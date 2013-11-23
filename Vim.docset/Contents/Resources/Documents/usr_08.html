@@ -1,0 +1,629 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_08</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_08</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_08.txt"></A><B>usr_08.txt</B>*	For Vim version 7.4.  Last change: 2006 Jul 18
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			      Splitting <A HREF="windows.html#windows">windows</A>
+
+
+Display two different files above each other.  Or <A HREF="starting.html#view">view</A> two locations in the
+file at the same time.  See the difference between two files by putting them
+side by side.  All this is possible with split <A HREF="windows.html#windows">windows</A>.
+
+|<A HREF="#08.1">08.1</A>|	Split a <A HREF="windows.html#window">window</A>
+|<A HREF="#08.2">08.2</A>|	Split a <A HREF="windows.html#window">window</A> on another file
+|<A HREF="#08.3">08.3</A>|	Window size
+|<A HREF="#08.4">08.4</A>|	Vertical splits
+|<A HREF="#08.5">08.5</A>|	Moving <A HREF="windows.html#windows">windows</A>
+|<A HREF="#08.6">08.6</A>|	Commands for all <A HREF="windows.html#windows">windows</A>
+|<A HREF="#08.7">08.7</A>|	Viewing differences with <A HREF="diff.html#vimdiff">vimdiff</A>
+|<A HREF="#08.8">08.8</A>|	Various
+|<A HREF="#08.9">08.9</A>|	<A HREF="intro.html#Tab">Tab</A> pages
+
+     Next chapter: |<A HREF="usr_09.html">usr_09.txt</A>|  Using the <A HREF="gui.html#GUI">GUI</A>
+ Previous chapter: |<A HREF="usr_07.html">usr_07.txt</A>|  Editing more than one file
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="08.1"></A><B>08.1</B>*	Split a <A HREF="windows.html#window">window</A>
+
+The easiest way to open a new <A HREF="windows.html#window">window</A> is to use the following command:
+
+<B>	:split</B>
+
+This command splits the screen into two <A HREF="windows.html#windows">windows</A> and leaves the cursor in the
+top one:
+
+	+----------------------------------+
+	|/* file one.c */		   |
+	|~				   |
+	|~				   |
+	|<A HREF="one.html">one.c=============================</A>|
+	|/* file one.c */		   |
+	|~				   |
+	|<A HREF="one.html">one.c=============================</A>|
+	&#124;				   |
+	+----------------------------------+
+
+What you see here is two <A HREF="windows.html#windows">windows</A> on the same file.  The line with &quot;====&quot; is
+that status line.  It displays information about the <A HREF="windows.html#window">window</A> above <A HREF="motion.html#it">it</A>.  (In
+practice the status line will be in reverse video.)
+   The two <A HREF="windows.html#windows">windows</A> allow you to <A HREF="starting.html#view">view</A> two parts of the same file.  For example,
+you could make the top <A HREF="windows.html#window">window</A> show the variable declarations of a program, and
+the bottom one the code that uses these <A HREF="eval.html#variables">variables</A>.
+
+The <A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#w">w</A> command can be used to jump between the <A HREF="windows.html#windows">windows</A>.  If you are in
+the top <A HREF="windows.html#window">window</A>, <A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#w">w</A> jumps to the <A HREF="windows.html#window">window</A> below <A HREF="motion.html#it">it</A>.  If you are in the
+bottom <A HREF="windows.html#window">window</A> <A HREF="motion.html#it">it</A> will jump to the first <A HREF="windows.html#window">window</A>.  (CTRL-W <A HREF="index.html#CTRL-W">CTRL-W</A> does the same
+thing, in <A HREF="change.html#case">case</A> you let go of the CTRL key a bit later.)
+
+
+CLOSE THE WINDOW
+
+To close a <A HREF="windows.html#window">window</A>, use the command:
+
+<B>	:close</B>
+
+Actually, any command that quits editing a file works, like &quot;<A HREF="editing.html#:quit">:quit</A>&quot; and &quot;<A HREF="editing.html#ZZ">ZZ</A>&quot;.
+But &quot;<A HREF="windows.html#:close">:close</A>&quot; prevents you from accidentally exiting Vim when you close the
+last <A HREF="windows.html#window">window</A>.
+
+
+CLOSING ALL OTHER WINDOWS
+
+If you have opened a whole bunch of <A HREF="windows.html#windows">windows</A>, but now want to concentrate on
+one of them, this command will be useful:
+
+<B>	:only</B>
+
+This closes all <A HREF="windows.html#windows">windows</A>, except for the current one.  If any of the other
+<A HREF="windows.html#windows">windows</A> has changes, you will get an error message and that <A HREF="windows.html#window">window</A> won't be
+closed.
+
+==============================================================================
+
+*<A NAME="08.2"></A><B>08.2</B>*	Split a <A HREF="windows.html#window">window</A> on another file
+
+The following command opens a second <A HREF="windows.html#window">window</A> and starts editing the given file:
+
+<B>	:split two.c</B>
+
+If you were editing one.c, then the result looks like this:
+
+	+----------------------------------+
+	|/* file two.c */		   |
+	|~				   |
+	|~				   |
+	|<A HREF="two.html">two.c=============================</A>|
+	|/* file one.c */		   |
+	|~				   |
+	|<A HREF="one.html">one.c=============================</A>|
+	&#124;				   |
+	+----------------------------------+
+
+To open a <A HREF="windows.html#window">window</A> on a new, empty file, use this:
+
+<B>	:new</B>
+
+You can repeat the &quot;<A HREF="windows.html#:split">:split</A>&quot; and &quot;<A HREF="windows.html#:new">:new</A>&quot; commands to create <A HREF="motion.html#as">as</A> many <A HREF="windows.html#windows">windows</A> <A HREF="motion.html#as">as</A>
+you like.
+
+==============================================================================
+
+*<A NAME="08.3"></A><B>08.3</B>*	Window size
+
+The &quot;<A HREF="windows.html#:split">:split</A>&quot; command can take a number argument.  If specified, this will be
+the height of the new <A HREF="windows.html#window">window</A>.  For example, the following opens a new <A HREF="windows.html#window">window</A>
+three lines high and starts editing the file alpha.c:
+
+<B>	:3split alpha.c</B>
+
+For existing <A HREF="windows.html#windows">windows</A> you can change the size in several ways.  When you have a
+working mouse, <A HREF="motion.html#it">it</A> is <A HREF="starting.html#easy">easy</A>: Move the mouse pointer to the status line that
+separates two <A HREF="windows.html#windows">windows</A>, and drag <A HREF="motion.html#it">it</A> up or down.
+
+To increase the size of a <A HREF="windows.html#window">window</A>:
+
+<B>	CTRL-W +</B>
+
+To decrease <A HREF="motion.html#it">it</A>:
+
+<B>	CTRL-W -</B>
+
+Both of these commands take a <A HREF="intro.html#count">count</A> and increase or decrease the <A HREF="windows.html#window">window</A> size
+by that many lines.  Thus &quot;4 <A HREF="index.html#CTRL-W">CTRL-W</A> +&quot; make the <A HREF="windows.html#window">window</A> four lines higher.
+
+To set the <A HREF="windows.html#window">window</A> height to a specified number of lines:
+
+<B>	{height}CTRL-W _</B>
+
+That's: a number {height}, <A HREF="index.html#CTRL-W">CTRL-W</A> and then an underscore (the - key with Shift
+on English-US keyboards).
+   To make a <A HREF="windows.html#window">window</A> <A HREF="motion.html#as">as</A> high <A HREF="motion.html#as">as</A> <A HREF="motion.html#it">it</A> can be, use the <A HREF="index.html#CTRL-W">CTRL-W</A> _ command without a
+<A HREF="intro.html#count">count</A>.
+
+
+USING THE MOUSE
+
+In Vim you can <A HREF="diff.html#do">do</A> many things very quickly from the keyboard.  Unfortunately,
+the <A HREF="windows.html#window">window</A> resizing commands require quite a bit of typing.  In this <A HREF="change.html#case">case</A>,
+using the mouse is faster.  Position the mouse pointer on a status line.  Now
+press the left mouse button and drag.  The status line will move, thus making
+the <A HREF="windows.html#window">window</A> on one side higher and the other smaller.
+
+
+OPTIONS
+
+The <A HREF="options.html#'winheight'">'winheight'</A> option can be set to a minimal desired height of a <A HREF="windows.html#window">window</A> and
+<A HREF="options.html#'winminheight'">'winminheight'</A> to a hard minimum height.
+   Likewise, there is <A HREF="options.html#'winwidth'">'winwidth'</A> for the minimal desired width and
+<A HREF="options.html#'winminwidth'">'winminwidth'</A> for the hard minimum width.
+   The <A HREF="options.html#'equalalways'">'equalalways'</A> option, when set, makes Vim equalize the <A HREF="windows.html#windows">windows</A> sizes
+when a <A HREF="windows.html#window">window</A> is closed or opened.
+
+==============================================================================
+
+*<A NAME="08.4"></A><B>08.4</B>*	Vertical splits
+
+The &quot;<A HREF="windows.html#:split">:split</A>&quot; command creates the new <A HREF="windows.html#window">window</A> above the current one.  To make
+the <A HREF="windows.html#window">window</A> appear at the left side, use:
+
+<B>	:vsplit</B>
+
+or:
+<B>	:vsplit two.c</B>
+
+The result looks something like this:
+
+	+--------------------------------------+
+	|/* file two.c */   |/* file one.c */  ||||
+	|~		    |~		       ||||
+	|~		    |~		       ||||
+	|~		    |~		       ||||
+	|<A HREF="two.html">two.c===============one.c=============</A>|
+	&#124;				       |
+	+--------------------------------------+
+
+Actually, the &#124; lines in the middle will be in reverse video.  This is called
+the vertical separator.  It separates the two <A HREF="windows.html#windows">windows</A> left and right of <A HREF="motion.html#it">it</A>.
+
+There is also the &quot;<A HREF="windows.html#:vnew">:vnew</A>&quot; command, to open a vertically split <A HREF="windows.html#window">window</A> on a new,
+empty file.  Another way to <A HREF="diff.html#do">do</A> this:
+
+<B>	:vertical new</B>
+
+The &quot;<A HREF="windows.html#:vertical">:vertical</A>&quot; command can be inserted before another command that splits a
+<A HREF="windows.html#window">window</A>.  This will cause that command to split the <A HREF="windows.html#window">window</A> vertically instead
+of horizontally.  (If the command doesn't split a <A HREF="windows.html#window">window</A>, <A HREF="motion.html#it">it</A> works
+unmodified.)
+
+
+MOVING BETWEEN WINDOWS
+
+Since you can split <A HREF="windows.html#windows">windows</A> horizontally and vertically <A HREF="motion.html#as">as</A> much <A HREF="motion.html#as">as</A> you like,
+you can create almost any layout of <A HREF="windows.html#windows">windows</A>.  Then you can use these commands
+to move between them:
+
+	<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#h">h</A>	move to the <A HREF="windows.html#window">window</A> on the left
+	<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#j">j</A>	move to the <A HREF="windows.html#window">window</A> below
+	<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#k">k</A>	move to the <A HREF="windows.html#window">window</A> above
+	<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#l">l</A>	move to the <A HREF="windows.html#window">window</A> on the right
+
+	<A HREF="index.html#CTRL-W">CTRL-W</A> t	move to the TOP <A HREF="windows.html#window">window</A>
+	<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#b">b</A>	move to the BOTTOM <A HREF="windows.html#window">window</A>
+
+You will notice the same letters <A HREF="motion.html#as">as</A> used for moving the cursor.  And the
+cursor keys can also be used, if you like.
+   More commands to move to other <A HREF="windows.html#windows">windows</A>: |<A HREF="quickref.html#Q_wi">Q_wi</A>|.
+
+==============================================================================
+
+*<A NAME="08.5"></A><B>08.5</B>*	Moving <A HREF="windows.html#windows">windows</A>
+
+You have split a few <A HREF="windows.html#windows">windows</A>, but now they are in the wrong place.  Then you
+need a command to move the <A HREF="windows.html#window">window</A> somewhere else.  For example, you have three
+<A HREF="windows.html#windows">windows</A> like this:
+
+	+----------------------------------+
+	|/* file two.c */		   |
+	|~				   |
+	|~				   |
+	|<A HREF="two.html">two.c=============================</A>|
+	|/* file three.c */		   |
+	|~				   |
+	|~				   |
+	|<A HREF="three.html">three.c===========================</A>|
+	|/* file one.c */		   |
+	|~				   |
+	|<A HREF="one.html">one.c=============================</A>|
+	&#124;				   |
+	+----------------------------------+
+
+Clearly the last one should be at the top.  Go to that <A HREF="windows.html#window">window</A> (using <A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#w">w</A>)
+and the type this command:
+
+<B>	CTRL-W K</B>
+
+This uses the <A HREF="change.html#uppercase">uppercase</A> <A HREF="print.html#letter">letter</A> <A HREF="various.html#K">K</A>.  What happens is that the <A HREF="windows.html#window">window</A> is moved to
+the very top.  You will notice that <A HREF="various.html#K">K</A> is again used for moving upwards.
+   When you have vertical splits, <A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="various.html#K">K</A> will move the current <A HREF="windows.html#window">window</A> to the
+top and make <A HREF="motion.html#it">it</A> occupy the full width of the Vim <A HREF="windows.html#window">window</A>.  If this is your
+layout:
+
+	+-------------------------------------------+
+	|/* two.c */  |/* three.c */  |/* one.c */  |
+	|~	      |~	      |~	    |
+	|~	      |~	      |~	    |
+	|~	      |~	      |~	    |
+	|~	      |~	      |~	    |
+	|~	      |~	      |~	    |
+	|<A HREF="two.html">two.c=========three.c=========one.c========</A>|
+	&#124;					    |
+	+-------------------------------------------+
+
+Then using <A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="various.html#K">K</A> in the middle <A HREF="windows.html#window">window</A> (three.c) will result in:
+
+	+-------------------------------------------+
+	|/* three.c */				    |
+	|~					    |
+	|~					    |
+	|<A HREF="three.html">three.c====================================</A>|
+	|/* two.c */	       |/* one.c */	    ||||
+	|~		       |~		    ||||
+	|<A HREF="two.html">two.c==================one.c===============</A>|
+	&#124;					    |
+	+-------------------------------------------+
+
+The other three similar commands (you can probably guess these now):
+
+	<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#H">H</A>	move <A HREF="windows.html#window">window</A> to the far left
+	<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="change.html#J">J</A>	move <A HREF="windows.html#window">window</A> to the bottom
+	<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#L">L</A>	move <A HREF="windows.html#window">window</A> to the far right
+
+==============================================================================
+
+*<A NAME="08.6"></A><B>08.6</B>*	Commands for all <A HREF="windows.html#windows">windows</A>
+
+When you have several <A HREF="windows.html#windows">windows</A> open and you want to quit Vim, you can close
+each <A HREF="windows.html#window">window</A> separately.  A quicker way is using this command:
+
+<B>	:qall</B>
+
+This stands for &quot;quit all&quot;.  If any of the <A HREF="windows.html#windows">windows</A> contain changes, Vim will
+not exit.  The cursor will automatically be positioned in a <A HREF="windows.html#window">window</A> with
+changes.  You can then either use &quot;<A HREF="editing.html#:write">:write</A>&quot; to save the changes, or &quot;:quit!&quot; to
+throw them away.
+
+If you know there are <A HREF="windows.html#windows">windows</A> with changes, and you want to save all these
+changes, use this command:
+
+<B>	:wall</B>
+
+This stands for &quot;write all&quot;.  But actually, <A HREF="motion.html#it">it</A> only writes files with
+changes.  Vim knows <A HREF="motion.html#it">it</A> doesn't make sense to write files that were not
+changed.
+   And then there is the combination of &quot;<A HREF="editing.html#:qall">:qall</A>&quot; and &quot;<A HREF="editing.html#:wall">:wall</A>&quot;: the &quot;write and
+quit all&quot; command:
+
+<B>	:wqall</B>
+
+This writes all modified files and quits Vim.
+   Finally, there is a command that quits Vim and throws away all changes:
+
+<B>	:qall!</B>
+
+Be careful, there is no way to <A HREF="undo.html#undo">undo</A> this command!
+
+
+OPENING A WINDOW FOR ALL ARGUMENTS
+
+To make Vim open a <A HREF="windows.html#window">window</A> for each file, start <A HREF="motion.html#it">it</A> with the &quot;<A HREF="starting.html#-o">-o</A>&quot; argument:
+
+<B>	vim -o one.txt two.txt three.txt</B>
+
+This results in:
+
+	+-------------------------------+
+	|file one.txt			|
+	|~				|
+	|<A HREF="one.html">one.txt========================</A>|
+	|file two.txt			|
+	|~				|
+	|<A HREF="two.html">two.txt========================</A>|
+	|file three.txt			|
+	|~				|
+	|<A HREF="three.html">three.txt======================</A>|
+	&#124;				|
+	+-------------------------------+
+
+The &quot;<A HREF="starting.html#-O">-O</A>&quot; argument is used to get vertically split <A HREF="windows.html#windows">windows</A>.
+   When Vim is already running, the &quot;<A HREF="windows.html#:all">:all</A>&quot; command opens a <A HREF="windows.html#window">window</A> for each
+file in the argument list.  &quot;<A HREF="windows.html#:vertical">:vertical</A> all&quot; does <A HREF="motion.html#it">it</A> with vertical splits.
+
+==============================================================================
+
+*<A NAME="08.7"></A><B>08.7</B>*	Viewing differences with <A HREF="diff.html#vimdiff">vimdiff</A>
+
+There is a special way to start Vim, which shows the differences between two
+files.  Let's take a file &quot;main.c&quot; and insert a few characters in one line.
+Write this file with the <A HREF="options.html#'backup'">'backup'</A> option set, so that the <A HREF="editing.html#backup">backup</A> file
+&quot;main.c~&quot; will contain the previous version of the file.
+   Type this command in a shell (not in Vim):
+
+<B>	vimdiff main.c~ main.c</B>
+
+Vim will start, with two <A HREF="windows.html#windows">windows</A> side by side.  You will only see the line
+in which you added characters, and a few lines above and below <A HREF="motion.html#it">it</A>.
+
+	 VV		      VV
+	+-----------------------------------------+
+	|+ +--123 lines: /* a|+ +--123 lines: /* a|  &lt;- fold|||
+	&#124;  text		     &#124;	text		  |
+	&#124;  text		     &#124;	text		  |
+	&#124;  text		     &#124;	text		  |
+	&#124;  text		     &#124;	changed text	  &#124;  &lt;- changed line
+	&#124;  text		     &#124;	text		  |
+	&#124;  text		     &#124;	------------------|  &lt;- deleted line
+	&#124;  text		     &#124;	text		  |
+	&#124;  text		     &#124;	text		  |
+	&#124;  text		     &#124;	text		  |
+	|+ +--432 lines: text|+ +--432 lines: text|  &lt;- fold|||
+	&#124;  ~		     &#124;	~		  |
+	&#124;  ~		     &#124;	~		  |
+	|<A HREF="main.html">main.c~==============main.c==============</A>|
+	&#124;					  |
+	+-----------------------------------------+
+
+(This picture doesn't show the highlighting, use the <A HREF="diff.html#vimdiff">vimdiff</A> command for a
+better look.)
+
+The lines that were not modified have been collapsed into one line.  This is
+called a closed fold.  They are indicated in the picture with &quot;&lt;- fold&quot;.  Thus
+the single fold line at the top stands for 123 text lines.  These lines are
+equal in both files.
+   The line marked with &quot;&lt;- changed line&quot; is highlighted, and the inserted
+text is displayed with another color.  This clearly shows what the difference
+is between the two files.
+   The line that was deleted is displayed with &quot;<A HREF="starting.html#---">---</A>&quot; in the main.c <A HREF="windows.html#window">window</A>.
+See the &quot;&lt;- deleted line&quot; marker in the picture.  These characters are not
+really there.  They just fill up main.c, so that <A HREF="motion.html#it">it</A> displays the same number
+of lines <A HREF="motion.html#as">as</A> the other <A HREF="windows.html#window">window</A>.
+
+
+THE FOLD COLUMN
+
+Each <A HREF="windows.html#window">window</A> has a column on the left with a slightly different background.  In
+the picture above these are indicated with &quot;VV&quot;.  You notice there is a plus
+character there, in front of each closed fold.  Move the mouse pointer to that
+plus and click the left button.  The fold will open, and you can see the text
+that <A HREF="motion.html#it">it</A> contains.
+   The fold column contains a minus sign for an open fold.  If you click on
+this -, the fold will close.
+   Obviously, this only works when you have a working mouse.  You can also use
+&quot;<A HREF="fold.html#zo">zo</A>&quot; to open a fold and &quot;<A HREF="fold.html#zc">zc</A>&quot; to close <A HREF="motion.html#it">it</A>.
+
+
+DIFFING IN VIM
+
+Another way to start in <A HREF="diff.html#diff">diff</A> mode can be done from inside Vim.  Edit the
+&quot;main.c&quot; file, then make a split and show the differences:
+
+<B>	:edit main.c</B>
+<B>	:vertical diffsplit main.c~ </B>
+
+The &quot;<A HREF="windows.html#:vertical">:vertical</A>&quot; command is used to make the <A HREF="windows.html#window">window</A> split vertically.  If you
+omit this, you will get a horizontal split.
+
+If you have a patch or <A HREF="diff.html#diff">diff</A> file, you can use the third way to start <A HREF="diff.html#diff">diff</A>
+mode.  First edit the file to which the patch applies.  Then tell Vim the name
+of the patch file:
+
+<B>	:edit main.c</B>
+<B>	:vertical diffpatch main.c.diff</B>
+
+WARNING: The patch file must contain only one patch, for the file you are
+editing.  Otherwise you will get a lot of error <A HREF="message.html#messages">messages</A>, and some files might
+be patched unexpectedly.
+   The patching will only be done to the copy of the file in Vim.  The file on
+your harddisk will remain unmodified (until you decide to write the file).
+
+
+SCROLL BINDING
+
+When the files have more changes, you can scroll in the usual way.  Vim will
+try to keep both the <A HREF="windows.html#windows">windows</A> start at the same position, so you can easily see
+the differences side by side.
+   When you don't want this for a moment, use this command:
+
+<B>	:set noscrollbind</B>
+
+
+JUMPING TO CHANGES
+
+When you have disabled <A HREF="fold.html#folding">folding</A> in some way, <A HREF="motion.html#it">it</A> may be difficult to find the
+changes.  Use this command to jump forward to the next change:
+
+<B>	]c</B>
+
+To go the other way use:
+
+<B>	[c</B>
+
+Prepended a <A HREF="intro.html#count">count</A> to jump further away.
+
+
+REMOVING CHANGES
+
+You can move text from one <A HREF="windows.html#window">window</A> to the other.  This either removes
+differences or adds new ones.  Vim doesn't keep the highlighting updated in
+all situations.  To update <A HREF="motion.html#it">it</A> use this command:
+
+<B>	:diffupdate</B>
+
+To remove a difference, you can move the text in a highlighted block from one
+<A HREF="windows.html#window">window</A> to another.  Take the &quot;main.c&quot; and &quot;main.c~&quot; example above.  Move the
+cursor to the left <A HREF="windows.html#window">window</A>, on the line that was deleted in the other <A HREF="windows.html#window">window</A>.
+Now type this command:
+
+<B>	dp</B>
+
+The change will be removed by putting the text of the current <A HREF="windows.html#window">window</A> in the
+other <A HREF="windows.html#window">window</A>.  &quot;<A HREF="diff.html#dp">dp</A>&quot; stands for &quot;<A HREF="diff.html#diff">diff</A> put&quot;.
+   You can also <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A> the other way around.  Move the cursor to the right
+<A HREF="windows.html#window">window</A>, to the line where &quot;changed&quot; was inserted.  Now type this command:
+
+<B>	do</B>
+
+The change will now be removed by getting the text from the other <A HREF="windows.html#window">window</A>.
+Since there are no changes left now, Vim puts all text in a closed fold.
+&quot;<A HREF="diff.html#do">do</A>&quot; stands for &quot;<A HREF="diff.html#diff">diff</A> obtain&quot;.  &quot;dg&quot; would have been better, but that already
+has a different meaning (&quot;dgg&quot; deletes from the cursor until the first line).
+
+For details about diff mode, see |<A HREF="diff.html#vimdiff">vimdiff</A>|.
+
+==============================================================================
+
+*<A NAME="08.8"></A><B>08.8</B>*	Various
+
+The <A HREF="options.html#'laststatus'">'laststatus'</A> option can be used to specify when the last <A HREF="windows.html#window">window</A> has a
+statusline:
+
+	0	never
+	1	only when there are split <A HREF="windows.html#windows">windows</A> (the default)
+	2	always
+
+Many commands that edit another file have a variant that splits the <A HREF="windows.html#window">window</A>.
+For <A HREF="cmdline.html#Command-line">Command-line</A> commands this is done by prepending an &quot;<A HREF="change.html#s">s</A>&quot;.  For example:
+&quot;<A HREF="tagsrch.html#:tag">:tag</A>&quot; jumps to a <A HREF="tagsrch.html#tag">tag</A>, &quot;<A HREF="windows.html#:stag">:stag</A>&quot; splits the <A HREF="windows.html#window">window</A> and jumps to a
+<A HREF="tagsrch.html#tag">tag</A>.
+   For <A HREF="intro.html#Normal">Normal</A> mode commands a <A HREF="index.html#CTRL-W">CTRL-W</A> is prepended.  <A HREF="editing.html#CTRL-^">CTRL-^</A> jumps to the
+alternate file, <A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="editing.html#CTRL-^">CTRL-^</A> splits the <A HREF="windows.html#window">window</A> and edits the alternate file.
+
+The <A HREF="options.html#'splitbelow'">'splitbelow'</A> option can be set to make a new <A HREF="windows.html#window">window</A> appear below the
+current <A HREF="windows.html#window">window</A>.  The <A HREF="options.html#'splitright'">'splitright'</A> option can be set to make a vertically split
+<A HREF="windows.html#window">window</A> appear right of the current <A HREF="windows.html#window">window</A>.
+
+When splitting a <A HREF="windows.html#window">window</A> you can prepend a modifier command to tell where the
+<A HREF="windows.html#window">window</A> is to appear:
+
+	<A HREF="windows.html#:leftabove">:leftabove</A> {cmd}	left or above the current <A HREF="windows.html#window">window</A>
+	<A HREF="windows.html#:aboveleft">:aboveleft</A> {cmd}	idem
+	<A HREF="windows.html#:rightbelow">:rightbelow</A> {cmd}	right or below the current <A HREF="windows.html#window">window</A>
+	<A HREF="windows.html#:belowright">:belowright</A> {cmd}	idem
+	<A HREF="windows.html#:topleft">:topleft</A> {cmd}		at the top or left of the Vim <A HREF="windows.html#window">window</A>
+	<A HREF="windows.html#:botright">:botright</A> {cmd}		at the bottom or right of the Vim <A HREF="windows.html#window">window</A>
+
+
+==============================================================================
+
+*<A NAME="08.9"></A><B>08.9</B>*	<A HREF="intro.html#Tab">Tab</A> pages
+
+You will have noticed that <A HREF="windows.html#windows">windows</A> never overlap.  That means you quickly run
+out of screen space.  The solution for this is called <A HREF="intro.html#Tab">Tab</A> pages.
+
+Assume you are editing &quot;thisfile&quot;.  To create a new <A HREF="intro.html#tab">tab</A> page use this command:
+
+<B>	:tabedit thatfile</B>
+
+This will edit the file &quot;thatfile&quot; in a <A HREF="windows.html#window">window</A> that occupies the whole Vim
+<A HREF="windows.html#window">window</A>.  And you will notice a <A HREF="motion.html#bar">bar</A> at the top with the two file names:
+
+	+----------------------------------+
+	&#124; thisfile &#124; /thatfile/ __________X|    (thatfile is <A HREF="syntax.html#bold">bold</A>)
+	|/* thatfile */			   |
+	|that				   |
+	|that				   |
+	|~				   |
+	|~				   |
+	|~				   |
+	&#124;				   |
+	+----------------------------------+
+
+You now have two <A HREF="intro.html#tab">tab</A> pages.  The first one has a <A HREF="windows.html#window">window</A> for &quot;thisfile&quot; and the
+second one a <A HREF="windows.html#window">window</A> for &quot;thatfile&quot;.  It's like two pages that are on top of
+eachother, with a <A HREF="intro.html#tab">tab</A> sticking out of each page showing the file name.
+
+Now use the mouse to click on &quot;thisfile&quot; in the top line.  The result is
+
+	+----------------------------------+
+	&#124; /thisfile/ &#124; thatfile __________X|    (thisfile is <A HREF="syntax.html#bold">bold</A>)
+	|/* thisfile */			   |
+	|this				   |
+	|this				   |
+	|~				   |
+	|~				   |
+	|~				   |
+	&#124;				   |
+	+----------------------------------+
+
+Thus you can switch between <A HREF="intro.html#tab">tab</A> pages by clicking on the label in the top
+line.  If you don't have a mouse or don't want to use <A HREF="motion.html#it">it</A>, you can use the &quot;<A HREF="tabpage.html#gt">gt</A>&quot;
+command.  Mnemonic: Goto <A HREF="intro.html#Tab">Tab</A>.
+
+Now let's create another <A HREF="intro.html#tab">tab</A> page with the command:
+
+<B>	:tab split</B>
+
+This makes a new <A HREF="intro.html#tab">tab</A> page with one <A HREF="windows.html#window">window</A> that is editing the same buffer <A HREF="motion.html#as">as</A>
+the <A HREF="windows.html#window">window</A> we were in:
+
+	+-------------------------------------+
+	&#124; thisfile &#124; /thisfile/ &#124; thatfile __X|   (thisfile is <A HREF="syntax.html#bold">bold</A>)
+	|/* thisfile */			      |
+	|this				      |
+	|this				      |
+	|~				      |
+	|~				      |
+	|~				      |
+	&#124;				      |
+	+-------------------------------------+
+
+You can put &quot;<A HREF="tabpage.html#:tab">:tab</A>&quot; before any <A HREF="intro.html#Ex">Ex</A> command that opens a <A HREF="windows.html#window">window</A>.  The <A HREF="windows.html#window">window</A> will
+be opened in a new <A HREF="intro.html#tab">tab</A> page.  Another example:
+
+<B>	:tab help gt</B>
+
+Will show the help text for &quot;<A HREF="tabpage.html#gt">gt</A>&quot; in a new <A HREF="intro.html#tab">tab</A> page.
+
+A few more things you can <A HREF="diff.html#do">do</A> with <A HREF="intro.html#tab">tab</A> pages:
+
+- click with the mouse in the space after the last label
+	The next <A HREF="intro.html#tab">tab</A> page will be selected, like with &quot;<A HREF="tabpage.html#gt">gt</A>&quot;.
+
+- click with the mouse on the &quot;<A HREF="change.html#X">X</A>&quot; in the top right corner
+	The current <A HREF="intro.html#tab">tab</A> page will be closed.  Unless there are unsaved
+	changes in the current <A HREF="intro.html#tab">tab</A> page.
+
+- double click with the mouse in the top line
+	A new <A HREF="intro.html#tab">tab</A> page will be created.
+
+- the &quot;tabonly&quot; command
+	Closes all <A HREF="intro.html#tab">tab</A> pages except the current one.  Unless there are unsaved
+	changes in other <A HREF="intro.html#tab">tab</A> pages.
+
+For more information about tab pages see |<A HREF="tabpage.html#tab-page">tab-page</A>|.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_09.html">usr_09.txt</A>|  Using the <A HREF="gui.html#GUI">GUI</A>
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

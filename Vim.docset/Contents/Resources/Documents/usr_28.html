@@ -1,0 +1,455 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_28</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_28</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_28.txt"></A><B>usr_28.txt</B>*	For Vim version 7.4.  Last change: 2008 Jun 14
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+				   <A HREF="fold.html#Folding">Folding</A>
+
+
+Structured text can be separated in sections.  And sections in sub-sections.
+<A HREF="fold.html#Folding">Folding</A> allows you to display a section <A HREF="motion.html#as">as</A> one line, providing an overview.
+This chapter explains the different ways this can be done.
+
+|<A HREF="#28.1">28.1</A>|	What is <A HREF="fold.html#folding">folding</A>?
+|<A HREF="#28.2">28.2</A>|	Manual <A HREF="fold.html#folding">folding</A>
+|<A HREF="#28.3">28.3</A>|	Working with <A HREF="fold.html#folds">folds</A>
+|<A HREF="#28.4">28.4</A>|	Saving and restoring <A HREF="fold.html#folds">folds</A>
+|<A HREF="#28.5">28.5</A>|	<A HREF="fold.html#Folding">Folding</A> by indent
+|<A HREF="#28.6">28.6</A>|	<A HREF="fold.html#Folding">Folding</A> with markers
+|<A HREF="#28.7">28.7</A>|	<A HREF="fold.html#Folding">Folding</A> by <A HREF="syntax.html#syntax">syntax</A>
+|<A HREF="#28.8">28.8</A>|	<A HREF="fold.html#Folding">Folding</A> by <A HREF="eval.html#expression">expression</A>
+|<A HREF="#28.9">28.9</A>|	<A HREF="fold.html#Folding">Folding</A> unchanged lines
+|<A HREF="#28.10">28.10</A>|	Which fold method to use?
+
+     Next chapter: |<A HREF="usr_29.html">usr_29.txt</A>|  Moving through programs
+ Previous chapter: |<A HREF="usr_27.html">usr_27.txt</A>|  Search commands and patterns
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="28.1"></A><B>28.1</B>*	What is <A HREF="fold.html#folding">folding</A>?
+
+<A HREF="fold.html#Folding">Folding</A> is used to show a range of lines in the buffer <A HREF="motion.html#as">as</A> a single line on the
+screen.  Like a piece of paper which is folded to make <A HREF="motion.html#it">it</A> shorter:
+
+	+------------------------+
+	&#124; line 1		 |
+	&#124; line 2		 |
+	&#124; line 3		 |
+	|_______________________ |
+	\			 \
+	 \________________________\
+	 / folded lines		  /
+	/________________________/
+	&#124; line 12		 |
+	&#124; line 13		 |
+	&#124; line 14		 |
+	+------------------------+
+
+The text is still in the buffer, unchanged.  Only the way lines are displayed
+is affected by <A HREF="fold.html#folding">folding</A>.
+
+The advantage of <A HREF="fold.html#folding">folding</A> is that you can get a better overview of the
+structure of text, by <A HREF="fold.html#folding">folding</A> lines of a section and <A HREF="change.html#replacing">replacing</A> <A HREF="motion.html#it">it</A> with a line
+that indicates that there is a section.
+
+==============================================================================
+
+*<A NAME="28.2"></A><B>28.2</B>*	Manual <A HREF="fold.html#folding">folding</A>
+
+Try <A HREF="motion.html#it">it</A> out: Position the cursor in a <A HREF="motion.html#paragraph">paragraph</A> and type:
+
+<B>	zfap</B>
+
+You will see that the <A HREF="motion.html#paragraph">paragraph</A> is replaced by a highlighted line.  You have
+created a fold.  |<A HREF="fold.html#zf">zf</A>| is an <A HREF="motion.html#operator">operator</A> and |<A HREF="motion.html#ap">ap</A>| a text object selection.  You
+can use the |<A HREF="fold.html#zf">zf</A>| <A HREF="motion.html#operator">operator</A> with any <A HREF="intro.html#movement">movement</A> command to create a fold for the
+text that <A HREF="motion.html#it">it</A> moved over.  |<A HREF="fold.html#zf">zf</A>| also works in <A HREF="visual.html#Visual">Visual</A> mode.
+
+To <A HREF="starting.html#view">view</A> the text again, open the fold by typing:
+
+<B>	zo</B>
+
+And you can close the fold again with:
+
+<B>	zc</B>
+
+All the <A HREF="fold.html#folding">folding</A> commands start with &quot;<A HREF="index.html#z">z</A>&quot;.  With some fantasy, this looks like a
+folded piece of paper, seen from the side.  The <A HREF="print.html#letter">letter</A> after the &quot;<A HREF="index.html#z">z</A>&quot; has a
+mnemonic meaning to make <A HREF="motion.html#it">it</A> easier to remember the commands:
+
+	<A HREF="fold.html#zf">zf</A>	F-old creation
+	<A HREF="fold.html#zo">zo</A>	O-pen a fold
+	<A HREF="fold.html#zc">zc</A>	C-lose a fold
+
+Folds can be nested: A region of text that contains <A HREF="fold.html#folds">folds</A> can be folded
+again.  For example, you can fold each <A HREF="motion.html#paragraph">paragraph</A> in this section, and then
+fold all the sections in this chapter.  Try <A HREF="motion.html#it">it</A> out.  You will notice that
+opening the fold for the whole chapter will restore the nested <A HREF="fold.html#folds">folds</A> <A HREF="motion.html#as">as</A> they
+were, some may be open and some may be closed.
+
+Suppose you have created several <A HREF="fold.html#folds">folds</A>, and now want to <A HREF="starting.html#view">view</A> all the text.
+You could go to each fold and type &quot;<A HREF="fold.html#zo">zo</A>&quot;.  To <A HREF="diff.html#do">do</A> this faster, use this command:
+
+<B>	zr</B>
+
+This will R-educe the <A HREF="fold.html#folding">folding</A>.  The opposite is:
+
+<B>	zm</B>
+
+This <A HREF="fold.html#folds">folds</A> M-ore.  You can repeat &quot;<A HREF="fold.html#zr">zr</A>&quot; and &quot;<A HREF="fold.html#zm">zm</A>&quot; to open and close nested <A HREF="fold.html#folds">folds</A>
+of several levels.
+
+If you have nested several levels deep, you can open all of them with:
+
+<B>	zR</B>
+
+This R-educes <A HREF="fold.html#folds">folds</A> until there are none left.  And you can close all <A HREF="fold.html#folds">folds</A>
+with:
+
+<B>	zM</B>
+
+This <A HREF="fold.html#folds">folds</A> M-ore and M-ore.
+
+You can quickly disable the <A HREF="fold.html#folding">folding</A> with the |<A HREF="fold.html#zn">zn</A>| command.  Then |<A HREF="fold.html#zN">zN</A>| brings
+back the <A HREF="fold.html#folding">folding</A> <A HREF="motion.html#as">as</A> <A HREF="motion.html#it">it</A> was.  |<A HREF="fold.html#zi">zi</A>| toggles between the two.  This is a useful
+way of working:
+- create <A HREF="fold.html#folds">folds</A> to get overview on your file
+- move around to where you want to <A HREF="diff.html#do">do</A> your work
+- <A HREF="diff.html#do">do</A> |<A HREF="fold.html#zi">zi</A>| to look at the text and edit <A HREF="motion.html#it">it</A>
+- <A HREF="diff.html#do">do</A> |<A HREF="fold.html#zi">zi</A>| again to go back to moving around
+
+More about manual <A HREF="fold.html#folding">folding</A> in the reference manual: |<A HREF="fold.html#fold-manual">fold-manual</A>|
+
+==============================================================================
+
+*<A NAME="28.3"></A><B>28.3</B>*	Working with <A HREF="fold.html#folds">folds</A>
+
+When some <A HREF="fold.html#folds">folds</A> are closed, <A HREF="intro.html#movement">movement</A> commands like &quot;<A HREF="motion.html#j">j</A>&quot; and &quot;<A HREF="motion.html#k">k</A>&quot; move over a
+fold like <A HREF="motion.html#it">it</A> was a single, empty line.  This allows you to quickly move around
+over folded text.
+
+You can <A HREF="change.html#yank">yank</A>, delete and put <A HREF="fold.html#folds">folds</A> <A HREF="motion.html#as">as</A> if <A HREF="motion.html#it">it</A> was a single line.  This is very
+useful if you want to reorder <A HREF="eval.html#functions">functions</A> in a program.  First make sure that
+each fold contains a whole function (or a bit <A HREF="various.html#less">less</A>) by selecting the right
+<A HREF="options.html#'foldmethod'">'foldmethod'</A>.  Then delete the function with &quot;<A HREF="change.html#dd">dd</A>&quot;, move the cursor and put <A HREF="motion.html#it">it</A>
+with &quot;<A HREF="change.html#p">p</A>&quot;.  If some lines of the function are above or below the fold, you can
+use <A HREF="visual.html#Visual">Visual</A> selection:
+- put the cursor on the first line to be moved
+- hit &quot;<A HREF="visual.html#V">V</A>&quot; to start <A HREF="visual.html#Visual">Visual</A> mode
+- put the cursor on the last line to be moved
+- hit &quot;<A HREF="change.html#d">d</A>&quot; to delete the selected lines.
+- move the cursor to the new position and &quot;p&quot;ut the lines there.
+
+It is sometimes difficult to see or remember where a fold is located, thus
+where a |<A HREF="fold.html#zo">zo</A>| command would actually work.  To see the defined <A HREF="fold.html#folds">folds</A>:
+
+<B>	:set foldcolumn=4</B>
+
+This will show a small column on the left of the <A HREF="windows.html#window">window</A> to indicate <A HREF="fold.html#folds">folds</A>.
+A &quot;<A HREF="motion.html#+">+</A>&quot; is shown for a closed fold.  A &quot;<A HREF="motion.html#-">-</A>&quot; is shown at the start of each open
+fold and &quot;|&quot; at following lines of the fold.
+
+You can use the mouse to open a fold by clicking on the &quot;<A HREF="motion.html#+">+</A>&quot; in the foldcolumn.
+Clicking on the &quot;<A HREF="motion.html#-">-</A>&quot; or a &quot;|&quot; below <A HREF="motion.html#it">it</A> will close an open fold.
+
+To open all <A HREF="fold.html#folds">folds</A> at the cursor line use |<A HREF="fold.html#zO">zO</A>|.
+To close all <A HREF="fold.html#folds">folds</A> at the cursor line use |<A HREF="fold.html#zC">zC</A>|.
+To delete a fold at the cursor line use |<A HREF="fold.html#zd">zd</A>|.
+To delete all <A HREF="fold.html#folds">folds</A> at the cursor line use |<A HREF="fold.html#zD">zD</A>|.
+
+When in <A HREF="insert.html#Insert">Insert</A> mode, the fold at the cursor line is never closed.  That allows
+you to see what you type!
+
+Folds are opened automatically when jumping around or moving the cursor left
+or right.  For example, the &quot;<A HREF="motion.html#0">0</A>&quot; command opens the fold under the cursor
+(if <A HREF="options.html#'foldopen'">'foldopen'</A> contains &quot;hor&quot;, which is the default).  The <A HREF="options.html#'foldopen'">'foldopen'</A> option
+can be changed to open <A HREF="fold.html#folds">folds</A> for specific commands.  If you want the line
+under the cursor always to be open, <A HREF="diff.html#do">do</A> this:
+
+<B>	:set foldopen=all</B>
+
+Warning: You won't be able to move onto a closed fold then.  You might want to
+use this only temporarily and then set <A HREF="motion.html#it">it</A> back to the default:
+
+<B>	:set foldopen&amp;</B>
+
+You can make <A HREF="fold.html#folds">folds</A> close automatically when you move out of <A HREF="motion.html#it">it</A>:
+
+<B>	:set foldclose=all</B>
+
+This will re-apply <A HREF="options.html#'foldlevel'">'foldlevel'</A> to all <A HREF="fold.html#folds">folds</A> that don't contain the cursor.
+You have to try <A HREF="motion.html#it">it</A> out if you like how this feels.  Use |<A HREF="fold.html#zm">zm</A>| to fold more and
+|<A HREF="fold.html#zr">zr</A>| to fold <A HREF="various.html#less">less</A> (reduce <A HREF="fold.html#folds">folds</A>).
+
+The <A HREF="fold.html#folding">folding</A> is local to the <A HREF="windows.html#window">window</A>.  This allows you to open two <A HREF="windows.html#windows">windows</A> on
+the same buffer, one with <A HREF="fold.html#folds">folds</A> and one without <A HREF="fold.html#folds">folds</A>.  Or one with all <A HREF="fold.html#folds">folds</A>
+closed and one with all <A HREF="fold.html#folds">folds</A> open.
+
+==============================================================================
+
+*<A NAME="28.4"></A><B>28.4</B>*	Saving and restoring <A HREF="fold.html#folds">folds</A>
+
+When you <A HREF="editing.html#abandon">abandon</A> a file (starting to edit another one), the state of the <A HREF="fold.html#folds">folds</A>
+is lost.  If you come back to the same file later, all manually opened and
+closed <A HREF="fold.html#folds">folds</A> are back to their default.  When <A HREF="fold.html#folds">folds</A> have been created
+manually, all <A HREF="fold.html#folds">folds</A> are gone!  To save the <A HREF="fold.html#folds">folds</A> use the |<A HREF="starting.html#:mkview">:mkview</A>| command:
+
+<B>	:mkview</B>
+
+This will store the settings and other things that influence the <A HREF="starting.html#view">view</A> on the
+file.  You can change what is stored with the <A HREF="options.html#'viewoptions'">'viewoptions'</A> option.
+When you come back to the same file later, you can load the <A HREF="starting.html#view">view</A> again:
+
+<B>	:loadview</B>
+
+You can store up to ten views on one file.  For example, to save the current
+setup <A HREF="motion.html#as">as</A> the third <A HREF="starting.html#view">view</A> and load the second <A HREF="starting.html#view">view</A>:
+
+<B>	:mkview 3</B>
+<B>	:loadview 2</B>
+
+Note that when you insert or delete lines the views might become invalid.
+Also check out the <A HREF="options.html#'viewdir'">'viewdir'</A> option, which specifies where the views are
+stored.  You might want to delete old views now and then.
+
+==============================================================================
+
+*<A NAME="28.5"></A><B>28.5</B>*	<A HREF="fold.html#Folding">Folding</A> by indent
+
+Defining <A HREF="fold.html#folds">folds</A> with |<A HREF="fold.html#zf">zf</A>| is a lot of work.  If your text is structured by
+giving lower level items a larger indent, you can use the indent <A HREF="fold.html#folding">folding</A>
+method.  This will create <A HREF="fold.html#folds">folds</A> for every sequence of lines with the same
+indent.  Lines with a larger indent will become nested <A HREF="fold.html#folds">folds</A>.  This works well
+with many programming languages.
+
+Try this by setting the <A HREF="options.html#'foldmethod'">'foldmethod'</A> option:
+
+<B>	:set foldmethod=indent</B>
+
+Then you can use the |<A HREF="fold.html#zm">zm</A>| and |<A HREF="fold.html#zr">zr</A>| commands to fold more and reduce <A HREF="fold.html#folding">folding</A>.
+It's <A HREF="starting.html#easy">easy</A> to see on this example text:
+
+This line is not indented
+	This line is indented once
+		This line is indented <A HREF="if_cscop.html#twice">twice</A>
+		This line is indented <A HREF="if_cscop.html#twice">twice</A>
+	This line is indented once
+This line is not indented
+	This line is indented once
+	This line is indented once
+
+Note that the relation between the amount of indent and the fold depth depends
+on the <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> option.  Each <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> worth of indent adds one to the
+depth of the fold.  This is called a fold level.
+
+When you use the |<A HREF="fold.html#zr">zr</A>| and |<A HREF="fold.html#zm">zm</A>| commands you actually increase or decrease the
+<A HREF="options.html#'foldlevel'">'foldlevel'</A> option.  You could also set <A HREF="motion.html#it">it</A> directly:
+
+<B>	:set foldlevel=3</B>
+
+This means that all <A HREF="fold.html#folds">folds</A> with three times a <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> indent or more will
+be closed.  The lower the foldlevel, the more <A HREF="fold.html#folds">folds</A> will be closed.  When
+<A HREF="options.html#'foldlevel'">'foldlevel'</A> is zero, all <A HREF="fold.html#folds">folds</A> are closed.  |<A HREF="fold.html#zM">zM</A>| does set <A HREF="options.html#'foldlevel'">'foldlevel'</A> to zero.
+The opposite command |<A HREF="fold.html#zR">zR</A>| sets <A HREF="options.html#'foldlevel'">'foldlevel'</A> to the deepest fold level that is
+present in the file.
+
+Thus there are two ways to open and close the <A HREF="fold.html#folds">folds</A>:
+(A) By setting the fold level.
+    This gives a very quick way of &quot;zooming out&quot; to <A HREF="starting.html#view">view</A> the structure of the
+    text, move the cursor, and &quot;zoom in&quot; on the text again.
+
+(B) By using |<A HREF="fold.html#zo">zo</A>| and |<A HREF="fold.html#zc">zc</A>| commands to open or close specific <A HREF="fold.html#folds">folds</A>.
+    This allows opening only those <A HREF="fold.html#folds">folds</A> that you want to be open, while other
+    <A HREF="fold.html#folds">folds</A> remain closed.
+
+This can be combined: You can first close most <A HREF="fold.html#folds">folds</A> by using |<A HREF="fold.html#zm">zm</A>| a few times
+and then open a specific fold with |<A HREF="fold.html#zo">zo</A>|.  Or open all <A HREF="fold.html#folds">folds</A> with |<A HREF="fold.html#zR">zR</A>| and
+then close specific <A HREF="fold.html#folds">folds</A> with |<A HREF="fold.html#zc">zc</A>|.
+
+But you cannot manually define <A HREF="fold.html#folds">folds</A> when <A HREF="options.html#'foldmethod'">'foldmethod'</A> is &quot;indent&quot;, <A HREF="motion.html#as">as</A> that
+would conflict with the relation between the indent and the fold level.
+
+More about <A HREF="fold.html#folding">folding</A> by indent in the reference manual: |<A HREF="fold.html#fold-indent">fold-indent</A>|
+
+==============================================================================
+
+*<A NAME="28.6"></A><B>28.6</B>*	<A HREF="fold.html#Folding">Folding</A> with markers
+
+Markers in the text are used to specify the start and end of a fold region.
+This gives precise <A HREF="intro.html#control">control</A> over which lines are included in a fold.  The
+disadvantage is that the text needs to be modified.
+
+Try <A HREF="motion.html#it">it</A>:
+
+<B>	:set foldmethod=marker</B>
+
+Example text, <A HREF="motion.html#as">as</A> <A HREF="motion.html#it">it</A> could appear in a C program:
+
+	/* foobar () {{{ */
+	int foobar()
+	{
+		/* return a value {{{ */
+		return <A HREF="usr_42.html#42">42</A>;
+		/* }}} */
+	}
+	/* }}} */
+
+Notice that the folded line will display the text before the marker.  This is
+very useful to tell what the fold contains.
+
+It's quite annoying when the markers don't pair up correctly after moving some
+lines around.  This can be avoided by using numbered markers.  Example:
+
+	/* global <A HREF="eval.html#variables">variables</A> {{{1 */
+	int varA, varB;
+
+	/* <A HREF="eval.html#functions">functions</A> {{{1 */
+	/* funcA() {{{2 */
+	void funcA() <A HREF="intro.html#{}">{}</A>
+
+	/* funcB() {{{2 */
+	void funcB() <A HREF="intro.html#{}">{}</A>
+	/* }}}1 */
+
+At every numbered marker a fold at the specified level begins.  This will make
+any fold at a higher level stop here.  You can just use numbered start markers
+to define all <A HREF="fold.html#folds">folds</A>.  Only when you want to explicitly stop a fold before
+another starts you need to add an end marker.
+
+More about <A HREF="fold.html#folding">folding</A> with markers in the reference manual: |<A HREF="fold.html#fold-marker">fold-marker</A>|
+
+==============================================================================
+
+*<A NAME="28.7"></A><B>28.7</B>*	<A HREF="fold.html#Folding">Folding</A> by <A HREF="syntax.html#syntax">syntax</A>
+
+For each language Vim uses a different <A HREF="syntax.html#syntax">syntax</A> file.  This defines the colors
+for various items in the file.  If you are reading this in Vim, in a terminal
+that supports colors, the colors you see are made with the &quot;help&quot; <A HREF="syntax.html#syntax">syntax</A> file.
+   In the <A HREF="syntax.html#syntax">syntax</A> files <A HREF="motion.html#it">it</A> is possible to add <A HREF="syntax.html#syntax">syntax</A> items that have the &quot;fold&quot;
+argument.  These define a fold region.  This requires <A HREF="editing.html#writing">writing</A> a <A HREF="syntax.html#syntax">syntax</A> file
+and adding these items in <A HREF="motion.html#it">it</A>.  That's not so <A HREF="starting.html#easy">easy</A> to <A HREF="diff.html#do">do</A>.  But once it's done,
+all <A HREF="fold.html#folding">folding</A> happens automatically.
+   Here we'll assume you are using an existing <A HREF="syntax.html#syntax">syntax</A> file.  Then there is
+nothing more to explain.  You can open and close <A HREF="fold.html#folds">folds</A> <A HREF="motion.html#as">as</A> explained above.
+The <A HREF="fold.html#folds">folds</A> will be created and deleted automatically when you edit the file.
+
+More about <A HREF="fold.html#folding">folding</A> by syntax in the reference manual: |<A HREF="fold.html#fold-syntax">fold-syntax</A>|
+
+==============================================================================
+
+*<A NAME="28.8"></A><B>28.8</B>*	<A HREF="fold.html#Folding">Folding</A> by <A HREF="eval.html#expression">expression</A>
+
+This is similar to <A HREF="fold.html#folding">folding</A> by indent, but instead of using the indent of a
+line a user function is called to compute the fold level of a line.  You can
+use this for text where something in the text indicates which lines belong
+together.  An example is an e-mail message where the quoted text is indicated
+by a &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; before the line.  To fold these <A HREF="quotes.html#quotes">quotes</A> use this:
+
+<B>	:set foldmethod=expr</B>
+<B>	:set foldexpr=strlen(substitute(substitute(getline(v:lnum),'\\s','',\"g\"),'[^&gt;].*','',''))</B>
+
+You can try <A HREF="motion.html#it">it</A> out on this text:
+
+<A HREF="change.html#&gt;">&gt;</A> quoted text he wrote
+<A HREF="change.html#&gt;">&gt;</A> quoted text he wrote
+<A HREF="change.html#&gt;">&gt;</A> <A HREF="change.html#&gt;">&gt;</A> double quoted text I wrote
+<A HREF="change.html#&gt;">&gt;</A> <A HREF="change.html#&gt;">&gt;</A> double quoted text I wrote
+
+Explanation for the <A HREF="options.html#'foldexpr'">'foldexpr'</A> used in the example (inside out):
+   getline(v:lnum)			gets the current line
+   substitute(...,'\\s','','g')		removes all white space from the line
+   substitute(...,'[^&gt;].*','','')	removes everything after leading '&gt;'s
+   strlen(...)				counts the length of the string, which
+					is the number of '&gt;'s found
+
+Note that a <A HREF="intro.html#backslash">backslash</A> must be inserted before every space, double <A HREF="change.html#quote">quote</A> and
+<A HREF="intro.html#backslash">backslash</A> for the &quot;<A HREF="options.html#:set">:set</A>&quot; command.  If this confuses you, <A HREF="diff.html#do">do</A>
+
+<B>	:set foldexpr</B>
+
+to check the actual resulting value.  To correct a complicated <A HREF="eval.html#expression">expression</A>, use
+the command-line completion:
+
+<B>	:set foldexpr=&lt;Tab&gt;</B>
+
+Where <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> is a real <A HREF="intro.html#Tab">Tab</A>.  Vim will fill in the previous value, which you can
+then edit.
+
+When the <A HREF="eval.html#expression">expression</A> gets more complicated you should put <A HREF="motion.html#it">it</A> in a function and
+set <A HREF="options.html#'foldexpr'">'foldexpr'</A> to call that function.
+
+More about <A HREF="fold.html#folding">folding</A> by <A HREF="eval.html#expression">expression</A> in the reference manual: |<A HREF="fold.html#fold-expr">fold-expr</A>|
+
+==============================================================================
+
+*<A NAME="28.9"></A><B>28.9</B>*	<A HREF="fold.html#Folding">Folding</A> unchanged lines
+
+This is useful when you set the <A HREF="options.html#'diff'">'diff'</A> option in the same <A HREF="windows.html#window">window</A>.  The
+|<A HREF="diff.html#vimdiff">vimdiff</A>| command does this for you.  Example:
+
+<B>	:setlocal diff foldmethod=diff scrollbind nowrap foldlevel=1</B>
+
+Do this in every <A HREF="windows.html#window">window</A> that shows a different version of the same file.  You
+will clearly see the differences between the files, while the text that didn't
+change is folded.
+
+For more details see |<A HREF="fold.html#fold-diff">fold-diff</A>|.
+
+==============================================================================
+
+*<A NAME="28.10"></A><B>28.10</B>* Which fold method to use?
+
+All these possibilities make you wonder which method you should choose.
+Unfortunately, there is no golden rule.  Here are some hints.
+
+If there is a <A HREF="syntax.html#syntax">syntax</A> file with <A HREF="fold.html#folding">folding</A> for the language you are editing, that
+is probably the best choice.  If there isn't one, you might try to write <A HREF="motion.html#it">it</A>.
+This requires a good knowledge of search patterns.  It's not <A HREF="starting.html#easy">easy</A>, but when
+it's working you will not have to define <A HREF="fold.html#folds">folds</A> manually.
+
+Typing commands to manually fold regions can be used for unstructured text.
+Then use the |<A HREF="starting.html#:mkview">:mkview</A>| command to save and restore your <A HREF="fold.html#folds">folds</A>.
+
+The marker method requires you to change the file.  If you are sharing the
+files with other people or you have to meet company standards, you might not
+be allowed to add them.
+   The main advantage of markers is that you can put them exactly where you
+want them.  That avoids that a few lines are missed when you cut and paste
+<A HREF="fold.html#folds">folds</A>.  And you can add a comment about what is contained in the fold.
+
+<A HREF="fold.html#Folding">Folding</A> by indent is something that works in many files, but not always very
+well.  Use <A HREF="motion.html#it">it</A> when you can't use one of the other methods.  However, <A HREF="motion.html#it">it</A> is
+very useful for outlining.  Then you specifically use one <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> for
+each nesting level.
+
+<A HREF="fold.html#Folding">Folding</A> with expressions can make <A HREF="fold.html#folds">folds</A> in almost any structured text.  It is
+quite simple to specify, especially if the start and end of a fold can easily
+be recognized.
+   If you use the &quot;<A HREF="eval.html#expr">expr</A>&quot; method to define <A HREF="fold.html#folds">folds</A>, but they are not exactly how
+you want them, you could switch to the &quot;manual&quot; method.  This will not remove
+the defined <A HREF="fold.html#folds">folds</A>.  Then you can delete or add <A HREF="fold.html#folds">folds</A> manually.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_29.html">usr_29.txt</A>|  Moving through programs
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

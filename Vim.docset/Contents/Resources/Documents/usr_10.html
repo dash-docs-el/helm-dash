@@ -1,0 +1,852 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_10</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_10</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_10.txt"></A><B>usr_10.txt</B>*	For Vim version 7.4.  Last change: 2006 Nov 05
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			     Making big changes
+
+
+In chapter 4 several ways to make small changes were explained.  This chapter
+goes into making changes that are repeated or can affect a large amount of
+text.  The <A HREF="visual.html#Visual">Visual</A> mode allows doing various things with blocks of text.  Use
+an external program to <A HREF="diff.html#do">do</A> really complicated things.
+
+|<A HREF="#10.1">10.1</A>|	Record and playback commands
+|<A HREF="#10.2">10.2</A>|	Substitution
+|<A HREF="#10.3">10.3</A>|	Command ranges
+|<A HREF="#10.4">10.4</A>|	The global command
+|<A HREF="#10.5">10.5</A>|	<A HREF="visual.html#Visual">Visual</A> block mode
+|<A HREF="#10.6">10.6</A>|	Reading and <A HREF="editing.html#writing">writing</A> part of a file
+|<A HREF="#10.7">10.7</A>|	Formatting text
+|<A HREF="#10.8">10.8</A>|	Changing <A HREF="change.html#case">case</A>
+|<A HREF="#10.9">10.9</A>|	Using an external program
+
+     Next chapter: |<A HREF="usr_11.html">usr_11.txt</A>|  Recovering from a crash
+ Previous chapter: |<A HREF="usr_09.html">usr_09.txt</A>|  Using the <A HREF="gui.html#GUI">GUI</A>
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="10.1"></A><B>10.1</B>*	Record and playback commands
+
+The &quot;<A HREF="repeat.html#.">.</A>&quot; command repeats the preceding change.  But what if you want to <A HREF="diff.html#do">do</A>
+something more complex than a single change?  That's where command <A HREF="repeat.html#recording">recording</A>
+comes in.  There are three steps:
+
+1. The &quot;q{register}&quot; command starts <A HREF="repeat.html#recording">recording</A> keystrokes into the <A HREF="sponsor.html#register">register</A>
+   named {register}.  The <A HREF="sponsor.html#register">register</A> name must be between a and <A HREF="scroll.html#z.">z.</A>
+2. Type your commands.
+3. To finish <A HREF="repeat.html#recording">recording</A>, press <A HREF="repeat.html#q">q</A> (without any extra character).
+
+You can now execute the <A HREF="map.html#macro">macro</A> by typing the command &quot;@{register}&quot;.
+
+Take a look at how to use these commands in practice.  You have a list of
+filenames that look like this:
+
+<B><FONT COLOR="PURPLE">	stdio.h </FONT></B>
+<B><FONT COLOR="PURPLE">	fcntl.h </FONT></B>
+<B><FONT COLOR="PURPLE">	unistd.h </FONT></B>
+<B><FONT COLOR="PURPLE">	stdlib.h </FONT></B>
+
+And what you want is the following:
+
+<B><FONT COLOR="PURPLE">	#include "stdio.h" </FONT></B>
+<B><FONT COLOR="PURPLE">	#include "fcntl.h" </FONT></B>
+<B><FONT COLOR="PURPLE">	#include "unistd.h" </FONT></B>
+<B><FONT COLOR="PURPLE">	#include "stdlib.h" </FONT></B>
+
+You start by moving to the first character of the first line.  Next you
+execute the following commands:
+
+	qa			Start <A HREF="repeat.html#recording">recording</A> a <A HREF="map.html#macro">macro</A> in <A HREF="sponsor.html#register">register</A> a.
+	^			Move to the beginning of the line.
+	i#include &quot;<A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>	<A HREF="insert.html#Insert">Insert</A> the string #include &quot; at the beginning
+				of the line.
+	$			Move to the end of the line.
+	a&quot;&lt;Esc&gt;			Append the character double quotation <A HREF="motion.html#mark">mark</A> (&quot;)
+				to the end of the line.
+	<A HREF="motion.html#j">j</A>			Go to the next line.
+	<A HREF="repeat.html#q">q</A>			Stop <A HREF="repeat.html#recording">recording</A> the <A HREF="map.html#macro">macro</A>.
+
+Now that you have done the work once, you can repeat the change by typing the
+command &quot;@a&quot; three times.
+   The &quot;@a&quot; command can be preceded by a <A HREF="intro.html#count">count</A>, which will cause the <A HREF="map.html#macro">macro</A> to
+be executed that number of times.  In this <A HREF="change.html#case">case</A> you would type:
+
+<B>	3@a</B>
+
+
+MOVE AND EXECUTE
+
+You might have the lines you want to change in various places.  Just move the
+cursor to each location and use the &quot;@a&quot; command.  If you have done that once,
+you can <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A> again with &quot;<A HREF="repeat.html#@@">@@</A>&quot;.  That's a bit easier to type.  If you now
+execute <A HREF="sponsor.html#register">register</A> <A HREF="motion.html#b">b</A> with &quot;@b&quot;, the next &quot;<A HREF="repeat.html#@@">@@</A>&quot; will use <A HREF="sponsor.html#register">register</A> <A HREF="motion.html#b">b</A>.
+   If you compare the playback method with using &quot;<A HREF="repeat.html#.">.</A>&quot;, there are several
+differences.  First of all, &quot;<A HREF="repeat.html#.">.</A>&quot; can only repeat one change.  As seen in the
+example above, &quot;@a&quot; can <A HREF="diff.html#do">do</A> several changes, and move around <A HREF="motion.html#as">as</A> well.
+Secondly, &quot;<A HREF="repeat.html#.">.</A>&quot; can only remember the last change.  Executing a <A HREF="sponsor.html#register">register</A> allows
+you to make any changes and then still use &quot;@a&quot; to replay the recorded
+commands.  Finally, you can use 26 different <A HREF="change.html#registers">registers</A>.  Thus you can remember
+26 different command sequences to execute.
+
+
+USING REGISTERS
+
+The <A HREF="change.html#registers">registers</A> used for <A HREF="repeat.html#recording">recording</A> are the same ones you used for <A HREF="change.html#yank">yank</A> and
+delete commands.  This allows you to mix <A HREF="repeat.html#recording">recording</A> with other commands to
+manipulate the <A HREF="change.html#registers">registers</A>.
+   Suppose you have recorded a few commands in <A HREF="sponsor.html#register">register</A> <A HREF="pattern.html#n">n</A>.  When you execute
+this with &quot;@n&quot; you notice you did something wrong.  You could try <A HREF="repeat.html#recording">recording</A>
+again, but perhaps you will make another mistake.  Instead, use this trick:
+
+	<A HREF="motion.html#G">G</A>			Go to the end of the file.
+	o&lt;Esc&gt;			Create an empty line.
+	&quot;np			Put the text from the <A HREF="pattern.html#n">n</A> <A HREF="sponsor.html#register">register</A>.  You now see
+				the commands you typed <A HREF="motion.html#as">as</A> text in the file.
+	{edits}			Change the commands that were wrong.  This is
+				just like editing text.
+	0			Go to the start of the line.
+	&quot;ny$			Yank the corrected commands into the <A HREF="pattern.html#n">n</A>
+				<A HREF="sponsor.html#register">register</A>.
+	<A HREF="change.html#dd">dd</A>			Delete the scratch line.
+
+Now you can execute the corrected commands with &quot;@n&quot;.  (If your recorded
+commands include line breaks, adjust the last two items in the example to
+include all the lines.)
+
+
+APPENDING TO A REGISTER
+
+So far we have used a <A HREF="change.html#lowercase">lowercase</A> <A HREF="print.html#letter">letter</A> for the <A HREF="sponsor.html#register">register</A> name.  To append to a
+<A HREF="sponsor.html#register">register</A>, use an <A HREF="change.html#uppercase">uppercase</A> <A HREF="print.html#letter">letter</A>.
+   Suppose you have recorded a command to change a <A HREF="motion.html#word">word</A> to <A HREF="sponsor.html#register">register</A> <A HREF="change.html#c">c</A>.  It
+works properly, but you would like to add a search for the next <A HREF="motion.html#word">word</A> to
+change.  This can be done with:
+
+<B>	qC/word&lt;Enter&gt;q</B>
+
+You start with &quot;qC&quot;, which records to the <A HREF="change.html#c">c</A> <A HREF="sponsor.html#register">register</A> and appends.  Thus
+<A HREF="editing.html#writing">writing</A> to an <A HREF="change.html#uppercase">uppercase</A> <A HREF="sponsor.html#register">register</A> name means to append to the <A HREF="sponsor.html#register">register</A> with
+the same <A HREF="print.html#letter">letter</A>, but <A HREF="change.html#lowercase">lowercase</A>.
+
+This works both with <A HREF="repeat.html#recording">recording</A> and with <A HREF="change.html#yank">yank</A> and delete commands.  For
+example, you want to collect a sequence of lines into the a <A HREF="sponsor.html#register">register</A>.  Yank
+the first line with:
+
+<B>	"aY</B>
+
+Now move to the second line, and type:
+
+<B>	"AY</B>
+
+Repeat this command for all lines.  The a <A HREF="sponsor.html#register">register</A> now contains all those
+lines, in the order you yanked them.
+
+==============================================================================
+
+*<A NAME="10.2"></A><B>10.2</B>*	Substitution						*<A NAME="find-replace"></A><B>find-replace</B>*
+
+The &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; command enables you to perform string replacements on a
+whole range of lines.  The general form of this command is <A HREF="motion.html#as">as</A> follows:
+
+<B>	:[range]substitute/from/to/[flags]</B>
+
+This command changes the &quot;from&quot; string to the &quot;to&quot; string in the lines
+specified with <A HREF="cmdline.html#[range]">[range]</A>.  For example, you can change &quot;Professor&quot; to &quot;Teacher&quot;
+in all lines with the following command:
+
+<B>	:%substitute/Professor/Teacher/</B>
+ 
+	Note:
+	The &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; command is almost never spelled out completely.
+	Most of the time, people use the abbreviated version &quot;<A HREF="change.html#:s">:s</A>&quot;.  From here
+	on the abbreviation will be used.
+
+The &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; before the command specifies the command works on all lines.  Without
+a range, &quot;<A HREF="change.html#:s">:s</A>&quot; only works on the current line.  More about ranges in the next
+section |<A HREF="#10.3">10.3</A>|.
+
+By default, the &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; command changes only the first occurrence on
+each line.  For example, the preceding command changes the line:
+
+<B><FONT COLOR="PURPLE">	Professor Smith criticized Professor Johnson today. </FONT></B>
+
+to:
+
+<B><FONT COLOR="PURPLE">	Teacher Smith criticized Professor Johnson today. </FONT></B>
+
+To change every occurrence on the line, you need to add the <A HREF="index.html#g">g</A> (global) flag.
+The command:
+
+<B>	:%s/Professor/Teacher/g</B>
+
+results in (starting with the original line):
+
+<B><FONT COLOR="PURPLE">	Teacher Smith criticized Teacher Johnson today. </FONT></B>
+
+Other flags include <A HREF="change.html#p">p</A> (print), which causes the &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; command to print
+out the last line <A HREF="motion.html#it">it</A> changes.  The <A HREF="change.html#c">c</A> (confirm) flag tells &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; to ask
+you for confirmation before <A HREF="motion.html#it">it</A> performs each substitution.  Enter the
+following:
+
+<B>	:%s/Professor/Teacher/c</B>
+
+Vim finds the first occurrence of &quot;Professor&quot; and displays the text <A HREF="motion.html#it">it</A> is
+about to change.  You get the following prompt:
+
+<B>	replace with Teacher (y/n/a/q/l/^E/^Y)?</B>
+
+At this point, you must enter one of the following answers:
+
+	<A HREF="change.html#y">y</A>		Yes; make this change.
+	<A HREF="pattern.html#n">n</A>		No; skip this match.
+	a		All; make this change and all remaining ones without
+			further confirmation.
+	<A HREF="repeat.html#q">q</A>		Quit; don't make any more changes.
+	<A HREF="motion.html#l">l</A>		Last; make this change and then quit.
+	<A HREF="scroll.html#CTRL-E">CTRL-E</A>		Scroll the text one line up.
+	<A HREF="scroll.html#CTRL-Y">CTRL-Y</A>		Scroll the text one line down.
+
+
+The &quot;from&quot; part of the substitute command is actually a <A HREF="pattern.html#pattern">pattern</A>.  The same
+kind <A HREF="motion.html#as">as</A> used for the search command.  For example, this command only
+substitutes &quot;the&quot; when <A HREF="motion.html#it">it</A> appears at the start of a line:
+
+<B>	:s/^the/these/</B>
+
+If you are substituting with a &quot;from&quot; or &quot;to&quot; part that includes a slash, you
+need to put a <A HREF="intro.html#backslash">backslash</A> before <A HREF="motion.html#it">it</A>.  A simpler way is to use another character
+instead of the slash.  A plus, for example:
+
+<B>	:s+one/two+one or two+</B>
+
+==============================================================================
+
+*<A NAME="10.3"></A><B>10.3</B>*	Command ranges
+
+The &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; command, and many other : commands, can be applied to a
+selection of lines.  This is called a range.
+   The simple form of a range is {number},{number}.  For example:
+
+<B>	:1,5s/this/that/g</B>
+
+Executes the substitute command on the lines 1 to 5.  Line 5 is included.
+The range is always placed before the command.
+
+A single number can be used to address one specific line:
+
+<B>	:54s/President/Fool/</B>
+
+Some commands work on the whole file when you <A HREF="diff.html#do">do</A> not specify a range.  To make
+them work on the current line the &quot;<A HREF="repeat.html#.">.</A>&quot; address is used.  The &quot;<A HREF="editing.html#:write">:write</A>&quot; command
+works like that.  Without a range, <A HREF="motion.html#it">it</A> writes the whole file.  To make <A HREF="motion.html#it">it</A> write
+only the current line into a file:
+
+<B>	:.write otherfile</B>
+
+The first line always has number one.  How about the last line?  The &quot;<A HREF="motion.html#$">$</A>&quot;
+character is used for this.  For example, to substitute in the lines from the
+cursor to the end:
+
+<B>	:.,$s/yes/no/</B>
+
+The &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; range that we used before, is actually a short way to say &quot;1,$&quot;, from
+the first to the last line.
+
+
+USING A PATTERN IN A RANGE
+
+Suppose you are editing a chapter in a <A HREF="intro.html#book">book</A>, and want to replace all
+occurrences of &quot;grey&quot; with &quot;gray&quot;.  But only in this chapter, not in the next
+one.  You know that only chapter boundaries have the <A HREF="motion.html#word">word</A> &quot;Chapter&quot; in the
+first column.  This command will work then:
+
+<B>	:?^Chapter?,/^Chapter/s=grey=gray=g</B>
+
+You can see a search <A HREF="pattern.html#pattern">pattern</A> is used <A HREF="if_cscop.html#twice">twice</A>.  The first &quot;?^Chapter?&quot; finds the
+line above the current position that matches this <A HREF="pattern.html#pattern">pattern</A>.  Thus the ?pattern?
+range is used to search backwards.  Similarly, &quot;/^Chapter/&quot; is used to search
+forward for the start of the next chapter.
+   To avoid confusion with the slashes, the &quot;<A HREF="change.html#=">=</A>&quot; character was used in the
+substitute command here.  A slash or another character would have worked <A HREF="motion.html#as">as</A>
+well.
+
+
+ADD AND SUBTRACT
+
+There is a slight error in the above command: If the title of the next chapter
+had included &quot;grey&quot; <A HREF="motion.html#it">it</A> would be replaced <A HREF="motion.html#as">as</A> well.  Maybe that's what you
+wanted, but what if you didn't?  Then you can specify an offset.
+   To search for a <A HREF="pattern.html#pattern">pattern</A> and then use the line above <A HREF="motion.html#it">it</A>:
+
+<B>	/Chapter/-1</B>
+
+You can use any number instead of the 1.  To address the second line below the
+match:
+
+<B>	/Chapter/+2</B>
+
+The offsets can also be used with the other items in a range.  Look at this
+one:
+
+<B>	:.+3,$-5</B>
+
+This specifies the range that starts three lines below the cursor and ends
+five lines before the last line in the file.
+
+
+USING MARKS
+
+Instead of figuring out the line numbers of certain positions, remembering them
+and typing them in a range, you can use marks.
+   Place the marks <A HREF="motion.html#as">as</A> mentioned in chapter 3.  For example, use &quot;mt&quot; to <A HREF="motion.html#mark">mark</A>
+the top of an area and &quot;mb&quot; to <A HREF="motion.html#mark">mark</A> the bottom.  Then you can use this range
+to specify the lines between the marks (including the lines with the marks):
+
+<B>	:'t,'b</B>
+
+
+VISUAL MODE AND RANGES
+
+You can select text with <A HREF="visual.html#Visual">Visual</A> mode.  If you then press &quot;<A HREF="cmdline.html#:">:</A>&quot; to start a colon
+command, you will see this:
+
+<B>	:'&lt;,'&gt;</B>
+
+Now you can type the command and <A HREF="motion.html#it">it</A> will be applied to the range of lines that
+was visually selected.
+
+	Note:
+	When using <A HREF="visual.html#Visual">Visual</A> mode to select part of a line, or using <A HREF="visual.html#CTRL-V">CTRL-V</A> to
+	select a block of text, the colon commands will still apply to whole
+	lines.  This might change in a future version of Vim.
+
+The <A HREF="motion.html#'&lt;">'&lt;</A> and <A HREF="motion.html#'&gt;">'&gt;</A> are actually marks, placed at the start and end of the <A HREF="visual.html#Visual">Visual</A>
+selection.  The marks remain at their position until another <A HREF="visual.html#Visual">Visual</A> selection
+is made.  Thus you can use the &quot;<A HREF="motion.html#'&lt;">'&lt;</A>&quot; command to jump to position where the
+<A HREF="visual.html#Visual">Visual</A> area started.  And you can mix the marks with other items:
+
+<B>	:'&gt;,$</B>
+
+This addresses the lines from the end of the <A HREF="visual.html#Visual">Visual</A> area to the end of the
+file.
+
+
+A NUMBER OF LINES
+
+When you know how many lines you want to change, you can type the number and
+then &quot;<A HREF="cmdline.html#:">:</A>&quot;.  For example, when you type &quot;5:&quot;, you will get:
+
+<B>	:.,.+4</B>
+
+Now you can type the command you want to use.  It will use the range &quot;<A HREF="repeat.html#.">.</A>&quot;
+(current line) until &quot;.+4&quot; (four lines down).  Thus <A HREF="motion.html#it">it</A> spans five lines.
+
+==============================================================================
+
+*<A NAME="10.4"></A><B>10.4</B>*	The global command
+
+The &quot;<A HREF="repeat.html#:global">:global</A>&quot; command is one of the more powerful features of Vim.  It allows
+you to find a match for a <A HREF="pattern.html#pattern">pattern</A> and execute a command there.  The general
+form is:
+
+<B>	:[range]global/{pattern}/{command}</B>
+
+This is similar to the &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; command.  But, instead of <A HREF="change.html#replacing">replacing</A> the
+matched text with other text, the command {command} is executed.
+
+	Note:
+	The command executed for &quot;<A HREF="repeat.html#:global">:global</A>&quot; must be one that starts with a
+	colon.  <A HREF="intro.html#Normal">Normal</A> mode commands can not be used directly.  The |<A HREF="various.html#:normal">:normal</A>|
+	command can <A HREF="diff.html#do">do</A> this for you.
+
+Suppose you want to change &quot;foobar&quot; to &quot;barfoo&quot;, but only in C++ style
+comments.  These comments start with &quot;<A HREF="version7.html#//">//</A>&quot;.  Use this command:
+
+<B>	:g+//+s/foobar/barfoo/g</B>
+
+This starts with &quot;<A HREF="repeat.html#:g">:g</A>&quot;.  That is short for &quot;<A HREF="repeat.html#:global">:global</A>&quot;, just like &quot;<A HREF="change.html#:s">:s</A>&quot; is short
+for &quot;<A HREF="change.html#:substitute">:substitute</A>&quot;.  Then the <A HREF="pattern.html#pattern">pattern</A>, enclosed in plus characters.  Since the
+<A HREF="pattern.html#pattern">pattern</A> we are looking for contains a slash, this uses the plus character to
+separate the <A HREF="pattern.html#pattern">pattern</A>.  Next comes the substitute command that changes &quot;foobar&quot;
+into &quot;barfoo&quot;.
+   The default range for the global command is the whole file.  Thus no range
+was specified in this example.  This is different from &quot;<A HREF="change.html#:substitute">:substitute</A>&quot;, which
+works on one line without a range.
+   The command isn't perfect, since <A HREF="motion.html#it">it</A> also matches lines where &quot;<A HREF="version7.html#//">//</A>&quot; appears
+halfway a line, and the substitution will also take place before the &quot;<A HREF="version7.html#//">//</A>&quot;.
+
+Just like with &quot;<A HREF="change.html#:substitute">:substitute</A>&quot;, any <A HREF="pattern.html#pattern">pattern</A> can be used.  When you learn more
+complicated patterns later, you can use them here.
+
+==============================================================================
+
+*<A NAME="10.5"></A><B>10.5</B>*	<A HREF="visual.html#Visual">Visual</A> block mode
+
+With <A HREF="visual.html#CTRL-V">CTRL-V</A> you can start selection of a rectangular area of text.  There are
+a few commands that <A HREF="diff.html#do">do</A> something special with the text block.
+
+There is something special about using the &quot;<A HREF="motion.html#$">$</A>&quot; command in <A HREF="visual.html#Visual">Visual</A> block mode.
+When the last motion command used was &quot;<A HREF="motion.html#$">$</A>&quot;, all lines in the <A HREF="visual.html#Visual">Visual</A> selection
+will extend until the end of the line, also when the line with the cursor is
+shorter.  This remains effective until you use a motion command that moves the
+cursor horizontally.  Thus using &quot;<A HREF="motion.html#j">j</A>&quot; keeps <A HREF="motion.html#it">it</A>, &quot;<A HREF="motion.html#h">h</A>&quot; stops <A HREF="motion.html#it">it</A>.
+
+
+INSERTING TEXT
+
+The command  &quot;I{string}&lt;Esc&gt;&quot; inserts the text {string} in each line, just
+left of the visual block.  You start by pressing <A HREF="visual.html#CTRL-V">CTRL-V</A> to enter visual block
+mode.  Now you move the cursor to define your block.  Next you type I to enter
+<A HREF="insert.html#Insert">Insert</A> mode, followed by the text to insert.  As you type, the text appears on
+the first line only.
+   After you press <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A> to end the insert, the text will magically be
+inserted in the rest of the lines contained in the visual selection.  Example:
+
+<B><FONT COLOR="PURPLE">	include one </FONT></B>
+<B><FONT COLOR="PURPLE">	include two </FONT></B>
+<B><FONT COLOR="PURPLE">	include three </FONT></B>
+<B><FONT COLOR="PURPLE">	include four </FONT></B>
+
+Move the cursor to the &quot;<A HREF="insert.html#o">o</A>&quot; of &quot;one&quot; and press <A HREF="visual.html#CTRL-V">CTRL-V</A>.  Move <A HREF="motion.html#it">it</A> down with &quot;3j&quot;
+to &quot;four&quot;.  You now have a block selection that spans four lines.  Now type:
+
+<B>	Imain.&lt;Esc&gt;</B>
+
+The result:
+
+<B><FONT COLOR="PURPLE">	include main.one </FONT></B>
+<B><FONT COLOR="PURPLE">	include main.two </FONT></B>
+<B><FONT COLOR="PURPLE">	include main.three </FONT></B>
+<B><FONT COLOR="PURPLE">	include main.four </FONT></B>
+
+If the block spans short lines that <A HREF="diff.html#do">do</A> not extend into the block, the text is
+not inserted in that line.  For example, make a <A HREF="visual.html#Visual">Visual</A> block selection that
+includes the <A HREF="motion.html#word">word</A> &quot;long&quot; in the first and last line of this text, and thus has
+no text selected in the second line:
+
+<B><FONT COLOR="PURPLE">	This is a long line </FONT></B>
+<B><FONT COLOR="PURPLE">	short </FONT></B>
+<B><FONT COLOR="PURPLE">	Any other long line </FONT></B>
+
+		  ^^^^ selected block
+
+Now use the command &quot;Ivery &lt;Esc&gt;&quot;.  The result is:
+
+<B><FONT COLOR="PURPLE">	This is a very long line </FONT></B>
+<B><FONT COLOR="PURPLE">	short </FONT></B>
+<B><FONT COLOR="PURPLE">	Any other very long line </FONT></B>
+
+In the short line no text was inserted.
+
+If the string you insert contains a newline, the &quot;<A HREF="insert.html#I">I</A>&quot; acts just like a <A HREF="intro.html#Normal">Normal</A>
+insert command and affects only the first line of the block.
+
+The &quot;<A HREF="insert.html#A">A</A>&quot; command works the same way, except that <A HREF="motion.html#it">it</A> appends after the right
+side of the block.  And <A HREF="motion.html#it">it</A> does insert text in a short line.  Thus you can
+make a choice whether you <A HREF="diff.html#do">do</A> or don't want to append text to a short line.
+   There is one special <A HREF="change.html#case">case</A> for &quot;<A HREF="insert.html#A">A</A>&quot;: <A HREF="visual.html#Select">Select</A> a <A HREF="visual.html#Visual">Visual</A> block and then use &quot;<A HREF="motion.html#$">$</A>&quot;
+to make the block extend to the end of each line.  Using &quot;<A HREF="insert.html#A">A</A>&quot; now will append
+the text to the end of each line.
+   Using the same example from above, and then typing &quot;$A XXX&lt;Esc&gt;, you get
+this result:
+
+<B><FONT COLOR="PURPLE">	This is a long line XXX </FONT></B>
+<B><FONT COLOR="PURPLE">	short XXX </FONT></B>
+<B><FONT COLOR="PURPLE">	Any other long line XXX </FONT></B>
+
+This really requires using the &quot;<A HREF="motion.html#$">$</A>&quot; command.  Vim remembers that <A HREF="motion.html#it">it</A> was used.
+Making the same selection by moving the cursor to the end of the longest line
+with other <A HREF="intro.html#movement">movement</A> commands will not have the same result.
+
+
+CHANGING TEXT
+
+The <A HREF="visual.html#Visual">Visual</A> block &quot;<A HREF="change.html#c">c</A>&quot; command deletes the block and then throws you into <A HREF="insert.html#Insert">Insert</A>
+mode to enable you to type in a string.  The string will be inserted in each
+line in the block.
+   Starting with the same selection of the &quot;long&quot; words <A HREF="motion.html#as">as</A> above, then typing
+&quot;c_LONG_&lt;Esc&gt;&quot;, you get this:
+
+<B><FONT COLOR="PURPLE">	This is a _LONG_ line </FONT></B>
+<B><FONT COLOR="PURPLE">	short </FONT></B>
+<B><FONT COLOR="PURPLE">	Any other _LONG_ line </FONT></B>
+
+Just like with &quot;<A HREF="insert.html#I">I</A>&quot; the short line is not changed.  Also, you can't enter a
+newline in the new text.
+
+The &quot;<A HREF="change.html#C">C</A>&quot; command deletes text from the left edge of the block to the end of
+line.  It then puts you in <A HREF="insert.html#Insert">Insert</A> mode so that you can type in a string,
+which is added to the end of each line.
+   Starting with the same text again, and typing &quot;Cnew text&lt;Esc&gt;&quot; you get:
+
+<B><FONT COLOR="PURPLE">	This is a new text </FONT></B>
+<B><FONT COLOR="PURPLE">	short </FONT></B>
+<B><FONT COLOR="PURPLE">	Any other new text </FONT></B>
+
+Notice that, even though only the &quot;long&quot; <A HREF="motion.html#word">word</A> was selected, the text after <A HREF="motion.html#it">it</A>
+is deleted <A HREF="motion.html#as">as</A> well.  Thus only the location of the left edge of the visual
+block really matters.
+   Again, short lines that <A HREF="diff.html#do">do</A> not reach into the block are excluded.
+
+Other commands that change the characters in the block:
+
+	~	swap <A HREF="change.html#case">case</A>	(a -&gt; A and A -&gt; <A HREF="motion.html#a)">a)</A>
+	<A HREF="undo.html#U">U</A>	make <A HREF="change.html#uppercase">uppercase</A>  (a -&gt; A and A -&gt; A)
+	<A HREF="undo.html#u">u</A>	make <A HREF="change.html#lowercase">lowercase</A>  (a -&gt; a and A -&gt; <A HREF="motion.html#a)">a)</A>
+
+
+FILLING WITH A CHARACTER
+
+To fill the whole block with one character, use the &quot;<A HREF="change.html#r">r</A>&quot; command.  Again,
+starting with the same example text from above, and then typing &quot;rx&quot;:
+
+<B><FONT COLOR="PURPLE">	This is a xxxx line </FONT></B>
+<B><FONT COLOR="PURPLE">	short </FONT></B>
+<B><FONT COLOR="PURPLE">	Any other xxxx line </FONT></B>
+
+
+	Note:
+	If you want to include characters beyond the end of the line in the
+	block, check out the <A HREF="options.html#'virtualedit'">'virtualedit'</A> feature in chapter 25.
+
+
+SHIFTING
+
+The command &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; shifts the selected text to the right one <A HREF="intro.html#shift">shift</A> amount,
+<A HREF="insert.html#inserting">inserting</A> <A HREF="pattern.html#whitespace">whitespace</A>.  The starting point for this <A HREF="intro.html#shift">shift</A> is the left edge of
+the visual block.
+   With the same example again, &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; gives this result:
+
+<B><FONT COLOR="PURPLE">	This is a	  long line </FONT></B>
+<B><FONT COLOR="PURPLE">	short </FONT></B>
+<B><FONT COLOR="PURPLE">	Any other	  long line </FONT></B>
+
+The <A HREF="intro.html#shift">shift</A> amount is specified with the <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> option.  To change <A HREF="motion.html#it">it</A> to
+use 4 spaces:
+
+<B>	:set shiftwidth=4</B>
+
+The &quot;<A HREF="change.html#&lt;">&lt;</A>&quot; command removes one <A HREF="intro.html#shift">shift</A> amount of <A HREF="pattern.html#whitespace">whitespace</A> at the left
+edge of the block.  This command is limited by the amount of text that is
+there; so if there is <A HREF="various.html#less">less</A> than a <A HREF="intro.html#shift">shift</A> amount of <A HREF="pattern.html#whitespace">whitespace</A> available, <A HREF="motion.html#it">it</A>
+removes what <A HREF="motion.html#it">it</A> can.
+
+
+JOINING LINES
+
+The &quot;<A HREF="change.html#J">J</A>&quot; command joins all selected lines together into one line.  Thus <A HREF="motion.html#it">it</A>
+removes the line breaks.  Actually, the line break, leading white space and
+trailing white space is replaced by one space.  Two spaces are used after a
+line ending (that can be changed with the <A HREF="options.html#'joinspaces'">'joinspaces'</A> option).
+   Let's use the example that we got so familiar with now.  The result of
+using the &quot;<A HREF="change.html#J">J</A>&quot; command:
+
+<B><FONT COLOR="PURPLE">	This is a long line short Any other long line </FONT></B>
+
+The &quot;<A HREF="change.html#J">J</A>&quot; command doesn't require a blockwise selection.  It works with &quot;<A HREF="visual.html#v">v</A>&quot; and
+&quot;<A HREF="visual.html#V">V</A>&quot; selection in exactly the same way.
+
+If you don't want the white space to be changed, use the &quot;<A HREF="change.html#gJ">gJ</A>&quot; command.
+
+==============================================================================
+
+*<A NAME="10.6"></A><B>10.6</B>*	Reading and <A HREF="editing.html#writing">writing</A> part of a file
+
+When you are <A HREF="editing.html#writing">writing</A> an e-mail message, you may want to include another file.
+This can be done with the &quot;<A HREF="insert.html#:read">:read</A> {filename}&quot; command.  The text of the file is
+put below the cursor line.
+   Starting with this text:
+
+<B><FONT COLOR="PURPLE">	Hi John, </FONT></B>
+<B><FONT COLOR="PURPLE">	Here is the diff that fixes the bug: </FONT></B>
+<B><FONT COLOR="PURPLE">	Bye, Pierre. </FONT></B>
+
+Move the cursor to the second line and type:
+
+<B>	:read patch</B>
+
+The file named &quot;patch&quot; will be inserted, with this result:
+
+<B><FONT COLOR="PURPLE">	Hi John, </FONT></B>
+<B><FONT COLOR="PURPLE">	Here is the diff that fixes the bug: </FONT></B>
+<B><FONT COLOR="PURPLE">	2c2 </FONT></B>
+<B><FONT COLOR="PURPLE">	&lt;	for (i = 0; i &lt;= length; ++i) </FONT></B>
+<B><FONT COLOR="PURPLE">	--- </FONT></B>
+<B><FONT COLOR="PURPLE">	&gt;	for (i = 0; i &lt; length; ++i) </FONT></B>
+<B><FONT COLOR="PURPLE">	Bye, Pierre. </FONT></B>
+
+The &quot;<A HREF="insert.html#:read">:read</A>&quot; command accepts a range.  The file will be put below the last line
+number of this range.  Thus &quot;:$r patch&quot; appends the file &quot;patch&quot; at the end of
+the file.
+   What if you want to read the file above the first line?  This can be done
+with the line number zero.  This line doesn't really exist, you will get an
+error message when using <A HREF="motion.html#it">it</A> with most commands.  But this command is allowed:
+
+<B>	:0read patch</B>
+
+The file &quot;patch&quot; will be put above the first line of the file.
+
+
+WRITING A RANGE OF LINES
+
+To write a range of lines to a file, the &quot;<A HREF="editing.html#:write">:write</A>&quot; command can be used.
+Without a range <A HREF="motion.html#it">it</A> writes the whole file.  With a range only the specified
+lines are written:
+
+<B>	:.,$write tempo</B>
+
+This writes the lines from the cursor until the end of the file into the file
+&quot;tempo&quot;.  If this file already exists you will get an error message.  Vim
+protects you from accidentally overwriting an existing file.  If you know what
+you are doing and want to overwrite the file, append !:
+
+<B>	:.,$write! tempo</B>
+
+CAREFUL: The ! must follow the &quot;<A HREF="editing.html#:write">:write</A>&quot; command immediately, without white
+space.  Otherwise <A HREF="motion.html#it">it</A> becomes a <A HREF="change.html#filter">filter</A> command, which is explained later in
+this chapter.
+
+
+APPENDING TO A FILE
+
+In the first section of this chapter was explained how to collect a number of
+lines into a <A HREF="sponsor.html#register">register</A>.  The same can be done to collect lines in a file.
+Write the first line with this command:
+
+<B>	:.write collection</B>
+
+Now move the cursor to the second line you want to collect, and type this:
+
+<B>	:.write &gt;&gt;collection</B>
+
+The &quot;<A HREF="change.html#&gt;&gt;">&gt;&gt;</A>&quot; tells Vim the &quot;collection&quot; file is not to be written <A HREF="motion.html#as">as</A> a new file,
+but the line must be appended at the end.   You can repeat this <A HREF="motion.html#as">as</A> many times
+<A HREF="motion.html#as">as</A> you like.
+
+==============================================================================
+
+*<A NAME="10.7"></A><B>10.7</B>*	Formatting text
+
+When you are typing plain text, it's <A HREF="todo.html#nice">nice</A> if the length of each line is
+automatically trimmed to fit in the <A HREF="windows.html#window">window</A>.  To make this happen while
+<A HREF="insert.html#inserting">inserting</A> text, set the <A HREF="options.html#'textwidth'">'textwidth'</A> option:
+
+<B>	:set textwidth=72</B>
+
+You might remember that in the example <A HREF="starting.html#vimrc">vimrc</A> file this command was used for
+every text file.  Thus if you are using that <A HREF="starting.html#vimrc">vimrc</A> file, you were already
+using <A HREF="motion.html#it">it</A>.  To check the current value of <A HREF="options.html#'textwidth'">'textwidth'</A>:
+
+<B>	:set textwidth</B>
+
+Now lines will be broken to take only up to 72 characters.  But when you
+insert text halfway a line, or when you delete a few words, the lines will get
+too long or too short.  Vim doesn't automatically reformat the text.
+   To tell Vim to format the current <A HREF="motion.html#paragraph">paragraph</A>:
+
+<B>	gqap</B>
+
+This starts with the &quot;<A HREF="change.html#gq">gq</A>&quot; command, which is an <A HREF="motion.html#operator">operator</A>.  Following is &quot;<A HREF="motion.html#ap">ap</A>&quot;,
+the text object that stands for &quot;a paragraph&quot;.  A <A HREF="motion.html#paragraph">paragraph</A> is separated from
+the next <A HREF="motion.html#paragraph">paragraph</A> by an empty line.
+
+	Note:
+	A blank line, which contains white space, does NOT separate
+	paragraphs.  This is hard to notice!
+
+Instead of &quot;<A HREF="motion.html#ap">ap</A>&quot; you could use any motion or text object.  If your paragraphs
+are properly separated, you can use this command to format the whole file:
+
+<B>	gggqG</B>
+
+&quot;<A HREF="motion.html#gg">gg</A>&quot; takes you to the first line, &quot;<A HREF="change.html#gq">gq</A>&quot; is the format <A HREF="motion.html#operator">operator</A> and &quot;<A HREF="motion.html#G">G</A>&quot; the
+motion that jumps to the last line.
+
+In <A HREF="change.html#case">case</A> your paragraphs aren't clearly defined, you can format just the lines
+you manually select.  Move the cursor to the first line you want to format.
+Start with the command &quot;gqj&quot;.  This formats the current line and the one below
+<A HREF="motion.html#it">it</A>.  If the first line was short, words from the next line will be appended.
+If <A HREF="motion.html#it">it</A> was too long, words will be moved to the next line.  The cursor moves to
+the second line.  Now you can use &quot;<A HREF="repeat.html#.">.</A>&quot; to repeat the command.  Keep doing this
+until you are at the end of the text you want to format.
+
+==============================================================================
+
+*<A NAME="10.8"></A><B>10.8</B>*	Changing <A HREF="change.html#case">case</A>
+
+You have text with section headers in <A HREF="change.html#lowercase">lowercase</A>.  You want to make the <A HREF="motion.html#word">word</A>
+&quot;section&quot; all <A HREF="change.html#uppercase">uppercase</A>.  Do this with the &quot;<A HREF="change.html#gU">gU</A>&quot; <A HREF="motion.html#operator">operator</A>.  Start with the
+cursor in the first column:
+
+<B>			     gUw</B>
+ 	section header	    ----&gt;      SECTION header
+
+The &quot;<A HREF="change.html#gu">gu</A>&quot; <A HREF="motion.html#operator">operator</A> does exactly the opposite:
+
+<B>			     guw</B>
+ 	SECTION header	    ----&gt;      section header
+
+You can also use &quot;<A HREF="change.html#g~">g~</A>&quot; to swap <A HREF="change.html#case">case</A>.  All these are operators, thus they work
+with any motion command, with text <A HREF="index.html#objects">objects</A> and in <A HREF="visual.html#Visual">Visual</A> mode.
+   To make an <A HREF="motion.html#operator">operator</A> work on lines you double <A HREF="motion.html#it">it</A>.  The delete <A HREF="motion.html#operator">operator</A> is
+&quot;<A HREF="change.html#d">d</A>&quot;, thus to delete a line you use &quot;<A HREF="change.html#dd">dd</A>&quot;.  Similarly, &quot;<A HREF="change.html#gugu">gugu</A>&quot; makes a whole line
+<A HREF="change.html#lowercase">lowercase</A>.  This can be shortened to &quot;<A HREF="change.html#guu">guu</A>&quot;.  &quot;<A HREF="change.html#gUgU">gUgU</A>&quot; is shortened to &quot;<A HREF="change.html#gUU">gUU</A>&quot; and
+&quot;<A HREF="change.html#g~g~">g~g~</A>&quot; to &quot;<A HREF="change.html#g~~">g~~</A>&quot;.  Example:
+
+<B>				g~~ </B>
+<B><FONT COLOR="PURPLE"> 	Some GIRLS have Fun    ----&gt;   sOME girls HAVE fUN </FONT></B>
+
+==============================================================================
+
+*<A NAME="10.9"></A><B>10.9</B>*	Using an external program
+
+Vim has a very powerful set of commands, <A HREF="motion.html#it">it</A> can <A HREF="diff.html#do">do</A> anything.  But there may
+still be something that an external command can <A HREF="diff.html#do">do</A> better or faster.
+   The command &quot;!{motion}{program}&quot; takes a block of text and filters <A HREF="motion.html#it">it</A>
+through an external program.  In other words, <A HREF="motion.html#it">it</A> runs the system command
+represented by {program}, giving <A HREF="motion.html#it">it</A> the block of text represented by <A HREF="intro.html#{motion}">{motion}</A>
+<A HREF="motion.html#as">as</A> input.  The output of this command then replaces the selected block.
+   Because this summarizes badly if you are unfamiliar with UNIX filters, take
+a look at an example.  The sort command sorts a file.  If you execute the
+following command, the unsorted file input.txt will be sorted and written to
+output.txt.  (This works on both UNIX and Microsoft Windows.)
+
+<B>	sort &lt;input.txt &gt;output.txt</B>
+
+Now <A HREF="diff.html#do">do</A> the same thing in Vim.  You want to sort lines 1 through 5 of a file.
+You start by putting the cursor on line 1.  Next you execute the following
+command:
+
+<B>	!5G</B>
+
+The &quot;<A HREF="change.html#!">!</A>&quot; tells Vim that you are performing a <A HREF="change.html#filter">filter</A> operation.  The Vim editor
+expects a motion command to follow, indicating which part of the file to
+<A HREF="change.html#filter">filter</A>.  The &quot;5G&quot; command tells Vim to go to line 5, so <A HREF="motion.html#it">it</A> now knows that <A HREF="motion.html#it">it</A>
+is to <A HREF="change.html#filter">filter</A> lines 1 (the current line) through 5.
+   In anticipation of the filtering, the cursor drops to the bottom of the
+screen and a ! prompt displays.  You can now type in the name of the <A HREF="change.html#filter">filter</A>
+program, in this <A HREF="change.html#case">case</A> &quot;sort&quot;.  Therefore, your full command is <A HREF="motion.html#as">as</A> follows:
+
+<B>	!5Gsort&lt;Enter&gt;</B>
+
+The result is that the sort program is run on the first 5 lines.  The output
+of the program replaces these lines.
+
+	line 55			      line 11
+	line 33			      line 22
+	line 11		--&gt;	      line 33
+	line 22			      line 44
+	line 44			      line 55
+	last line		      last line
+
+The &quot;<A HREF="change.html#!!">!!</A>&quot; command filters the current line through a <A HREF="change.html#filter">filter</A>.  In <A HREF="os_unix.html#Unix">Unix</A> the &quot;date&quot;
+command prints the current time and date.  &quot;!!date&lt;Enter&gt;&quot; replaces the current
+line with the output of &quot;date&quot;.  This is useful to add a <A HREF="editing.html#timestamp">timestamp</A> to a file.
+
+
+WHEN IT DOESN'T WORK
+
+Starting a shell, sending <A HREF="motion.html#it">it</A> text and capturing the output requires that Vim
+knows how the shell works exactly.  When you have problems with filtering,
+check the values of these <A HREF="options.html#options">options</A>:
+
+	<A HREF="options.html#'shell'">'shell'</A>		specifies the program that Vim uses to execute
+			external programs.
+	<A HREF="options.html#'shellcmdflag'">'shellcmdflag'</A>	argument to pass a command to the shell
+	<A HREF="options.html#'shellquote'">'shellquote'</A>	<A HREF="change.html#quote">quote</A> to be used around the command
+	<A HREF="options.html#'shellxquote'">'shellxquote'</A>	<A HREF="change.html#quote">quote</A> to be used around the command and redirection
+	<A HREF="options.html#'shelltype'">'shelltype'</A>	kind of shell (only for the <A HREF="os_amiga.html#Amiga">Amiga</A>)
+	<A HREF="options.html#'shellslash'">'shellslash'</A>	use forward slashes in the command (only for
+			<A HREF="os_win32.html#MS-Windows">MS-Windows</A> and alikes)
+	<A HREF="options.html#'shellredir'">'shellredir'</A>	string used to write the command output into a file
+
+On <A HREF="os_unix.html#Unix">Unix</A> this is hardly ever a problem, because there are two kinds of shells:
+&quot;sh&quot; like and &quot;csh&quot; like.  Vim checks the <A HREF="options.html#'shell'">'shell'</A> option and sets related
+<A HREF="options.html#options">options</A> automatically, depending on whether <A HREF="motion.html#it">it</A> sees &quot;csh&quot; somewhere in
+<A HREF="options.html#'shell'">'shell'</A>.
+   On <A HREF="os_win32.html#MS-Windows">MS-Windows</A>, however, there are many different shells and you might have
+to tune the <A HREF="options.html#options">options</A> to make filtering work.  Check the help for the <A HREF="options.html#options">options</A>
+for more information.
+
+
+READING COMMAND OUTPUT
+
+To read the contents of the current directory into the file, use this:
+
+on <A HREF="os_unix.html#Unix">Unix</A>:
+<B>	:read !ls</B>
+on <A HREF="os_win32.html#MS-Windows">MS-Windows</A>:
+<B>	:read !dir</B>
+
+The output of the &quot;ls&quot; or &quot;dir&quot; command is captured and inserted in the text,
+below the cursor.  This is similar to reading a file, except that the &quot;<A HREF="change.html#!">!</A>&quot; is
+used to tell Vim that a command follows.
+   The command may have arguments.  And a range can be used to tell where Vim
+should put the lines:
+
+<B>	:0read !date -u</B>
+
+This inserts the current time and date in UTC format at the top of the file.
+(Well, if you have a date command that accepts the &quot;<A HREF="starting.html#-u">-u</A>&quot; argument.)  Note the
+difference with using &quot;!!date&quot;: that replaced a line, while &quot;<A HREF="insert.html#:read">:read</A> !date&quot; will
+insert a line.
+
+
+WRITING TEXT TO A COMMAND
+
+The <A HREF="os_unix.html#Unix">Unix</A> command &quot;wc&quot; counts words.  To <A HREF="intro.html#count">count</A> the words in the current file:
+
+<B>	:write !wc</B>
+
+This is the same write command <A HREF="motion.html#as">as</A> before, but instead of a file name the &quot;<A HREF="change.html#!">!</A>&quot;
+character is used and the name of an external command.  The written text will
+be passed to the specified command <A HREF="motion.html#as">as</A> its standard input.  The output could
+look like this:
+
+<B><FONT COLOR="PURPLE">       4      47     249 </FONT></B>
+
+The &quot;wc&quot; command isn't <A HREF="starting.html#verbose">verbose</A>.  This means you have 4 lines, 47 words and 249
+characters.
+
+Watch out for this mistake:
+
+<B>	:write! wc</B>
+
+This will write the file &quot;wc&quot; in the current directory, with force.  White
+space is important here!
+
+
+REDRAWING THE SCREEN
+
+If the external command produced an error message, the display may have been
+messed up.  Vim is very efficient and only redraws those parts of the screen
+that <A HREF="motion.html#it">it</A> knows need redrawing.  But <A HREF="motion.html#it">it</A> can't know about what another program
+has written.  To tell Vim to redraw the screen:
+
+<B>	CTRL-L</B>
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_11.html">usr_11.txt</A>|  Recovering from a crash
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

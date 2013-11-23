@@ -1,0 +1,549 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: gui_w32</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: gui_w32</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="gui_w32.txt"></A><B>gui_w32.txt</B>*   For Vim version 7.4.  Last change: 2012 Aug 04
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Vim's <A HREF="os_win32.html#Win32">Win32</A> Graphical <A HREF="autocmd.html#User">User</A> Interface			*<A NAME="gui-w32"></A><B>gui-w32</B>* *<A NAME="win32-gui"></A><B>win32-gui</B>*
+
+1. Starting the <A HREF="gui.html#GUI">GUI</A>		|<A HREF="#gui-w32-start">gui-w32-start</A>|
+2. Vim <A HREF="motion.html#as">as</A> default editor	|<A HREF="#vim-default-editor">vim-default-editor</A>|
+3. Using the clipboard		|<A HREF="#gui-clipboard">gui-clipboard</A>|
+4. Shell Commands		|<A HREF="#gui-shell-win32">gui-shell-win32</A>|
+5. Special colors		|<A HREF="#win32-colors">win32-colors</A>|
+6. Windows dialogs <A HREF="change.html#&amp;">&amp;</A> browsers	|<A HREF="#gui-w32-dialogs">gui-w32-dialogs</A>|
+7. Command line arguments	|<A HREF="#gui-w32-cmdargs">gui-w32-cmdargs</A>|
+8. Various			|<A HREF="#gui-w32-various">gui-w32-various</A>|
+
+Other relevant documentation:
+|<A HREF="gui.html">gui.txt</A>|	For generic items of the <A HREF="gui.html#GUI">GUI</A>.
+|<A HREF="os_win32.html">os_win32.txt</A>| 	For <A HREF="os_win32.html#Win32">Win32</A> specific items.
+
+{Vi does not have a Windows GUI}
+
+==============================================================================
+
+1. Starting the <A HREF="gui.html#GUI">GUI</A>					*<A NAME="gui-w32-start"></A><B>gui-w32-start</B>*
+
+The <A HREF="os_win32.html#Win32">Win32</A> <A HREF="gui.html#GUI">GUI</A> version of Vim will always start the <A HREF="gui.html#GUI">GUI</A>, no matter how you
+start <A HREF="motion.html#it">it</A> or what it's called.
+
+The <A HREF="gui.html#GUI">GUI</A> will always run in the Windows subsystem.  Mostly shells automatically
+return with a command prompt after starting <A HREF="starting.html#gvim">gvim</A>.  If not, you should use the
+&quot;start&quot; command:
+<B>	start gvim [options] file ..</B>
+
+Note: All fonts (bold, <A HREF="syntax.html#italic">italic</A>) must be of the same size!!!  If you don't <A HREF="diff.html#do">do</A>
+this, text will disappear or mess up the display.  Vim does not check the font
+sizes.  It's the size in screen pixels that must be the same.  Note that some
+fonts that have the same point size don't have the same pixel size!
+Additionally, the positioning of the fonts must be the same (ascent and
+descent).
+
+The <A HREF="os_win32.html#Win32">Win32</A> <A HREF="gui.html#GUI">GUI</A> has an extra menu item:  &quot;Edit/Select Font&quot;.  It brings up the
+standard Windows font selector.
+
+Setting the menu height doesn't work for the <A HREF="os_win32.html#Win32">Win32</A> <A HREF="gui.html#GUI">GUI</A>.
+
+
+							*<A NAME="gui-win32-maximized"></A><B>gui-win32-maximized</B>*
+If you want Vim to start with a maximized <A HREF="windows.html#window">window</A>, add this command to your
+<A HREF="starting.html#vimrc">vimrc</A> or <A HREF="gui.html#gvimrc">gvimrc</A> file:
+<B>	au GUIEnter * simalt ~x</B>
+ 
+
+								*<A NAME="gui-w32s"></A><B>gui-w32s</B>*
+There is a specific version of gvim.exe that runs under the Win32s subsystem
+of Windows 3.1 or 3.11.  See |<A HREF="os_win32.html#win32s">win32s</A>|.
+
+
+
+Using Vim <A HREF="motion.html#as">as</A> a <A HREF="usr_05.html#plugin">plugin</A>					*<A NAME="gui-w32-windowid"></A><B>gui-w32-windowid</B>*
+
+When <A HREF="starting.html#gvim">gvim</A> starts up normally, <A HREF="motion.html#it">it</A> creates its own top level <A HREF="windows.html#window">window</A>.  If you
+pass Vim the command-line option |<A HREF="starting.html#--windowid">--windowid</A>| with a decimal or hexadecimal
+value, Vim will create a <A HREF="windows.html#window">window</A> that is a child of the <A HREF="windows.html#window">window</A> with the given
+ID.  This enables Vim to act <A HREF="motion.html#as">as</A> a <A HREF="usr_05.html#plugin">plugin</A> in another application.  This really
+is a programmer's interface, and is of no use without a supporting application
+to spawn Vim correctly.
+
+==============================================================================
+
+2. Vim <A HREF="motion.html#as">as</A> default editor				*<A NAME="vim-default-editor"></A><B>vim-default-editor</B>*
+
+To set Vim <A HREF="motion.html#as">as</A> the default editor for a file type:
+1. Start a Windows Explorer
+2. Choose View/Options -&gt; File Types
+3. <A HREF="visual.html#Select">Select</A> the path to <A HREF="starting.html#gvim">gvim</A> for every file type that you want to use <A HREF="motion.html#it">it</A> for.
+   (you can also use three spaces in the file type field, for files without an
+   extension).
+   In the &quot;open&quot; action, use:
+<B>	gvim "%1"</B>
+   The <A HREF="quotes.html#quotes">quotes</A> are required for using file names with embedded spaces.
+   You can also use this:
+<B>	gvim "%L"</B>
+   This should avoid short (8.3 character) file names in some situations.  But
+   I'm not sure if this works everywhere.
+
+When you open a file in Vim by double clicking <A HREF="motion.html#it">it</A>, Vim changes to that
+file's directory.
+
+If you want Vim to start full-screen, use this for the Open action:
+<B>	gvim -c "simalt ~x" "%1"</B>
+
+Another method, which also works when you put Vim in another directory (e.g.,
+when you have got a new version):
+1. select a file you want to use Vim with
+2. &lt;Shift-F10&gt;
+3. select &quot;Open With...&quot; menu entry
+4. click &quot;Other...&quot;
+5. browse to the (new) location of Vim and click &quot;Open&quot;
+6. make &quot;Always Use this program...&quot; checked
+7. &lt;OK&gt;
+
+
+						*<A NAME="send-to-menu"></A><B>send-to-menu</B>* *<A NAME="sendto"></A><B>sendto</B>*
+You can also <A HREF="usr_90.html#install">install</A> Vim in the &quot;Send To&quot; menu:
+1. Start a Windows Explorer
+2. Navigate to your <A HREF="#sendto">sendto</A> directory:
+   Windows 95: &#37;windir&#37;\sendto (e.g. &quot;c:\windows\sendto&quot;)
+   Windows NT: &#37;windir&#37;\profiles\&#37;user&#37;\sendto (e.g.
+	       &quot;c:\winnt\profiles\mattha\sendto&quot;).
+3. Right-click in the file pane and select New-&gt;Shortcut
+4. Follow the shortcut wizard, using the full path to VIM/GVIM.
+
+When you 'send a file to Vim', Vim changes to that file's directory.  Note,
+however, that any long directory names will appear in their short (MS-DOS)
+form.  This is a limitation of the Windows &quot;Send To&quot; mechanism.
+
+
+						*<A NAME="notepad"></A><B>notepad</B>*
+You could replace notepad.exe with gvim.exe, but that has a few side effects.
+Some programs rely on <A HREF="#notepad">notepad</A> arguments, which are not recognized by Vim.  For
+example &quot;<A HREF="#notepad">notepad</A> -p&quot; is used by some applications to print a file.  It's
+better to leave <A HREF="#notepad">notepad</A> where <A HREF="motion.html#it">it</A> is and use another way to start Vim.
+
+
+						*<A NAME="win32-popup-menu"></A><B>win32-popup-menu</B>*
+A more drastic approach is to <A HREF="usr_90.html#install">install</A> an &quot;Edit with Vim&quot; entry in the popup
+menu for the right mouse button.  With this you can edit any file with Vim.
+
+This can co-exist with the file associations mentioned above.  The difference
+is that the file associations will make starting Vim the default action.  With
+the &quot;Edit with Vim&quot; menu entry you can keep the existing file association for
+double clicking on the file, and edit the file with Vim when you want.  For
+example, you can associate &quot;*.mak&quot; with your make program.  You can execute
+the makefile by double clicking <A HREF="motion.html#it">it</A> and use the &quot;Edit with Vim&quot; entry to edit
+the makefile.
+
+You can select any files and right-click to see a menu option called &quot;Edit
+with gvim&quot;.  Choosing this menu option will invoke <A HREF="starting.html#gvim">gvim</A> with the file you have
+selected.  If you select multiple files, you will find two gvim-related menu
+<A HREF="options.html#options">options</A>:
+&quot;Edit with multiple gvims&quot;  <A HREF="starting.html#--">--</A> one <A HREF="starting.html#gvim">gvim</A> for each file in the selection
+&quot;Edit with single gvim&quot;     <A HREF="starting.html#--">--</A> one <A HREF="starting.html#gvim">gvim</A> for all the files in the selection
+And if there already is a <A HREF="starting.html#gvim">gvim</A> running:
+&quot;Edit with existing gvim&quot;   <A HREF="starting.html#--">--</A> edit the file with the running <A HREF="starting.html#gvim">gvim</A>
+
+The &quot;edit with existing Vim&quot; entries can be disabled by adding an entry in the
+registry under HKLM\Software\Vim\Gvim, named DisableEditWithExisting, and with
+any value.
+
+						*<A NAME="install-registry"></A><B>install-registry</B>*
+You can add the &quot;Edit with Vim&quot; menu entry in an <A HREF="starting.html#easy">easy</A> way by using the
+&quot;install.exe&quot; program.  It will add several registry entries for you.
+
+You can also <A HREF="diff.html#do">do</A> this by hand.  This is complicated!  Use the install.exe if
+you can.
+
+1. Start the registry editor with &quot;regedit&quot;.
+2. Add these keys:
+<B><FONT COLOR="PURPLE">   key		value name		    value </FONT></B>
+   HKEY_CLASSES_ROOT\CLSID\{51EEE242-AD87-11d3-9C1E-0090278BBD99}
+		{default}		    Vim Shell Extension
+   HKEY_CLASSES_ROOT\CLSID\{51EEE242-AD87-11d3-9C1E-0090278BBD99}\InProcServer32
+		{default}		    {path}\gvimext.dll
+		ThreadingModel		    Apartment
+   HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\gvim
+		{default}		    {51EEE242-AD87-11d3-9C1E-0090278BBD99}
+   HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved
+		{51EEE242-AD87-11d3-9C1E-0090278BBD99}
+					    Vim Shell Extension
+   HKEY_LOCAL_MACHINE\Software\Vim\Gvim
+		path			    {path}\gvim.exe
+   HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Uninstall\vim 5.6
+		DisplayName		    Vim 5.6: Edit with Vim popup menu entry
+		UninstallString		    {path}\uninstal.exe
+
+   <A HREF="insert.html#Replace">Replace</A> {path} with the path that leads to the executable.
+   Don't type {default}, this is the value for the key itself.
+
+To remove &quot;Edit with Vim&quot; from the popup menu, just remove the registry
+entries mentioned above.  The &quot;uninstal.exe&quot; program can <A HREF="diff.html#do">do</A> this for you.  You
+can also use the entry in the Windows standard &quot;Add/Remove Programs&quot; list.
+
+If you notice that this entry overrules other file type associations, set
+those associations again by hand (using Windows Explorer, see above).  This
+only seems to happen on some Windows NT versions (Windows bug?).  Procedure:
+1. Find the name of the file type.  This can be done by starting the registry
+   editor, and searching for the extension in \\HKEY_CLASSES_ROOT
+2. In a Windows Explorer, use View/Options/File Types.  Search for the file
+   type in the list and click &quot;Edit&quot;.  In the actions list, you can select on
+   to be used <A HREF="motion.html#as">as</A> the default (normally the &quot;open&quot; action) and click on the
+   &quot;Set Default&quot; button.
+
+
+
+Vim in the &quot;Open With...&quot; context menu			*<A NAME="win32-open-with-menu"></A><B>win32-open-with-menu</B>*
+
+If you use the Vim <A HREF="usr_90.html#install">install</A> program you have the choice to add Vim to the &quot;Open
+With...&quot; menu.  This means you can use Vim to edit many files.  Not every file
+(for unclear reasons...), thus the &quot;Edit with Vim&quot; menu entry is still useful.
+
+One reason to add this is to be able to edit HTML files directly from Internet
+Explorer.  To enable this use the &quot;Tools&quot; menu, &quot;Internet Options...&quot; entry.
+In the <A HREF="#dialog">dialog</A> select the &quot;Programs&quot; <A HREF="intro.html#tab">tab</A> and select Vim in the &quot;HTML editor&quot;
+choice.  If it's not there than installing didn't work properly.
+
+Doing this manually can be done with this <A HREF="usr_41.html#script">script</A>:
+
+REGEDIT4
+
+[HKEY_CLASSES_ROOT\Applications\gvim.exe]
+
+[HKEY_CLASSES_ROOT\Applications\gvim.exe\shell]
+
+[HKEY_CLASSES_ROOT\Applications\gvim.exe\shell\edit]
+
+[HKEY_CLASSES_ROOT\Applications\gvim.exe\shell\edit\command]
+@=&quot;c:\\vim\\vim62\\gvim.exe \&quot;&#37;1\&quot;&quot;
+
+[HKEY_CLASSES_ROOT\.htm\OpenWithList\gvim.exe]
+
+[HKEY_CLASSES_ROOT\*\OpenWithList\gvim.exe]
+
+
+Change the &quot;c:\\vim\\vim62&quot; bit to where gvim.exe is actually located.
+
+To uninstall this run the Vim uninstall program or manually delete the
+registry entries with &quot;regedit&quot;.
+
+==============================================================================
+
+3. Using the <A HREF="gui.html#clipboard">clipboard</A>					*<A NAME="gui-clipboard"></A><B>gui-clipboard</B>*
+
+Windows has a <A HREF="gui.html#clipboard">clipboard</A>, where you can copy text to, and paste text from.  Vim
+supports this in several ways.  For other systems see |<A HREF="gui.html#gui-selections">gui-selections</A>|.
+
+The &quot;* <A HREF="sponsor.html#register">register</A> reflects the contents of the <A HREF="gui.html#clipboard">clipboard</A>.  |<A HREF="gui.html#quotestar">quotestar</A>|
+
+When the &quot;unnamed&quot; string is included in the <A HREF="options.html#'clipboard'">'clipboard'</A> option, the unnamed
+<A HREF="sponsor.html#register">register</A> is the same.  Thus you can <A HREF="change.html#yank">yank</A> to and paste from the <A HREF="gui.html#clipboard">clipboard</A>
+without prepending &quot;* to commands.
+
+The '<A HREF="insert.html#a">a</A>' flag in <A HREF="options.html#'guioptions'">'guioptions'</A> is not included by default.  This means that text
+is only put on the <A HREF="gui.html#clipboard">clipboard</A> when an operation is performed on <A HREF="motion.html#it">it</A>.  Just
+Visually selecting text doesn't put <A HREF="motion.html#it">it</A> on the <A HREF="gui.html#clipboard">clipboard</A>.  When the '<A HREF="insert.html#a">a</A>' flag is
+included, the text is copied to the <A HREF="gui.html#clipboard">clipboard</A> even when <A HREF="motion.html#it">it</A> is not operated
+upon.
+
+
+							*<A NAME="mswin.vim"></A><B>mswin.vim</B>*
+To use the standard <A HREF="os_win32.html#MS-Windows">MS-Windows</A> way of <A HREF="change.html#CTRL-X">CTRL-X</A>, <A HREF="pattern.html#CTRL-C">CTRL-C</A> and <A HREF="visual.html#CTRL-V">CTRL-V</A>, use the
+$VIMRUNTIME/mswin.vim <A HREF="usr_41.html#script">script</A>.  You could add this line to your <A HREF="starting.html#_vimrc">_vimrc</A> file:
+<B>	source $VIMRUNTIME/mswin.vim</B>
+
+Since <A HREF="pattern.html#CTRL-C">CTRL-C</A> is used to copy the text to the <A HREF="gui.html#clipboard">clipboard</A>, <A HREF="motion.html#it">it</A> can't be used to
+cancel an operation.  Use CTRL-Break for that.
+
+<A HREF="starting.html#CTRL-Z">CTRL-Z</A> is used for <A HREF="undo.html#undo">undo</A>.  This means you can't <A HREF="starting.html#suspend">suspend</A> Vim with this key, use
+|<A HREF="starting.html#:suspend">:suspend</A>| instead (if it's supported at all).
+
+
+						*<A NAME="CTRL-V-alternative"></A><B>CTRL-V-alternative</B>* *<A NAME="CTRL-Q"></A><B>CTRL-Q</B>*
+Since <A HREF="visual.html#CTRL-V">CTRL-V</A> is used to paste, you can't use <A HREF="motion.html#it">it</A> to start a blockwise <A HREF="visual.html#Visual">Visual</A>
+selection.  You can use <A HREF="#CTRL-Q">CTRL-Q</A> instead.  You can also use <A HREF="#CTRL-Q">CTRL-Q</A> in <A HREF="insert.html#Insert">Insert</A>
+mode and <A HREF="cmdline.html#Command-line">Command-line</A> mode to get the old meaning of <A HREF="visual.html#CTRL-V">CTRL-V</A>.  But <A HREF="#CTRL-Q">CTRL-Q</A>
+doesn't work for terminals when it's used for <A HREF="intro.html#control">control</A> flow.
+
+NOTE: The <A HREF="gui.html#clipboard">clipboard</A> support still has a number of bugs.  See |<A HREF="todo.html#todo">todo</A>|.
+
+==============================================================================
+
+4. Shell Commands					*<A NAME="gui-shell-win32"></A><B>gui-shell-win32</B>*
+
+Vim uses another <A HREF="windows.html#window">window</A> for external commands, to make <A HREF="motion.html#it">it</A> possible to run any
+command.  The external command gets its own environment for running, just like
+<A HREF="motion.html#it">it</A> was started from a <A HREF="os_dos.html#DOS">DOS</A> prompt.
+
+
+							*<A NAME="win32-vimrun"></A><B>win32-vimrun</B>*
+Executing an external command is done indirectly by the &quot;vimrun&quot; command.  The
+&quot;vimrun.exe&quot; must be in the path for this to work.  Or <A HREF="motion.html#it">it</A> must be in the same
+directory <A HREF="motion.html#as">as</A> the Vim executable.  If &quot;vimrun&quot; cannot be found, the command is
+executed directly, but then the <A HREF="os_dos.html#DOS">DOS</A> <A HREF="windows.html#window">window</A> closes immediately after the
+external command has finished.
+WARNING: If you close this <A HREF="windows.html#window">window</A> with the &quot;<A HREF="change.html#X">X</A>&quot; button, and confirm the
+question if you really want to kill the application, Vim may be killed too!
+(This does not apply to commands run asynchronously with &quot;:!start&quot;.)
+
+In Windows 95, the <A HREF="windows.html#window">window</A> in which the commands are executed is always 25x80
+characters, to be <A HREF="motion.html#as">as</A> <A HREF="os_dos.html#DOS">DOS</A> compatible <A HREF="motion.html#as">as</A> possible (this matters!).  The default
+system font is used.  On NT, the <A HREF="windows.html#window">window</A> will be the default you have set up for
+&quot;Console&quot; in Control Panel.  On Win32s, the properties of the <A HREF="os_dos.html#DOS">DOS</A> box are
+determined by _default.pif in the <A HREF="windows.html#windows">windows</A> directory.
+
+
+							*<A NAME="msdos-mode"></A><B>msdos-mode</B>*
+If you get a <A HREF="#dialog">dialog</A> that says &quot;This program is set to run in <A HREF="os_msdos.html#MS-DOS">MS-DOS</A> mode...&quot;
+when you run an external program, you can solve this by <A HREF="change.html#changing">changing</A> the
+properties of the associated shortcut:
+- Use a Windows Explorer to find the command.com that is used.  It can be
+  c:\command.com, c:\dos\command.com, c:\windows\command.com, etc.
+- With the right mouse button, select properties of this command.com.
+- In the Program <A HREF="intro.html#tab">tab</A> select &quot;Advanced&quot;.
+- Unselect &quot;<A HREF="os_msdos.html#MS-DOS">MS-DOS</A> mode&quot;.
+- Click &quot;OK&quot; <A HREF="if_cscop.html#twice">twice</A>.
+
+
+							*<A NAME="win32-!start"></A><B>win32-!start</B>*
+Normally, Vim waits for a command to complete before continuing (this makes
+sense for most shell commands which produce output for Vim to use).  If you
+want Vim to start a program and return immediately, you can use the following
+<A HREF="syntax.html#syntax">syntax</A> on W95 <A HREF="change.html#&amp;">&amp;</A> NT:
+<B>	:!start [/min] {command}</B>
+The optional &quot;/min&quot; causes the <A HREF="windows.html#window">window</A> to be minimized.
+
+On Win32s, you will have to go to another <A HREF="windows.html#window">window</A> instead.  Don't forget that
+you must tell Windows 3.1x to keep executing a <A HREF="os_dos.html#DOS">DOS</A> command in the background
+while you switch back to Vim.
+
+==============================================================================
+
+5. Special colors					*<A NAME="win32-colors"></A><B>win32-colors</B>*
+
+On <A HREF="os_win32.html#Win32">Win32</A>, the normal <A HREF="os_dos.html#DOS">DOS</A> colors can be used.  See |<A HREF="os_dos.html#dos-colors">dos-colors</A>|.
+
+Additionally the system configured colors can also be used.  These are known
+by the names Sys_XXX, where XXX is the appropriate system color name, from the
+following list (see the <A HREF="os_win32.html#Win32">Win32</A> documentation for full descriptions).  Case is
+ignored.  Note: On Win32s not all of these colors are supported.
+
+Sys_3DDKShadow		Sys_3DFace			Sys_BTNFace
+Sys_3DHilight		Sys_3DHighlight			Sys_BTNHilight
+Sys_BTNHighlight	Sys_3DLight			Sys_3DShadow
+Sys_BTNShadow		Sys_ActiveBorder		Sys_ActiveCaption
+Sys_AppWorkspace	Sys_Background			Sys_Desktop
+Sys_BTNText		Sys_CaptionText			Sys_GrayText
+Sys_Highlight		Sys_HighlightText		Sys_InactiveBorder
+Sys_InactiveCaption	Sys_InactiveCaptionText		Sys_InfoBK
+Sys_InfoText		Sys_Menu			Sys_MenuText
+Sys_ScrollBar		Sys_Window			Sys_WindowFrame
+Sys_WindowText
+
+Probably the most useful values are
+	Sys_Window	    <A HREF="intro.html#Normal">Normal</A> <A HREF="windows.html#window">window</A> background
+	Sys_WindowText      <A HREF="intro.html#Normal">Normal</A> <A HREF="windows.html#window">window</A> text
+	Sys_Highlight       Highlighted background
+	Sys_HighlightText   Highlighted text
+
+These extra colors are also available:
+Gray, Grey, LightYellow, SeaGreen, Orange, Purple, SlateBlue, Violet,
+
+
+								*<A NAME="rgb.txt"></A><B>rgb.txt</B>*
+Additionally, colors defined by a &quot;<A HREF="#rgb.txt">rgb.txt</A>&quot; file can be used.  This file is
+well known from <A HREF="options.html#X11">X11</A>.  A few lines from <A HREF="motion.html#it">it</A>:
+
+<B>  255 218 185		   peach puff</B>
+<B>  205 133  63		   peru</B>
+<B>  255 181 197		   pink</B>
+
+This shows the layout of the file:  First the <A HREF="change.html#R">R</A>, <A HREF="motion.html#G">G</A> and <A HREF="motion.html#B">B</A> value <A HREF="motion.html#as">as</A> a decimal
+number, followed by the name of the color.  The four fields are separated by
+spaces.
+
+You can get an <A HREF="#rgb.txt">rgb.txt</A> file from any <A HREF="options.html#X11">X11</A> <A HREF="intro.html#distribution">distribution</A>.  It is located in a
+directory like &quot;/usr/X11R6/lib/X11/&quot;.  For Vim <A HREF="motion.html#it">it</A> must be located in the
+<A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> directory.  Thus the file can be found with &quot;$VIMRUNTIME/rgb.txt&quot;.
+
+==============================================================================
+
+						*<A NAME="gui-w32-dialogs"></A><B>gui-w32-dialogs</B>* *<A NAME="dialog"></A><B>dialog</B>*
+6. Windows dialogs <A HREF="change.html#&amp;">&amp;</A> browsers
+
+The <A HREF="os_win32.html#Win32">Win32</A> <A HREF="gui.html#GUI">GUI</A> can use familiar Windows components for some operations, <A HREF="motion.html#as">as</A> well
+<A HREF="motion.html#as">as</A> the traditional interface shared with the console version.
+
+
+6.1 Dialogs
+
+The dialogs displayed by the &quot;confirm&quot; family (i.e. the <A HREF="options.html#'confirm'">'confirm'</A> option,
+|<A HREF="editing.html#:confirm">:confirm</A>| command and |<A HREF="eval.html#confirm()">confirm()</A>| function) are GUI-based rather than the
+console-based ones used by other versions.  The '<A HREF="change.html#c">c</A>' flag in <A HREF="options.html#'guioptions'">'guioptions'</A>
+changes this.
+
+
+6.2 File Browsers
+
+When prepending &quot;<A HREF="editing.html#:browse">:browse</A>&quot; before file editing commands, a file requester is
+used to allow you to select an existing file.  See |<A HREF="editing.html#:browse">:browse</A>|.
+
+
+6.3 Tearoff Menus
+
+The <A HREF="os_win32.html#Win32">Win32</A> <A HREF="gui.html#GUI">GUI</A> emulates Motif's tear-off <A HREF="gui.html#menus">menus</A>.  At the top of each menu you
+will see a small graphic &quot;rip here&quot; sign.  Selecting <A HREF="motion.html#it">it</A> will cause a floating
+<A HREF="windows.html#window">window</A> to be created with the same menu entries on <A HREF="motion.html#it">it</A>.  The floating menu can
+then be accessed just <A HREF="motion.html#as">as</A> if <A HREF="motion.html#it">it</A> was the original (including sub-menus), but
+without having to go to the menu <A HREF="motion.html#bar">bar</A> each time.
+This is most useful if you find yourself using a command buried in a sub-menu
+over and over again.
+The tearoff <A HREF="gui.html#menus">menus</A> can be positioned where you like, and always stay just above
+the Main Vim <A HREF="windows.html#window">window</A>.  You can get rid of them by closing them <A HREF="motion.html#as">as</A> usual; they
+also of course close when you exit Vim.
+
+
+							*<A NAME=":tearoff"></A><B>:tearoff</B>* *<A NAME=":te"></A><B>:te</B>*
+:te[aroff] {name}	Tear-off the menu {name}.  The menu named must have at
+			least one subentry, but need not appear on the
+			menu-bar (see |<A HREF="gui.html#win32-hidden-menus">win32-hidden-menus</A>|).
+
+Example:
+<B>	:tearoff File</B>
+will make the &quot;File&quot; menu (if there is one) appear <A HREF="motion.html#as">as</A> a tearoff menu.
+
+<B>	:amenu ]Toolbar.Make	:make&lt;CR&gt;</B>
+<B>	:tearoff ]Toolbar</B>
+This creates a floating menu that doesn't exist on the main menu-bar.
+
+Note that a menu that starts with '<A HREF="index.html#]">]</A>' will not be displayed.
+
+==============================================================================
+
+7. Command line arguments				*<A NAME="gui-w32-cmdargs"></A><B>gui-w32-cmdargs</B>*
+
+Analysis of a command line into parameters is not standardised in MS Windows.
+Gvim has to provide logic to analyse a command line.  This logic is likely to
+be different from the default logic provided by a compilation system used to
+build vim.  The differences relate to unusual double <A HREF="change.html#quote">quote</A> (&quot;) usage.
+The arguments &quot;C:\My Music\freude.txt&quot; and &quot;+/Sch\&quot;iller&quot; are handled in the
+same way.  The argument &quot;+/Sch&quot;&quot;iller&quot; may be handled different by <A HREF="starting.html#gvim">gvim</A> and
+vim, depending what <A HREF="motion.html#it">it</A> was compiled with.
+
+The rules are:
+      <A HREF="motion.html#a)">a)</A> A parameter is a sequence of graphic characters.
+      <A HREF="motion.html#b">b</A>) Parameters are separated by white space.
+      <A HREF="change.html#c">c</A>) A parameter can be enclosed in double <A HREF="quotes.html#quotes">quotes</A> to include white space.
+      <A HREF="change.html#d">d</A>) A sequence of zero or more backslashes (\) and a double <A HREF="change.html#quote">quote</A> (&quot;)
+	is special.  The effective number of backslashes is halved, rounded
+	down.  An even number of backslashes reverses the acceptability of
+	spaces and tabs, an odd number of backslashes produces a literal
+	double <A HREF="change.html#quote.">quote.</A>
+
+So:
+	&quot;	is a special double <A HREF="change.html#quote">quote</A>
+	\&quot;	is a literal double <A HREF="change.html#quote">quote</A>
+	\\&quot;	is a literal <A HREF="intro.html#backslash">backslash</A> and a special double <A HREF="change.html#quote">quote</A>
+	\\\&quot;	is a literal <A HREF="intro.html#backslash">backslash</A> and a literal double <A HREF="change.html#quote">quote</A>
+	\\\\&quot;	is 2 literal backslashes and a special double <A HREF="change.html#quote">quote</A>
+	\\\\\&quot;	is 2 literal backslashes and a literal double <A HREF="change.html#quote">quote</A>
+	etc.
+
+Example:
+<B>	gvim "C:\My Music\freude" +"set ignorecase" +/"\"foo\\" +\"bar\\\"</B>
+
+opens &quot;C:\My Music\freude&quot; and executes the line mode commands:
+<B>	set ignorecase; /"foo\ and /bar\"</B>
+
+==============================================================================
+
+8. Various						*<A NAME="gui-w32-various"></A><B>gui-w32-various</B>*
+
+
+							*<A NAME="gui-w32-printing"></A><B>gui-w32-printing</B>*
+The &quot;File/Print&quot; menu prints the text with <A HREF="syntax.html#syntax">syntax</A> highlighting, see
+|<A HREF="print.html#:hardcopy">:hardcopy</A>|.  If you just want to print the raw text and have a default
+printer installed this should also work:
+<B>	:w &gt;&gt;prn</B>
+
+Vim supports a number of standard MS Windows features.  Some of these are
+detailed elsewhere: see |<A HREF="options.html#'mouse'">'mouse'</A>|, |<A HREF="gui.html#win32-hidden-menus">win32-hidden-menus</A>|.
+
+
+							*<A NAME="drag-n-drop-win32"></A><B>drag-n-drop-win32</B>*
+You can drag and drop one or more files into the Vim <A HREF="windows.html#window">window</A>, where they will
+be opened <A HREF="motion.html#as">as</A> normal.  See |<A HREF="gui.html#drag-n-drop">drag-n-drop</A>|.
+
+
+							*<A NAME=":simalt"></A><B>:simalt</B>* *<A NAME=":si"></A><B>:si</B>*
+:sim[alt] {key}		simulate pressing {key} while holding Alt pressed.
+			{not in Vi} {only for <A HREF="os_win32.html#Win32">Win32</A> versions}
+
+Normally, Vim takes <A HREF="intro.html#control">control</A> of all Alt-&lt;Key&gt; combinations, to increase the
+number of possible mappings.  This clashes with the standard use of Alt <A HREF="motion.html#as">as</A> the
+key for accessing <A HREF="gui.html#menus">menus</A>.
+The quick way of getting standard behavior is to set the <A HREF="options.html#'winaltkeys'">'winaltkeys'</A> option
+to &quot;yes&quot;.  This however prevents you from <A HREF="map.html#mapping">mapping</A> Alt keys at all.
+Another way is to set <A HREF="options.html#'winaltkeys'">'winaltkeys'</A> to &quot;menu&quot;.  Menu shortcut keys are then
+handled by <A HREF="windows.html#windows">windows</A>, other ALT keys can be mapped.  This doesn't allow a
+dependency on the current state though.
+To get round this, the <A HREF="#:simalt">:simalt</A> command allows Vim (when <A HREF="options.html#'winaltkeys'">'winaltkeys'</A> is not
+&quot;yes&quot;) to fake a Windows-style Alt keypress.  You can use this to map Alt key
+combinations (or anything else for that matter) to produce standard Windows
+actions.  Here are some examples:
+
+<B>	:map &lt;M-f&gt; :simalt f&lt;CR&gt;</B>
+This makes Alt-F pop down the 'File' menu (with the stock Menu.vim) by
+simulating the keystrokes Alt, <A HREF="motion.html#F">F</A>.
+<B>	:map &lt;M-Space&gt; :simalt ~&lt;CR&gt;</B>
+This maps Alt-Space to pop down the system menu for the Vim <A HREF="windows.html#window">window</A>.  Note that
+~ is used by simalt to represent the <A HREF="motion.html#&lt;Space&gt;">&lt;Space&gt;</A> character.
+<B>	:map &lt;C-n&gt; :simalt ~n&lt;CR&gt;</B>
+Maps Control-N to produce the keys Alt-Space followed by N.  This minimizes the
+Vim <A HREF="windows.html#window">window</A> via the system menu.
+
+Note that the key changes depending on the language you are using.
+
+
+						*<A NAME="intellimouse-wheel-problems"></A><B>intellimouse-wheel-problems</B>*
+When using the Intellimouse mouse wheel causes Vim to stop accepting input, go
+to:
+	ControlPanel - Mouse - Wheel - UniversalScrolling - Exceptions
+
+And add <A HREF="starting.html#gvim">gvim</A> to the list of applications.  This problem only appears to happen
+with the Intellimouse driver 2.2 and when &quot;Universal Scrolling&quot; is turned on.
+
+
+
+XPM support						*<A NAME="w32-xpm-support"></A><B>w32-xpm-support</B>*
+
+Gvim can be build on <A HREF="os_win32.html#MS-Windows">MS-Windows</A> with support for XPM files.  |<A HREF="various.html#+xpm_w32">+xpm_w32</A>|
+See the Make_mvc.mak file for instructions, search for XPM.
+
+To try out if XPM support works <A HREF="diff.html#do">do</A> this:
+<B>	:help</B>
+<B>	:exe 'sign define vimxpm icon=' . $VIMRUNTIME . '\\vim16x16.xpm'</B>
+<B>	:exe 'sign place 1 line=1 name=vimxpm file=' . expand('%:p')</B>
+ 
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

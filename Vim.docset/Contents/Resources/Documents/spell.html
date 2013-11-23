@@ -1,0 +1,1753 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: spell</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: spell</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="spell.txt"></A><B>spell.txt</B>*	For Vim version 7.4.  Last change: 2013 Jul 17
+
+
+		  VIM REFERENCE MANUAL	  by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Spell checking						*<A NAME="spell"></A><B>spell</B>*
+
+1. Quick start			|<A HREF="#spell-quickstart">spell-quickstart</A>|
+2. Remarks on spell checking	|<A HREF="#spell-remarks">spell-remarks</A>|
+3. Generating a spell file	|<A HREF="#spell-mkspell">spell-mkspell</A>|
+4. Spell file format		|<A HREF="#spell-file-format">spell-file-format</A>|
+
+{Vi does not have any of these commands}
+
+Spell checking is not available when the |<A HREF="various.html#+syntax">+syntax</A>| feature has been disabled
+at compile time.
+
+Note: There also is a vimspell <A HREF="usr_05.html#plugin">plugin</A>.  If you have <A HREF="motion.html#it">it</A> you can <A HREF="diff.html#do">do</A> &quot;<A HREF="helphelp.html#:help">:help</A>
+vimspell&quot; to find about <A HREF="motion.html#it">it</A>.  But you will probably want to get rid of the
+<A HREF="usr_05.html#plugin">plugin</A> and use the <A HREF="options.html#'spell'">'spell'</A> option instead, <A HREF="motion.html#it">it</A> works better.
+
+==============================================================================
+
+1. Quick start					*<A NAME="spell-quickstart"></A><B>spell-quickstart</B>* *<A NAME="E756"></A><B>E756</B>*
+
+This command switches on <A HREF="#spell">spell</A> checking:
+
+<B>	:setlocal spell spelllang=en_us</B>
+
+This switches on the <A HREF="options.html#'spell'">'spell'</A> option and specifies to check for US English.
+
+The words that are not recognized are highlighted with one of these:
+	SpellBad	<A HREF="motion.html#word">word</A> not recognized			|<A HREF="syntax.html#hl-SpellBad">hl-SpellBad</A>|
+	SpellCap	<A HREF="motion.html#word">word</A> not capitalised			|<A HREF="syntax.html#hl-SpellCap">hl-SpellCap</A>|
+	SpellRare	rare <A HREF="motion.html#word">word</A>				|<A HREF="syntax.html#hl-SpellRare">hl-SpellRare</A>|
+	SpellLocal	wrong spelling for selected region	|<A HREF="syntax.html#hl-SpellLocal">hl-SpellLocal</A>|
+
+Vim only checks words for spelling, there is no grammar check.
+
+If the <A HREF="options.html#'mousemodel'">'mousemodel'</A> option is set to &quot;popup&quot; and the cursor is on a badly
+spelled <A HREF="motion.html#word">word</A> or <A HREF="motion.html#it">it</A> is &quot;popup_setpos&quot; and the mouse pointer is on a badly
+spelled <A HREF="motion.html#word">word</A>, then the popup menu will contain a submenu to replace the bad
+<A HREF="motion.html#word">word</A>.  Note: this slows down the appearance of the popup menu.  Note for <A HREF="gui_x11.html#GTK">GTK</A>:
+don't release the right mouse button until the menu appears, otherwise <A HREF="motion.html#it">it</A>
+won't work.
+
+To search for the next misspelled <A HREF="motion.html#word">word</A>:
+
+
+							*<A NAME="]s"></A><B>]s</B>*
+<A HREF="#]s">]s</A>			Move to next misspelled <A HREF="motion.html#word">word</A> after the cursor.
+			A <A HREF="intro.html#count">count</A> before the command can be used to repeat.
+			<A HREF="options.html#'wrapscan'">'wrapscan'</A> applies.
+
+
+							*<A NAME="[s"></A><B>[s</B>*
+<A HREF="#[s">[s</A>			Like &quot;<A HREF="#]s">]s</A>&quot; but search backwards, find the misspelled
+			<A HREF="motion.html#word">word</A> before the cursor.  Doesn't recognize words
+			split over two lines, thus may stop at words that are
+			not highlighted <A HREF="motion.html#as">as</A> bad.  Does not stop at <A HREF="motion.html#word">word</A> with
+			missing capital at the start of a line.
+
+
+							*<A NAME="]S"></A><B>]S</B>*
+<A HREF="#]S">]S</A>			Like &quot;<A HREF="#]s">]s</A>&quot; but only stop at bad words, not at rare
+			words or words for another region.
+
+
+							*<A NAME="[S"></A><B>[S</B>*
+<A HREF="#[S">[S</A>			Like &quot;<A HREF="#]S">]S</A>&quot; but search backwards.
+
+
+To add words to your own <A HREF="motion.html#word">word</A> list:
+
+
+							*<A NAME="zg"></A><B>zg</B>*
+<A HREF="#zg">zg</A>			Add <A HREF="motion.html#word">word</A> under the cursor <A HREF="motion.html#as">as</A> a good <A HREF="motion.html#word">word</A> to the first
+			name in <A HREF="options.html#'spellfile'">'spellfile'</A>.  A <A HREF="intro.html#count">count</A> may precede the command
+			to indicate the entry in <A HREF="options.html#'spellfile'">'spellfile'</A> to be used.  A
+			<A HREF="intro.html#count">count</A> of two uses the second entry.
+
+			In <A HREF="visual.html#Visual">Visual</A> mode the selected characters are added <A HREF="motion.html#as">as</A> a
+			<A HREF="motion.html#word">word</A> (including white space!).
+			When the cursor is on text that is marked <A HREF="motion.html#as">as</A> badly
+			spelled then the marked text is used.
+			Otherwise the <A HREF="motion.html#word">word</A> under the cursor, separated by
+			non-word characters, is used.
+
+			If the <A HREF="motion.html#word">word</A> is explicitly marked <A HREF="motion.html#as">as</A> bad <A HREF="motion.html#word">word</A> in
+			another <A HREF="#spell">spell</A> file the result is unpredictable.
+
+
+							*<A NAME="zG"></A><B>zG</B>*
+<A HREF="#zG">zG</A>			Like &quot;<A HREF="#zg">zg</A>&quot; but add the <A HREF="motion.html#word">word</A> to the internal <A HREF="motion.html#word">word</A> list
+			|<A HREF="#internal-wordlist">internal-wordlist</A>|.
+
+
+							*<A NAME="zw"></A><B>zw</B>*
+<A HREF="#zw">zw</A>			Like &quot;<A HREF="#zg">zg</A>&quot; but <A HREF="motion.html#mark">mark</A> the <A HREF="motion.html#word">word</A> <A HREF="motion.html#as">as</A> a wrong (bad) <A HREF="motion.html#word">word</A>.
+			If the <A HREF="motion.html#word">word</A> already appears in <A HREF="options.html#'spellfile'">'spellfile'</A> <A HREF="motion.html#it">it</A> is
+			turned into a comment line.  See |<A HREF="#spellfile-cleanup">spellfile-cleanup</A>|
+			for getting rid of those.
+
+
+							*<A NAME="zW"></A><B>zW</B>*
+<A HREF="#zW">zW</A>			Like &quot;<A HREF="#zw">zw</A>&quot; but add the <A HREF="motion.html#word">word</A> to the internal <A HREF="motion.html#word">word</A> list
+			|<A HREF="#internal-wordlist">internal-wordlist</A>|.
+
+
+<A HREF="#zuw">zuw</A>							*<A NAME="zug"></A><B>zug</B>* *<A NAME="zuw"></A><B>zuw</B>*
+<A HREF="#zug">zug</A>			Undo |<A HREF="#zw">zw</A>| and |<A HREF="#zg">zg</A>|, remove the <A HREF="motion.html#word">word</A> from the entry in
+			<A HREF="options.html#'spellfile'">'spellfile'</A>.  Count used <A HREF="motion.html#as">as</A> with |<A HREF="#zg">zg</A>|.
+
+
+<A HREF="#zuW">zuW</A>							*<A NAME="zuG"></A><B>zuG</B>* *<A NAME="zuW"></A><B>zuW</B>*
+<A HREF="#zuG">zuG</A>			Undo |<A HREF="#zW">zW</A>| and |<A HREF="#zG">zG</A>|, remove the <A HREF="motion.html#word">word</A> from the internal
+			<A HREF="motion.html#word">word</A> list.  Count used <A HREF="motion.html#as">as</A> with |<A HREF="#zg">zg</A>|.
+
+
+							*<A NAME=":spe"></A><B>:spe</B>* *<A NAME=":spellgood"></A><B>:spellgood</B>*
+:[count]spe[llgood] {word}
+			Add {word} <A HREF="motion.html#as">as</A> a good <A HREF="motion.html#word">word</A> to <A HREF="options.html#'spellfile'">'spellfile'</A>, like with
+			|<A HREF="#zg">zg</A>|.  Without <A HREF="intro.html#count">count</A> the first name is used, with a
+			<A HREF="intro.html#count">count</A> of two the second entry, etc.
+
+:spe[llgood]! {word}	Add {word} <A HREF="motion.html#as">as</A> a good <A HREF="motion.html#word">word</A> to the internal <A HREF="motion.html#word">word</A> list,
+			like with |<A HREF="#zG">zG</A>|.
+
+
+							*<A NAME=":spellw"></A><B>:spellw</B>* *<A NAME=":spellwrong"></A><B>:spellwrong</B>*
+:[count]spellw[rong] {word}
+			Add {word} <A HREF="motion.html#as">as</A> a wrong (bad) <A HREF="motion.html#word">word</A> to <A HREF="options.html#'spellfile'">'spellfile'</A>, <A HREF="motion.html#as">as</A>
+			with |<A HREF="#zw">zw</A>|.  Without <A HREF="intro.html#count">count</A> the first name is used, with
+			a <A HREF="intro.html#count">count</A> of two the second entry, etc.
+
+:spellw[rong]! {word}	Add {word} <A HREF="motion.html#as">as</A> a wrong (bad) <A HREF="motion.html#word">word</A> to the internal <A HREF="motion.html#word">word</A>
+			list, like with |<A HREF="#zW">zW</A>|.
+
+
+:[count]spellu[ndo] {word}				*<A NAME=":spellu"></A><B>:spellu</B>* *<A NAME=":spellundo"></A><B>:spellundo</B>*
+			Like |<A HREF="#zuw">zuw</A>|.  <A HREF="intro.html#[count]">[count]</A> used <A HREF="motion.html#as">as</A> with |<A HREF="#:spellgood">:spellgood</A>|.
+
+:spellu[ndo]! {word}	Like |<A HREF="#zuW">zuW</A>|.  <A HREF="intro.html#[count]">[count]</A> used <A HREF="motion.html#as">as</A> with |<A HREF="#:spellgood">:spellgood</A>|.
+
+
+After adding a <A HREF="motion.html#word">word</A> to <A HREF="options.html#'spellfile'">'spellfile'</A> with the above commands its associated
+&quot;.spl&quot; file will automatically be updated and reloaded.  If you change
+<A HREF="options.html#'spellfile'">'spellfile'</A> manually you need to use the |<A HREF="#:mkspell">:mkspell</A>| command.  This sequence of
+commands mostly works well:
+<B>	:edit &lt;file in 'spellfile'&gt;</B>
+ 	(make changes to the <A HREF="#spell">spell</A> file)
+<B>	:mkspell! %</B>
+
+More details about the <A HREF="options.html#'spellfile'">'spellfile'</A> format below |<A HREF="#spell-wordlist-format">spell-wordlist-format</A>|.
+
+
+							*<A NAME="internal-wordlist"></A><B>internal-wordlist</B>*
+The internal <A HREF="motion.html#word">word</A> list is used for all <A HREF="windows.html#buffers">buffers</A> where <A HREF="options.html#'spell'">'spell'</A> is set.  It is
+not stored, <A HREF="motion.html#it">it</A> is lost when you exit Vim.  It is also cleared when <A HREF="options.html#'encoding'">'encoding'</A>
+is set.
+
+
+Finding suggestions for bad words:
+
+							*<A NAME="z="></A><B>z=</B>*
+<A HREF="#z=">z=</A>			For the <A HREF="motion.html#word">word</A> under/after the cursor suggest correctly
+			spelled words.  This also works to find alternatives
+			for a <A HREF="motion.html#word">word</A> that is not highlighted <A HREF="motion.html#as">as</A> a bad <A HREF="motion.html#word">word</A>,
+			e.g., when the <A HREF="motion.html#word">word</A> after <A HREF="motion.html#it">it</A> is bad.
+			In <A HREF="visual.html#Visual">Visual</A> mode the highlighted text is taken <A HREF="motion.html#as">as</A> the
+			<A HREF="motion.html#word">word</A> to be replaced.
+			The results are sorted on similarity to the <A HREF="motion.html#word">word</A> being
+			replaced.
+			This may take a long time.  Hit <A HREF="pattern.html#CTRL-C">CTRL-C</A> when you get
+			bored.
+
+			If the command is used without a <A HREF="intro.html#count">count</A> the
+			alternatives are listed and you can enter the number
+			of your choice or press <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> if you don't want to
+			replace.  You can also use the mouse to click on your
+			choice (only works if the mouse can be used in <A HREF="intro.html#Normal">Normal</A>
+			mode and when there are no line wraps).  Click on the
+			first line (the header) to cancel.
+
+			The suggestions listed normally replace a highlighted
+			bad <A HREF="motion.html#word">word</A>.  Sometimes they include other text, in that
+			<A HREF="change.html#case">case</A> the replaced text is also listed after a &quot;<A HREF="change.html#&lt;">&lt;</A>&quot;.
+
+			If a <A HREF="intro.html#count">count</A> is used that suggestion is used, without
+			prompting.  For example, &quot;1z=&quot; always takes the first
+			suggestion.
+
+			If <A HREF="options.html#'verbose'">'verbose'</A> is non-zero a score will be displayed
+			with the suggestions to indicate the likeliness to the
+			badly spelled <A HREF="motion.html#word">word</A> (the higher the score the more
+			different).
+			When a <A HREF="motion.html#word">word</A> was replaced the <A HREF="undo.html#redo">redo</A> command &quot;<A HREF="repeat.html#.">.</A>&quot; will
+			repeat the <A HREF="motion.html#word">word</A> replacement.  This works like &quot;ciw&quot;,
+			the good <A HREF="motion.html#word">word</A> and <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>.  This does NOT work for Thai
+			and other languages without spaces between words.
+
+
+					*<A NAME=":spellr"></A><B>:spellr</B>* *<A NAME=":spellrepall"></A><B>:spellrepall</B>* *<A NAME="E752"></A><B>E752</B>* *<A NAME="E753"></A><B>E753</B>*
+:spellr[epall]		Repeat the replacement done by |<A HREF="#z=">z=</A>| for all matches
+			with the replaced <A HREF="motion.html#word">word</A> in the current <A HREF="windows.html#window">window</A>.
+
+In <A HREF="insert.html#Insert">Insert</A> mode, when the cursor is after a badly spelled <A HREF="motion.html#word">word</A>, you can use
+<A HREF="change.html#CTRL-X">CTRL-X</A> <A HREF="change.html#s">s</A> to find suggestions.  This works like <A HREF="insert.html#Insert">Insert</A> mode completion.  Use
+<A HREF="motion.html#CTRL-N">CTRL-N</A> to use the next suggestion, <A HREF="motion.html#CTRL-P">CTRL-P</A> to go back. |<A HREF="insert.html#i_CTRL-X_s">i_CTRL-X_s</A>|
+
+The <A HREF="options.html#'spellsuggest'">'spellsuggest'</A> option influences how the list of suggestions is generated
+and sorted.  See |<A HREF="options.html#'spellsuggest'">'spellsuggest'</A>|.
+
+The <A HREF="options.html#'spellcapcheck'">'spellcapcheck'</A> option is used to check the first <A HREF="motion.html#word">word</A> of a <A HREF="motion.html#sentence">sentence</A>
+starts with a capital.  This doesn't work for the first <A HREF="motion.html#word">word</A> in the file.
+When there is a line break right after a <A HREF="motion.html#sentence">sentence</A> the highlighting of the next
+line may be postponed.  Use |<A HREF="various.html#CTRL-L">CTRL-L</A>| when needed.  Also see |<A HREF="#set-spc-auto">set-spc-auto</A>| for
+how <A HREF="motion.html#it">it</A> can be set automatically when <A HREF="options.html#'spelllang'">'spelllang'</A> is set.
+
+Vim counts the number of times a good <A HREF="motion.html#word">word</A> is encountered.  This is used to
+sort the suggestions: words that have been seen before get a small bonus,
+words that have been seen often get a bigger bonus.  The COMMON item in the
+affix file can be used to define common words, so that this mechanism also
+works in a new or short file |<A HREF="#spell-COMMON">spell-COMMON</A>|.
+
+==============================================================================
+
+2. Remarks on <A HREF="#spell">spell</A> checking				*<A NAME="spell-remarks"></A><B>spell-remarks</B>*
+
+PERFORMANCE
+
+Vim does on-the-fly <A HREF="#spell">spell</A> checking.  To make this work fast the <A HREF="motion.html#word">word</A> list is
+loaded in memory.  Thus this uses a lot of memory (1 Mbyte or more).  There
+might also be a noticeable delay when the <A HREF="motion.html#word">word</A> list is loaded, which happens
+when <A HREF="options.html#'spell'">'spell'</A> is set and when <A HREF="options.html#'spelllang'">'spelllang'</A> is set while <A HREF="options.html#'spell'">'spell'</A> was already set.
+To minimize the delay each <A HREF="motion.html#word">word</A> list is only loaded once, <A HREF="motion.html#it">it</A> is not deleted
+when <A HREF="options.html#'spelllang'">'spelllang'</A> is made empty or <A HREF="options.html#'spell'">'spell'</A> is reset.  When <A HREF="options.html#'encoding'">'encoding'</A> is set
+all the <A HREF="motion.html#word">word</A> lists are reloaded, thus you may notice a delay then too.
+
+
+REGIONS
+
+A <A HREF="motion.html#word">word</A> may be spelled differently in various regions.  For example, English
+comes in (at least) these variants:
+
+	en		all regions
+	en_au		Australia
+	en_ca		Canada
+	en_gb		Great Britain
+	en_nz		New Zealand
+	en_us		USA
+
+Words that are not used in one region but are used in another region are
+highlighted with SpellLocal |<A HREF="syntax.html#hl-SpellLocal">hl-SpellLocal</A>|.
+
+Always use <A HREF="change.html#lowercase">lowercase</A> letters for the language and region names.
+
+When adding a <A HREF="motion.html#word">word</A> with |<A HREF="#zg">zg</A>| or another command it's always added for all
+regions.  You can change that by manually editing the <A HREF="options.html#'spellfile'">'spellfile'</A>.  See
+|<A HREF="#spell-wordlist-format">spell-wordlist-format</A>|.  Note that the regions <A HREF="motion.html#as">as</A> specified in the files in
+<A HREF="options.html#'spellfile'">'spellfile'</A> are only used when all entries in <A HREF="options.html#'spelllang'">'spelllang'</A> specify the same
+region (not counting files specified by their .spl name).
+
+
+							*<A NAME="spell-german"></A><B>spell-german</B>*
+Specific exception: For German these special regions are used:
+	de		all German words accepted
+	de_de		old and new spelling
+	de_19		old spelling
+	de_20		new spelling
+	de_at		Austria
+	de_ch		Switzerland
+
+
+							*<A NAME="spell-russian"></A><B>spell-russian</B>*
+Specific exception: For <A HREF="russian.html#Russian">Russian</A> these special regions are used:
+	ru		all <A HREF="russian.html#Russian">Russian</A> words accepted
+	ru_ru		&quot;IE&quot; <A HREF="print.html#letter">letter</A> spelling
+	ru_yo		&quot;YO&quot; <A HREF="print.html#letter">letter</A> spelling
+
+
+							*<A NAME="spell-yiddish"></A><B>spell-yiddish</B>*
+Yiddish requires using &quot;<A HREF="mbyte.html#utf-8">utf-8</A>&quot; encoding, because of the special characters
+used.  If you are using latin1 Vim will use transliterated (romanized) Yiddish
+instead.  If you want to use transliterated Yiddish with <A HREF="mbyte.html#utf-8">utf-8</A> use &quot;yi-tr&quot;.
+In a table:
+	<A HREF="options.html#'encoding'">'encoding'</A>	<A HREF="options.html#'spelllang'">'spelllang'</A>
+	<A HREF="mbyte.html#utf-8">utf-8</A>		yi		Yiddish
+	latin1		yi		transliterated Yiddish
+	<A HREF="mbyte.html#utf-8">utf-8</A>		yi-tr		transliterated Yiddish
+
+
+
+SPELL FILES						*<A NAME="spell-load"></A><B>spell-load</B>*
+
+Vim searches for <A HREF="#spell">spell</A> files in the &quot;<A HREF="#spell">spell</A>&quot; subdirectory of the directories in
+<A HREF="options.html#'runtimepath'">'runtimepath'</A>.  The name is: LL.EEE.spl, where:
+	LL	the language name
+	EEE	the value of <A HREF="options.html#'encoding'">'encoding'</A>
+
+The value for &quot;LL&quot; comes from <A HREF="options.html#'spelllang'">'spelllang'</A>, but excludes the region name.
+Examples:
+<B><FONT COLOR="PURPLE">	'spelllang'	LL </FONT></B>
+	en_us		en
+	en-rare		en-rare
+	medical_ca	medical
+
+Only the first file is loaded, the one that is first in <A HREF="options.html#'runtimepath'">'runtimepath'</A>.  If
+this succeeds then additionally files with the name LL.EEE.add.spl are loaded.
+All the ones that are found are used.
+
+If no <A HREF="#spell">spell</A> file is found the |<A HREF="autocmd.html#SpellFileMissing">SpellFileMissing</A>| <A HREF="autocmd.html#autocommand">autocommand</A> event is
+triggered.  This may trigger the |<A HREF="spellfile.html">spellfile.vim</A>| <A HREF="usr_05.html#plugin">plugin</A> to offer you
+downloading the <A HREF="#spell">spell</A> file.
+
+Additionally, the files related to the names in <A HREF="options.html#'spellfile'">'spellfile'</A> are loaded.  These
+are the files that |<A HREF="#zg">zg</A>| and |<A HREF="#zw">zw</A>| add good and wrong words to.
+
+Exceptions:
+- Vim uses &quot;latin1&quot; when <A HREF="options.html#'encoding'">'encoding'</A> is &quot;iso-8859-15&quot;.  The euro sign doesn't
+  matter for spelling.
+- When no <A HREF="#spell">spell</A> file for <A HREF="options.html#'encoding'">'encoding'</A> is found &quot;ascii&quot; is tried.  This only
+  works for languages where nearly all words are ASCII, such <A HREF="motion.html#as">as</A> English.  It
+  helps when <A HREF="options.html#'encoding'">'encoding'</A> is not &quot;latin1&quot;, such <A HREF="motion.html#as">as</A> iso-8859-2, and English text
+  is being edited.  For the &quot;.add&quot; files the same name <A HREF="motion.html#as">as</A> the found main
+  <A HREF="#spell">spell</A> file is used.
+
+For example, with these values:
+	<A HREF="options.html#'runtimepath'">'runtimepath'</A> is &quot;~/.vim,/usr/share/vim70,~/.vim/after&quot;
+	<A HREF="options.html#'encoding'">'encoding'</A>    is &quot;iso-8859-2&quot;
+	<A HREF="options.html#'spelllang'">'spelllang'</A>   is &quot;pl&quot;
+
+Vim will look for:
+1. ~/.vim/spell/pl.iso-8859-2.spl
+2. /usr/share/vim70/spell/pl.iso-8859-2.spl
+3. ~/.vim/spell/pl.iso-8859-2.add.spl
+4. /usr/share/vim70/spell/pl.iso-8859-2.add.spl
+5. ~/.vim/after/spell/pl.iso-8859-2.add.spl
+
+This assumes 1. is not found and 2. is found.
+
+If <A HREF="options.html#'encoding'">'encoding'</A> is &quot;latin1&quot; Vim will look for:
+1. ~/.vim/spell/pl.latin1.spl
+2. /usr/share/vim70/spell/pl.latin1.spl
+3. ~/.vim/after/spell/pl.latin1.spl
+4. ~/.vim/spell/pl.ascii.spl
+5. /usr/share/vim70/spell/pl.ascii.spl
+6. ~/.vim/after/spell/pl.ascii.spl
+
+This assumes none of them are found (Polish doesn't make sense when leaving
+out the non-ASCII characters).
+
+Spelling for EBCDIC is currently not supported.
+
+A <A HREF="#spell">spell</A> file might not be available in the current <A HREF="options.html#'encoding'">'encoding'</A>.  See
+|<A HREF="#spell-mkspell">spell-mkspell</A>| about how to create a spell file.  Converting a spell file
+with &quot;iconv&quot; will NOT work!
+
+Note: on <A HREF="os_vms.html#VMS">VMS</A> &quot;.{enc}.spl&quot; is changed to &quot;_{enc}.spl&quot; to avoid trouble with
+filenames.
+
+
+						    *<A NAME="spell-sug-file"></A><B>spell-sug-file</B>* *<A NAME="E781"></A><B>E781</B>*
+If there is a file with exactly the same name <A HREF="motion.html#as">as</A> the &quot;.spl&quot; file but ending in
+&quot;.sug&quot;, that file will be used for giving better suggestions.  It isn't loaded
+before suggestions are made to reduce memory use.
+
+
+				    *<A NAME="E758"></A><B>E758</B>* *<A NAME="E759"></A><B>E759</B>* *<A NAME="E778"></A><B>E778</B>* *<A NAME="E779"></A><B>E779</B>* *<A NAME="E780"></A><B>E780</B>* *<A NAME="E782"></A><B>E782</B>*
+When loading a <A HREF="#spell">spell</A> file Vim checks that <A HREF="motion.html#it">it</A> is properly formatted.  If you
+get an error the file may be truncated, modified or intended for another Vim
+version.
+
+
+
+SPELLFILE CLEANUP					*<A NAME="spellfile-cleanup"></A><B>spellfile-cleanup</B>*
+
+The |<A HREF="#zw">zw</A>| command turns existing entries in <A HREF="options.html#'spellfile'">'spellfile'</A> into comment lines.
+This avoids having to write a new file every time, but results in the file
+only getting longer, never shorter.  To clean up the comment lines in all
+&quot;.add&quot; <A HREF="#spell">spell</A> files <A HREF="diff.html#do">do</A> this:
+<B>	:runtime spell/cleanadd.vim</B>
+
+This deletes all comment lines, except the ones that start with &quot;##&quot;.  Use
+&quot;##&quot; lines to add comments that you want to keep.
+
+You can invoke this <A HREF="usr_41.html#script">script</A> <A HREF="motion.html#as">as</A> often <A HREF="motion.html#as">as</A> you like.  A variable is provided to
+skip updating files that have been changed recently.  Set <A HREF="motion.html#it">it</A> to the number of
+seconds that has passed since a file was changed before <A HREF="motion.html#it">it</A> will be cleaned.
+For example, to clean only files that were not changed in the last hour:
+<B>      let g:spell_clean_limit = 60 * 60</B>
+The default is one second.
+
+
+WORDS
+
+Vim uses a fixed method to recognize a <A HREF="motion.html#word">word</A>.  This is independent of
+<A HREF="options.html#'iskeyword'">'iskeyword'</A>, so that <A HREF="motion.html#it">it</A> also works in help files and for languages that
+include characters like '<A HREF="motion.html#-">-</A>' in <A HREF="options.html#'iskeyword'">'iskeyword'</A>.  The <A HREF="motion.html#word">word</A> characters <A HREF="diff.html#do">do</A> depend on
+<A HREF="options.html#'encoding'">'encoding'</A>.
+
+The table with <A HREF="motion.html#word">word</A> characters is stored in the main .spl file.  Therefore <A HREF="motion.html#it">it</A>
+matters what the current <A HREF="mbyte.html#locale">locale</A> is when generating <A HREF="motion.html#it">it</A>!  A .add.spl file does
+not contain a <A HREF="motion.html#word">word</A> table though.
+
+For a <A HREF="motion.html#word">word</A> that starts with a digit the digit is ignored, unless the <A HREF="motion.html#word">word</A> <A HREF="motion.html#as">as</A> a
+whole is recognized.  Thus if &quot;3D&quot; is a <A HREF="motion.html#word">word</A> and &quot;<A HREF="change.html#D">D</A>&quot; is not then &quot;3D&quot; is
+recognized <A HREF="motion.html#as">as</A> a <A HREF="motion.html#word">word</A>, but if &quot;3D&quot; is not a <A HREF="motion.html#word">word</A> then only the &quot;<A HREF="change.html#D">D</A>&quot; is marked <A HREF="motion.html#as">as</A>
+bad.  Hex numbers in the form 0x12ab and 0X12AB are recognized.
+
+
+<A HREF="motion.html#WORD">WORD</A> COMBINATIONS
+
+It is possible to spell-check words that include a space.  This is used to
+recognize words that are invalid when used by themselves, e.g. for &quot;et al.&quot;.
+It can also be used to recognize &quot;the the&quot; and highlight <A HREF="motion.html#it">it</A>.
+
+The number of spaces is irrelevant.  In most cases a line break may also
+appear.  However, this makes <A HREF="motion.html#it">it</A> difficult to find out where to start checking
+for spelling mistakes.  When you make a change to one line and only that line
+is redrawn Vim won't look in the previous line, thus when &quot;et&quot; is at the end
+of the previous line &quot;al.&quot; will be flagged <A HREF="motion.html#as">as</A> an error.  And when you type
+&quot;the&lt;CR&gt;the&quot; the highlighting doesn't appear until the first line is redrawn.
+Use |<A HREF="various.html#CTRL-L">CTRL-L</A>| to redraw right away.  &quot;<A HREF="#[s">[s</A>&quot; will also stop at a <A HREF="motion.html#word">word</A> combination
+with a line break.
+
+When encountering a line break Vim skips characters such <A HREF="motion.html#as">as</A> '*', '<A HREF="change.html#&gt;">&gt;</A>' and &#39;&#34;'',
+so that comments in C, shell and Vim code can be <A HREF="#spell">spell</A> checked.
+
+
+
+SYNTAX HIGHLIGHTING					*<A NAME="spell-syntax"></A><B>spell-syntax</B>*
+
+Files that use <A HREF="syntax.html#syntax">syntax</A> highlighting can specify where <A HREF="#spell">spell</A> checking should be
+done:
+
+1.  everywhere			   default
+2.  in specific items		   use &quot;contains=@Spell&quot;
+3.  everywhere but specific items  use &quot;contains=@NoSpell&quot;
+
+For the second method adding the @NoSpell cluster will disable <A HREF="#spell">spell</A> checking
+again.  This can be used, for example, to add @Spell to the comments of a
+program, and add @NoSpell for items that shouldn't be checked.
+Also see |<A HREF="syntax.html#:syn-spell">:syn-spell</A>| for text that is not in a <A HREF="syntax.html#syntax">syntax</A> item.
+
+
+VIM SCRIPTS
+
+If you want to write a Vim <A HREF="usr_41.html#script">script</A> that does something with spelling, you may
+find these <A HREF="eval.html#functions">functions</A> useful:
+
+    <A HREF="eval.html#spellbadword()">spellbadword()</A>	find badly spelled <A HREF="motion.html#word">word</A> at the cursor
+    <A HREF="eval.html#spellsuggest()">spellsuggest()</A>	get list of spelling suggestions
+    <A HREF="eval.html#soundfold()">soundfold()</A>		get the sound-a-like version of a <A HREF="motion.html#word">word</A>
+
+
+
+SETTING <A HREF="options.html#'spellcapcheck'">'spellcapcheck'</A> AUTOMATICALLY			*<A NAME="set-spc-auto"></A><B>set-spc-auto</B>*
+
+After the <A HREF="options.html#'spelllang'">'spelllang'</A> option has been set successfully, Vim will source the
+files &quot;spell/LANG.vim&quot; in <A HREF="options.html#'runtimepath'">'runtimepath'</A>.  &quot;LANG&quot; is the value of <A HREF="options.html#'spelllang'">'spelllang'</A>
+up to the first comma, dot or underscore.  This can be used to set <A HREF="options.html#options">options</A>
+specifically for the language, especially <A HREF="options.html#'spellcapcheck'">'spellcapcheck'</A>.
+
+The <A HREF="intro.html#distribution">distribution</A> includes a few of these files.  Use this command to see what
+they <A HREF="diff.html#do">do</A>:
+<B>	:next $VIMRUNTIME/spell/*.vim</B>
+
+Note that the default scripts don't set <A HREF="options.html#'spellcapcheck'">'spellcapcheck'</A> if <A HREF="motion.html#it">it</A> was changed from
+the default value.  This assumes the user prefers another value then.
+
+
+
+DOUBLE SCORING						*<A NAME="spell-double-scoring"></A><B>spell-double-scoring</B>*
+
+The <A HREF="options.html#'spellsuggest'">'spellsuggest'</A> option can be used to select &quot;double&quot; scoring.  This
+mechanism is based on the principle that there are two kinds of spelling
+mistakes:
+
+1. You know how to <A HREF="#spell">spell</A> the <A HREF="motion.html#word">word</A>, but mistype something.  This results in a
+   small editing distance (character swapped/omitted/inserted) and possibly a
+   <A HREF="motion.html#word">word</A> that sounds completely different.
+
+2. You don't know how to <A HREF="#spell">spell</A> the <A HREF="motion.html#word">word</A> and type something that sounds right.
+   The edit distance can be big but the <A HREF="motion.html#word">word</A> is similar after sound-folding.
+
+Since scores for these two mistakes will be very different we use a list
+for each and mix them.
+
+The sound-folding is slow and people that know the language won't make the
+second kind of mistakes.  Therefore <A HREF="options.html#'spellsuggest'">'spellsuggest'</A> can be set to select the
+preferred method for scoring the suggestions.
+
+==============================================================================
+
+3. Generating a <A HREF="#spell">spell</A> file				*<A NAME="spell-mkspell"></A><B>spell-mkspell</B>*
+
+Vim uses a binary file format for spelling.  This greatly speeds up loading
+the <A HREF="motion.html#word">word</A> list and keeps <A HREF="motion.html#it">it</A> small.
+
+						    *<A NAME=".aff"></A><B>.aff</B>* *<A NAME=".dic"></A><B>.dic</B>* *<A NAME="Myspell"></A><B>Myspell</B>*
+You can create a Vim <A HREF="#spell">spell</A> file from the <A HREF="#.aff">.aff</A> and <A HREF="#.dic">.dic</A> files that <A HREF="#Myspell">Myspell</A>
+uses.  <A HREF="#Myspell">Myspell</A> is used by OpenOffice.org and Mozilla. The OpenOffice .oxt 
+files are <A HREF="pi_zip.html#zip">zip</A> files which contain the <A HREF="#.aff">.aff</A> and <A HREF="#.dic">.dic</A> files. You should be able
+to find them here:
+	<A HREF="http://extensions.services.openoffice.org/dictionary">http://extensions.services.openoffice.org/dictionary</A>
+The older, OpenOffice 2 files may be used if this doesn't work:
+	<A HREF="http://wiki.services.openoffice.org/wiki/Dictionaries">http://wiki.services.openoffice.org/wiki/Dictionaries</A>
+You can also use a plain <A HREF="motion.html#word">word</A> list.  The results are the same, the choice
+depends on what <A HREF="motion.html#word">word</A> lists you can find.
+
+If you <A HREF="usr_90.html#install">install</A> Aap (from www.a-a-p.org) you can use the recipes in the
+runtime/spell/??/ directories.  Aap will take care of downloading the files,
+apply patches needed for Vim and build the .spl file.
+
+Make sure your current <A HREF="mbyte.html#locale">locale</A> is set properly, otherwise Vim doesn't know what
+characters are upper/lower <A HREF="change.html#case">case</A> letters.  If the <A HREF="mbyte.html#locale">locale</A> isn't available (e.g.,
+when using an <A HREF="os_win32.html#MS-Windows">MS-Windows</A> codepage on <A HREF="os_unix.html#Unix">Unix</A>) add tables to the <A HREF="#.aff">.aff</A> file
+|<A HREF="#spell-affix-chars">spell-affix-chars</A>|.  If the <A HREF="#.aff">.aff</A> file doesn't define a table then the <A HREF="motion.html#word">word</A>
+table of the currently active spelling is used.  If spelling is not active
+then Vim will try to guess.
+
+
+							*<A NAME=":mksp"></A><B>:mksp</B>* *<A NAME=":mkspell"></A><B>:mkspell</B>*
+:mksp[ell][!] [-ascii] {outname} {inname} <A HREF="eval.html#...">...</A>
+			Generate a Vim <A HREF="#spell">spell</A> file from <A HREF="motion.html#word">word</A> lists.  Example:
+<B>		:mkspell /tmp/nl nl_NL.words</B>
+
+ 								*<A NAME="E751"></A><B>E751</B>*
+			When {outname} ends in &quot;.spl&quot; <A HREF="motion.html#it">it</A> is used <A HREF="motion.html#as">as</A> the output
+			file name.  Otherwise <A HREF="motion.html#it">it</A> should be a language name,
+			such <A HREF="motion.html#as">as</A> &quot;en&quot;, without the region name.  The file
+			written will be &quot;{outname}.{encoding}.spl&quot;, where
+			{encoding} is the value of the <A HREF="options.html#'encoding'">'encoding'</A> option.
+
+			When the output file already exists [!] must be used
+			to overwrite <A HREF="motion.html#it">it</A>.
+
+			When the [-ascii] argument is present, words with
+			non-ascii characters are skipped.  The resulting file
+			ends in &quot;ascii.spl&quot;.
+
+			The input can be the <A HREF="#Myspell">Myspell</A> format files {inname}.aff
+			and {inname}.dic.  If {inname}.aff does not exist then
+			{inname} is used <A HREF="motion.html#as">as</A> the file name of a plain <A HREF="motion.html#word">word</A>
+			list.
+
+			Multiple {inname} arguments can be given to combine
+			regions into one Vim <A HREF="#spell">spell</A> file.  Example:
+<B>		:mkspell ~/.vim/spell/en /tmp/en_US /tmp/en_CA /tmp/en_AU</B>
+ 			This combines the English <A HREF="motion.html#word">word</A> lists for US, CA and AU
+			into one en.spl file.
+
+			Up to eight regions can be combined. *<A NAME="E754"></A><B>E754</B>* *<A NAME="E755"></A><B>E755</B>*
+			The REP and SAL items of the first <A HREF="#.aff">.aff</A> file where
+			they appear are used. |<A HREF="#spell-REP">spell-REP</A>| |<A HREF="#spell-SAL">spell-SAL</A>|
+
+								*<A NAME="E845"></A><B>E845</B>*
+			This command uses a lot of memory, required to find
+			the optimal <A HREF="motion.html#word">word</A> tree (Polish, Italian and Hungarian
+			require several hundred Mbyte).  The final result will
+			be much smaller, because compression is used.  To
+			avoid running out of memory compression will be done
+			now and then.  This can be tuned with the <A HREF="options.html#'mkspellmem'">'mkspellmem'</A>
+			option.
+
+			After the <A HREF="#spell">spell</A> file was written and <A HREF="motion.html#it">it</A> was being used
+			in a buffer <A HREF="motion.html#it">it</A> will be reloaded automatically.
+
+:mksp[ell] [-ascii] {name}.{enc}.add
+			Like &quot;<A HREF="#:mkspell">:mkspell</A>&quot; above, using {name}.{enc}.add <A HREF="motion.html#as">as</A> the
+			input file and producing an output file in the same
+			directory that has &quot;.spl&quot; appended.
+
+:mksp[ell] [-ascii] {name}
+			Like &quot;<A HREF="#:mkspell">:mkspell</A>&quot; above, using {name} <A HREF="motion.html#as">as</A> the input file
+			and producing an output file in the same directory
+			that has &quot;.{enc}.spl&quot; appended.
+
+Vim will report the number of duplicate words.  This might be a mistake in the
+list of words.  But sometimes <A HREF="motion.html#it">it</A> is used to have different prefixes and
+<A HREF="cmdline.html#suffixes">suffixes</A> for the same basic <A HREF="motion.html#word">word</A> to avoid them combining (e.g. Czech uses
+this).  If you want Vim to report all duplicate words set the <A HREF="options.html#'verbose'">'verbose'</A>
+option.
+
+Since you might want to change a <A HREF="#Myspell">Myspell</A> <A HREF="motion.html#word">word</A> list for use with Vim the
+following procedure is recommended:
+
+1. Obtain the xx_YY.aff and xx_YY.dic files from <A HREF="#Myspell">Myspell</A>.
+2. Make a copy of these files to xx_YY.orig.aff and xx_YY.orig.dic.
+3. Change the xx_YY.aff and xx_YY.dic files to remove bad words, add missing
+   words, define <A HREF="motion.html#word">word</A> characters with FOL/LOW/UPP, etc.  The distributed
+   &quot;*.diff&quot; files can be used.
+4. Start Vim with the right <A HREF="mbyte.html#locale">locale</A> and use |<A HREF="#:mkspell">:mkspell</A>| to generate the Vim
+   <A HREF="#spell">spell</A> file.
+5. Try out the <A HREF="#spell">spell</A> file with &quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'spell'">spell</A> spelllang=xx&quot; if you wrote <A HREF="motion.html#it">it</A> in
+   a <A HREF="#spell">spell</A> directory in <A HREF="options.html#'runtimepath'">'runtimepath'</A>, or &quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'spelllang'">spelllang</A>=xx.enc.spl&quot; if you
+   wrote <A HREF="motion.html#it">it</A> somewhere else.
+
+When the <A HREF="#Myspell">Myspell</A> files are updated you can <A HREF="diff.html#merge">merge</A> the differences:
+1. Obtain the new <A HREF="#Myspell">Myspell</A> files <A HREF="motion.html#as">as</A> xx_YY.new.aff and xx_UU.new.dic.
+2. Use Vimdiff to see what changed:
+<B>	vimdiff xx_YY.orig.dic xx_YY.new.dic</B>
+3. Take over the changes you like in xx_YY.dic.
+   You may also need to change xx_YY.aff.
+4. Rename xx_YY.new.dic to xx_YY.orig.dic and xx_YY.new.aff to xx_YY.new.aff.
+
+
+
+SPELL FILE VERSIONS					*<A NAME="E770"></A><B>E770</B>* *<A NAME="E771"></A><B>E771</B>* *<A NAME="E772"></A><B>E772</B>*
+
+Spell checking is a relatively new feature in Vim, thus it's possible that the
+.spl file format will be changed to support more languages.  Vim will check
+the validity of the <A HREF="#spell">spell</A> file and report anything wrong.
+
+<B><FONT COLOR="PURPLE">	E771: Old spell file, needs to be updated </FONT></B>
+This <A HREF="#spell">spell</A> file is older than your Vim.  You need to update the .spl file.
+
+<B><FONT COLOR="PURPLE">	E772: Spell file is for newer version of Vim </FONT></B>
+This means the <A HREF="#spell">spell</A> file was made for a later version of Vim.  You need to
+update Vim.
+
+<B><FONT COLOR="PURPLE">	E770: Unsupported section in spell file </FONT></B>
+This means the <A HREF="#spell">spell</A> file was made for a later version of Vim and contains a
+section that is required for the <A HREF="#spell">spell</A> file to work.  In this <A HREF="change.html#case">case</A> it's
+probably a good idea to upgrade your Vim.
+
+
+SPELL FILE DUMP
+
+If for some reason you want to check what words are supported by the currently
+used spelling files, use this command:
+
+
+							*<A NAME=":spelldump"></A><B>:spelldump</B>* *<A NAME=":spelld"></A><B>:spelld</B>*
+:spelld[ump]		Open a new <A HREF="windows.html#window">window</A> and fill <A HREF="motion.html#it">it</A> with all currently valid
+			words.  Compound words are not included.
+			Note: For some languages the result may be enormous,
+			causing Vim to run out of memory.
+
+:spelld[ump]!		Like &quot;<A HREF="#:spelldump">:spelldump</A>&quot; and include the <A HREF="motion.html#word">word</A> <A HREF="intro.html#count">count</A>.  This is
+			the number of times the <A HREF="motion.html#word">word</A> was found while
+			updating the screen.  Words that are in COMMON items
+			get a starting <A HREF="intro.html#count">count</A> of 10.
+
+The format of the word list is used |<A HREF="#spell-wordlist-format">spell-wordlist-format</A>|.  You should be
+able to read <A HREF="motion.html#it">it</A> with &quot;<A HREF="#:mkspell">:mkspell</A>&quot; to generate one .spl file that includes all
+the words.
+
+When all entries to <A HREF="options.html#'spelllang'">'spelllang'</A> use the same regions or no regions at all then
+the region information is included in the dumped words.  Otherwise only words
+for the current region are included and no &quot;/regions&quot; line is generated.
+
+Comment lines with the name of the .spl file are used <A HREF="motion.html#as">as</A> a header above the
+words that were generated from that .spl file.
+
+
+
+SPELL FILE MISSING		*<A NAME="spell-SpellFileMissing"></A><B>spell-SpellFileMissing</B>* *<A NAME="spellfile.vim"></A><B>spellfile.vim</B>*
+
+If the <A HREF="#spell">spell</A> file for the language you are using is not available, you will
+get an error message.  But if the &quot;<A HREF="#spellfile.vim">spellfile.vim</A>&quot; <A HREF="usr_05.html#plugin">plugin</A> is active <A HREF="motion.html#it">it</A> will
+offer you to <A HREF="intro.html#download">download</A> the <A HREF="#spell">spell</A> file.  Just follow the instructions, <A HREF="motion.html#it">it</A> will
+ask you where to write the file (there must be a writable directory in
+<A HREF="options.html#'runtimepath'">'runtimepath'</A> for this).
+
+The <A HREF="usr_05.html#plugin">plugin</A> has a default place where to look for <A HREF="#spell">spell</A> files, on the Vim ftp
+server.  If you want to use another location or another protocol, set the
+g:spellfile_URL variable to the directory that holds the <A HREF="#spell">spell</A> files.  The
+|<A HREF="pi_netrw.html#netrw">netrw</A>| <A HREF="usr_05.html#plugin">plugin</A> is used for getting the file, look there for the specific
+<A HREF="syntax.html#syntax">syntax</A> of the URL.  Example:
+<B>	let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell'</B>
+You may need to <A HREF="intro.html#escape">escape</A> special characters.
+
+The <A HREF="usr_05.html#plugin">plugin</A> will only ask about downloading a language once.  If you want to
+try again anyway restart Vim, or set g:spellfile_URL to another value (e.g.,
+prepend a space).
+
+To avoid using the &quot;<A HREF="#spellfile.vim">spellfile.vim</A>&quot; <A HREF="usr_05.html#plugin">plugin</A> <A HREF="diff.html#do">do</A> this in your <A HREF="starting.html#vimrc">vimrc</A> file:
+
+<B>	let loaded_spellfile_plugin = 1</B>
+
+Instead of using the <A HREF="usr_05.html#plugin">plugin</A> you can define a |<A HREF="autocmd.html#SpellFileMissing">SpellFileMissing</A>| <A HREF="autocmd.html#autocommand">autocommand</A> to
+handle the missing file yourself.  You can use <A HREF="motion.html#it">it</A> like this:
+
+<B>	:au SpellFileMissing * call Download_spell_file(expand('&lt;amatch&gt;'))</B>
+
+Thus the <A HREF="cmdline.html#&lt;amatch&gt;">&lt;amatch&gt;</A> item contains the name of the language.  Another important
+value is <A HREF="options.html#'encoding'">'encoding'</A>, since every encoding has its own <A HREF="#spell">spell</A> file.  With two
+exceptions:
+- For ISO-8859-15 (latin9) the name &quot;latin1&quot; is used (the encodings only
+  differ in characters not used in dictionary words).
+- The name &quot;ascii&quot; may also be used for some languages where the words use
+  only ASCII letters for most of the words.
+
+The default &quot;<A HREF="#spellfile.vim">spellfile.vim</A>&quot; <A HREF="usr_05.html#plugin">plugin</A> uses this <A HREF="autocmd.html#autocommand">autocommand</A>, if you define your
+<A HREF="autocmd.html#autocommand">autocommand</A> afterwards you may want to use &quot;:au! SpellFileMissing&quot; to overrule
+<A HREF="motion.html#it">it</A>.  If you define your <A HREF="autocmd.html#autocommand">autocommand</A> before the <A HREF="usr_05.html#plugin">plugin</A> is loaded <A HREF="motion.html#it">it</A> will notice
+this and not <A HREF="diff.html#do">do</A> anything.
+
+							*<A NAME="E797"></A><B>E797</B>*
+Note that the <A HREF="autocmd.html#SpellFileMissing">SpellFileMissing</A> <A HREF="autocmd.html#autocommand">autocommand</A> must not change or destroy the
+buffer the user was editing.
+
+==============================================================================
+
+4. Spell file format					*<A NAME="spell-file-format"></A><B>spell-file-format</B>*
+
+This is the format of the files that are used by the person who creates and
+maintains a <A HREF="motion.html#word">word</A> list.
+
+Note that we avoid the <A HREF="motion.html#word">word</A> &quot;dictionary&quot; here.  That is because the goal of
+<A HREF="#spell">spell</A> checking differs from <A HREF="editing.html#writing">writing</A> a dictionary (as in the <A HREF="intro.html#book">book</A>).  For
+spelling we need a list of words that are OK, thus should not be highlighted.
+Person and company names will not appear in a dictionary, but <A HREF="diff.html#do">do</A> appear in a
+<A HREF="motion.html#word">word</A> list.  And some old words are rarely used while they are common
+misspellings.  These <A HREF="diff.html#do">do</A> appear in a dictionary but not in a <A HREF="motion.html#word">word</A> list.
+
+There are two formats: A straight list of words and a list using affix
+compression.  The files with affix compression are used by <A HREF="#Myspell">Myspell</A> (Mozilla
+and OpenOffice.org).  This requires two files, one with <A HREF="#.aff">.aff</A> and one with <A HREF="#.dic">.dic</A>
+extension.
+
+
+
+FORMAT OF STRAIGHT <A HREF="motion.html#WORD">WORD</A> LIST				*<A NAME="spell-wordlist-format"></A><B>spell-wordlist-format</B>*
+
+The words must appear one per line.  That is all that is required.
+
+Additionally the following items are recognized:
+
+- Empty and blank lines are ignored.
+
+<B><FONT COLOR="PURPLE">	# comment </FONT></B>
+- Lines starting with a # are ignored (comment lines).
+
+<B><FONT COLOR="PURPLE">	/encoding=utf-8 </FONT></B>
+- A line starting with &quot;/encoding=&quot;, before any <A HREF="motion.html#word">word</A>, specifies the encoding
+  of the file.  After the second '<A HREF="change.html#=">=</A>' comes an encoding name.  This tells Vim
+  to setup conversion from the specified encoding to <A HREF="options.html#'encoding'">'encoding'</A>.  Thus you can
+  use one <A HREF="motion.html#word">word</A> list for several target encodings.
+
+<B><FONT COLOR="PURPLE">	/regions=usca </FONT></B>
+- A line starting with &quot;/regions=&quot; specifies the region names that are
+  supported.  Each region name must be two ASCII letters.  The first one is
+  region 1.  Thus &quot;/regions=usca&quot; has region 1 &quot;us&quot; and region 2 &quot;ca&quot;.
+  In an addition <A HREF="motion.html#word">word</A> list the region names should be equal to the main <A HREF="motion.html#word">word</A>
+  list!
+
+- Other lines starting with '<A HREF="pattern.html#/">/</A>' are reserved for future use.  The ones that
+  are not recognized are ignored.  You <A HREF="diff.html#do">do</A> get a warning message, so that you
+  know something won't work.
+
+- A &quot;<A HREF="pattern.html#/">/</A>&quot; may follow the <A HREF="motion.html#word">word</A> with the following items:
+    =		Case must match exactly.
+    ?		Rare <A HREF="motion.html#word">word</A>.
+    !		Bad (wrong) <A HREF="motion.html#word">word</A>.
+    digit	A region in which the <A HREF="motion.html#word">word</A> is valid.  If no regions are
+		specified the <A HREF="motion.html#word">word</A> is valid in all regions.
+
+Example:
+
+	# This is an example <A HREF="motion.html#word">word</A> list		comment
+	/encoding=latin1			encoding of the file
+	/regions=uscagb				regions &quot;us&quot;, &quot;ca&quot; and &quot;gb&quot;
+	example					<A HREF="motion.html#word">word</A> for all regions
+	blah/12					<A HREF="motion.html#word">word</A> for regions &quot;us&quot; and &quot;ca&quot;
+	vim/!					bad <A HREF="motion.html#word">word</A>
+	Campbell/?3				rare <A HREF="motion.html#word">word</A> in region 3 &quot;gb&quot;
+	's mornings/=				keep-case <A HREF="motion.html#word">word</A>
+
+Note that when &quot;/=&quot; is used the same <A HREF="motion.html#word">word</A> with all upper-case letters is not
+accepted.  This is different from a <A HREF="motion.html#word">word</A> with mixed <A HREF="change.html#case">case</A> that is automatically
+marked <A HREF="motion.html#as">as</A> keep-case, those words may appear in all upper-case letters.
+
+
+
+FORMAT WITH .AFF AND .DIC FILES				*<A NAME="aff-dic-format"></A><B>aff-dic-format</B>*
+
+There are two files: the basic <A HREF="motion.html#word">word</A> list and an affix file.  The affix file
+specifies settings for the language and can contain affixes.  The affixes are
+used to modify the basic words to get the full <A HREF="motion.html#word">word</A> list.  This significantly
+reduces the number of words, especially for a language like Polish.  This is
+called affix compression.
+
+The basic <A HREF="motion.html#word">word</A> list and the affix file are combined with the &quot;<A HREF="#:mkspell">:mkspell</A>&quot;
+command and results in a binary <A HREF="#spell">spell</A> file.  All the preprocessing has been
+done, thus this file loads fast.  The binary <A HREF="#spell">spell</A> file format is described in
+the source code (src/spell.c).  But only developers need to know about <A HREF="motion.html#it">it</A>.
+
+The preprocessing also allows us to take the <A HREF="#Myspell">Myspell</A> language files and modify
+them before the Vim <A HREF="motion.html#word">word</A> list is made.  The tools for this can be found in the
+&quot;src/spell&quot; directory.
+
+The format for the affix and <A HREF="motion.html#word">word</A> list files is based on what <A HREF="#Myspell">Myspell</A> uses
+(the <A HREF="#spell">spell</A> checker of Mozilla and OpenOffice.org).  A description can be found
+here:
+<B><FONT COLOR="PURPLE">	http://lingucomponent.openoffice.org/affix.readme </FONT></B>
+Note that affixes are <A HREF="change.html#case">case</A> sensitive, this isn't obvious from the description.
+
+Vim supports quite a few extras.  They are described below |<A HREF="#spell-affix-vim">spell-affix-vim</A>|.
+Attempts have been made to keep this compatible with other <A HREF="#spell">spell</A> checkers, so
+that the same files can often be used.  One other project that offers more
+ than Myspell is Hunspell	<A HREF="http://hunspell.sf.net">http://hunspell.sf.net</A> .
+
+
+
+<A HREF="motion.html#WORD">WORD</A> LIST FORMAT				*<A NAME="spell-dic-format"></A><B>spell-dic-format</B>*
+
+A short example, with line numbers:
+
+<B><FONT COLOR="PURPLE">	1	1234 </FONT></B>
+<B><FONT COLOR="PURPLE">	2	aan </FONT></B>
+<B><FONT COLOR="PURPLE">	3	Als </FONT></B>
+<B><FONT COLOR="PURPLE">	4	Etten-Leur </FONT></B>
+<B><FONT COLOR="PURPLE">	5	et al. </FONT></B>
+<B><FONT COLOR="PURPLE">	6	's-Gravenhage </FONT></B>
+<B><FONT COLOR="PURPLE">	7	's-Gravenhaags </FONT></B>
+<B><FONT COLOR="PURPLE">	8	# word that differs between regions </FONT></B>
+<B><FONT COLOR="PURPLE">	9	kado/1 </FONT></B>
+<B><FONT COLOR="PURPLE">	10	cadeau/2 </FONT></B>
+<B><FONT COLOR="PURPLE">	11	TCP,IP </FONT></B>
+<B><FONT COLOR="PURPLE">	12	/the S affix may add a 's' </FONT></B>
+<B><FONT COLOR="PURPLE">	13	bedel/S </FONT></B>
+
+The first line contains the number of words.  Vim ignores <A HREF="motion.html#it">it</A>, but you <A HREF="diff.html#do">do</A> get
+
+an error message if it's not there.  *<A NAME="E760"></A><B>E760</B>*
+
+What follows is one <A HREF="motion.html#word">word</A> per line.  White space at the end of the line is
+ignored, all other white space matters.  The encoding is specified in the
+affix file |<A HREF="#spell-SET">spell-SET</A>|.
+
+Comment lines start with '<A HREF="pattern.html##">#</A>' or '<A HREF="pattern.html#/">/</A>'.  See the example lines 8 and 12.  Note
+that putting a comment after a <A HREF="motion.html#word">word</A> is NOT allowed:
+
+<B><FONT COLOR="PURPLE">		someword   # comment that causes an error! </FONT></B>
+
+After the <A HREF="motion.html#word">word</A> there is an optional slash and flags.  Most of these flags are
+letters that indicate the affixes that can be used with this <A HREF="motion.html#word">word</A>.  These are
+specified with SFX and PFX lines in the <A HREF="#.aff">.aff</A> file, see |<A HREF="#spell-SFX">spell-SFX</A>| and
+|<A HREF="#spell-PFX">spell-PFX</A>|.  Vim allows using other flag types with the FLAG item in the
+affix file |<A HREF="#spell-FLAG">spell-FLAG</A>|.
+
+When the <A HREF="motion.html#word">word</A> only has lower-case letters <A HREF="motion.html#it">it</A> will also match with the <A HREF="motion.html#word">word</A>
+starting with an upper-case <A HREF="print.html#letter">letter</A>.
+
+When the <A HREF="motion.html#word">word</A> includes an upper-case <A HREF="print.html#letter">letter</A>, this means the upper-case <A HREF="print.html#letter">letter</A>
+is required at this position.  The same <A HREF="motion.html#word">word</A> with a lower-case <A HREF="print.html#letter">letter</A> at this
+position will not match. When some of the other letters are upper-case <A HREF="motion.html#it">it</A> will
+not match either.
+
+The <A HREF="motion.html#word">word</A> with all upper-case characters will always be OK,
+
+<B><FONT COLOR="PURPLE">	word list	matches			does not match </FONT></B>
+	als		als Als ALS		ALs AlS aLs aLS
+	Als		Als  ALS		als ALs AlS aLs aLS
+	ALS		ALS			als Als ALs AlS aLs aLS
+	AlS		AlS ALS			als Als ALs aLs aLS
+
+The KEEPCASE affix ID can be used to specifically match a <A HREF="motion.html#word">word</A> with identical
+<A HREF="change.html#case">case</A> only, see below |<A HREF="#spell-KEEPCASE">spell-KEEPCASE</A>|.
+
+Note: in line 5 to 7 non-word characters are used.  You can include any
+character in a <A HREF="motion.html#word">word</A>.  When checking the text a <A HREF="motion.html#word">word</A> still only matches when <A HREF="motion.html#it">it</A>
+appears with a non-word character before and after <A HREF="motion.html#it">it</A>.  For <A HREF="#Myspell">Myspell</A> a <A HREF="motion.html#word">word</A>
+starting with a non-word character probably won't work.
+
+In line 12 the <A HREF="motion.html#word">word</A> &quot;TCP/IP&quot; is defined.  Since the slash has a special
+meaning the comma is used instead.  This is defined with the SLASH item in the
+affix file, see |<A HREF="#spell-SLASH">spell-SLASH</A>|.  Note that without this SLASH item the <A HREF="motion.html#word">word</A>
+will be &quot;TCP,IP&quot;.
+
+
+
+AFFIX FILE FORMAT			*<A NAME="spell-aff-format"></A><B>spell-aff-format</B>* *<A NAME="spell-affix-vim"></A><B>spell-affix-vim</B>*
+
+
+							*<A NAME="spell-affix-comment"></A><B>spell-affix-comment</B>*
+Comment lines in the <A HREF="#.aff">.aff</A> file start with a '<A HREF="pattern.html##">#</A>':
+
+<B><FONT COLOR="PURPLE">	# comment line </FONT></B>
+
+Items with a fixed number of arguments can be followed by a comment.  But only
+if none of the arguments can contain white space.  The comment must start with
+a &quot;<A HREF="pattern.html##">#</A>&quot; character.  Example:
+
+<B><FONT COLOR="PURPLE">	KEEPCASE =  # fix case for words with this flag </FONT></B>
+
+
+
+ENCODING							*<A NAME="spell-SET"></A><B>spell-SET</B>*
+
+The affix file can be in any encoding that is supported by &quot;iconv&quot;.  However,
+in some cases the current <A HREF="mbyte.html#locale">locale</A> should also be set properly at the time
+|<A HREF="#:mkspell">:mkspell</A>| is invoked.  Adding FOL/LOW/UPP lines removes this requirement
+|<A HREF="#spell-FOL">spell-FOL</A>|.
+
+The encoding should be specified before anything where the encoding matters.
+The encoding applies both to the affix file and the dictionary file.  It is
+done with a SET line:
+
+<B><FONT COLOR="PURPLE">	SET utf-8 </FONT></B>
+
+The encoding can be different from the value of the <A HREF="options.html#'encoding'">'encoding'</A> option at the
+time &quot;<A HREF="#:mkspell">:mkspell</A>&quot; is used.  Vim will then convert everything to <A HREF="options.html#'encoding'">'encoding'</A> and
+generate a <A HREF="#spell">spell</A> file for <A HREF="options.html#'encoding'">'encoding'</A>.  If some of the used characters to not
+fit in <A HREF="options.html#'encoding'">'encoding'</A> you will get an error message.
+
+							*<A NAME="spell-affix-mbyte"></A><B>spell-affix-mbyte</B>*
+When using a <A HREF="mbyte.html#multi-byte">multi-byte</A> encoding it's possible to use more different affix
+flags.  But <A HREF="#Myspell">Myspell</A> doesn't support that, thus you may not want to use <A HREF="motion.html#it">it</A>
+anyway.  For compatibility use an 8-bit encoding.
+
+
+INFORMATION
+
+These entries in the affix file can be used to add information to the <A HREF="#spell">spell</A>
+file.  There are no restrictions on the format, but they should be in the
+right encoding.
+
+
+				*<A NAME="spell-NAME"></A><B>spell-NAME</B>* *<A NAME="spell-VERSION"></A><B>spell-VERSION</B>* *<A NAME="spell-HOME"></A><B>spell-HOME</B>*
+
+				*<A NAME="spell-AUTHOR"></A><B>spell-AUTHOR</B>* *<A NAME="spell-EMAIL"></A><B>spell-EMAIL</B>* *<A NAME="spell-COPYRIGHT"></A><B>spell-COPYRIGHT</B>*
+	NAME		Name of the language
+	VERSION		1.0.1  with fixes
+ HOME	<A HREF="http://www.myhome.eu">http://www.myhome.eu</A>
+	AUTHOR		John Doe
+	EMAIL		john AT Doe DOT net
+	COPYRIGHT	LGPL
+
+These fields are put in the .spl file as-is.  The |<A HREF="#:spellinfo">:spellinfo</A>| command can be
+used to <A HREF="starting.html#view">view</A> the info.
+
+
+							*<A NAME=":spellinfo"></A><B>:spellinfo</B>* *<A NAME=":spelli"></A><B>:spelli</B>*
+:spelli[nfo]		Display the information for the <A HREF="#spell">spell</A> file(s) used for
+			the current buffer.
+
+
+CHARACTER TABLES
+
+							*<A NAME="spell-affix-chars"></A><B>spell-affix-chars</B>*
+When using an 8-bit encoding the affix file should define what characters are
+<A HREF="motion.html#word">word</A> characters.  This is because the system where &quot;<A HREF="#:mkspell">:mkspell</A>&quot; is used may not
+support a <A HREF="mbyte.html#locale">locale</A> with this encoding and isalpha() won't work.  For example
+when using &quot;cp1250&quot; on <A HREF="os_unix.html#Unix">Unix</A>.
+
+						*<A NAME="E761"></A><B>E761</B>* *<A NAME="E762"></A><B>E762</B>* *<A NAME="spell-FOL"></A><B>spell-FOL</B>*
+
+						*<A NAME="spell-LOW"></A><B>spell-LOW</B>* *<A NAME="spell-UPP"></A><B>spell-UPP</B>*
+Three lines in the affix file are needed.  Simplistic example:
+
+<B><FONT COLOR="PURPLE">	FOL  &aacute;ëñ </FONT></B>
+<B><FONT COLOR="PURPLE">	LOW  &aacute;ëñ </FONT></B>
+<B><FONT COLOR="PURPLE">	UPP  ÁËÑ </FONT></B>
+
+All three lines must have exactly the same number of characters.
+
+The &quot;FOL&quot; line specifies the case-folded characters.  These are used to
+compare words while ignoring <A HREF="change.html#case">case</A>.  For most encodings this is identical to
+the lower <A HREF="change.html#case">case</A> line.
+
+The &quot;LOW&quot; line specifies the characters in lower-case.  Mostly it's equal to
+the &quot;FOL&quot; line.
+
+The &quot;UPP&quot; line specifies the characters with upper-case.  That is, a character
+is upper-case where it's different from the character at the same position in
+&quot;FOL&quot;.
+
+An exception is made for the German sharp <A HREF="change.html#s">s</A> ß.  The upper-case version is
+&quot;SS&quot;.  In the FOL/LOW/UPP lines <A HREF="motion.html#it">it</A> should be included, so that it's recognized
+<A HREF="motion.html#as">as</A> a <A HREF="motion.html#word">word</A> character, but use the ß character in all three.
+
+ASCII characters should be omitted, Vim always handles these in the same way.
+When the encoding is <A HREF="mbyte.html#UTF-8">UTF-8</A> no <A HREF="motion.html#word">word</A> characters need to be specified.
+
+
+							*<A NAME="E763"></A><B>E763</B>*
+Vim allows you to use <A HREF="#spell">spell</A> checking for several languages in the same file.
+You can list them in the <A HREF="options.html#'spelllang'">'spelllang'</A> option.  As a consequence all <A HREF="#spell">spell</A> files
+for the same encoding must use the same <A HREF="motion.html#word">word</A> characters, otherwise they can't
+be combined without <A HREF="message.html#errors">errors</A>.
+
+If you get an <A HREF="#E763">E763</A> warning that the <A HREF="motion.html#word">word</A> tables differ you need to update your
+&quot;.spl&quot; <A HREF="#spell">spell</A> files.  If you downloaded the files, get the latest version of
+all <A HREF="#spell">spell</A> files you use.  Otherwise generate the .spl file again with
+|<A HREF="#:mkspell">:mkspell</A>|.  If you still get <A HREF="message.html#errors">errors</A> check the FOL, LOW and UPP lines in the
+used <A HREF="#.aff">.aff</A> files.
+
+The XX.ascii.spl <A HREF="#spell">spell</A> file generated with the &quot;-ascii&quot; argument will not
+contain the table with characters, so that <A HREF="motion.html#it">it</A> can be combine with <A HREF="#spell">spell</A> files
+for any encoding.  The .add.spl files also <A HREF="diff.html#do">do</A> not contain the table.
+
+
+MID-WORD CHARACTERS
+
+							*<A NAME="spell-midword"></A><B>spell-midword</B>*
+Some characters are only to be considered <A HREF="motion.html#word">word</A> characters if they are used in
+between two ordinary <A HREF="motion.html#word">word</A> characters.  An example is the single <A HREF="change.html#quote:">quote:</A> It is
+often used to put text in <A HREF="quotes.html#quotes">quotes</A>, thus <A HREF="motion.html#it">it</A> can't be recognized <A HREF="motion.html#as">as</A> a <A HREF="motion.html#word">word</A>
+character, but when <A HREF="motion.html#it">it</A> appears in between <A HREF="motion.html#word">word</A> characters <A HREF="motion.html#it">it</A> must be part of
+the <A HREF="motion.html#word">word</A>.  This is needed to detect a spelling error such <A HREF="motion.html#as">as</A> they'are.  That
+should be they're, but since &quot;they&quot; and &quot;are&quot; are words themselves that would
+go unnoticed.
+
+These characters are defined with MIDWORD in the <A HREF="#.aff">.aff</A> file.  Example:
+
+<B><FONT COLOR="PURPLE">	MIDWORD	'- </FONT></B>
+
+
+
+FLAG TYPES						*<A NAME="spell-FLAG"></A><B>spell-FLAG</B>*
+
+Flags are used to specify the affixes that can be used with a <A HREF="motion.html#word">word</A> and for
+other properties of the <A HREF="motion.html#word">word</A>.  Normally single-character flags are used.  This
+<A HREF="vi_diff.html#limits">limits</A> the number of possible flags, especially for 8-bit encodings.  The FLAG
+item can be used if more affixes are to be used.  Possible values:
+
+	FLAG long	use two-character flags
+	FLAG num	use numbers, from 1 up to 65000
+	FLAG caplong	use one-character flags without A-Z and two-character
+			flags that start with A-Z
+
+With &quot;FLAG num&quot; the numbers in a list of affixes need to be separated with a
+comma: &quot;234,2143,1435&quot;.  This method is inefficient, but useful if the file is
+generated with a program.
+
+When using &quot;caplong&quot; the two-character flags all start with a capital: &quot;Aa&quot;,
+&quot;B1&quot;, &quot;BB&quot;, etc.  This is useful to use one-character flags for the most
+common items and two-character flags for uncommon items.
+
+Note: When using <A HREF="mbyte.html#utf-8">utf-8</A> only characters up to 65000 may be used for flags.
+
+Note: even when using &quot;num&quot; or &quot;long&quot; the number of flags available to
+compounding and prefixes is limited to about 250.
+
+
+AFFIXES
+
+					    *<A NAME="spell-PFX"></A><B>spell-PFX</B>* *<A NAME="spell-SFX"></A><B>spell-SFX</B>*
+The usual PFX (prefix) and SFX (suffix) lines are supported (see the <A HREF="#Myspell">Myspell</A>
+documentation or the Aspell manual:
+	<A HREF="http://aspell.net/man-html/Affix-Compression.html">http://aspell.net/man-html/Affix-Compression.html</A>.
+
+Summary:
+<B><FONT COLOR="PURPLE">	SFX L Y 2 </FONT></B>
+<B><FONT COLOR="PURPLE">	SFX L 0 re [^x] </FONT></B>
+<B><FONT COLOR="PURPLE">	SFX L 0 ro x </FONT></B>
+
+The first line is a header and has four fields:
+	SFX {flag} {combine} {count}
+
+{flag}		The name used for the suffix.  Mostly it's a single <A HREF="print.html#letter">letter</A>,
+		but other characters can be used, see |<A HREF="#spell-FLAG">spell-FLAG</A>|.
+
+{combine}	Can be '<A HREF="change.html#Y">Y</A>' or '<A HREF="pattern.html#N">N</A>'.  When '<A HREF="change.html#Y">Y</A>' then the <A HREF="motion.html#word">word</A> plus suffix can
+		also have a prefix.  When '<A HREF="pattern.html#N">N</A>' then a prefix is not allowed.
+
+{count}		The number of lines following.  If this is wrong you will get
+		an error message.
+
+For PFX the fields are exactly the same.
+
+The basic format for the following lines is:
+	SFX {flag} {strip} {add} {condition} {extra}
+
+{flag}		Must be the same <A HREF="motion.html#as">as</A> the {flag} used in the first line.
+
+{strip}		Characters removed from the basic <A HREF="motion.html#word">word</A>.  There is no check if
+		the characters are actually there, only the length is used (in
+		bytes).  This better match the {condition}, otherwise strange
+		things may happen.  If the {strip} length is equal to or
+		longer than the basic <A HREF="motion.html#word">word</A> the suffix won't be used.
+		When {strip} is 0 (zero) then nothing is stripped.
+
+{add}		Characters added to the basic <A HREF="motion.html#word">word</A>, after removing {strip}.
+		Optionally there is a '<A HREF="pattern.html#/">/</A>' followed by flags.  The flags apply
+		to the <A HREF="motion.html#word">word</A> plus affix.  See |<A HREF="#spell-affix-flags">spell-affix-flags</A>|
+
+{condition}	A simplistic <A HREF="pattern.html#pattern">pattern</A>.  Only when this matches with a basic
+		<A HREF="motion.html#word">word</A> will the suffix be used for that <A HREF="motion.html#word">word</A>.  This is normally
+		for using one suffix <A HREF="print.html#letter">letter</A> with different {add} and {strip}
+		fields for words with different endings.
+		When {condition} is a . (dot) there is no condition.
+		The <A HREF="pattern.html#pattern">pattern</A> may contain:
+		- Literal characters.
+		- A set of characters in <A HREF="motion.html#[]">[]</A>. [abc] matches a, <A HREF="motion.html#b">b</A> and <A HREF="change.html#c">c</A>.
+		  A dash is allowed for a range [a-c], but this is
+		  Vim-specific.
+		- A set of characters that starts with a ^, meaning the
+		  complement of the specified characters. [^abc] matches any
+		  character but a, <A HREF="motion.html#b">b</A> and <A HREF="change.html#c">c</A>.
+
+{extra}		Optional extra text:
+		    # comment		Comment is ignored
+		    -			Hunspell uses this, ignored
+
+For PFX the fields are the same, but the {strip}, {add} and {condition} apply
+to the start of the <A HREF="motion.html#word">word</A>.
+
+Note: <A HREF="#Myspell">Myspell</A> ignores any extra text after the relevant info.  Vim requires
+this text to start with a &quot;<A HREF="pattern.html##">#</A>&quot; so that mistakes don't go unnoticed.  Example:
+
+<B><FONT COLOR="PURPLE">	SFX F 0 in   [^i]n      # Spion &gt; Spionin  </FONT></B>
+<B><FONT COLOR="PURPLE">	SFX F 0 nen  in		# Bauerin &gt; Bauerinnen </FONT></B>
+
+Apparently <A HREF="#Myspell">Myspell</A> allows an affix name to appear more than once.  Since this
+might also be a mistake, Vim checks for an extra &quot;<A HREF="change.html#S">S</A>&quot;.  The affix files for
+<A HREF="#Myspell">Myspell</A> that use this feature apparently have this flag.  Example:
+
+<B><FONT COLOR="PURPLE">	SFX a Y 1 S </FONT></B>
+<B><FONT COLOR="PURPLE">	SFX a 0 an . </FONT></B>
+
+<B><FONT COLOR="PURPLE">	SFX a Y 2 S </FONT></B>
+<B><FONT COLOR="PURPLE">	SFX a 0 en . </FONT></B>
+<B><FONT COLOR="PURPLE">	SFX a 0 on . </FONT></B>
+
+
+
+AFFIX FLAGS						*<A NAME="spell-affix-flags"></A><B>spell-affix-flags</B>*
+
+This is a feature that comes from Hunspell: The affix may specify flags.  This
+works similar to flags specified on a basic <A HREF="motion.html#word">word</A>.  The flags apply to the
+basic <A HREF="motion.html#word">word</A> plus the affix (but there are restrictions).  Example:
+
+<B><FONT COLOR="PURPLE">	SFX S Y 1 </FONT></B>
+<B><FONT COLOR="PURPLE">	SFX S 0 s . </FONT></B>
+
+<B><FONT COLOR="PURPLE">	SFX A Y 1 </FONT></B>
+<B><FONT COLOR="PURPLE">	SFX A 0 able/S . </FONT></B>
+
+When the dictionary file contains &quot;drink/AS&quot; then these words are possible:
+
+	drink
+	drinks		uses <A HREF="change.html#S">S</A> suffix
+	drinkable	uses A suffix
+	drinkables	uses A suffix and then <A HREF="change.html#S">S</A> suffix
+
+Generally the flags of the suffix are added to the flags of the basic <A HREF="motion.html#word">word</A>,
+both are used for the <A HREF="motion.html#word">word</A> plus suffix.  But the flags of the basic <A HREF="motion.html#word">word</A> are
+only used once for affixes, except that both one prefix and one suffix can be
+used when both support combining.
+
+Specifically, the affix flags can be used for:
+- Suffixes on <A HREF="cmdline.html#suffixes">suffixes</A>, <A HREF="motion.html#as">as</A> in the example above.  This works once, thus you
+  can have two <A HREF="cmdline.html#suffixes">suffixes</A> on a <A HREF="motion.html#word">word</A> (plus one prefix).
+- Making the <A HREF="motion.html#word">word</A> with the affix rare, by using the |<A HREF="#spell-RARE">spell-RARE</A>| flag.
+- Exclude the <A HREF="motion.html#word">word</A> with the affix from compounding, by using the
+  |<A HREF="#spell-COMPOUNDFORBIDFLAG">spell-COMPOUNDFORBIDFLAG</A>| flag.
+- Allow the <A HREF="motion.html#word">word</A> with the affix to be part of a compound <A HREF="motion.html#word">word</A> on the side of
+  the affix with the |<A HREF="#spell-COMPOUNDPERMITFLAG">spell-COMPOUNDPERMITFLAG</A>|.
+- Use the NEEDCOMPOUND flag: <A HREF="motion.html#word">word</A> plus affix can only be used <A HREF="motion.html#as">as</A> part of a
+  compound <A HREF="motion.html#word">word</A>. |<A HREF="#spell-NEEDCOMPOUND">spell-NEEDCOMPOUND</A>|
+- Compound flags: <A HREF="motion.html#word">word</A> plus affix can be part of a compound <A HREF="motion.html#word">word</A> at the end,
+  middle, start, etc.  The flags are combined with the flags of the basic
+  <A HREF="motion.html#word">word</A>.  |<A HREF="#spell-compound">spell-compound</A>|
+- NEEDAFFIX: another affix is needed to make a valid <A HREF="motion.html#word">word</A>.
+- CIRCUMFIX, <A HREF="motion.html#as">as</A> explained just below.
+
+
+
+CIRCUMFIX						*<A NAME="spell-CIRCUMFIX"></A><B>spell-CIRCUMFIX</B>*
+
+The CIRCUMFIX flag means a prefix and suffix must be added at the same time.
+If a prefix has the CIRCUMFIX flag than only <A HREF="cmdline.html#suffixes">suffixes</A> with the CIRCUMFIX flag
+can be added, and the other way around.
+An alternative is to only specify the suffix, and give the that suffix two
+flags: The required prefix and the NEEDAFFIX flag.  |<A HREF="#spell-NEEDAFFIX">spell-NEEDAFFIX</A>|
+
+
+
+PFXPOSTPONE						*<A NAME="spell-PFXPOSTPONE"></A><B>spell-PFXPOSTPONE</B>*
+
+When an affix file has very many prefixes that apply to many words it's not
+possible to build the whole <A HREF="motion.html#word">word</A> list in memory.  This applies to Hebrew (a
+list with all words is over a Gbyte).  In that <A HREF="change.html#case">case</A> applying prefixes must be
+postponed.  This makes <A HREF="#spell">spell</A> checking slower.  It is indicated by this keyword
+in the <A HREF="#.aff">.aff</A> file:
+
+<B><FONT COLOR="PURPLE">	PFXPOSTPONE </FONT></B>
+
+Only prefixes without a chop string and without flags can be postponed.
+Prefixes with a chop string or with flags will still be included in the <A HREF="motion.html#word">word</A>
+list.  An exception if the chop string is one character and equal to the last
+character of the added string, but in lower <A HREF="change.html#case">case</A>.  Thus when the chop string
+is used to allow the following <A HREF="motion.html#word">word</A> to start with an upper <A HREF="change.html#case">case</A> <A HREF="print.html#letter">letter</A>.
+
+
+
+WORDS WITH A SLASH					*<A NAME="spell-SLASH"></A><B>spell-SLASH</B>*
+
+The slash is used in the <A HREF="#.dic">.dic</A> file to separate the basic <A HREF="motion.html#word">word</A> from the affix
+letters and other flags.  Unfortunately, this means you cannot use a slash in
+a <A HREF="motion.html#word">word</A>.  Thus &quot;TCP/IP&quot; is not a <A HREF="motion.html#word">word</A> but &quot;TCP&quot; with the flags &quot;IP&quot;.  To include
+a slash in the <A HREF="motion.html#word">word</A> put a <A HREF="intro.html#backslash">backslash</A> before <A HREF="motion.html#it">it</A>: &quot;TCP\/IP&quot;.  In the rare <A HREF="change.html#case">case</A>
+you want to use a <A HREF="intro.html#backslash">backslash</A> inside a <A HREF="motion.html#word">word</A> you need to use two backslashes.
+Any other use of the <A HREF="intro.html#backslash">backslash</A> is reserved for future expansion.
+
+
+
+KEEP-CASE WORDS						*<A NAME="spell-KEEPCASE"></A><B>spell-KEEPCASE</B>*
+
+In the affix file a KEEPCASE line can be used to define the affix name used
+for keep-case words.  Example:
+
+<B><FONT COLOR="PURPLE">	KEEPCASE = </FONT></B>
+
+This flag is not supported by <A HREF="#Myspell">Myspell</A>.  It has the meaning that <A HREF="change.html#case">case</A> matters.
+This can be used if the <A HREF="motion.html#word">word</A> does not have the first <A HREF="print.html#letter">letter</A> in upper <A HREF="change.html#case">case</A> at
+the start of a <A HREF="motion.html#sentence">sentence</A>.  Example:
+
+<B><FONT COLOR="PURPLE">    word list	    matches		    does not match </FONT></B>
+    's morgens/=    's morgens		    'S morgens 's Morgens 'S MORGENS
+    's Morgens	    's Morgens 'S MORGENS   'S morgens 's morgens
+
+The flag can also be used to avoid that the <A HREF="motion.html#word">word</A> matches when <A HREF="motion.html#it">it</A> is in all
+upper-case letters.
+
+
+
+RARE WORDS						*<A NAME="spell-RARE"></A><B>spell-RARE</B>*
+
+In the affix file a RARE line can be used to define the affix name used for
+rare words.  Example:
+
+<B><FONT COLOR="PURPLE">	RARE ? </FONT></B>
+
+Rare words are highlighted differently from bad words.  This is to be used for
+words that are correct for the language, but are hardly ever used and could be
+a typing mistake anyway.  When the same <A HREF="motion.html#word">word</A> is found <A HREF="motion.html#as">as</A> good <A HREF="motion.html#it">it</A> won't be
+highlighted <A HREF="motion.html#as">as</A> rare.
+
+This flag can also be used on an affix, so that a basic <A HREF="motion.html#word">word</A> is not rare but
+the basic <A HREF="motion.html#word">word</A> plus affix is rare |<A HREF="#spell-affix-flags">spell-affix-flags</A>|.  However, if the <A HREF="motion.html#word">word</A>
+also appears <A HREF="motion.html#as">as</A> a good <A HREF="motion.html#word">word</A> in another way (e.g., in another region) <A HREF="motion.html#it">it</A> won't
+be marked <A HREF="motion.html#as">as</A> rare.
+
+
+
+BAD WORDS						*<A NAME="spell-BAD"></A><B>spell-BAD</B>*
+
+In the affix file a BAD line can be used to define the affix name used for
+bad words.  Example:
+
+<B><FONT COLOR="PURPLE">	BAD ! </FONT></B>
+
+This can be used to exclude words that would otherwise be good.  For example
+&quot;the the&quot; in the <A HREF="#.dic">.dic</A> file:
+
+<B><FONT COLOR="PURPLE">	the the/! </FONT></B>
+
+Once a <A HREF="motion.html#word">word</A> has been marked <A HREF="motion.html#as">as</A> bad <A HREF="motion.html#it">it</A> won't be undone by encountering the same
+<A HREF="motion.html#word">word</A> <A HREF="motion.html#as">as</A> good.
+
+The flag also applies to the <A HREF="motion.html#word">word</A> with affixes, thus this can be used to <A HREF="motion.html#mark">mark</A>
+a whole bunch of related words <A HREF="motion.html#as">as</A> bad.
+
+
+							*<A NAME="spell-FORBIDDENWORD"></A><B>spell-FORBIDDENWORD</B>*
+FORBIDDENWORD can be used just like BAD.  For compatibility with Hunspell.
+
+
+							*<A NAME="spell-NEEDAFFIX"></A><B>spell-NEEDAFFIX</B>*
+The NEEDAFFIX flag is used to require that a <A HREF="motion.html#word">word</A> is used with an affix.  The
+<A HREF="motion.html#word">word</A> itself is not a good <A HREF="motion.html#word">word</A> (unless there is an empty affix).  Example:
+
+<B><FONT COLOR="PURPLE">	NEEDAFFIX + </FONT></B>
+
+
+
+COMPOUND WORDS						*<A NAME="spell-compound"></A><B>spell-compound</B>*
+
+A compound <A HREF="motion.html#word">word</A> is a longer <A HREF="motion.html#word">word</A> made by concatenating words that appear in
+the <A HREF="#.dic">.dic</A> file.  To specify which words may be concatenated a character is
+used.  This character is put in the list of affixes after the <A HREF="motion.html#word">word</A>.  We will
+call this character a flag here.  Obviously these flags must be different from
+any affix IDs used.
+
+
+							*<A NAME="spell-COMPOUNDFLAG"></A><B>spell-COMPOUNDFLAG</B>*
+The <A HREF="#Myspell">Myspell</A> compatible method uses one flag, specified with COMPOUNDFLAG.  All
+words with this flag combine in any order.  This means there is no <A HREF="intro.html#control">control</A>
+over which <A HREF="motion.html#word">word</A> comes first.  Example:
+<B><FONT COLOR="PURPLE">	COMPOUNDFLAG c </FONT></B>
+
+
+							*<A NAME="spell-COMPOUNDRULE"></A><B>spell-COMPOUNDRULE</B>*
+A more advanced method to specify how compound words can be formed uses
+multiple items with multiple flags.  This is not compatible with <A HREF="#Myspell">Myspell</A> 3.0.
+Let's start with an example:
+<B><FONT COLOR="PURPLE">	COMPOUNDRULE c+ </FONT></B>
+<B><FONT COLOR="PURPLE">	COMPOUNDRULE se </FONT></B>
+
+The first line defines that words with the &quot;<A HREF="change.html#c">c</A>&quot; flag can be concatenated in any
+order.  The second line defines compound words that are made of one <A HREF="motion.html#word">word</A> with
+the &quot;<A HREF="change.html#s">s</A>&quot; flag and one <A HREF="motion.html#word">word</A> with the &quot;<A HREF="motion.html#e">e</A>&quot; flag.  With this dictionary:
+<B><FONT COLOR="PURPLE">	bork/c </FONT></B>
+<B><FONT COLOR="PURPLE">	onion/s </FONT></B>
+<B><FONT COLOR="PURPLE">	soup/e </FONT></B>
+
+You can make these words:
+	bork
+	borkbork
+	borkborkbork
+	(etc.)
+	onion
+	soup
+	onionsoup
+
+The COMPOUNDRULE item may appear multiple times.  The argument is made out of
+one or more groups, where each group can be:
+	one flag			e.g., <A HREF="change.html#c">c</A>
+	alternate flags inside <A HREF="motion.html#[]">[]</A>	e.g., [abc]
+Optionally this may be followed by:
+	&#42;	the group appears zero or more times, e.g., sm*e
+	+	the group appears one or more times, e.g., c+
+	?	the group appears zero times or once, e.g., <A HREF="change.html#x">x</A>?
+
+This is similar to the <A HREF="pattern.html#regexp">regexp</A> <A HREF="pattern.html#pattern">pattern</A> <A HREF="syntax.html#syntax">syntax</A> (but not the same!).  A few
+examples with the sequence of <A HREF="motion.html#word">word</A> flags they require:
+    COMPOUNDRULE x+	    <A HREF="change.html#x">x</A> xx xxx etc.
+    COMPOUNDRULE yz	    yz
+    COMPOUNDRULE x+z	    xz xxz xxxz etc.
+    COMPOUNDRULE yx+	    yx yxx yxxx etc.
+    COMPOUNDRULE xy?z	    xz xyz
+
+    COMPOUNDRULE [abc]z    az bz cz
+    COMPOUNDRULE [abc]+z   az aaz abaz bz baz bcbz cz caz cbaz etc.
+    COMPOUNDRULE a[xyz]+   ax axx axyz ay ayx ayzz az azy azxy etc.
+    COMPOUNDRULE sm*e	    se sme smme smmme etc.
+    COMPOUNDRULE s[xyz]*e  se sxe sxye sxyxe sye syze sze szye szyxe  etc.
+
+A specific example: Allow a compound to be made of two words and a dash:
+	In the <A HREF="#.aff">.aff</A> file:
+<B><FONT COLOR="PURPLE">	    COMPOUNDRULE sde </FONT></B>
+<B><FONT COLOR="PURPLE">	    NEEDAFFIX x </FONT></B>
+<B><FONT COLOR="PURPLE">	    COMPOUNDWORDMAX 3 </FONT></B>
+<B><FONT COLOR="PURPLE">	    COMPOUNDMIN 1 </FONT></B>
+	In the <A HREF="#.dic">.dic</A> file:
+<B><FONT COLOR="PURPLE">	    start/s </FONT></B>
+<B><FONT COLOR="PURPLE">	    end/e </FONT></B>
+<B><FONT COLOR="PURPLE">	    -/xd </FONT></B>
+
+This allows for the <A HREF="motion.html#word">word</A> &quot;start-end&quot;, but not &quot;startend&quot;.
+
+An additional implied rule is that, without further flags, a <A HREF="motion.html#word">word</A> with a
+prefix cannot be compounded after another <A HREF="motion.html#word">word</A>, and a <A HREF="motion.html#word">word</A> with a suffix
+cannot be compounded with a following <A HREF="motion.html#word">word</A>.  Thus the affix cannot appear
+on the inside of a compound <A HREF="motion.html#word">word</A>.  This can be changed with the
+|<A HREF="#spell-COMPOUNDPERMITFLAG">spell-COMPOUNDPERMITFLAG</A>|.
+
+
+							*<A NAME="spell-NEEDCOMPOUND"></A><B>spell-NEEDCOMPOUND</B>*
+The NEEDCOMPOUND flag is used to require that a <A HREF="motion.html#word">word</A> is used <A HREF="motion.html#as">as</A> part of a
+compound <A HREF="motion.html#word">word</A>.  The <A HREF="motion.html#word">word</A> itself is not a good <A HREF="motion.html#word">word</A>.  Example:
+
+<B><FONT COLOR="PURPLE">	NEEDCOMPOUND &amp; </FONT></B>
+
+
+							*<A NAME="spell-ONLYINCOMPOUND"></A><B>spell-ONLYINCOMPOUND</B>*
+The ONLYINCOMPOUND does exactly the same <A HREF="motion.html#as">as</A> NEEDCOMPOUND.  Supported for
+compatibility with Hunspell.
+
+
+							*<A NAME="spell-COMPOUNDMIN"></A><B>spell-COMPOUNDMIN</B>*
+The minimal character length of a <A HREF="motion.html#word">word</A> used for compounding is specified with
+COMPOUNDMIN.  Example:
+<B><FONT COLOR="PURPLE">	COMPOUNDMIN 5 </FONT></B>
+
+When omitted there is no minimal length.  Obviously you could just leave out
+the compound flag from short words instead, this feature is present for
+compatibility with <A HREF="#Myspell">Myspell</A>.
+
+
+							*<A NAME="spell-COMPOUNDWORDMAX"></A><B>spell-COMPOUNDWORDMAX</B>*
+The maximum number of words that can be concatenated into a compound <A HREF="motion.html#word">word</A> is
+specified with COMPOUNDWORDMAX.  Example:
+<B><FONT COLOR="PURPLE">	COMPOUNDWORDMAX 3 </FONT></B>
+
+When omitted there is no maximum.  It applies to all compound words.
+
+To set a limit for words with specific flags make sure the items in
+COMPOUNDRULE where they appear don't allow too many words.
+
+
+							*<A NAME="spell-COMPOUNDSYLMAX"></A><B>spell-COMPOUNDSYLMAX</B>*
+The maximum number of syllables that a compound <A HREF="motion.html#word">word</A> may contain is specified
+with COMPOUNDSYLMAX.  Example:
+<B><FONT COLOR="PURPLE">	COMPOUNDSYLMAX 6 </FONT></B>
+
+This has no effect if there is no SYLLABLE item.  Without COMPOUNDSYLMAX there
+is no limit on the number of syllables.
+
+If both COMPOUNDWORDMAX and COMPOUNDSYLMAX are defined, a compound <A HREF="motion.html#word">word</A> is
+accepted if <A HREF="motion.html#it">it</A> fits one of the criteria, thus is either made from up to
+COMPOUNDWORDMAX words or contains up to COMPOUNDSYLMAX syllables.
+
+
+						    *<A NAME="spell-COMPOUNDFORBIDFLAG"></A><B>spell-COMPOUNDFORBIDFLAG</B>*
+The COMPOUNDFORBIDFLAG specifies a flag that can be used on an affix.  It
+means that the <A HREF="motion.html#word">word</A> plus affix cannot be used in a compound <A HREF="motion.html#word">word</A>.  Example:
+	affix file:
+<B><FONT COLOR="PURPLE">		COMPOUNDFLAG c </FONT></B>
+<B><FONT COLOR="PURPLE">		COMPOUNDFORBIDFLAG x </FONT></B>
+<B><FONT COLOR="PURPLE">		SFX a Y 2 </FONT></B>
+<B><FONT COLOR="PURPLE">		SFX a 0 s   . </FONT></B>
+<B><FONT COLOR="PURPLE">		SFX a 0 ize/x . </FONT></B>
+	dictionary:
+<B><FONT COLOR="PURPLE">		word/c </FONT></B>
+<B><FONT COLOR="PURPLE">		util/ac </FONT></B>
+
+This allows for &quot;wordutil&quot; and &quot;wordutils&quot; but not &quot;wordutilize&quot;.
+Note: this doesn't work for postponed prefixes yet.
+
+
+						    *<A NAME="spell-COMPOUNDPERMITFLAG"></A><B>spell-COMPOUNDPERMITFLAG</B>*
+The COMPOUNDPERMITFLAG specifies a flag that can be used on an affix.  It
+means that the <A HREF="motion.html#word">word</A> plus affix can also be used in a compound <A HREF="motion.html#word">word</A> in a way
+where the affix ends up halfway the <A HREF="motion.html#word">word</A>.  Without this flag that is not
+allowed.
+Note: this doesn't work for postponed prefixes yet.
+
+
+						    *<A NAME="spell-COMPOUNDROOT"></A><B>spell-COMPOUNDROOT</B>*
+The COMPOUNDROOT flag is used for words in the dictionary that are already a
+compound.  This means <A HREF="motion.html#it">it</A> counts for two words when checking the compounding
+rules.  Can also be used for an affix to <A HREF="intro.html#count">count</A> the affix <A HREF="motion.html#as">as</A> a compounding
+<A HREF="motion.html#word">word</A>.
+
+
+						*<A NAME="spell-CHECKCOMPOUNDPATTERN"></A><B>spell-CHECKCOMPOUNDPATTERN</B>*
+CHECKCOMPOUNDPATTERN is used to define patterns that, when matching at the
+position where two words are compounded together forbids the compound.
+For example:
+<B><FONT COLOR="PURPLE">	CHECKCOMPOUNDPATTERN o e </FONT></B>
+
+This forbids compounding if the first <A HREF="motion.html#word">word</A> ends in &quot;<A HREF="insert.html#o">o</A>&quot; and the second <A HREF="motion.html#word">word</A>
+starts with &quot;<A HREF="motion.html#e">e</A>&quot;.
+
+The arguments must be plain text, no patterns are actually supported, despite
+the item name.  Case is always ignored.
+
+The Hunspell feature to use three arguments and flags is not supported.
+
+
+							*<A NAME="spell-SYLLABLE"></A><B>spell-SYLLABLE</B>*
+The SYLLABLE item defines characters or character sequences that are used to
+<A HREF="intro.html#count">count</A> the number of syllables in a <A HREF="motion.html#word">word</A>.  Example:
+<B><FONT COLOR="PURPLE">	SYLLABLE a&aacute;eéiíoóöõuúüûy/aa/au/ea/ee/ei/ie/oa/oe/oo/ou/uu/ui </FONT></B>
+
+Before the first slash is the set of characters that are counted for one
+syllable, also when repeated and mixed, until the next character that is not
+in this set.  After the slash come sequences of characters that are counted
+for one syllable.  These are preferred over using characters from the set.
+With the example &quot;ideeen&quot; has three syllables, counted by &quot;<A HREF="insert.html#i">i</A>&quot;, &quot;ee&quot; and &quot;<A HREF="motion.html#e">e</A>&quot;.
+
+Only case-folded letters need to be included.
+
+Another way to restrict compounding was mentioned above: Adding the
+|<A HREF="#spell-COMPOUNDFORBIDFLAG">spell-COMPOUNDFORBIDFLAG</A>| flag to an affix causes all words that are made
+with that affix to not be used for compounding.
+
+
+
+UNLIMITED COMPOUNDING					*<A NAME="spell-NOBREAK"></A><B>spell-NOBREAK</B>*
+
+For some languages, such <A HREF="motion.html#as">as</A> Thai, there is no space in between words.  This
+looks like all words are compounded.  To specify this use the NOBREAK item in
+the affix file, without arguments:
+<B><FONT COLOR="PURPLE">	NOBREAK </FONT></B>
+
+Vim will try to figure out where one <A HREF="motion.html#word">word</A> ends and a next starts.  When there
+are spelling mistakes this may not be quite right.
+
+
+
+							*<A NAME="spell-COMMON"></A><B>spell-COMMON</B>*
+Common words can be specified with the COMMON item.  This will give better
+suggestions when editing a short file.  Example:
+
+<B><FONT COLOR="PURPLE">	COMMON  the of to and a in is it you that he was for on are </FONT></B>
+
+The words must be separated by white space, up to 25 per line.
+When multiple regions are specified in a &quot;<A HREF="#:mkspell">:mkspell</A>&quot; command the common words
+for all regions are combined and used for all regions.
+
+
+							*<A NAME="spell-NOSPLITSUGS"></A><B>spell-NOSPLITSUGS</B>*
+This item indicates that splitting a <A HREF="motion.html#word">word</A> to make suggestions is not a good
+idea.  Split-word suggestions will appear only when there are few similar
+words.
+
+<B><FONT COLOR="PURPLE">	NOSPLITSUGS </FONT></B>
+
+
+							*<A NAME="spell-NOSUGGEST"></A><B>spell-NOSUGGEST</B>*
+The flag specified with NOSUGGEST can be used for words that will not be
+suggested.  Can be used for obscene words.
+
+<B><FONT COLOR="PURPLE">	NOSUGGEST % </FONT></B>
+
+
+
+REPLACEMENTS						*<A NAME="spell-REP"></A><B>spell-REP</B>*
+
+In the affix file REP items can be used to define common mistakes.  This is
+used to make spelling suggestions.  The items define the &quot;from&quot; text and the
+&quot;to&quot; replacement.  Example:
+
+<B><FONT COLOR="PURPLE">	REP 4 </FONT></B>
+<B><FONT COLOR="PURPLE">	REP f ph </FONT></B>
+<B><FONT COLOR="PURPLE">	REP ph f </FONT></B>
+<B><FONT COLOR="PURPLE">	REP k ch </FONT></B>
+<B><FONT COLOR="PURPLE">	REP ch k </FONT></B>
+
+The first line specifies the number of REP lines following.  Vim ignores the
+number, but <A HREF="motion.html#it">it</A> must be there (for compatibility with <A HREF="#Myspell">Myspell</A>).
+
+Don't include simple one-character replacements or swaps.  Vim will try these
+anyway.  You can include whole words if you want to, but you might want to use
+the &quot;file:&quot; item in <A HREF="options.html#'spellsuggest'">'spellsuggest'</A> instead.
+
+You can include a space by using an underscore:
+
+<B><FONT COLOR="PURPLE">	REP the_the the </FONT></B>
+
+
+
+SIMILAR CHARACTERS					*<A NAME="spell-MAP"></A><B>spell-MAP</B>* *<A NAME="E783"></A><B>E783</B>*
+
+In the affix file MAP items can be used to define letters that are very much
+alike.  This is mostly used for a <A HREF="print.html#letter">letter</A> with different accents.  This is used
+to prefer suggestions with these letters substituted.  Example:
+
+<B><FONT COLOR="PURPLE">	MAP 2 </FONT></B>
+<B><FONT COLOR="PURPLE">	MAP eéëêè </FONT></B>
+<B><FONT COLOR="PURPLE">	MAP uüùúû </FONT></B>
+
+The first line specifies the number of MAP lines following.  Vim ignores the
+number, but the line must be there.
+
+Each <A HREF="print.html#letter">letter</A> must appear in only one of the MAP items.  It's a bit more
+efficient if the first <A HREF="print.html#letter">letter</A> is ASCII or at least one without accents.
+
+
+
+.SUG FILE						*<A NAME="spell-NOSUGFILE"></A><B>spell-NOSUGFILE</B>*
+
+When soundfolding is specified in the affix file then &quot;<A HREF="#:mkspell">:mkspell</A>&quot; will normally
+produce a .sug file next to the .spl file.  This file is used to find
+suggestions by their sound-a-like form quickly.  At the cost of a lot of
+memory (the amount depends on the number of words, |<A HREF="#:mkspell">:mkspell</A>| will display an
+estimate when it's done).
+
+To avoid producing a .sug file use this item in the affix file:
+
+<B><FONT COLOR="PURPLE">	NOSUGFILE </FONT></B>
+
+Users can simply omit the .sug file if they don't want to use <A HREF="motion.html#it">it</A>.
+
+
+
+SOUND-A-LIKE						*<A NAME="spell-SAL"></A><B>spell-SAL</B>*
+
+In the affix file SAL items can be used to define the sounds-a-like mechanism
+to be used.  The main items define the &quot;from&quot; text and the &quot;to&quot; replacement.
+Simplistic example:
+
+<B><FONT COLOR="PURPLE">	SAL CIA			 X </FONT></B>
+<B><FONT COLOR="PURPLE">	SAL CH			 X </FONT></B>
+<B><FONT COLOR="PURPLE">	SAL C			 K </FONT></B>
+<B><FONT COLOR="PURPLE">	SAL K			 K </FONT></B>
+
+There are a few rules and this can become quite complicated.  An explanation
+how <A HREF="motion.html#it">it</A> works can be found in the Aspell manual:
+	<A HREF="http://aspell.net/man-html/Phonetic-Code.html">http://aspell.net/man-html/Phonetic-Code.html</A>.
+
+There are a few special items:
+
+<B><FONT COLOR="PURPLE">	SAL followup		true </FONT></B>
+<B><FONT COLOR="PURPLE">	SAL collapse_result	true </FONT></B>
+<B><FONT COLOR="PURPLE">	SAL remove_accents	true </FONT></B>
+
+&quot;1&quot; has the same meaning <A HREF="motion.html#as">as</A> &quot;true&quot;.  Any other value means &quot;false&quot;.
+
+
+
+SIMPLE SOUNDFOLDING				*<A NAME="spell-SOFOFROM"></A><B>spell-SOFOFROM</B>* *<A NAME="spell-SOFOTO"></A><B>spell-SOFOTO</B>*
+
+The SAL mechanism is complex and slow.  A simpler mechanism is <A HREF="map.html#mapping">mapping</A> all
+characters to another character, <A HREF="map.html#mapping">mapping</A> similar sounding characters to the
+same character.  At the same time this does <A HREF="change.html#case">case</A> <A HREF="fold.html#folding">folding</A>.  You can not have
+both SAL items and simple soundfolding.
+
+There are two items required: one to specify the characters that are mapped
+and one that specifies the characters they are mapped to.  They must have
+exactly the same number of characters.  Example:
+
+<B><FONT COLOR="PURPLE">    SOFOFROM abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </FONT></B>
+<B><FONT COLOR="PURPLE">    SOFOTO   ebctefghejklnnepkrstevvkesebctefghejklnnepkrstevvkes </FONT></B>
+
+In the example all vowels are mapped to the same character '<A HREF="motion.html#e">e</A>'.  Another
+method would be to leave out all vowels.  Some characters that sound nearly
+the same and are often mixed up, such <A HREF="motion.html#as">as</A> '<A HREF="motion.html#m">m</A>' and '<A HREF="pattern.html#n">n</A>', are mapped to the same
+character.  Don't <A HREF="diff.html#do">do</A> this too much, all words will start looking alike.
+
+Characters that <A HREF="diff.html#do">do</A> not appear in SOFOFROM will be left out, except that all
+white space is replaced by one space.  Sequences of the same character in
+SOFOFROM are replaced by one.
+
+You can use the |<A HREF="eval.html#soundfold()">soundfold()</A>| function to try out the results.  Or set the
+<A HREF="options.html#'verbose'">'verbose'</A> option to see the score in the output of the |<A HREF="#z=">z=</A>| command.
+
+
+
+UNSUPPORTED ITEMS				*<A NAME="spell-affix-not-supported"></A><B>spell-affix-not-supported</B>*
+
+These items appear in the affix file of other <A HREF="#spell">spell</A> checkers.  In Vim they are
+ignored, not supported or defined in another way.
+
+
+ACCENT		(Hunspell)				*<A NAME="spell-ACCENT"></A><B>spell-ACCENT</B>*
+		Use MAP instead. |<A HREF="#spell-MAP">spell-MAP</A>|
+
+
+BREAK		(Hunspell)				*<A NAME="spell-BREAK"></A><B>spell-BREAK</B>*
+		Define break points.  Unclear how <A HREF="motion.html#it">it</A> works exactly.
+		Not supported.
+
+
+CHECKCOMPOUNDCASE  (Hunspell)			*<A NAME="spell-CHECKCOMPOUNDCASE"></A><B>spell-CHECKCOMPOUNDCASE</B>*
+		Disallow <A HREF="change.html#uppercase">uppercase</A> letters at compound <A HREF="motion.html#word">word</A> boundaries.
+		Not supported.
+
+
+CHECKCOMPOUNDDUP  (Hunspell)			*<A NAME="spell-CHECKCOMPOUNDDUP"></A><B>spell-CHECKCOMPOUNDDUP</B>*
+		Disallow using the same <A HREF="motion.html#word">word</A> <A HREF="if_cscop.html#twice">twice</A> in a compound.  Not
+		supported.
+
+
+CHECKCOMPOUNDREP  (Hunspell)			*<A NAME="spell-CHECKCOMPOUNDREP"></A><B>spell-CHECKCOMPOUNDREP</B>*
+		Something about using REP items and compound words.  Not
+		supported.
+
+
+CHECKCOMPOUNDTRIPLE  (Hunspell)			*<A NAME="spell-CHECKCOMPOUNDTRIPLE"></A><B>spell-CHECKCOMPOUNDTRIPLE</B>*
+		Forbid three identical characters when compounding.  Not
+		supported.
+
+
+COMPLEXPREFIXES  (Hunspell)				*<A NAME="spell-COMPLEXPREFIXES"></A><B>spell-COMPLEXPREFIXES</B>*
+		Enables using two prefixes.  Not supported.
+
+
+COMPOUND	(Hunspell)				*<A NAME="spell-COMPOUND"></A><B>spell-COMPOUND</B>*
+		This is one line with the <A HREF="intro.html#count">count</A> of COMPOUND items, followed by
+		that many COMPOUND lines with a <A HREF="pattern.html#pattern">pattern</A>.
+		Remove the first line with the <A HREF="intro.html#count">count</A> and rename the other
+		items to COMPOUNDRULE |<A HREF="#spell-COMPOUNDRULE">spell-COMPOUNDRULE</A>|
+
+
+COMPOUNDFIRST	(Hunspell)				*<A NAME="spell-COMPOUNDFIRST"></A><B>spell-COMPOUNDFIRST</B>*
+		Use COMPOUNDRULE instead. |<A HREF="#spell-COMPOUNDRULE">spell-COMPOUNDRULE</A>|
+
+
+COMPOUNDBEGIN	(Hunspell)				*<A NAME="spell-COMPOUNDBEGIN"></A><B>spell-COMPOUNDBEGIN</B>*
+		Use COMPOUNDRULE instead. |<A HREF="#spell-COMPOUNDRULE">spell-COMPOUNDRULE</A>|
+
+
+COMPOUNDEND	(Hunspell)				*<A NAME="spell-COMPOUNDEND"></A><B>spell-COMPOUNDEND</B>*
+		Use COMPOUNDRULE instead. |<A HREF="#spell-COMPOUNDRULE">spell-COMPOUNDRULE</A>|
+
+
+COMPOUNDMIDDLE	(Hunspell)				*<A NAME="spell-COMPOUNDMIDDLE"></A><B>spell-COMPOUNDMIDDLE</B>*
+		Use COMPOUNDRULE instead. |<A HREF="#spell-COMPOUNDRULE">spell-COMPOUNDRULE</A>|
+
+
+COMPOUNDRULES	(Hunspell)				*<A NAME="spell-COMPOUNDRULES"></A><B>spell-COMPOUNDRULES</B>*
+		<A HREF="eval.html#Number">Number</A> of COMPOUNDRULE lines following.  Ignored, but the
+		argument must be a number.
+
+
+COMPOUNDSYLLABLE  (Hunspell)			*<A NAME="spell-COMPOUNDSYLLABLE"></A><B>spell-COMPOUNDSYLLABLE</B>*
+		Use SYLLABLE and COMPOUNDSYLMAX instead. |<A HREF="#spell-SYLLABLE">spell-SYLLABLE</A>|
+		|<A HREF="#spell-COMPOUNDSYLMAX">spell-COMPOUNDSYLMAX</A>|
+
+
+KEY		(Hunspell)				*<A NAME="spell-KEY"></A><B>spell-KEY</B>*
+		Define characters that are close together on the keyboard.
+		Used to give better suggestions.  Not supported.
+		
+
+LANG		(Hunspell)				*<A NAME="spell-LANG"></A><B>spell-LANG</B>*
+		This specifies language-specific behavior.  This actually
+		moves part of the language knowledge into the program,
+		therefore Vim does not support <A HREF="motion.html#it">it</A>.  Each language property
+		must be specified separately.
+
+
+LEMMA_PRESENT	(Hunspell)				*<A NAME="spell-LEMMA_PRESENT"></A><B>spell-LEMMA_PRESENT</B>*
+		Only needed for morphological analysis.
+
+
+MAXNGRAMSUGS	(Hunspell)				*<A NAME="spell-MAXNGRAMSUGS"></A><B>spell-MAXNGRAMSUGS</B>*
+		Set number of n-gram suggestions.  Not supported.
+
+
+PSEUDOROOT	(Hunspell)				*<A NAME="spell-PSEUDOROOT"></A><B>spell-PSEUDOROOT</B>*
+		Use NEEDAFFIX instead. |<A HREF="#spell-NEEDAFFIX">spell-NEEDAFFIX</A>|
+
+
+SUGSWITHDOTS	(Hunspell)				*<A NAME="spell-SUGSWITHDOTS"></A><B>spell-SUGSWITHDOTS</B>*
+		Adds dots to suggestions.  Vim doesn't need this.
+
+
+SYLLABLENUM	(Hunspell)				*<A NAME="spell-SYLLABLENUM"></A><B>spell-SYLLABLENUM</B>*
+		Not supported.
+
+
+TRY		(Myspell, Hunspell, others)		*<A NAME="spell-TRY"></A><B>spell-TRY</B>*
+		Vim does not use the TRY item, <A HREF="motion.html#it">it</A> is ignored.  For making
+		suggestions the actual characters in the words are used, that
+		is much more efficient.
+
+
+WORDCHARS	(Hunspell)				*<A NAME="spell-WORDCHARS"></A><B>spell-WORDCHARS</B>*
+		Used to recognize words.  Vim doesn't need <A HREF="motion.html#it">it</A>, because there
+		is no need to separate words before checking them (using a
+		trie instead of a hashtable).
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

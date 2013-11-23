@@ -1,0 +1,385 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_12</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_12</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_12.txt"></A><B>usr_12.txt</B>*	For Vim version 7.4.  Last change: 2007 May 11
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+				Clever tricks
+
+
+By combining several commands you can make Vim <A HREF="diff.html#do">do</A> nearly everything.  In this
+chapter a number of useful combinations will be presented.  This uses the
+commands introduced in the previous chapters and a few more.
+
+|<A HREF="#12.1">12.1</A>|	<A HREF="insert.html#Replace">Replace</A> a <A HREF="motion.html#word">word</A>
+|<A HREF="#12.2">12.2</A>|	Change &quot;Last, First&quot; to &quot;First Last&quot;
+|<A HREF="#12.3">12.3</A>|	Sort a list
+|<A HREF="#12.4">12.4</A>|	Reverse line order
+|<A HREF="#12.5">12.5</A>|	Count words
+|<A HREF="#12.6">12.6</A>|	Find a man page
+|<A HREF="#12.7">12.7</A>|	Trim blanks
+|<A HREF="#12.8">12.8</A>|	Find where a <A HREF="motion.html#word">word</A> is used
+
+     Next chapter: |<A HREF="usr_20.html">usr_20.txt</A>|  Typing command-line commands quickly
+ Previous chapter: |<A HREF="usr_11.html">usr_11.txt</A>|  Recovering from a crash
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="12.1"></A><B>12.1</B>*	<A HREF="insert.html#Replace">Replace</A> a <A HREF="motion.html#word">word</A>
+
+The substitute command can be used to replace all occurrences of a <A HREF="motion.html#word">word</A> with
+another <A HREF="motion.html#word">word</A>:
+
+<B>	:%s/four/4/g</B>
+
+The &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; range means to replace in all lines.  The &quot;<A HREF="index.html#g">g</A>&quot; flag at the end causes
+all words in a line to be replaced.
+   This will not <A HREF="diff.html#do">do</A> the right thing if your file also contains &quot;thirtyfour&quot;.
+It would be replaced with &quot;thirty4&quot;.  To avoid this, use the &quot;\&lt;&quot; item to
+match the start of a <A HREF="motion.html#word">word</A>:
+
+<B>	:%s/\&lt;four/4/g</B>
+
+Obviously, this still goes wrong on &quot;fourteen&quot;.  Use &quot;\&gt;&quot; to match the end of
+a <A HREF="motion.html#word">word</A>:
+
+<B>	:%s/\&lt;four\&gt;/4/g</B>
+
+If you are programming, you might want to replace &quot;four&quot; in comments, but not
+in the code.  Since this is difficult to specify, add the &quot;<A HREF="change.html#c">c</A>&quot; flag to have the
+substitute command prompt you for each replacement:
+
+
+<B>	:%s/\&lt;four\&gt;/4/gc</B>
+
+
+REPLACING IN SEVERAL FILES
+
+Suppose you want to replace a <A HREF="motion.html#word">word</A> in more than one file.  You could edit each
+file and type the command manually.  It's a lot faster to use record and
+playback.
+   Let's assume you have a directory with C++ files, all ending in &quot;.cpp&quot;.
+There is a function called &quot;GetResp&quot; that you want to rename to &quot;GetAnswer&quot;.
+
+	vim *.cpp		Start Vim, defining the argument list to
+				contain all the C++ files.  You are now in the
+				first file.
+	qq			Start <A HREF="repeat.html#recording">recording</A> into the <A HREF="repeat.html#q">q</A> <A HREF="sponsor.html#register">register</A>
+	:&#37;s/\&lt;GetResp\&gt;/GetAnswer/g
+				Do the replacements in the first file.
+	<A HREF="editing.html#:wnext">:wnext</A>			Write this file and move to the next one.
+	<A HREF="repeat.html#q">q</A>			Stop <A HREF="repeat.html#recording">recording</A>.
+	@q			Execute the <A HREF="repeat.html#q">q</A> <A HREF="sponsor.html#register">register</A>.  This will replay the
+				substitution and &quot;<A HREF="editing.html#:wnext">:wnext</A>&quot;.  You can verify
+				that this doesn't produce an error message.
+	<A HREF="mailto:999@q">999@q</A> Execute the q register on the remaining files. 
+
+At the last file you will get an error message, because &quot;<A HREF="editing.html#:wnext">:wnext</A>&quot; cannot move
+to the next file.  This stops the execution, and everything is done.
+
+	Note:
+	When playing back a recorded sequence, an error stops the execution.
+	Therefore, make sure you don't get an error message when <A HREF="repeat.html#recording">recording</A>.
+
+There is one catch: If one of the .cpp files does not contain the <A HREF="motion.html#word">word</A>
+&quot;GetResp&quot;, you will get an error and <A HREF="change.html#replacing">replacing</A> will stop.  To avoid this, add
+the &quot;<A HREF="motion.html#e">e</A>&quot; flag to the substitute command:
+
+<B>	:%s/\&lt;GetResp\&gt;/GetAnswer/ge</B>
+
+The &quot;<A HREF="motion.html#e">e</A>&quot; flag tells &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; that not finding a match is not an error.
+
+==============================================================================
+
+*<A NAME="12.2"></A><B>12.2</B>*	Change &quot;Last, First&quot; to &quot;First Last&quot;
+
+You have a list of names in this form:
+
+<B><FONT COLOR="PURPLE">	Doe, John </FONT></B>
+<B><FONT COLOR="PURPLE">	Smith, Peter </FONT></B>
+
+You want to change that to:
+
+<B><FONT COLOR="PURPLE">	John Doe </FONT></B>
+<B><FONT COLOR="PURPLE">	Peter Smith </FONT></B>
+
+This can be done with just one command:
+
+<B>	:%s/\([^,]*\), \(.*\)/\2 \1/</B>
+
+Let's break this down in parts.  Obviously <A HREF="motion.html#it">it</A> starts with a substitute
+command.  The &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; is the line range, which stands for the whole file.  Thus
+the substitution is done in every line in the file.
+   The arguments for the substitute command are &quot;/from/to/&quot;.  The slashes
+separate the &quot;from&quot; <A HREF="pattern.html#pattern">pattern</A> and the &quot;to&quot; string.  This is what the &quot;from&quot;
+<A HREF="pattern.html#pattern">pattern</A> contains:
+<B><FONT COLOR="PURPLE">							\([^,]*\), \(.*\) </FONT></B>
+
+	The first part between \( \) matches &quot;Last&quot;	\(     \)
+	    match anything but a comma			  [^,]
+	    any number of times				      *
+	matches &quot;<A HREF="motion.html#,">,</A> &quot; literally					 ,
+	The second part between \( \) matches &quot;First&quot;		   \(  \)
+	    any character					     .
+	    any number of times					      *
+
+In the &quot;to&quot; part we have &quot;\2&quot; and &quot;\1&quot;.  These are called backreferences.
+They refer to the text matched by the &quot;\( \)&quot; parts in the <A HREF="pattern.html#pattern">pattern</A>.  &quot;\2&quot;
+refers to the text matched by the second &quot;\( \)&quot;, which is the &quot;First&quot; name.
+&quot;\1&quot; refers to the first &quot;\( \)&quot;, which is the &quot;Last&quot; name.
+   You can use up to nine backreferences in the &quot;to&quot; part of a substitute
+command.  &quot;<A HREF="change.html#\0">\0</A>&quot; stands for the whole matched <A HREF="pattern.html#pattern">pattern</A>.  There are a few more
+special items in a substitute command, see |<A HREF="change.html#sub-replace-special">sub-replace-special</A>|.
+
+==============================================================================
+
+*<A NAME="12.3"></A><B>12.3</B>*	Sort a list
+
+In a Makefile you often have a list of files.  For example:
+
+<B><FONT COLOR="PURPLE">	OBJS = \ </FONT></B>
+<B><FONT COLOR="PURPLE">		version.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		pch.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		getopt.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		util.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		getopt1.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		inp.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		patch.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		backup.o </FONT></B>
+
+To sort this list, <A HREF="change.html#filter">filter</A> the text through the external sort command:
+
+<B>	/^OBJS</B>
+<B>	j</B>
+<B>	:.,/^$/-1!sort</B>
+
+This goes to the first line, where &quot;OBJS&quot; is the first thing in the line.
+Then <A HREF="motion.html#it">it</A> goes one line down and filters the lines until the next empty line.
+You could also select the lines in <A HREF="visual.html#Visual">Visual</A> mode and then use &quot;!sort&quot;.  That's
+easier to type, but more work when there are many lines.
+   The result is this:
+
+<B><FONT COLOR="PURPLE">	OBJS = \ </FONT></B>
+<B><FONT COLOR="PURPLE">		backup.o </FONT></B>
+<B><FONT COLOR="PURPLE">		getopt.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		getopt1.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		inp.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		patch.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		pch.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		util.o \ </FONT></B>
+<B><FONT COLOR="PURPLE">		version.o \ </FONT></B>
+
+
+Notice that a <A HREF="intro.html#backslash">backslash</A> at the end of each line is used to indicate the line
+continues.  After <A HREF="change.html#sorting">sorting</A>, this is wrong!  The &quot;backup.o&quot; line that was at
+the end didn't have a <A HREF="intro.html#backslash">backslash</A>.  Now that <A HREF="motion.html#it">it</A> sorts to another place, <A HREF="motion.html#it">it</A>
+must have a <A HREF="intro.html#backslash">backslash</A>.
+   The simplest solution is to add the <A HREF="intro.html#backslash">backslash</A> with &quot;A \&lt;Esc&gt;&quot;.  You can
+keep the <A HREF="intro.html#backslash">backslash</A> in the last line, if you make sure an empty line comes
+after <A HREF="motion.html#it">it</A>.  That way you don't have this problem again.
+
+==============================================================================
+
+*<A NAME="12.4"></A><B>12.4</B>*	Reverse line order
+
+The |<A HREF="repeat.html#:global">:global</A>| command can be combined with the |<A HREF="change.html#:move">:move</A>| command to move all the
+lines before the first line, resulting in a reversed file.  The command is:
+
+<B>	:global/^/m 0</B>
+
+Abbreviated:
+
+<B>	:g/^/m 0</B>
+
+The &quot;<A HREF="motion.html#^">^</A>&quot; regular <A HREF="eval.html#expression">expression</A> matches the beginning of the line (even if the line
+is blank).  The |<A HREF="change.html#:move">:move</A>| command moves the matching line to after the mythical
+zeroth line, so the current matching line becomes the first line of the file.
+As the |<A HREF="repeat.html#:global">:global</A>| command is not confused by the <A HREF="change.html#changing">changing</A> line numbering,
+|<A HREF="repeat.html#:global">:global</A>| proceeds to match all remaining lines of the file and puts each <A HREF="motion.html#as">as</A>
+the first.
+
+This also works on a range of lines.  First move to above the first line and
+<A HREF="motion.html#mark">mark</A> <A HREF="motion.html#it">it</A> with &quot;mt&quot;.  Then move the cursor to the last line in the range and
+type:
+
+<B>	:'t+1,.g/^/m 't</B>
+
+==============================================================================
+
+*<A NAME="12.5"></A><B>12.5</B>*	Count words
+
+Sometimes you have to write a text with a maximum number of words.  Vim can
+<A HREF="intro.html#count">count</A> the words for you.
+   When the whole file is what you want to <A HREF="intro.html#count">count</A> the words in, use this
+command:
+
+<B>	g CTRL-G</B>
+
+Do not type a space after the <A HREF="motion.html#g,">g,</A> this is just used here to make the command
+<A HREF="starting.html#easy">easy</A> to read.
+   The output looks like this:
+
+<B><FONT COLOR="PURPLE">	Col 1 of 0; Line 141 of 157; Word 748 of 774; Byte 4489 of 4976 </FONT></B>
+
+You can see on which <A HREF="motion.html#word">word</A> you are (748), and the total number of words in the
+file (774).
+
+When the text is only part of a file, you could move to the start of the text,
+type &quot;g CTRL-G&quot;, move to the end of the text, type &quot;g CTRL-G&quot; again, and then
+use your brain to compute the difference in the <A HREF="motion.html#word">word</A> position.  That's a good
+exercise, but there is an easier way.  With <A HREF="visual.html#Visual">Visual</A> mode, select the text you
+want to <A HREF="intro.html#count">count</A> words in.  Then type <A HREF="index.html#g">g</A> <A HREF="editing.html#CTRL-G">CTRL-G</A>.  The result:
+
+<B><FONT COLOR="PURPLE">	Selected 5 of 293 Lines; 70 of 1884 Words; 359 of 10928 Bytes </FONT></B>
+
+For other ways to count words, lines and other items, see |<A HREF="tips.html#count-items">count-items</A>|.
+
+==============================================================================
+
+*<A NAME="12.6"></A><B>12.6</B>*	Find a man page					*<A NAME="find-manpage"></A><B>find-manpage</B>*
+
+While editing a shell <A HREF="usr_41.html#script">script</A> or C program, you are using a command or function
+that you want to find the man page for (this is on <A HREF="os_unix.html#Unix">Unix</A>).  Let's first use a
+simple way: Move the cursor to the <A HREF="motion.html#word">word</A> you want to find help on and press
+
+<B>	K</B>
+
+Vim will run the external &quot;man&quot; program on the <A HREF="motion.html#word">word</A>.  If the man page is
+found, <A HREF="motion.html#it">it</A> is displayed.  This uses the normal <A HREF="message.html#pager">pager</A> to scroll through the text
+(mostly the &quot;more&quot; program).  When you get to the end pressing <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> will
+get you back into Vim.
+
+A disadvantage is that you can't see the man page and the text you are working
+on at the same time.  There is a trick to make the man page appear in a Vim
+<A HREF="windows.html#window">window</A>.  First, load the man <A HREF="filetype.html#filetype">filetype</A> <A HREF="usr_05.html#plugin">plugin</A>:
+
+<B>	:runtime! ftplugin/man.vim</B>
+
+Put this command in your <A HREF="starting.html#vimrc">vimrc</A> file if you intend to <A HREF="diff.html#do">do</A> this often.  Now you
+can use the &quot;<A HREF="filetype.html#:Man">:Man</A>&quot; command to open a <A HREF="windows.html#window">window</A> on a man page:
+
+<B>	:Man csh</B>
+
+You can scroll around and the text is highlighted.  This allows you to find
+the help you were looking for.  Use <A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="motion.html#w">w</A> to jump to the <A HREF="windows.html#window">window</A> with the
+text you were working on.
+   To find a man page in a specific section, put the section number first.
+For example, to look in section 3 for &quot;echo&quot;:
+
+<B>	:Man 3 echo</B>
+
+To jump to another man page, which is in the text with the typical form
+&quot;word(1)&quot;, press <A HREF="tagsrch.html#CTRL-]">CTRL-]</A> on <A HREF="motion.html#it">it</A>.  Further &quot;<A HREF="filetype.html#:Man">:Man</A>&quot; commands will use the same
+<A HREF="windows.html#window">window</A>.
+
+To display a man page for the <A HREF="motion.html#word">word</A> under the cursor, use this:
+
+<B>	\K</B>
+
+(If you redefined the <A HREF="map.html#&lt;Leader&gt;">&lt;Leader&gt;</A>, use <A HREF="motion.html#it">it</A> instead of the <A HREF="intro.html#backslash">backslash</A>).
+For example, you want to know the return value of &quot;<A HREF="eval.html#strstr()">strstr()</A>&quot; while editing
+this line:
+
+<B><FONT COLOR="PURPLE">	if ( strstr (input, "aap") == ) </FONT></B>
+
+Move the cursor to somewhere on &quot;strstr&quot; and type &quot;\K&quot;.  A <A HREF="windows.html#window">window</A> will open
+to display the man page for <A HREF="eval.html#strstr()">strstr()</A>.
+
+==============================================================================
+
+*<A NAME="12.7"></A><B>12.7</B>*	Trim blanks
+
+Some people find spaces and tabs at the end of a line useless, wasteful, and
+ugly.  To remove <A HREF="pattern.html#whitespace">whitespace</A> at the end of every line, execute the following
+command:
+
+<B>	:%s/\s\+$//</B>
+
+The line range &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; is used, thus this works on the whole file.  The <A HREF="pattern.html#pattern">pattern</A>
+that the &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; command matches with is &quot;\s\+$&quot;.  This finds white
+space characters (\s), 1 or more of them (\+), before the end-of-line ($).
+Later will be explained how you write patterns like this |<A HREF="usr_27.html">usr_27.txt</A>|.
+   The &quot;to&quot; part of the substitute command is empty: &quot;<A HREF="version7.html#//">//</A>&quot;.  Thus <A HREF="motion.html#it">it</A> replaces
+with nothing, effectively <A HREF="change.html#deleting">deleting</A> the matched white space.
+
+Another wasteful use of spaces is placing them before a <A HREF="intro.html#tab">tab</A>.  Often these can
+be deleted without <A HREF="change.html#changing">changing</A> the amount of white space.  But not always!
+Therefore, you can best <A HREF="diff.html#do">do</A> this manually.  Use this search command:
+
+<B>	/ 	</B>
+
+You cannot see <A HREF="motion.html#it">it</A>, but there is a space before a <A HREF="intro.html#tab">tab</A> in this command.  Thus
+it's &quot;/&lt;Space&gt;&lt;Tab&gt;&quot;.   Now use &quot;<A HREF="change.html#x">x</A>&quot; to delete the space and check that the
+amount of white space doesn't change.  You might have to insert a <A HREF="intro.html#tab">tab</A> if <A HREF="motion.html#it">it</A>
+does change.  Type &quot;<A HREF="pattern.html#n">n</A>&quot; to find the next match.  Repeat this until no more
+matches can be found.
+
+==============================================================================
+
+*<A NAME="12.8"></A><B>12.8</B>*	Find where a <A HREF="motion.html#word">word</A> is used
+
+If you are a UNIX user, you can use a combination of Vim and the <A HREF="quickfix.html#grep">grep</A> command
+to edit all the files that contain a given <A HREF="motion.html#word">word</A>.  This is extremely useful if
+you are working on a program and want to <A HREF="starting.html#view">view</A> or edit all the files that
+contain a specific variable.
+   For example, suppose you want to edit all the C program files that contain
+the <A HREF="motion.html#word">word</A> &quot;frame_counter&quot;.  To <A HREF="diff.html#do">do</A> this you use the command:
+
+<B>	vim `grep -l frame_counter *.c`</B>
+
+Let's look at this command in detail.  The <A HREF="quickfix.html#grep">grep</A> command searches through a set
+of files for a given <A HREF="motion.html#word">word</A>.  Because the <A HREF="starting.html#-l">-l</A> argument is specified, the command
+will only list the files containing the <A HREF="motion.html#word">word</A> and not print the matching lines.
+The <A HREF="motion.html#word">word</A> <A HREF="motion.html#it">it</A> is searching for is &quot;frame_counter&quot;.  Actually, this can be any
+regular <A HREF="eval.html#expression">expression</A>.  (Note: What <A HREF="quickfix.html#grep">grep</A> uses for regular expressions is not
+exactly the same <A HREF="motion.html#as">as</A> what Vim uses.)
+   The entire command is enclosed in backticks (`).  This tells the UNIX shell
+to run this command and pretend that the results were typed on the command
+line.  So what happens is that the <A HREF="quickfix.html#grep">grep</A> command is run and produces a list of
+files, these files are put on the Vim command line.  This results in Vim
+editing the file list that is the output of <A HREF="quickfix.html#grep">grep</A>.  You can then use commands
+like &quot;<A HREF="editing.html#:next">:next</A>&quot; and &quot;<A HREF="editing.html#:first">:first</A>&quot; to browse through the files.
+
+
+FINDING EACH LINE
+
+The above command only finds the files in which the <A HREF="motion.html#word">word</A> is found.  You still
+have to find the <A HREF="motion.html#word">word</A> within the files.
+   Vim has a built-in command that you can use to search a set of files for a
+given string.  If you want to find all occurrences of &quot;error_string&quot; in all C
+program files, for example, enter the following command:
+
+<B>	:grep error_string *.c</B>
+
+This causes Vim to search for the string &quot;error_string&quot; in all the specified
+files (*.c).  The editor will now open the first file where a match is found
+and position the cursor on the first matching line.  To go to the next
+matching line (no matter in what file <A HREF="motion.html#it">it</A> is), use the &quot;<A HREF="quickfix.html#:cnext">:cnext</A>&quot; command.  To go
+to the previous match, use the &quot;:cprev&quot; command.  Use &quot;<A HREF="quickfix.html#:clist">:clist</A>&quot; to see all the
+matches and where they are.
+   The &quot;<A HREF="quickfix.html#:grep">:grep</A>&quot; command uses the external commands <A HREF="quickfix.html#grep">grep</A> (on <A HREF="os_unix.html#Unix">Unix</A>) or findstr
+(on Windows).  You can change this by setting the option <A HREF="options.html#'grepprg'">'grepprg'</A>.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_20.html">usr_20.txt</A>|  Typing command-line commands quickly
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

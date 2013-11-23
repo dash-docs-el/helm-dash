@@ -1,0 +1,160 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: os_390</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: os_390</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="os_390.txt"></A><B>os_390.txt</B>*    For Vim version 7.4.  Last change: 2010 May 30
+
+
+		  VIM REFERENCE MANUAL	  by Ralf Schandl
+
+
+					*<A NAME="zOS"></A><B>zOS</B>* *<A NAME="z/OS"></A><B>z/OS</B>* *<A NAME="OS390"></A><B>OS390</B>* *<A NAME="os390"></A><B>os390</B>* *<A NAME="MVS"></A><B>MVS</B>*
+This file contains the particulars for the <A HREF="#z/OS">z/OS</A> UNIX version of Vim.
+
+1. ASCII/EBCDIC dependent scripts	|<A HREF="#zOS-has-ebcdic">zOS-has-ebcdic</A>|
+2. Putty and Colors                     |<A HREF="#zOS-PuTTY">zOS-PuTTY</A>|
+3. Motif Problems			|<A HREF="#zOS-Motif">zOS-Motif</A>|
+4. Bugs					|<A HREF="#zOS-Bugs">zOS-Bugs</A>|
+5. Limitations     			|<A HREF="#zOS-limitations">zOS-limitations</A>|
+6. Open source on <A HREF="#z/OS">z/OS</A> UNIX		|<A HREF="#zOS-open-source">zOS-open-source</A>|
+
+<B><FONT COLOR="PURPLE">Contributors: </FONT></B>
+The port to <A HREF="#z/OS">z/OS</A> UNIX was done by Ralf Schandl for the Redbook mentioned
+below.
+
+Changes, <A HREF="intro.html#bug-reports">bug-reports</A>, or both by:
+
+	David Moore
+	Anthony Giorgio
+	and others
+
+==============================================================================
+
+1. ASCII/EBCDIC dependent scripts	*<A NAME="OS390-has-ebcdic"></A><B>OS390-has-ebcdic</B>* *<A NAME="zOS-has-ebcdic"></A><B>zOS-has-ebcdic</B>*
+
+For the internal <A HREF="usr_41.html#script">script</A> language the feature &quot;ebcdic&quot; was added.  With this
+you can fix ASCII dependent scripts like this:
+
+<B>    if has("ebcdic")</B>
+<B>	let space = 64</B>
+<B>    else</B>
+<B>	let space = 32</B>
+<B>    endif</B>
+ 
+
+==============================================================================
+
+2. PuTTY and Colors			*<A NAME="OS390-PuTTY"></A><B>OS390-PuTTY</B>* *<A NAME="zOS-PuTTY"></A><B>zOS-PuTTY</B>*
+
+If you see problems with <A HREF="syntax.html#syntax">syntax</A> highlighting or screen corruptions when you
+connect to <A HREF="#z/OS">z/OS</A> using Putty, try the following:
+
+- Configure Putty <A HREF="motion.html#as">as</A> &quot;vt220&quot; terminal (Connection-&gt;Data)
+- Add the following 3 lines to your <A HREF="starting.html#vimrc">vimrc</A>:
+
+
+<B>    set t_AB=[4%p1%dm</B>
+<B>    set t_AF=[3%p1%dm</B>
+<B>    set t_CO=8</B>
+ 
+
+Note:  is one character use &lt;C-V&gt;&lt;Esc&gt; to enter <A HREF="motion.html#it">it</A>.
+
+==============================================================================
+
+3. <A HREF="gui_x11.html#Motif">Motif</A> Problems			*<A NAME="OS390-Motif"></A><B>OS390-Motif</B>* *<A NAME="zOS-Motif"></A><B>zOS-Motif</B>*
+
+Note: Seen with Vim 6.*, never tested since.
+
+It seems that in porting the <A HREF="gui_x11.html#Motif">Motif</A> library to <A HREF="#z/OS">z/OS</A>, a translation from EBCDIC
+to ASCII for the accelerator characters of the pull-down <A HREF="gui.html#menus">menus</A> was forgotten.
+Even after I tried to hand convert the <A HREF="gui.html#menus">menus</A>, the accelerator keys continued
+to only work for the opening of <A HREF="gui.html#menus">menus</A> (like &lt;Alt-F&gt; to open the file menu).
+They still <A HREF="diff.html#do">do</A> not work for the menu items themselves (like &lt;Alt-F&gt;O to open
+the file browser).
+
+There is no solution for this yet.
+
+==============================================================================
+
+4. Bugs					*<A NAME="OS390-bugs"></A><B>OS390-bugs</B>* *<A NAME="zOS-Bugs"></A><B>zOS-Bugs</B>*
+
+- Vim will consistently hang when a large amount of text is selected in
+  visual block mode.  This may be due to a memory corruption issue.  Note that
+  this occurs in both the terminal and <A HREF="gui.html#gui">gui</A> versions.
+
+==============================================================================
+
+5. Limitations     			*<A NAME="OS390-limitations"></A><B>OS390-limitations</B>* *<A NAME="zOS-limitations"></A><B>zOS-limitations</B>*
+
+- No binary search in <A HREF="tagsrch.html#tag">tag</A> files.
+  The program /bin/sort sorts by ASCII value by default.  This program is
+  normally used by <A HREF="tagsrch.html#ctags">ctags</A> to sort the <A HREF="tagsrch.html#tags">tags</A>.  There might be a version of
+  <A HREF="tagsrch.html#ctags">ctags</A> out there, that does <A HREF="motion.html#it">it</A> right, but we can't be sure.  So this seems to
+  be a permanent restriction.
+
+- The cscope interface (|<A HREF="if_cscop.html#cscope">cscope</A>|) doesn't work for the version of cscope
+  that we use on our mainframe.  We have a copy of version 15.0b12, and <A HREF="motion.html#it">it</A>
+  causes Vim to hang when using the &quot;<A HREF="if_cscop.html#cscope">cscope</A> add&quot; command.  I'm guessing that
+  the binary format of the <A HREF="if_cscop.html#cscope">cscope</A> database isn't quite what Vim is expecting.
+  I've tried to port the current version of <A HREF="if_cscop.html#cscope">cscope</A> (15.3) to <A HREF="#z/OS">z/OS</A>, without
+  much success.  If anyone is interested in trying, drop me a line if you
+  make any progress.
+
+- No glib/gtk support.  I have not been able to successfully compile glib on
+  <A HREF="#z/OS">z/OS</A> UNIX.  This means you'll have to live without the pretty gtk toolbar.
+ 
+Disabled at compile time:
+    - Multibyte support         (|<A HREF="mbyte.html#multibyte">multibyte</A>|)
+    - Right-to-left mode        (|<A HREF="rileft.html#rileft">rileft</A>|)
+    - Farsi key map             (|<A HREF="farsi.html#Farsi">Farsi</A>|)
+    - Arabic language support   (|<A HREF="arabic.html#Arabic">Arabic</A>|)
+    - Spell checking            (|<A HREF="spell.html#spell">spell</A>|)
+
+Never tested:
+    - <A HREF="if_perl.html#Perl">Perl</A> interface		(|<A HREF="if_perl.html#perl">perl</A>|)
+    - Hangul input		(|<A HREF="hangulin.html#hangul">hangul</A>|)
+    - Encryption support	(|<A HREF="editing.html#encryption">encryption</A>|)
+    - Langmap			(|<A HREF="options.html#'langmap'">'langmap'</A>|)
+    - Python support		(|<A HREF="if_pyth.html#Python">Python</A>|)
+    - Right-to-left mode	(|<A HREF="options.html#'rightleft'">'rightleft'</A>|)
+    - SNiFF+ interface		(|<A HREF="if_sniff.html#sniff">sniff</A>|)
+    - <A HREF="if_tcl.html#TCL">TCL</A> interface		(|<A HREF="if_tcl.html#tcl">tcl</A>|)
+    <A HREF="eval.html#...">...</A>
+
+==============================================================================
+
+6. Open source on <A HREF="#z/OS">z/OS</A> UNIX		*<A NAME="OS390-open-source"></A><B>OS390-open-source</B>* *<A NAME="zOS-open-source"></A><B>zOS-open-source</B>*
+
+If you are interested in other Open Source Software on <A HREF="#z/OS">z/OS</A> UNIX, have a
+look at the following Redbook:
+
+    Mike MacIsaac et al
+    &quot;Open Source Software for <A HREF="#z/OS">z/OS</A> and OS/390 UNIX&quot;
+    IBM Form <A HREF="eval.html#Number">Number</A>: SG24-5944-01
+    ISBN: 0738424633
+	<A HREF="http://www-03.ibm.com/systems/resources/servers_eserver_zseries_zos_unix_redbook_sg245944.pdf">http://www-03.ibm.com/systems/resources/servers_eserver_zseries_zos_unix_redbook_sg245944.pdf</A>
+
+Also look at:
+	<A HREF="http://www.redbooks.ibm.com">http://www.redbooks.ibm.com</A>
+	<A HREF="http://www-03.ibm.com/systems/z/os/zos/features/unix/">http://www-03.ibm.com/systems/z/os/zos/features/unix/</A>
+	<A HREF="http://www-03.ibm.com/systems/z/os/zos/features/unix/library/IBM+Redbooks/index.html">http://www-03.ibm.com/systems/z/os/zos/features/unix/library/IBM+Redbooks/index.html</A>
+
+
+
+------------------------------------------------------------------------------
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

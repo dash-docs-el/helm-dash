@@ -1,0 +1,143 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: os_mac</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: os_mac</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="os_mac.txt"></A><B>os_mac.txt</B>*    For Vim version 7.4.  Last change: 2006 Apr 30
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A> et al.
+
+
+
+					*<A NAME="mac"></A><B>mac</B>* *<A NAME="Mac"></A><B>Mac</B>* *<A NAME="macintosh"></A><B>macintosh</B>* *<A NAME="Macintosh"></A><B>Macintosh</B>*
+
+This file documents the particularities of the <A HREF="#Macintosh">Macintosh</A> version of Vim.
+
+NOTE: This file is a bit outdated.  You might find more useful info here:
+	<A HREF="http://macvim.org/">http://macvim.org/</A>
+
+1. Filename Convention		|<A HREF="#mac-filename">mac-filename</A>|
+2. <A HREF="starting.html#.vimrc">.vimrc</A> an .vim files		|<A HREF="#mac-vimfile">mac-vimfile</A>|
+3. <A HREF="intro.html#FAQ">FAQ</A>				|<A HREF="#mac-faq">mac-faq</A>|
+4. Known Lack			|<A HREF="#mac-lack">mac-lack</A>|
+5. <A HREF="#Mac">Mac</A> Bug Report		|<A HREF="#mac-bug">mac-bug</A>|
+6. Compiling Vim		|<A HREF="#mac-compile">mac-compile</A>|
+
+There was a <A HREF="#Mac">Mac</A> port for version 3.0 of Vim.  Here are the first few lines
+from the old file:
+
+VIM Release Notes
+Initial <A HREF="#Macintosh">Macintosh</A> release, VIM version 3.0
+19 October 1994
+
+Eric Fischer
+<A HREF="mailto:enf1@midway.uchicago.edu">&lt;enf1@midway.uchicago.edu&gt;</A>, <A HREF="mailto:eric@jcp.uchicago.edu">&lt;eric@jcp.uchicago.edu&gt;</A>, <A HREF="mailto:etaoin@uchicago.edu">&lt;etaoin@uchicago.edu&gt;</A> 
+5759 N. Guilford Ave
+Indianapolis IN 46220 USA
+
+==============================================================================
+
+1. Filename Convention					*<A NAME="mac-filename"></A><B>mac-filename</B>*
+
+Starting with Vim version 7 you can just use the <A HREF="os_unix.html#unix">unix</A> path separators with
+Vim. In order to determine if the specified filename is relative to the
+current folder or absolute (i.e. relative to the &quot;Desktop&quot;), the following
+algorithm is used:
+
+	If the path start by a &quot;<A HREF="pattern.html#/">/</A>&quot;, the path is absolute
+	If the path start by a &quot;<A HREF="cmdline.html#:">:</A>&quot;, the path is relative
+	If the path doesn't start by neither a &quot;<A HREF="pattern.html#/">/</A>&quot; nor &quot;<A HREF="cmdline.html#:">:</A>&quot;,
+	  and a &quot;<A HREF="cmdline.html#:">:</A>&quot; is found before a &quot;<A HREF="pattern.html#/">/</A>&quot; then the path is absolute
+
+<B>		:e /HD/text</B>
+<B>		:e HD:text</B>
+ 	Edit the file &quot;text&quot; of the disk &quot;HD&quot;
+<B>		:e :src:main.c</B>
+<B>		:e src/main.c</B>
+ 	Edit the file &quot;main.c&quot; in the folder &quot;src&quot; in the current folder
+<B>		:e os_mac.c</B>
+ 	Edit the file &quot;os_mac.c&quot; in the current folder.
+
+You can use the |<A HREF="starting.html#$VIM">$VIM</A>| and |<A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A>|  variable.
+
+<B>		:so $VIMRUNTIME:syntax:syntax.vim</B>
+
+==============================================================================
+
+2. <A HREF="starting.html#.vimrc">.vimrc</A> and .vim files				*<A NAME="mac-vimfile"></A><B>mac-vimfile</B>*
+
+It is recommended to use <A HREF="os_unix.html#Unix">Unix</A> style line separators for Vim scripts, thus a
+single newline character.
+
+When starting up Vim will load the $VIMRUNTIME/macmap.vim <A HREF="usr_41.html#script">script</A> to define
+default command-key mappings.
+
+On older systems files starting with a dot &quot;<A HREF="repeat.html#.">.</A>&quot; are discouraged, thus the rc
+files are named &quot;<A HREF="starting.html#vimrc">vimrc</A>&quot; or &quot;<A HREF="starting.html#_vimrc">_vimrc</A>&quot; and &quot;<A HREF="gui.html#gvimrc">gvimrc</A>&quot; or &quot;<A HREF="gui.html#_gvimrc">_gvimrc</A>&quot;.  These files
+can be in any format (mac, <A HREF="os_dos.html#dos">dos</A> or <A HREF="os_unix.html#unix">unix</A>).  Vim can handle any file format when
+the |<A HREF="options.html#'nocompatible'">'nocompatible'</A>| option is set, otherwise <A HREF="motion.html#it">it</A> will only handle <A HREF="#mac">mac</A> format
+files.
+
+==============================================================================
+
+3. <A HREF="#Mac">Mac</A> <A HREF="intro.html#FAQ">FAQ</A>						*<A NAME="mac-faq"></A><B>mac-faq</B>*
+
+ On the internet:	<A HREF="http://macvim.org/OSX/index.php#FAQ">http://macvim.org/OSX/index.php#FAQ</A>
+
+<A HREF="intro.html#Q">Q</A>: I can't enter non-ASCII character in Apple Terminal.
+A: Under Window Settings, Emulation, make sure that &quot;Escape non-ASCII
+   characters&quot; is not checked.
+
+<A HREF="intro.html#Q">Q</A>: How <A HREF="diff.html#do">do</A> I start the <A HREF="gui.html#GUI">GUI</A> from the command line?
+A: Assuming that Vim.app is located in /Applications:
+	open /Applications/Vim.app
+   Or:
+	/Applications/Vim.app/Contents/MacOS/Vim <A HREF="starting.html#-g">-g</A>  {arguments}
+
+<A HREF="intro.html#Q">Q</A>: How can I set $PATH to something reasonable when I start Vim.app from the
+   <A HREF="gui.html#GUI">GUI</A> or with open?
+A: The following trick works with most shells.  Put <A HREF="motion.html#it">it</A> in your <A HREF="starting.html#vimrc">vimrc</A> file.
+   This is included in the system <A HREF="starting.html#vimrc">vimrc</A> file included with the binaries
+   distributed at macvim.org .
+<B>	let s:path = system("echo echo VIMPATH'${PATH}' | $SHELL -l")</B>
+<B>	let $PATH = matchstr(s:path, 'VIMPATH\zs.\{-}\ze\n')</B>
+
+==============================================================================
+
+4. <A HREF="#Mac">Mac</A> Lack						*<A NAME="mac-lack"></A><B>mac-lack</B>*
+
+In a terminal <A HREF="editing.html#CTRL-^">CTRL-^</A> needs to be entered <A HREF="motion.html#as">as</A> Shift-Control-6.  CTRL-@ <A HREF="motion.html#as">as</A>
+Shift-Control-2.
+
+==============================================================================
+
+5. <A HREF="#Mac">Mac</A> Bug Report					*<A NAME="mac-bug"></A><B>mac-bug</B>*
+
+When reporting any <A HREF="#Mac">Mac</A> specific bug or feature change, please use the <A HREF="intro.html#vim-mac">vim-mac</A>
+<A HREF="intro.html#maillist">maillist</A> |<A HREF="intro.html#vim-mac">vim-mac</A>|.  However, you need to be subscribed.  An alternative is to
+send a message to the current MacVim maintainers:
+
+	<A HREF="mailto:mac@vim.org">mac@vim.org</A> 
+
+==============================================================================
+
+6. Compiling Vim					*<A NAME="mac-compile"></A><B>mac-compile</B>*
+
+See the file &quot;src/INSTALLmac.txt&quot; that comes with the source files.
+
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

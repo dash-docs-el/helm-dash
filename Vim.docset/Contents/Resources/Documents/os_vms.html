@@ -1,0 +1,966 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: os_vms</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: os_vms</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="os_vms.txt"></A><B>os_vms.txt</B>*    For Vim version 7.4.  Last change: 2011 Aug 14
+
+
+		  VIM REFERENCE MANUAL
+
+
+
+							*<A NAME="VMS"></A><B>VMS</B>* *<A NAME="vms"></A><B>vms</B>*
+This file contains the particularities for the <A HREF="#VMS">VMS</A> version of Vim.
+You can reach this information file by typing <A HREF="helphelp.html#:help">:help</A> <A HREF="#VMS">VMS</A> in Vim command
+prompt.
+
+ 1. Getting started	|<A HREF="#vms-started">vms-started</A>|
+ 2. Download files	|<A HREF="#vms-download">vms-download</A>|
+ 3. Compiling		|<A HREF="#vms-compiling">vms-compiling</A>|
+ 4. Problems		|<A HREF="#vms-problems">vms-problems</A>|
+ 5. Deploy		|<A HREF="#vms-deploy">vms-deploy</A>|
+ 6. Practical usage	|<A HREF="#vms-usage">vms-usage</A>|
+ 7. <A HREF="gui.html#GUI">GUI</A> mode questions	|<A HREF="#vms-gui">vms-gui</A>|
+ 8. Useful notes	|<A HREF="#vms-notes">vms-notes</A>|
+ 9. <A HREF="#VMS">VMS</A> related changes	|<A HREF="#vms-changes">vms-changes</A>|
+10. Authors		|<A HREF="#vms-authors">vms-authors</A>|
+
+==============================================================================
+
+
+1. Getting started					*<A NAME="vms-started"></A><B>vms-started</B>*
+
+Vim (Vi IMproved) is a vi-compatible text editor that runs on nearly every
+operating system known to humanity.  Now use Vim on OpenVMS too, in character
+or X/Motif environment.  It is fully featured and absolutely compatible with
+Vim on other operating systems.
+
+==============================================================================
+
+
+2. Download files					*<A NAME="vms-download"></A><B>vms-download</B>*
+
+You can <A HREF="intro.html#download">download</A> the Vim source code by ftp from the official Vim site:
+	<A HREF="ftp://ftp.vim.org/pub/vim/">ftp://ftp.vim.org/pub/vim/</A>
+Or use one of the mirrors:
+	<A HREF="ftp://ftp.vim.org/pub/vim/MIRRORS">ftp://ftp.vim.org/pub/vim/MIRRORS</A>
+
+You can <A HREF="intro.html#download">download</A> precompiled executables from:
+	<A HREF="http://www.polarhome.com/vim/">http://www.polarhome.com/vim/</A>
+	<A HREF="ftp://ftp.polarhome.com/pub/vim/">ftp://ftp.polarhome.com/pub/vim/</A>
+
+To use the precompiled binary version, you need one of these archives:
+
+  vim-XX-exe-ia64-gui.zip       IA64 GUI/Motif executables
+  vim-XX-exe-ia64-gtk.zip       IA64 GUI/GTK executables
+  vim-XX-exe-ia64-term.zip      IA64 console executables
+  vim-XX-exe-axp-gui.zip	Alpha GUI/Motif executables
+  vim-XX-exe-axp-gtk.zip	Alpha GUI/GTK executables
+  vim-XX-exe-axp-term.zip       Alpha console executables
+  vim-XX-exe-vax-gui.zip	VAX <A HREF="gui.html#GUI">GUI</A> executables
+  vim-XX-exe-vax-term.zip       VAX console executables
+
+and of course (optional)
+  vim-XX-runtime.zip		runtime files
+
+The binary archives contain: vim.exe, ctags.exe, xxd.exe files.
+
+For <A HREF="gui_x11.html#GTK">GTK</A> executables you will need GTKLIB that is available for
+Alpha and IA64 platform.
+
+==============================================================================
+
+
+3. Compiling						*<A NAME="vms-compiling"></A><B>vms-compiling</B>*
+
+See the file [.SRC]INSTALLVMS.TXT.
+
+==============================================================================
+
+
+4. Problems						*<A NAME="vms-problems"></A><B>vms-problems</B>*
+
+The code has been tested under Open <A HREF="#VMS">VMS</A> 6.2 - 8.2 on Alpha, VAX and IA64
+platforms with the DEC C compiler.  It should work without big problems.
+If your system does not have some include libraries you can tune up in
+OS_VMS_CONF.H file.
+
+If you decided to build Vim with <A HREF="various.html#+perl">+perl</A>, <A HREF="various.html#+python">+python</A>, etc. <A HREF="options.html#options">options</A>, first you need
+to <A HREF="intro.html#download">download</A> OpenVMS distributions of <A HREF="if_perl.html#Perl">Perl</A> and <A HREF="if_pyth.html#Python">Python</A>.  Build and deploy the
+libraries and change adequate lines in MAKE_VMS.MMS file.  There should not be
+a problem from Vim side.
+
+Also <A HREF="gui_x11.html#GTK">GTK</A>, XPM library paths should be configured in MAKE_VMS.MMS
+
+Note: Under VAX <A HREF="motion.html#it">it</A> should work with the DEC C compiler without problems.  The
+VAX C compiler is not fully ANSI C compatible in pre-processor directives
+semantics, therefore you have to use a converter program that will <A HREF="diff.html#do">do</A> the lion
+part of the job.  For detailed instructions read file INSTALLvms.txt
+
+MMS_VIM.EXE is build together with VIM.EXE, but for XXD.EXE you should
+change to a subdirectory and build <A HREF="motion.html#it">it</A> separately.
+
+CTAGS is not part of the Vim source <A HREF="intro.html#distribution">distribution</A> anymore, however the OpenVMS
+specific source might contain CTAGS source files <A HREF="motion.html#as">as</A> described above.
+You can find more information about CTAGS on <A HREF="#VMS">VMS</A> at
+	<A HREF="http://www.polarhome.com/ctags/">http://www.polarhome.com/ctags/</A>
+
+Advanced users may try some acrobatics in FEATURE.H file <A HREF="motion.html#as">as</A> well.
+
+It is possible to compile with <A HREF="various.html#+xfontset">+xfontset</A> <A HREF="various.html#+xim">+xim</A> <A HREF="options.html#options">options</A> too, but then you have
+to set up <A HREF="gui.html#GUI">GUI</A> fonts etc. correctly.  See <A HREF="helphelp.html#:help">:help</A> <A HREF="mbyte.html#xim">xim</A> from Vim command prompt.
+
+You may want to use <A HREF="gui.html#GUI">GUI</A> with <A HREF="gui_x11.html#GTK">GTK</A> icons, then you have to <A HREF="intro.html#download">download</A> and <A HREF="usr_90.html#install">install</A>
+<A HREF="gui_x11.html#GTK">GTK</A> for OpenVMS or at least runtime shareable images - LIBGTK from
+polarhome.com
+
+For more advanced questions, please send your problem to Vim on <A HREF="#VMS">VMS</A> mailing
+list <A HREF="mailto:vim-vms@polarhome.com">&lt;vim-vms@polarhome.com&gt;</A> 
+More about the vim-vms list can be found at:
+	<A HREF="http://www.polarhome.com/mailman/listinfo/vim-vms">http://www.polarhome.com/mailman/listinfo/vim-vms</A>
+
+==============================================================================
+
+
+5. Deploy						*<A NAME="vms-deploy"></A><B>vms-deploy</B>*
+
+Vim uses a special directory structure to hold the document and runtime files:
+
+   vim (or wherever)
+    |- tmp
+    |- vim57
+    |----- doc
+    |----- <A HREF="syntax.html#syntax">syntax</A>
+    |- vim62
+    |----- doc
+    |----- <A HREF="syntax.html#syntax">syntax</A>
+    |- vim64
+    |----- doc
+    |----- <A HREF="syntax.html#syntax">syntax</A>
+    <A HREF="starting.html#vimrc">vimrc</A>    (system rc files)
+    <A HREF="gui.html#gvimrc">gvimrc</A>
+
+Use:
+
+<B>	define/nolog VIM	device:[path.vim]</B>
+<B>	define/nolog VIMRUNTIME device:[path.vim.vim60]</B>
+<B>	define/nolog TMP	device:[path.tmp]</B>
+
+To get vim.exe to find its document, <A HREF="filetype.html#filetype">filetype</A>, and <A HREF="syntax.html#syntax">syntax</A> files, and to
+specify a directory where temporary files will be located.  Copy the &quot;runtime&quot;
+subdirectory of the Vim <A HREF="intro.html#distribution">distribution</A> to vimruntime.
+
+Logicals <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> and $TMP are optional.
+
+If <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> is not set, Vim will guess and try to set up automatically.
+Read more about <A HREF="motion.html#it">it</A> at <A HREF="helphelp.html#:help">:help</A> runtime
+
+If $TMP is not set, you will not be able to use some <A HREF="eval.html#functions">functions</A> <A HREF="motion.html#as">as</A> CTAGS,
+XXD, <A HREF="print.html#printing">printing</A> etc. that use temporary directory for normal operation.
+The $TMP directory should be readable and writable by the user(s).
+The easiest way to set up $TMP is to define a logical:
+
+<B>	define/nolog TMP SYS$SCRATCH</B>
+or <A HREF="motion.html#as">as</A>:
+<B>	define/nolog TMP SYS$LOGIN</B>
+
+==============================================================================
+
+
+6. Practical usage					*<A NAME="vms-usage"></A><B>vms-usage</B>*
+
+Usually, you want to run just one version of Vim on your system, therefore
+<A HREF="motion.html#it">it</A> is enough to dedicate one directory for Vim.
+Copy the whole Vim runtime directory structure to the deployment position.
+Add the following lines to your LOGIN.COM (in SYS$LOGIN directory).
+Set up the logical <A HREF="starting.html#$VIM">$VIM</A> <A HREF="motion.html#as">as</A>:
+
+<B>	$ define VIM device:&lt;path&gt;</B>
+
+Set up some symbols:
+
+<B>	$ ! vi starts Vim in chr. mode.</B>
+<B>	$ vi*m  :== mcr VIM:VIM.EXE</B>
+
+<B>	$ !gvi starts Vim in GUI mode.</B>
+<B>	$ gv*im :== spawn/nowait mcr VIM:VIM.EXE -g</B>
+
+Please, check the notes for customization and configuration of symbols.
+
+You may want to create <A HREF="starting.html#.vimrc">.vimrc</A> and <A HREF="gui.html#.gvimrc">.gvimrc</A> files in your home directory
+(SYS$LOGIN) to overwrite default settings.
+
+The easiest way is just rename example files.  You may leave the menu file
+(MENU.VIM) and files <A HREF="starting.html#vimrc">vimrc</A> and <A HREF="gui.html#gvimrc">gvimrc</A> in the original <A HREF="starting.html#$VIM">$VIM</A> directory.  It will
+be the default setup for all users, and for users <A HREF="motion.html#it">it</A> is enough to just have
+their own additions or resetting in their home directory in files <A HREF="starting.html#.vimrc">.vimrc</A> and
+<A HREF="gui.html#.gvimrc">.gvimrc</A>.  It should work without problems.
+
+Note: Remember, system rc files (default for all users) don't have a leading
+&quot;<A HREF="repeat.html#.">.</A>&quot;.  So, system rc files are:
+
+<B>	$VIM:vimrc</B>
+<B>	$VIM:gvimrc</B>
+<B>	$VIM:menu.vim</B>
+
+and user customized rc files are:
+
+<B>	sys$login:.vimrc</B>
+<B>	sys$login:.gvimrc</B>
+
+You can check that everything is at the right place with the <A HREF="various.html#:version">:version</A> command.
+
+Example LOGIN.COM:
+
+<B>	$ define/nolog VIM RF10:[UTIL.VIM]</B>
+<B>	$ vi*m :== mcr VIM:VIM.EXE</B>
+<B>	$ gv*im:== spawn/nowait/input=NLA0 mcr VIM:VIM.EXE -g -GEOMETRY 80x40</B>
+<B>	$ set disp/create/node=192.168.5.223/trans=tcpip</B>
+
+Note: This set-up should be enough, if you are working on a standalone server or
+clustered environment, but if you want to use Vim <A HREF="motion.html#as">as</A> an internode editor in
+DECNET environment, <A HREF="motion.html#it">it</A> will satisfy <A HREF="motion.html#as">as</A> well.
+You just have to define the &quot;whole&quot; path:
+
+<B>	$ define VIM "&lt;server_name&gt;[""user password""]::device:&lt;path&gt;"</B>
+<B>	$ vi*m :== "mcr VIM:VIM.EXE"</B>
+
+For example:
+
+<B>	$ define VIM "PLUTO::RF10:[UTIL.VIM]"</B>
+<B>	$ define VIM "PLUTO""ZAY mypass""::RF10:[UTIL.VIM]" ! if passwd required</B>
+
+You can also use the <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> logical to point to the proper version of Vim
+if you have installed more versions at the same time.  If <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> is not
+defined Vim will borrow its value from the <A HREF="starting.html#$VIM">$VIM</A> logical.  You can find more
+information about the <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> logical by typing <A HREF="helphelp.html#:help">:help</A> runtime <A HREF="motion.html#as">as</A> a Vim
+command.
+
+System administrators might want to set up a system wide Vim installation,
+then add to the SYS$STARTUP:SYLOGICALS.COM
+
+<B>	$ define/nolog/sys VIM device:&lt;path&gt;</B>
+<B>	$ define/nolog/sys TMP SYS$SCRATCH</B>
+
+And to the SYS$STARTUP:SYLOGIN.COM
+
+<B>	$ vi*m :== mcr VIM:VIM.EXE</B>
+<B>	$ gv*im:== spawn/nowait/input=NLA0 mcr VIM:VIM.EXE -g -GEOMETRY 80x40</B>
+
+
+It will set up a normal Vim work environment for every user on the system.
+
+IMPORTANT: Vim on OpenVMS (and on other <A HREF="change.html#case">case</A> insensitive system) command line
+parameters are assumed to be <A HREF="change.html#lowercase">lowercase</A>. In order to indicate that a command
+line parameter is <A HREF="change.html#uppercase">uppercase</A> &quot;<A HREF="pattern.html#/">/</A>&quot; sign must be used.
+
+Examples:
+ 
+<B>	vim -R  filename  ! means: -r List swap files and exit</B>
+<B>	vim -/r filename  ! means: -R Readonly mode (like "view")</B>
+<B>	vim -u	&lt;vimrc&gt;   ! means: -u Use &lt;vimrc&gt; instead of any .vimrc</B>
+<B>	vim -/u &lt;gvimrc&gt;  ! means: -U Use &lt;gvimrc&gt; instead of any .gvimrc</B>
+
+==============================================================================
+
+
+7. <A HREF="gui.html#GUI">GUI</A> mode questions					*<A NAME="vms-gui"></A><B>vms-gui</B>*
+
+OpenVMS is a real mainframe OS, therefore even if <A HREF="motion.html#it">it</A> has a <A HREF="gui.html#GUI">GUI</A> console, most
+of the users <A HREF="diff.html#do">do</A> not use a native X/Window environment during normal operation.
+It is not possible to start Vim in <A HREF="gui.html#GUI">GUI</A> mode &quot;just like that&quot;.  But anyhow <A HREF="motion.html#it">it</A>
+is not too complicated either.
+
+First of all: you will need an executable that is built with the <A HREF="gui.html#GUI">GUI</A> enabled.
+
+Second: you need to have installed DECW/Motif on your <A HREF="#VMS">VMS</A> server, otherwise
+you will get <A HREF="message.html#errors">errors</A> that some shareable libraries are missing.
+
+Third: If you choose to run Vim with extra features such <A HREF="motion.html#as">as</A> GUI/GTK then you
+need a <A HREF="gui_x11.html#GTK">GTK</A> installation too or at least a <A HREF="gui_x11.html#GTK">GTK</A> runtime environment (LIBGTK
+ can be downloaded from	<A HREF="http://www.polarhome.com/vim/">http://www.polarhome.com/vim/</A>.
+
+1) If you are working on the <A HREF="#VMS">VMS</A> X/Motif console:
+   Start Vim with the command:
+
+<B>	$ mc device:&lt;path&gt;VIM.EXE -g</B>
+ 
+   or type <A HREF="gui_x11.html#:gui">:gui</A> <A HREF="motion.html#as">as</A> a command to the Vim command prompt.  For more info <A HREF="helphelp.html#:help">:help</A>
+   <A HREF="gui.html#gui">gui</A>
+
+2) If you are working on some other X/Window environment like <A HREF="os_unix.html#Unix">Unix</A> or a remote
+   X <A HREF="#VMS">VMS</A> console.  Set up display to your host with:
+
+<B>	$ set disp/create/node=&lt;your IP address&gt;/trans=&lt;transport-name&gt;</B>
+ 
+   and start Vim <A HREF="motion.html#as">as</A> in point 1.  You can find more help in <A HREF="#VMS">VMS</A> documentation or
+   type: help set disp in <A HREF="#VMS">VMS</A> prompt.
+   Examples:
+
+<B>	$ set disp/create/node=192.168.5.159		 ! default trans is DECnet</B>
+<B>	$ set disp/create/node=192.168.5.159/trans=tcpip ! TCP/IP network</B>
+<B>	$ set disp/create/node=192.168.5.159/trans=local ! display on the same node</B>
+
+Note: you should define just one of these.
+For more information type $help set disp in <A HREF="#VMS">VMS</A> prompt.
+
+3) Another elegant solution is XDM if you have installed on OpenVMS box.
+   It is possible to work from XDM client <A HREF="motion.html#as">as</A> from <A HREF="gui.html#GUI">GUI</A> console.
+
+4) If you are working on <A HREF="os_win32.html#MS-Windows">MS-Windows</A> or some other non X/Window environment
+   you need to set up one X server and run Vim <A HREF="motion.html#as">as</A> in point 2.
+   For <A HREF="os_win32.html#MS-Windows">MS-Windows</A> there are available free X servers <A HREF="motion.html#as">as</A> MIX, Omni X etc.,
+   <A HREF="motion.html#as">as</A> well <A HREF="motion.html#as">as</A> excellent commercial products <A HREF="motion.html#as">as</A> eXcursion or ReflectionX with
+   built-in DEC support.
+
+Please note, that executables without <A HREF="gui.html#GUI">GUI</A> are slightly faster during <A HREF="starting.html#startup">startup</A>
+than with enabled <A HREF="gui.html#GUI">GUI</A> in character mode. Therefore, if you <A HREF="diff.html#do">do</A> not use <A HREF="gui.html#GUI">GUI</A>
+features, <A HREF="motion.html#it">it</A> is worth to choose non <A HREF="gui.html#GUI">GUI</A> executables.
+
+==============================================================================
+
+
+8. Useful notes						*<A NAME="vms-notes"></A><B>vms-notes</B>*
+
+8.1 Backspace/delete
+8.2 Filters
+8.3 <A HREF="#VMS">VMS</A> file version numbers
+8.4 Directory conversion
+8.5 Remote host invocation
+8.6 Terminal problems
+8.7 Hex-editing and other external tools
+8.8 Sourcing <A HREF="starting.html#vimrc">vimrc</A> and <A HREF="gui.html#gvimrc">gvimrc</A>
+8.9 Printing from Vim
+8.10 Setting up the symbols
+8.11 <A HREF="diff.html#diff">diff</A> and other GNU programs
+8.12 <A HREF="diff.html#diff-mode">diff-mode</A>
+8.13 Allow '<A HREF="motion.html#$">$</A>' in C keywords
+8.14 VIMTUTOR for beginners
+8.15 Slow start in console mode issue
+8.16 Common VIM directory - different architectures
+
+8.1 Backspace/delete
+
+There are backspace/delete key inconsistencies with <A HREF="#VMS">VMS</A>.
+<A HREF="options.html#:fixdel">:fixdel</A> doesn't <A HREF="diff.html#do">do</A> the trick, but the solution is:
+
+<B>	:inoremap ^? ^H		" for terminal mode</B>
+<B>	:inoremap &lt;Del&gt; ^H	" for gui mode</B>
+
+Read more in ch: 8.6 (Terminal problems).
+(Bruce Hunsaker <A HREF="mailto:BNHunsaker@chq.byu.edu">&lt;BNHunsaker@chq.byu.edu&gt;</A> Vim 5.3) 
+
+
+8.2 Filters
+
+Vim supports filters, i.e., if you have a sort program that can handle
+input/output redirection like <A HREF="os_unix.html#Unix">Unix</A> (&lt;infile &gt;outfile), you could use
+
+<B>	:map \s 0!'aqsort&lt;CR&gt;</B>
+
+(Charles E. Campbell, Jr. <A HREF="mailto:cec@gryphon.gsfc.nasa.gov">&lt;cec@gryphon.gsfc.nasa.gov&gt;</A> Vim 5.4) 
+
+
+8.3 <A HREF="#VMS">VMS</A> file version numbers
+
+Vim is saving files into a new file with the next higher file version
+number, try these settings.
+
+<B>	:set nobackup	     " does not create *.*_ backup files</B>
+<B>	:set nowritebackup   " does not have any purpose on VMS.  It's the</B>
+<B>			     " default.</B>
+
+Recovery is working perfectly <A HREF="motion.html#as">as</A> well from the default swap file.
+Read more with <A HREF="helphelp.html#:help">:help</A> swapfile
+
+(Claude Marinier <A HREF="mailto:ClaudeMarinier@xwavesolutions.com">&lt;ClaudeMarinier@xwavesolutions.com&gt;</A> Vim 5.5, Zoltan Arpadffy 
+Vim 5.6)
+
+
+8.4 Directory conversion
+
+Vim will internally convert any unix-style paths and even mixed unix/VMS
+paths into <A HREF="#VMS">VMS</A> style paths.  Some typical conversions resemble:
+
+	/abc/def/ghi		-&gt; abc:[def]ghi.
+	/abc/def/ghi.j		-&gt; abc:[def]ghi.j
+	/abc/def/ghi.j;2	-&gt; abc:[def]ghi.j;2
+	/abc/def/ghi/jkl/mno	-&gt; abc:[def.ghi.jkl]mno.
+	abc:[def.ghi]jkl/mno	-&gt; abc:[def.ghi.jkl]mno.
+	  ./			-&gt; current directory
+	  ../			-&gt; relative parent directory
+	  [.def.ghi]		-&gt; relative child directory
+	   ./def/ghi		-&gt; relative child directory
+
+Note: You may use &lt;,&gt; brackets <A HREF="motion.html#as">as</A> well (device:&lt;path&gt;file.ext;version) <A HREF="motion.html#as">as</A>
+rf10:&lt;user.zay.work&gt;test.c;1
+
+(David Elins <A HREF="mailto:delins@foliage.com">&lt;delins@foliage.com&gt;</A>, Jerome Lauret 
+<A HREF="mailto:JLAURET@mail.chem.sunysb.edu">&lt;JLAURET@mail.chem.sunysb.edu&gt;</A> Vim 5.6) 
+
+
+8.5 Remote host invocation
+
+It is possible to use Vim <A HREF="motion.html#as">as</A> an internode editor.
+1. Edit some file from remote node:
+
+<B>	vi "&lt;server&gt;""username passwd""::&lt;device&gt;:&lt;path&gt;&lt;filename&gt;;&lt;version&gt;"</B>
+
+Example:
+<B>	vi "pluto""zay passwd""::RF10:&lt;USER.ZAY.WORK&gt;TEST.C;1"</B>
+
+Note: <A HREF="syntax.html#syntax">syntax</A> is very important, otherwise <A HREF="#VMS">VMS</A> will recognize more parameters
+instead of one (resulting with: file not found)
+
+2.  Set up Vim <A HREF="motion.html#as">as</A> your internode editor.  If Vim is not installed on your
+host, just set up your IP address, the full Vim path including the server name
+and run the command procedure below:
+
+<B>	$ if (p1 .eqs. "") .OR. (p2 .eqs. "") then goto usage</B>
+<B>	$ set disp/create/node=&lt;your_IP_here&gt;/trans=tcpip</B>
+<B>	$ define "VIM "&lt;vim_server&gt;""''p1' ''p2'""::&lt;device&gt;:&lt;vim_path&gt;"</B>
+<B>	$  vi*m :== "mcr VIM:VIM.EXE"</B>
+<B>	$ gv*im :== "spawn/nowait mcr VIM:VIM.EXE -g"</B>
+<B>	$ goto end</B>
+<B>	$ usage:</B>
+<B>	$ write sys$output " Please enter username and password as a parameter."</B>
+<B>	$ write sys$output " Example: @SETVIM.COM username passwd"</B>
+<B>	$ end:</B>
+
+Note: Never use <A HREF="motion.html#it">it</A> in a clustered environment (you <A HREF="diff.html#do">do</A> not need it), loading
+could be very-very slow, but even faster than a local Emacs. :-)
+
+(Zoltan Arpadffy, Vim 5.6)
+
+
+8.6 Terminal problems
+
+If your terminal name is not known to Vim and <A HREF="motion.html#it">it</A> is trying to find the default
+one you will get the following message during start-up:
+Terminal entry not found in <A HREF="term.html#termcap">termcap</A>
+'unknown-terminal' not known.  Available built-in terminals are:
+    builtin_gui
+    builtin_riscos
+    builtin_amiga
+    builtin_beos-ansi
+    builtin_ansi
+    builtin_vt320
+    builtin_vt52
+    builtin_pcansi
+    builtin_win32
+    builtin_xterm
+    builtin_iris-ansi
+    builtin_debug
+    builtin_dumb
+defaulting to 'vt320'
+The solution is to define the default terminal name:
+
+<B>	$ ! unknown terminal name.  Let us use vt320 or ansi instead.</B>
+<B>	$ ! Note: it's case sensitive</B>
+<B>	$ define term "vt320"</B>
+
+Terminals from VT100 to VT320 (as V300, VT220, VT200) <A HREF="diff.html#do">do</A> not need any extra
+keyboard mappings.  They should work perfectly <A HREF="motion.html#as">as</A> they are, including arrows,
+Ins, Del buttons etc., except Backspace in <A HREF="gui.html#GUI">GUI</A> mode.  To solve <A HREF="motion.html#it">it</A>, add to
+<A HREF="gui.html#.gvimrc">.gvimrc</A>:
+
+<B>	inoremap &lt;Del&gt; &lt;BS&gt;</B>
+
+Vim will also recognize that they are fast terminals.
+
+If you have some annoying line jumping on the screen between <A HREF="windows.html#windows">windows</A> add to
+your <A HREF="starting.html#.vimrc">.vimrc</A> file:
+
+<B>	set ttyfast	" set fast terminal</B>
+
+Note: if you're using Vim on remote host or through a very slow connection, it's
+recommended to avoid the fast terminal option with:
+
+<B>	set nottyfast   " set terminal to slow mode</B>
+
+(Zoltan Arpadffy, Vim 5.6)
+
+
+8.7 Hex-editing and other external tools
+
+A very important difference between OpenVMS and other systems is that <A HREF="#VMS">VMS</A> uses
+special commands to execute executables:
+
+<B>	RUN &lt;path&gt;filename</B>
+<B>	MCR &lt;path&gt;filename &lt;parameters&gt;</B>
+
+OpenVMS users always have to be aware that the Vim command <A HREF="various.html#:!">:!</A> &quot;just&quot; drop them
+to DCL prompt.  This feature is possible to use without any problem with all
+DCL commands, but if we want to execute some programs such <A HREF="motion.html#as">as</A> XXD, CTAGS, JTAGS,
+etc.  we're running into trouble if we follow the Vim documentation (see: help
+xxd).
+
+Solution: Execute with the MC command and add the full path to the executable.
+Example: Instead of :&#37;!xxd command use:
+
+<B>	:%!mc vim:xxd</B>
+
+<A HREF="eval.html#...">...</A> or in general:
+<B>	:!mc &lt;path&gt;filename &lt;parameters&gt;</B>
+
+Note: You can use XXD and CTAGS from <A HREF="gui.html#GUI">GUI</A> menu.
+
+To customize <A HREF="tagsrch.html#ctags">ctags</A> <A HREF="motion.html#it">it</A> is possible to define the logical $CTAGS with standard
+parameters <A HREF="motion.html#as">as</A>:
+
+<B>	define/nolog CTAGS "--totals -o sys$login:tags"</B>
+
+For additional information, please read <A HREF="helphelp.html#:help">:help</A> tagsearch and CTAGS
+ documentation at	<A HREF="http://ctags.sourceforge.net/ctags.html">http://ctags.sourceforge.net/ctags.html</A>.
+
+(Zoltan Arpadffy, Vim 5.6-70)
+
+
+8.8 Sourcing <A HREF="starting.html#vimrc">vimrc</A> and <A HREF="gui.html#gvimrc">gvimrc</A>
+
+If you want to use your <A HREF="starting.html#.vimrc">.vimrc</A> and <A HREF="gui.html#.gvimrc">.gvimrc</A> from other platforms (e.g. Windows)
+you can get in trouble if you ftp that file(s): <A HREF="#VMS">VMS</A> has different end-of-line
+indication.
+The symptom is that Vim is not sourcing your .vimrc/.gvimrc, even if you say:
+
+<B>	:so sys$login:.vimrc</B>
+
+One trick is to <A HREF="pi_gzip.html#compress">compress</A> (e.g. <A HREF="pi_zip.html#zip">zip</A>) the files on the other platform and
+uncompress <A HREF="motion.html#it">it</A> on <A HREF="#VMS">VMS</A>; if you have the same symptom, try to create the files
+with copy-paste (for this you need both op. systems reachable from one
+machine, e.g. an Xterm on Windows or telnet to Windows from <A HREF="#VMS">VMS</A>).
+
+(Sandor Kopanyi, <A HREF="mailto:sandor.kopanyi@mailbox.hu">&lt;sandor.kopanyi@mailbox.hu&gt;</A> Vim 6.0a) 
+
+
+8.9 Printing from Vim
+
+To be able to print from Vim (running in <A HREF="gui.html#GUI">GUI</A> mode) under <A HREF="#VMS">VMS</A> you have to set
+up $TMP logical which should point to some temporary directory and logical
+SYS$PRINT to your default print queue.
+Example:
+
+<B>	$define SYS$PRINT HP5ANSI</B>
+
+You can print out the whole buffer or just the marked area.
+More info under <A HREF="helphelp.html#:help">:help</A> hardcopy
+
+(Zoltan Arpadffy, Vim 6.0c)
+
+
+8.10 Setting up the symbols
+
+When I use GVIM this way and press <A HREF="scroll.html#CTRL-Y">CTRL-Y</A> in the parent terminal, <A HREF="starting.html#gvim">gvim</A> exits.
+I now use a different symbol that seems to work OK and fixes the problem.
+I suggest this instead:
+
+<B>	$ GV*IM:==SPAWN/NOWAIT/INPUT=NLA0: MCR VIM:VIM.EXE -G -GEOMETRY 80X40</B>
+
+The /INPUT=NLA0: separates the standard input of the <A HREF="starting.html#gvim">gvim</A> process from the
+parent terminal, to block signals from the parent <A HREF="windows.html#window">window</A>.
+Without the -GEOMETRY, the GVIM <A HREF="windows.html#window">window</A> size will be minimal and the menu
+will be confused after a <A HREF="windows.html#window-resize">window-resize</A>.
+
+(Carlo Mekenkamp, Coen Engelbarts, Vim 6.0ac)
+
+
+8.11 <A HREF="diff.html#diff">diff</A> and other GNU programs
+
+From 6.0 <A HREF="diff.html#diff">diff</A> functionality has been implemented, but OpenVMS does not use
+GNU/Unix like <A HREF="diff.html#diff">diff</A> therefore built in <A HREF="diff.html#diff">diff</A> does not work.
+There is a simple solution to solve this anomaly.  Install a <A HREF="os_unix.html#Unix">Unix</A> like <A HREF="diff.html#diff">diff</A>
+and Vim will work perfectly in <A HREF="diff.html#diff">diff</A> mode too.  You just have to redefine your
+<A HREF="diff.html#diff">diff</A> program <A HREF="motion.html#as">as</A>:
+
+<B>	define /nolog diff &lt;GNU_PATH&gt;diff.exe</B>
+
+Another, more sophisticated solution is described below (8.12 <A HREF="diff.html#diff-mode">diff-mode</A>)
+There are other programs such <A HREF="motion.html#as">as</A> patch, make etc that may cause the same
+problems.  At www.polarhome.com is possible to <A HREF="intro.html#download">download</A> an GNU package for
+Alpha and VAX boxes that is meant to solve GNU problems on OpenVMS.
+(Zoltan Arpadffy, Vim 6.1)
+
+
+8.12 <A HREF="diff.html#diff-mode">diff-mode</A>
+
+Vim 6.0 and higher supports Vim diff-mode (See |<A HREF="version6.html#new-diff-mode">new-diff-mode</A>|, |<A HREF="diff.html#diff-mode">diff-mode</A>|
+and |<A HREF="usr_08.html#08.7">08.7</A>|).  This uses the external program <A HREF="options.html#'diff'">'diff'</A> and expects a Unix-like
+output format from <A HREF="diff.html#diff">diff</A>.  The standard <A HREF="#VMS">VMS</A> <A HREF="diff.html#diff">diff</A> has a different output
+format.  To use Vim on <A HREF="#VMS">VMS</A> in <A HREF="diff.html#diff-mode">diff-mode</A>, you need to:
+    1 Install a Unix-like <A HREF="diff.html#diff">diff</A> program, e.g. GNU <A HREF="diff.html#diff">diff</A>
+    2 Tell Vim to use the Unix-like <A HREF="diff.html#diff">diff</A> for <A HREF="diff.html#diff-mode">diff-mode</A>.
+
+You can <A HREF="intro.html#download">download</A> GNU <A HREF="diff.html#diff">diff</A> from the VIM-VMS website, <A HREF="motion.html#it">it</A> is one of the GNU
+ tools in	<A HREF="http://www.polarhome.com/vim/files/gnu_tools.zip">http://www.polarhome.com/vim/files/gnu_tools.zip</A>. I suggest to
+unpack <A HREF="motion.html#it">it</A> in a separate directory &quot;GNU&quot; and create a logical GNU: that
+points to that directory, e.g:
+
+<B>   DEFINE GNU    &lt;DISK&gt;:[&lt;DIRECTORY&gt;.BIN.GNU]</B>
+
+You may also want to define a symbol GDIFF, to use the GNU <A HREF="diff.html#diff">diff</A> from the DCL
+prompt:
+
+<B>   GDIFF :==     $GNU:DIFF.EXE</B>
+
+Now you need to tell Vim to use the new <A HREF="diff.html#diff">diff</A> program.  Take the example
+settings from |<A HREF="diff.html#diff-diffexpr">diff-diffexpr</A>| and change the call to the external diff
+program to the new <A HREF="diff.html#diff">diff</A> on <A HREF="#VMS">VMS</A>.  Add this to your <A HREF="starting.html#.vimrc">.vimrc</A> file:
+
+<B>     " Set up vimdiff options</B>
+<B>       if v:version &gt;= 600</B>
+<B>	" Use GNU diff on VMS</B>
+<B>	set diffexpr=MyDiff()</B>
+<B>	function MyDiff()</B>
+<B>	   let opt = ""</B>
+<B>	   if &amp;diffopt =~ "icase"</B>
+<B>	     let opt = opt . "-i "</B>
+<B>	   endif</B>
+<B>	   if &amp;diffopt =~ "iwhite"</B>
+<B>	     let opt = opt . "-b "</B>
+<B>	   endif</B>
+<B>	   silent execute "!mc GNU:diff.exe -a " . opt . v:fname_in . " " .  v:fname_new .</B>
+<B>		\  " &gt; " . v:fname_out</B>
+<B>	endfunction</B>
+<B>      endif</B>
+
+You can now use Vim in <A HREF="diff.html#diff-mode">diff-mode</A>, e.g. to compare two files in read-only
+mode:
+
+<B>    $ VIM -D/R &lt;FILE1&gt; &lt;FILE2&gt;</B>
+
+You can also define new symbols for <A HREF="diff.html#vimdiff">vimdiff</A>, e.g.:
+
+<B>    $ VIMDIFF     :== 'VIM' -D/R</B>
+<B>    $ GVIMDIFF    :== 'GVIM' -D/R</B>
+
+You can now compare files in 4 ways:
+
+<B>    1. VMS  diff:  $ DIFF     &lt;FILE1&gt; &lt;FILE2&gt;</B>
+<B>    2. GNU  diff:  $ GDIFF    &lt;FILE1&gt; &lt;FILE2&gt;</B>
+<B>    3. VIM  diff:  $ VIMDIFF  &lt;FILE1&gt; &lt;FILE2&gt;</B>
+<B>    4. GVIM diff:  $ GVIMDIFF &lt;FILE1&gt; &lt;FILE2&gt;</B>
+
+(Coen Engelbarts, Vim 6.1)
+
+
+8.13 Allow '<A HREF="motion.html#$">$</A>' in C keywords
+
+DEC C uses many identifiers with '<A HREF="motion.html#$">$</A>' in them.  This is not allowed in ANSI C,
+and Vim recognises the '<A HREF="motion.html#$">$</A>' <A HREF="motion.html#as">as</A> the end of the identifier.  You can change this
+with the <A HREF="options.html#'iskeyword'">'iskeyword'</A> option.
+Add this command to your <A HREF="starting.html#.vimrc">.vimrc</A> file:
+
+<B>    autocmd FileType c,cpp,cs  set iskeyword+=$</B>
+
+You can also create the file(s) $VIM/FTPLUGIN/C.VIM (and/or CPP.VIM and
+CS.VIM) and add this command:
+
+<B>	set iskeyword+=$</B>
+
+Now word-based commands, e.g. the '*'-search-command and the <A HREF="tagsrch.html#CTRL-]">CTRL-]</A>
+tag-lookup, work on the whole identifier.  (Ctags on <A HREF="#VMS">VMS</A> also supports '<A HREF="motion.html#$">$</A>' in
+C keywords since <A HREF="tagsrch.html#ctags">ctags</A> version 5.1.)
+
+(Coen Engelbarts, Vim 6.1)
+
+8.14 VIMTUTOR for beginners
+
+The VIMTUTOR.COM DCL <A HREF="usr_41.html#script">script</A> can help Vim beginners to learn/make their first
+steps with Vim on OpenVMS.  Depending of binary <A HREF="intro.html#distribution">distribution</A> you may start <A HREF="motion.html#it">it</A>
+with:
+
+<B>	@vim:vimtutor</B>
+
+(Thomas.R.Wyant III, Vim 6.1)
+
+8.16 Slow start in console mode issue
+
+As GUI/GTK Vim works equally well in console mode, many administrators
+deploy those executables system wide.
+Unfortunately, on a remote slow connections GUI/GTK executables behave rather
+slow when user wants to run Vim just in the console mode - because of X
+environment detection timeout.
+
+Luckily, there is a simple solution for that. Administrators need to deploy
+both GUI/GTK build and just console build executables, like below:
+
+<B>    |- vim73</B>
+<B>    |----- doc</B>
+<B>    |----- syntax</B>
+<B>       vimrc    (system rc files)</B>
+<B>       gvimrc</B>
+<B>       gvim.exe (the renamed GUI or GTK built vim.exe)</B>
+<B>       vim.exe  (the console only executable)</B>
+
+Define system symbols like below in for <A HREF="starting.html#ex">ex</A> in LOGIN.COM or SYLOGIN.COM:
+
+<B>	$ define/nolog VIM RF10:[UTIL.VIM73] ! where you VIM directory is</B>
+<B>	$ vi*m  :== mcr VIM:VIM.EXE</B>
+<B>	$ gvi*m :== mcr VIM:GVIM.EXE</B>
+<B>	$ ! or you can try to spawn with</B>
+<B>	$ gv*im :== spawn/nowait/input=NLA0 mcr VIM:GVIM.EXE -g -GEOMETRY 80x40</B>
+
+
+Like this, users that <A HREF="diff.html#do">do</A> not have X environment and want to use Vim just in
+console mode can avoid performance problems.
+
+(Zoltan Arpadffy, Vim 7.2)
+
+8.15 Common VIM directory - different architectures
+
+In a cluster that contains nodes with different architectures like below:
+
+$show cluster
+<A HREF="starting.html#View">View</A> of Cluster from system ID 11655  node: TOR                                                                     18-AUG-2008 11:58:31
++---------------------------------+
+¦        SYSTEMS        ¦ MEMBERS ¦
++-----------------------+---------¦
+¦  NODE  ¦   SOFTWARE   ¦  STATUS ¦
++--------+--------------+---------¦
+¦ TOR    ¦ <A HREF="#VMS">VMS</A> V7.3-2   ¦ MEMBER  ¦
+¦ TITAN2 ¦ <A HREF="#VMS">VMS</A> V8.3     ¦ MEMBER  ¦
+¦ ODIN   ¦ <A HREF="#VMS">VMS</A> V7.3-2   ¦ MEMBER  ¦
++---------------------------------+
+
+It is convenient to have a common VIM directory but execute different
+executables.
+There are several solutions for this problem:
+
+Solution 1.  All executables in the same directory with different names
+This is easily done with the following <A HREF="usr_41.html#script">script</A> that can be added
+to the login.com or sylogin.com:
+
+<B>	$ if f$getsyi("NODE_HWTYPE") .eqs. "VAX"</B>
+<B>	$ then</B>
+<B>	$       say "VAX platform"</B>
+<B>	$       vi*m:== mcr vim:VIM.EXE_VAX</B>
+<B>	$ endif</B>
+<B>	$ if f$getsyi("NODE_HWTYPE") .eqs. "ALPH"</B>
+<B>	$ then</B>
+<B>	$       say "ALPHA platform"</B>
+<B>	$       vi*m :== mcr vim:VIM.EXE_AXP</B>
+<B>	$ endif</B>
+<B>	$ if f$getsyi("ARCH_NAME") .eqs. "IA64"</B>
+<B>	$ then</B>
+<B>	$      say "IA64 platform"</B>
+<B>	$      vi*m :== mcr vim:VIM.EXE_IA64</B>
+<B>	$ endif</B>
+
+Solution 2.  Different directories:
+
+<B>	$ if f$getsyi("NODE_HWTYPE") .eqs. "VAX"</B>
+<B>	$ then</B>
+<B>	$       say "VAX platform"</B>
+<B>	$       define/nolog VIM RF10:[UTIL.VAX_EXE] ! VAX executables</B>
+<B>	$ endif</B>
+<B>	$ if f$getsyi("NODE_HWTYPE") .eqs. "ALPH"</B>
+<B>	$ then</B>
+<B>	$       say "ALPHA platform"</B>
+<B>	$       define/nolog VIM RF10:[UTIL.AXP_EXE] ! AXP executables</B>
+<B>	$ endif</B>
+<B>	$ if f$getsyi("ARCH_NAME") .eqs. "IA64"</B>
+<B>	$ then</B>
+<B>	$      say "IA64 platform"</B>
+<B>	$      define/nolog VIM RF10:[UTIL.IA64_EXE] ! IA64 executables</B>
+<B>	$ endif</B>
+<B>        $! VIMRUNTIME must be defined in order to find runtime files</B>
+<B>	$ define/nolog VIMRUNTIME RF10:[UTIL.VIM73]</B>
+
+A good example for this approach is the [GNU]gnu_tools.com <A HREF="usr_41.html#script">script</A> from
+ GNU_TOOLS.ZIP package downloadable from	<A HREF="http://www.polarhome.com/vim/">http://www.polarhome.com/vim/</A>
+
+(Zoltan Arpadffy, Vim 7.2)
+
+==============================================================================
+
+
+9. <A HREF="#VMS">VMS</A> related changes					*<A NAME="vms-changes"></A><B>vms-changes</B>*
+
+Version 7.3
+- CTAGS 5.8 included
+- <A HREF="#VMS">VMS</A> compile warnings fixed - floating-point overflow warning corrected on VAX
+- filepath completion corrected - too many chars were escaped in filename
+  and shell commands
+- the following plugins are included into <A HREF="#VMS">VMS</A> runtime:
+	genutils 2.4, multiselect 2.2, multvals 3.1, selectbuf 4.3,
+	bufexplorer 7.1.7, taglist 4.5
+- minor changes in <A HREF="starting.html#vimrc">vimrc</A> (just in <A HREF="#VMS">VMS</A> runtime)
+- make_vms.mms - HUGE model is the default
+- [TESTDIR]make_vms.mms include <A HREF="motion.html#as">as</A> many tests possible
+- modify test30 and test54 for <A HREF="#VMS">VMS</A>
+- enable FLOAT feature in <A HREF="#VMS">VMS</A> port
+- <A HREF="#os_vms.txt">os_vms.txt</A> updated
+
+Version 7.2 (2008 Aug 9)
+- VCF files write corrected
+- CTAGS 5.7 included
+- corrected make_vms.mms (on VAX gave <A HREF="syntax.html#syntax">syntax</A> error)
+
+Version 7.1 (2007 Jun 15)
+- create TAGS file from menu
+
+Version 7 (2006 May 8)
+- Improved low level char input (affects just console mode)
+- Fixed <A HREF="usr_05.html#plugin">plugin</A> bug
+- CTAGS 5.6 included
+
+Version 6.4 (2005 Oct 15)
+- GTKLIB and Vim build on IA64
+- colors in terminal mode
+- <A HREF="syntax.html#syntax">syntax</A> highlighting in terminal mode
+- write problem fixed (extra CR)
+- ESC and ESC sequence recognition in terminal mode
+- make file changed to support new MMS version
+- env variable expansion in path corrected
+- <A HREF="print.html#printing">printing</A> problems corrected
+- help text added for <A HREF="change.html#case">case</A> insensitive arguments
+
+Version 6.3 (2004 May 10)
+- Improved vms_read function
+- CTAGS v5.5.4 included
+- Documentation corrected and updated
+
+Version 6.2 (2003 May 7)
+- Corrected <A HREF="#VMS">VMS</A> system call results
+- Low level character input is rewritten
+- Correction in <A HREF="tagsrch.html#tag">tag</A> and <A HREF="quickfix.html#quickfix">quickfix</A> handling
+- First <A HREF="gui_x11.html#GTK">GTK</A> build
+- Make file changes
+    - <A HREF="gui_x11.html#GTK">GTK</A> feature added
+    - Define for OLD_VMS
+    - OpenVMS version 6.2 or older
+- Documentation updated with <A HREF="gui_x11.html#GTK">GTK</A> features
+- CTAGS v5.5 included
+- <A HREF="#VMS">VMS</A> VIM <A HREF="usr_01.html#tutor">tutor</A> created
+
+Version 6.1 (2002 Mar 25)
+- <A HREF="if_tcl.html#TCL">TCL</A> init_tcl() problem fixed
+- CTAGS v5.4 included
+- GNU tools binaries for OpenVMS
+- Make file changes
+    - PERL, PYTHON and <A HREF="if_tcl.html#TCL">TCL</A> support improved
+    - InstallVMS.txt has a detailed description HOWTO build
+- VMS/Unix file handling rewritten
+- Minor casting and bug fixes
+
+Version 6.0 (2001 Sep 28)
+- <A HREF="os_unix.html#Unix">Unix</A> and <A HREF="#VMS">VMS</A> code has been merged
+	- separated &quot;really&quot; <A HREF="#VMS">VMS</A> related code
+	- included all possible <A HREF="os_unix.html#Unix">Unix</A> functionality
+	- simplified or deleted the configuration files
+	- makefile MAKE_VMS.MMS reviewed
+- menu changes (fixed <A HREF="print.html#printing">printing</A>, CTAGS and XXD usage)
+- fixed variable RMS record format handling anomaly
+- corrected <A HREF="syntax.html#syntax">syntax</A>, <A HREF="usr_41.html#ftplugin">ftplugin</A> etc files load
+- changed expand_wildcards and expandpath <A HREF="eval.html#functions">functions</A> to work more general
+- created OS_VMS_FILTER.COM - DECC-&gt;VAXC pre-processor directive convert
+  <A HREF="usr_41.html#script">script</A>.
+- Improved code's VAXC and new DECC compilers compatibility
+- changed <A HREF="quickfix.html#quickfix">quickfix</A> parameters:
+	- errormessage format to suite DECC
+	- search, make and other commands to suite <A HREF="#VMS">VMS</A> system
+- updated and renamed MMS make files for Vim and CTAGS.
+- CTAGS has been removed from source <A HREF="intro.html#distribution">distribution</A> of Vim but <A HREF="motion.html#it">it</A> will remain
+  in OpenVMS binary distributions.
+- simplified build/configuration procedure
+- created INSTALLvms.txt - detailed compiling instructions under <A HREF="#VMS">VMS</A>.
+- updated test scripts.
+
+Version 5.8 (2001 Jun 1)
+- OS_VMS.TXT updated with new features.
+- other minor fixes.
+- documentation updated
+- this version had been tested much more than any other OpenVMS version
+  earlier
+
+Version 5.7 (2000 Jun 24)
+- New CTAGS v5.0 in <A HREF="intro.html#distribution">distribution</A>
+- Documentation updated
+
+Version 5.6 (2000 Jan 17)
+- <A HREF="#VMS">VMS</A> filename related changes:
+	- version handling (open everything, save to new version)
+	- correct file extension matching for <A HREF="syntax.html#syntax">syntax</A> (version problem)
+	- handle &lt;,&gt; characters and passwords in directory definition
+	- handle internode/remote invocation and editing with passwords
+	- OpenVMS files will be treated <A HREF="change.html#case">case</A> insensitive from now
+	- corrected response of expand(&quot;&#37;:.&quot;) etc path related <A HREF="eval.html#functions">functions</A>
+	(in one <A HREF="motion.html#word">word</A>: <A HREF="#VMS">VMS</A> directory handling internally)
+- version command
+	- corrected (+,-) information data
+	- added compiler and OS version
+	- added user and host information
+	- resolving <A HREF="starting.html#$VIM">$VIM</A> and <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> logicals
+- <A HREF="#VMS">VMS</A> port is in MAX_FEAT (maximum features) club with <A HREF="os_unix.html#Unix">Unix</A>, <A HREF="os_win32.html#Win32">Win32</A> and <A HREF="os_os2.html#OS/2">OS/2</A>.
+	- enabled <A HREF="farsi.html#farsi">farsi</A>, rightleft etc. features
+	- <A HREF="undo.html#undo">undo</A> level raised up to 1000
+- Updated OS_VMS.MMS file.
+	- maximum features ON is default
+	- Vim is compilable with <A HREF="various.html#+perl">+perl</A>, <A HREF="various.html#+python">+python</A> and <A HREF="various.html#+tcl">+tcl</A> features.
+	- improved MMK compatibility
+- Created MAKEFILE_VMS.MMS, makefile for testing Vim during <A HREF="develop.html#development">development</A>.
+- Defined DEC terminal VT320
+	- compatibility for VT3*0, VT2*0 and VT1*0 - ANSI terminals
+	  backwards, but not VT340 and newer with colour capability.
+	- VT320 is default terminal for OpenVMS
+	- these new terminals are also fast ttys (default for OpenVMS).
+	- allowed dec_mouse ttym
+- Updated files <A HREF="starting.html#vimrc">vimrc</A> and <A HREF="gui.html#gvimrc">gvimrc</A> with <A HREF="#VMS">VMS</A> specific suggestions.
+- OS_VMS.TXT updated with new features.
+
+Version 5.5 (1999 Dec 3)
+- Popup menu line crash corrected.
+- Handle full file names with version numbers.
+- Directory handling (CD command etc.)
+- Corrected file name conversion <A HREF="#VMS">VMS</A> to <A HREF="os_unix.html#Unix">Unix</A> and v.v.
+- Correct response of expand <A HREF="editing.html#wildcards">wildcards</A>
+- Recovery is working from this version under <A HREF="#VMS">VMS</A> <A HREF="motion.html#as">as</A> well.
+- Improved terminal and signal handing.
+- Improved OS_VMS.TXT
+
+Version 5.4 (1999 Sep 9)
+- Cut and paste mismatch corrected.
+- <A HREF="gui_x11.html#Motif">Motif</A> directories during open and save are corrected.
+
+Version 5.3 (1998 Oct 12)
+- Minor changes in the code
+- Standard <A HREF="intro.html#distribution">distribution</A> with +GUI option
+
+Version 5.1 (1998 Apr 21)
+- <A HREF="autocmd.html#Syntax">Syntax</A> and DEC C changes in the code
+- Fixing problems with the /doc subdirectory
+- Improve OS_VMS.MMS
+
+Version 4.5 (1996 Dec 16)
+- First VMS port by Henk Elbers <A HREF="mailto:henk@xs4all.nl">&lt;henk@xs4all.nl&gt;</A> 
+
+==============================================================================
+
+
+10. Authors						*<A NAME="vms-authors"></A><B>vms-authors</B>*
+
+OpenVMS documentation and executables are maintained by:
+Zoltan Arpadffy <A HREF="mailto:arpadffy@polarhome.com">&lt;arpadffy@polarhome.com&gt;</A> 
+ OpenVMS Vim page:	<A HREF="http://www.polarhome.com/vim/">http://www.polarhome.com/vim/</A>
+
+This document uses parts and remarks from earlier authors and contributors
+of OS_VMS.TXT:
+	Charles E. Campbell, Jr. <A HREF="mailto:cec@gryphon.gsfc.nasa.gov">&lt;cec@gryphon.gsfc.nasa.gov&gt;</A> 
+	Bruce Hunsaker <A HREF="mailto:BNHunsaker@chq.byu.edu">&lt;BNHunsaker@chq.byu.edu&gt;</A> 
+	Sandor Kopanyi <A HREF="mailto:sandor.kopanyi@mailbox.hu">&lt;sandor.kopanyi@mailbox.hu&gt;</A> 
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

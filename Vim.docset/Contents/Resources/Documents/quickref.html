@@ -1,0 +1,1468 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: quickref</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: quickref</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="quickref.txt"></A><B>quickref.txt</B>*  For Vim version 7.4.  Last change: 2013 Jun 29
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			    Quick reference guide
+
+
+							 *<A NAME="quickref"></A><B>quickref</B>* *<A NAME="Contents"></A><B>Contents</B>*
+<B><FONT COLOR="PURPLE"> tag	  subject			 tag	  subject	</FONT></B>
+|<A HREF="help.html#Q_ct">Q_ct</A>|	list of help files		|<A HREF="#Q_re">Q_re</A>|	Repeating commands
+|<A HREF="#Q_lr">Q_lr</A>|	motion: Left-right		|<A HREF="#Q_km">Q_km</A>|	Key <A HREF="map.html#mapping">mapping</A>
+|<A HREF="#Q_ud">Q_ud</A>|	motion: Up-down			|<A HREF="#Q_ab">Q_ab</A>|	<A HREF="map.html#Abbreviations">Abbreviations</A>
+|<A HREF="#Q_tm">Q_tm</A>|	motion: Text object		|<A HREF="#Q_op">Q_op</A>|	Options
+|<A HREF="#Q_pa">Q_pa</A>|	motion: <A HREF="pattern.html#Pattern">Pattern</A> searches	|<A HREF="#Q_ur">Q_ur</A>|	Undo/Redo commands
+|<A HREF="#Q_ma">Q_ma</A>|	motion: Marks			|<A HREF="#Q_et">Q_et</A>|	External commands
+|<A HREF="#Q_vm">Q_vm</A>|	motion: Various			|<A HREF="#Q_qf">Q_qf</A>|	<A HREF="quickfix.html#Quickfix">Quickfix</A> commands
+|<A HREF="#Q_ta">Q_ta</A>|	motion: Using <A HREF="tagsrch.html#tags">tags</A>		|<A HREF="#Q_vc">Q_vc</A>|	Various commands
+|<A HREF="#Q_sc">Q_sc</A>|	Scrolling			|<A HREF="#Q_ce">Q_ce</A>|	<A HREF="intro.html#Ex">Ex</A>: <A HREF="cmdline.html#Command-line">Command-line</A> editing
+|<A HREF="#Q_in">Q_in</A>|	insert: Inserting text		|<A HREF="#Q_ra">Q_ra</A>|	<A HREF="intro.html#Ex">Ex</A>: Ranges
+|<A HREF="#Q_ai">Q_ai</A>|	insert: Keys			|<A HREF="#Q_ex">Q_ex</A>|	<A HREF="intro.html#Ex">Ex</A>: Special characters
+|<A HREF="#Q_ss">Q_ss</A>|	insert: Special keys		|<A HREF="#Q_st">Q_st</A>|	Starting Vim
+|<A HREF="#Q_di">Q_di</A>|	insert: <A HREF="digraph.html#Digraphs">Digraphs</A>		|<A HREF="#Q_ed">Q_ed</A>|	Editing a file
+|<A HREF="#Q_si">Q_si</A>|	insert: Special inserts		|<A HREF="#Q_fl">Q_fl</A>|	Using the argument list
+|<A HREF="#Q_de">Q_de</A>|	change: Deleting text		|<A HREF="#Q_wq">Q_wq</A>|	Writing and quitting
+|<A HREF="#Q_cm">Q_cm</A>|	change: Copying and moving	|<A HREF="#Q_ac">Q_ac</A>|	Automatic commands
+|<A HREF="#Q_ch">Q_ch</A>|	change: Changing text		|<A HREF="#Q_wi">Q_wi</A>|	Multi-window commands
+|<A HREF="#Q_co">Q_co</A>|	change: Complex			|<A HREF="#Q_bu">Q_bu</A>|	Buffer list commands
+|<A HREF="#Q_vi">Q_vi</A>|	<A HREF="visual.html#Visual">Visual</A> mode			|<A HREF="#Q_sy">Q_sy</A>|	<A HREF="autocmd.html#Syntax">Syntax</A> highlighting
+|<A HREF="#Q_to">Q_to</A>|	Text <A HREF="index.html#objects">objects</A>			|<A HREF="#Q_gu">Q_gu</A>|	<A HREF="gui.html#GUI">GUI</A> commands
+					|<A HREF="#Q_fo">Q_fo</A>|	<A HREF="fold.html#Folding">Folding</A>
+
+------------------------------------------------------------------------------
+N is used to indicate an optional <A HREF="intro.html#count">count</A> that can be given before the command.
+------------------------------------------------------------------------------
+
+*<A NAME="Q_lr"></A><B>Q_lr</B>*		Left-right motions
+
+|<A HREF="motion.html#h">h</A>|	N  h		left (also: <A HREF="motion.html#CTRL-H">CTRL-H</A>, <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A>, or <A HREF="motion.html#&lt;Left&gt;">&lt;Left&gt;</A> key)
+|<A HREF="motion.html#l">l</A>|	N  l		right (also: <A HREF="motion.html#&lt;Space&gt;">&lt;Space&gt;</A> or <A HREF="motion.html#&lt;Right&gt;">&lt;Right&gt;</A> key)
+|<A HREF="motion.html#0">0</A>|	   0		to first character in the line (also: <A HREF="motion.html#&lt;Home&gt;">&lt;Home&gt;</A> key)
+|<A HREF="motion.html#^">^</A>|	   ^		to first non-blank character in the line
+|<A HREF="motion.html#$">$</A>|	N  $		to the last character in the line (N-1 lines lower)
+			   (also: <A HREF="motion.html#&lt;End&gt;">&lt;End&gt;</A> key)
+|<A HREF="motion.html#g0">g0</A>|	   g0		to first character in screen line (differs from &quot;0&quot;
+			   when lines wrap)
+|<A HREF="motion.html#g^">g^</A>|	   g^		to first non-blank character in screen line (differs
+			   from &quot;<A HREF="motion.html#^">^</A>&quot; when lines wrap)
+|<A HREF="motion.html#g$">g$</A>|	N  g$		to last character in screen line (differs from &quot;$&quot;
+			   when lines wrap)
+|<A HREF="motion.html#gm">gm</A>|	   gm		to middle of the screen line
+|<A HREF="motion.html#bar">bar</A>|	N  &#124;		to column N (default: 1)
+|<A HREF="motion.html#f">f</A>|	N  f{char}	to the Nth occurrence of {char} to the right
+|<A HREF="motion.html#F">F</A>|	N  F{char}	to the Nth occurrence of {char} to the left
+|<A HREF="motion.html#t">t</A>|	N  t{char}	till before the Nth occurrence of {char} to the right
+|<A HREF="motion.html#T">T</A>|	N  T{char}	till before the Nth occurrence of {char} to the left
+|<A HREF="motion.html#;">;</A>|	N  ;		repeat the last &quot;<A HREF="motion.html#f">f</A>&quot;, &quot;<A HREF="motion.html#F">F</A>&quot;, &quot;<A HREF="motion.html#t">t</A>&quot;, or &quot;<A HREF="motion.html#T">T</A>&quot; N times
+|<A HREF="motion.html#,">,</A>|	N  ,		repeat the last &quot;<A HREF="motion.html#f">f</A>&quot;, &quot;<A HREF="motion.html#F">F</A>&quot;, &quot;<A HREF="motion.html#t">t</A>&quot;, or &quot;<A HREF="motion.html#T">T</A>&quot; N times in
+			   opposite direction
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ud"></A><B>Q_ud</B>*		Up-down motions
+
+|<A HREF="motion.html#k">k</A>|	N  k		up N lines (also: <A HREF="motion.html#CTRL-P">CTRL-P</A> and <A HREF="motion.html#&lt;Up&gt;">&lt;Up&gt;</A>)
+|<A HREF="motion.html#j">j</A>|	N  j		down N lines (also: <A HREF="motion.html#CTRL-J">CTRL-J</A>, <A HREF="motion.html#CTRL-N">CTRL-N</A>, <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A>, and <A HREF="motion.html#&lt;Down&gt;">&lt;Down&gt;</A>)
+|<A HREF="motion.html#-">-</A>|	N  -		up N lines, on the first non-blank character
+|<A HREF="motion.html#+">+</A>|	N  +		down N lines, on the first non-blank character (also:
+			   <A HREF="motion.html#CTRL-M">CTRL-M</A> and <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>)
+|<A HREF="motion.html#_">_</A>|	N  _		down N-1 lines, on the first non-blank character
+|<A HREF="motion.html#G">G</A>|	N  G		goto line N (default: last line), on the first
+			   non-blank character
+|<A HREF="motion.html#gg">gg</A>|	N  gg		goto line N (default: first line), on the first
+			   non-blank character
+|<A HREF="motion.html#N&#37;">N&#37;</A>|	N  &#37;		goto line N percentage down in the file; N must be
+			   given, otherwise <A HREF="motion.html#it">it</A> is the |<A HREF="motion.html#&#37;">&#37;</A>| command
+|<A HREF="motion.html#gk">gk</A>|	N  gk		up N screen lines (differs from &quot;k&quot; when line wraps)
+|<A HREF="motion.html#gj">gj</A>|	N  gj		down N screen lines (differs from &quot;j&quot; when line wraps)
+------------------------------------------------------------------------------
+
+*<A NAME="Q_tm"></A><B>Q_tm</B>*		Text object motions
+
+|<A HREF="motion.html#w">w</A>|	N  w		N words forward
+|<A HREF="motion.html#W">W</A>|	N  W		N blank-separated |<A HREF="motion.html#WORD">WORD</A>|<A HREF="change.html#s">s</A> forward
+|<A HREF="motion.html#e">e</A>|	N  e		forward to the end of the Nth <A HREF="motion.html#word">word</A>
+|<A HREF="motion.html#E">E</A>|	N  E		forward to the end of the Nth blank-separated |<A HREF="motion.html#WORD">WORD</A>|
+|<A HREF="motion.html#b">b</A>|	N  b		N words backward
+|<A HREF="motion.html#B">B</A>|	N  B		N blank-separated |<A HREF="motion.html#WORD">WORD</A>|<A HREF="change.html#s">s</A> backward
+|<A HREF="motion.html#ge">ge</A>|	N  ge		backward to the end of the Nth <A HREF="motion.html#word">word</A>
+|<A HREF="motion.html#gE">gE</A>|	N  gE		backward to the end of the Nth blank-separated |<A HREF="motion.html#WORD">WORD</A>|
+
+|<A HREF="motion.html#)">)</A>|	N  )		N sentences forward
+|<A HREF="motion.html#(">(</A>|	N  (		N sentences backward
+|<A HREF="motion.html#}">}</A>|	N  }		N paragraphs forward
+|<A HREF="motion.html#{">{</A>|	N  {		N paragraphs backward
+|<A HREF="motion.html#]]">]]</A>|	N  ]]		N sections forward, at start of section
+|<A HREF="motion.html#[[">[[</A>|	N  [[		N sections backward, at start of section
+|<A HREF="motion.html#][">][</A>|	N  ][		N sections forward, at end of section
+|<A HREF="motion.html#[]">[]</A>|	N  []		N sections backward, at end of section
+|<A HREF="motion.html#[(">[(</A>|	N  [(		N times back to unclosed '('
+|<A HREF="motion.html#[{">[{</A>|	N  [{		N times back to unclosed '{'
+|<A HREF="motion.html#[m">[m</A>|	N  [m		N times back to start of method (for Java)
+|<A HREF="motion.html#[M">[M</A>|	N  [M		N times back to end of method (for Java)
+|<A HREF="motion.html#])">])</A>|	N  ])		N times forward to unclosed ')'
+|<A HREF="motion.html#]}">]}</A>|	N  ]}		N times forward to unclosed '}'
+|<A HREF="motion.html#]m">]m</A>|	N  ]m		N times forward to start of method (for Java)
+|<A HREF="motion.html#]M">]M</A>|	N  ]M		N times forward to end of method (for Java)
+|<A HREF="motion.html#[#">[#</A>|	N  [#		N times back to unclosed &quot;#if&quot; or &quot;#else&quot;
+|<A HREF="motion.html#]#">]#</A>|	N  ]#		N times forward to unclosed &quot;#else&quot; or &quot;#endif&quot;
+|<A HREF="motion.html#[star">[star</A>|	N  [*		N times back to start of comment &quot;/*&quot;
+|<A HREF="motion.html#]star">]star</A>|	N  ]*		N times forward to end of comment &quot;*/&quot;
+------------------------------------------------------------------------------
+
+*<A NAME="Q_pa"></A><B>Q_pa</B>*		<A HREF="pattern.html#Pattern">Pattern</A> searches
+
+|<A HREF="pattern.html#/">/</A>|	N  /{pattern}[/[offset]]&lt;CR&gt;
+			search forward for the Nth occurrence of {pattern}
+|<A HREF="pattern.html#?">?</A>|	N  ?{pattern}[?[offset]]&lt;CR&gt;
+			search backward for the Nth occurrence of {pattern}
+|<A HREF="pattern.html#/&lt;CR&gt;">/&lt;CR&gt;</A>|	N  /&lt;CR&gt;	repeat last search, in the forward direction
+|<A HREF="pattern.html#?&lt;CR&gt;">?&lt;CR&gt;</A>|	N  ?&lt;CR&gt;	repeat last search, in the backward direction
+|<A HREF="pattern.html#n">n</A>|	N  n		repeat last search
+|<A HREF="pattern.html#N">N</A>|	N  N		repeat last search, in opposite direction
+|<A HREF="pattern.html#star">star</A>|	N  &#42;		search forward for the identifier under the cursor
+|<A HREF="pattern.html##">#</A>|	N  #		search backward for the identifier under the cursor
+|<A HREF="pattern.html#gstar">gstar</A>|	N  g*		like &quot;*&quot;, but also find partial matches
+|<A HREF="pattern.html#g#">g#</A>|	N  g#		like &quot;#&quot;, but also find partial matches
+|<A HREF="pattern.html#gd">gd</A>|	   gd		goto local declaration of identifier under the cursor
+|<A HREF="pattern.html#gD">gD</A>|	   gD		goto global declaration of identifier under the cursor
+
+|<A HREF="pattern.html#pattern">pattern</A>|		Special characters in search patterns
+
+<B><FONT COLOR="PURPLE">			meaning		      magic   nomagic	</FONT></B>
+		matches any single character	.	\.
+		       matches start of line	^	^
+			       matches <A HREF="intro.html#&lt;EOL&gt;">&lt;EOL&gt;</A>	$	$
+		       matches start of <A HREF="motion.html#word">word</A>	\&lt;	\&lt;
+			 matches end of <A HREF="motion.html#word">word</A>	\&gt;	\&gt;
+	matches a single char from the range	[a-z]	\[a-z]
+      matches a single char not in the range	[^a-z]	\[^a-z]
+		  matches an identifier char	\i	\i
+		   idem but excluding digits	\I	\I
+		 matches a keyword character	\k	\k
+		   idem but excluding digits	\K	\K
+	       matches a file name character	\f	\f
+		   idem but excluding digits	\F	\F
+	       matches a printable character	\p	\p
+		   idem but excluding digits	\P	\P
+	     matches a white space character	\s	\s
+	 matches a non-white space character	\S	\S
+
+			       matches <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>	\e	\e
+			       matches <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>	\t	\t
+				matches <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>	\r	\r
+				matches <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A>	\b	\b
+
+     matches 0 or more of the preceding atom	&#42;	\*
+     matches 1 or more of the preceding atom	\+	\+
+	matches 0 or 1 of the preceding atom	\=	\=
+	matches 2 to 5 of the preceding atom	\{2,5}  \{2,5}
+		  separates two alternatives	\|	\|
+		group a <A HREF="pattern.html#pattern">pattern</A> into an atom	\(\)	\(\)
+
+|<A HREF="pattern.html#search-offset">search-offset</A>|		Offsets allowed after search command
+
+    [num]	[num] lines downwards, in column 1
+    +[num]	[num] lines downwards, in column 1
+    -[num]	[num] lines upwards, in column 1
+    e[+num]	[num] characters to the right of the end of the match
+    e[-num]	[num] characters to the left of the end of the match
+    s[+num]	[num] characters to the right of the start of the match
+    s[-num]	[num] characters to the left of the start of the match
+    b[+num]	[num] identical to s[+num] above (mnemonic: begin)
+    b[-num]	[num] identical to s[-num] above (mnemonic: begin)
+    ;{search-command}	execute {search-command} next
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ma"></A><B>Q_ma</B>*		Marks and motions
+
+|<A HREF="motion.html#m">m</A>|        m{a-zA-Z}	<A HREF="motion.html#mark">mark</A> current position with <A HREF="motion.html#mark">mark</A> {a-zA-Z}
+|<A HREF="motion.html#`a">`a</A>|       `{a-z}	go to <A HREF="motion.html#mark">mark</A> {a-z} within current file
+|<A HREF="motion.html#`A">`A</A>|       `{A-Z}	go to <A HREF="motion.html#mark">mark</A> {A-Z} in any file
+|<A HREF="motion.html#`0">`0</A>|       `{0-9}	go to the position where Vim was previously exited
+|<A HREF="motion.html#``">``</A>|       ``		go to the position before the last jump
+|<A HREF="motion.html#`quote">`quote</A>|   `&quot;		go to the position when last editing this file
+|<A HREF="motion.html#`[">`[</A>|       `[		go to the start of the previously operated or put text
+|<A HREF="motion.html#`]">`]</A>|       `]		go to the end of the previously operated or put text
+|<A HREF="motion.html#`&lt;">`&lt;</A>|       `&lt;		go to the start of the (previous) <A HREF="visual.html#Visual">Visual</A> area
+|<A HREF="motion.html#`&gt;">`&gt;</A>|       `&gt;		go to the end of the (previous) <A HREF="visual.html#Visual">Visual</A> area
+|<A HREF="motion.html#`.">`.</A>|       `.		go to the position of the last change in this file
+|<A HREF="motion.html#'">'</A>|        '{a-zA-Z0-9[]&#39;&#34;'&lt;&gt;.}
+			same <A HREF="motion.html#as">as</A> `, but on the first non-blank in the line
+|<A HREF="motion.html#:marks">:marks</A>|  :marks	print the active marks
+|<A HREF="motion.html#CTRL-O">CTRL-O</A>|  N  CTRL-O	go to Nth older position in jump list
+|<A HREF="motion.html#CTRL-I">CTRL-I</A>|  N  CTRL-I	go to Nth newer position in jump list
+|<A HREF="motion.html#:ju">:ju</A>|     :ju[mps]	print the jump list
+------------------------------------------------------------------------------
+
+*<A NAME="Q_vm"></A><B>Q_vm</B>*		Various motions
+
+|<A HREF="motion.html#&#37;">&#37;</A>|	   &#37;		find the next brace, bracket, comment, or &quot;#if&quot;/
+			   &quot;#else&quot;/&quot;#endif&quot; in this line and go to its match
+|<A HREF="motion.html#H">H</A>|	N  H		go to the Nth line in the <A HREF="windows.html#window">window</A>, on the first
+			   non-blank
+|<A HREF="motion.html#M">M</A>|	   M		go to the middle line in the <A HREF="windows.html#window">window</A>, on the first
+			   non-blank
+|<A HREF="motion.html#L">L</A>|	N  L		go to the Nth line from the bottom, on the first
+			   non-blank
+
+|<A HREF="motion.html#go">go</A>|	N  go			go to Nth byte in the buffer
+|<A HREF="motion.html#:go">:go</A>|	:[range]go[to] [off]	go to [off] byte in the buffer
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ta"></A><B>Q_ta</B>*		Using <A HREF="tagsrch.html#tags">tags</A>
+
+|<A HREF="tagsrch.html#:ta">:ta</A>|      :ta[g][!] {tag}	jump to <A HREF="tagsrch.html#tag">tag</A> {tag}
+|<A HREF="tagsrch.html#:ta">:ta</A>|      :[count]ta[g][!]	jump to [count]'th newer <A HREF="tagsrch.html#tag">tag</A> in <A HREF="tagsrch.html#tag">tag</A> list
+|<A HREF="tagsrch.html#CTRL-]">CTRL-]</A>|      CTRL-]		jump to the <A HREF="tagsrch.html#tag">tag</A> under cursor, unless changes
+				   have been made
+|<A HREF="tagsrch.html#:ts">:ts</A>|      :ts[elect][!] [tag]	list matching <A HREF="tagsrch.html#tags">tags</A> and select one to jump to
+|<A HREF="tagsrch.html#:tjump">:tjump</A>|   :tj[ump][!] [tag]	jump to <A HREF="tagsrch.html#tag">tag</A> [tag] or select from list when
+				   there are multiple matches
+|<A HREF="tagsrch.html#:ltag">:ltag</A>|    :lt[ag][!] [tag]	jump to tag [tag] and add matching <A HREF="tagsrch.html#tags">tags</A> to the
+				   location list
+
+|<A HREF="tagsrch.html#:tags">:tags</A>|    :tags		print tag list
+|<A HREF="tagsrch.html#CTRL-T">CTRL-T</A>|   N  CTRL-T		jump back from Nth older <A HREF="tagsrch.html#tag">tag</A> in <A HREF="tagsrch.html#tag">tag</A> list
+|<A HREF="tagsrch.html#:po">:po</A>|      :[count]po[p][!]	jump back from [count]'th older <A HREF="tagsrch.html#tag">tag</A> in <A HREF="tagsrch.html#tag">tag</A> list
+|<A HREF="tagsrch.html#:tnext">:tnext</A>|   :[count]tn[ext][!]	jump to [count]'th next matching <A HREF="tagsrch.html#tag">tag</A>
+|<A HREF="tagsrch.html#:tp">:tp</A>|      :[count]tp[revious][!] jump to [count]'th previous matching <A HREF="tagsrch.html#tag">tag</A>
+|<A HREF="tagsrch.html#:tr">:tr</A>|      :[count]tr[ewind][!]	jump to [count]'th matching <A HREF="tagsrch.html#tag">tag</A>
+|<A HREF="tagsrch.html#:tl">:tl</A>|      :tl[ast][!]		jump to last matching <A HREF="tagsrch.html#tag">tag</A>
+
+|<A HREF="windows.html#:ptag">:ptag</A>|    :pt[ag] {tag}	open a preview <A HREF="windows.html#window">window</A> to show tag {tag}
+|<A HREF="windows.html#CTRL-W_}">CTRL-W_}</A>|    CTRL-W }		like <A HREF="tagsrch.html#CTRL-]">CTRL-]</A> but show <A HREF="tagsrch.html#tag">tag</A> in preview <A HREF="windows.html#window">window</A>
+|<A HREF="tagsrch.html#:pts">:pts</A>|     :pts[elect]		like &quot;<A HREF="tagsrch.html#:tselect">:tselect</A>&quot; but show <A HREF="tagsrch.html#tag">tag</A> in preview <A HREF="windows.html#window">window</A>
+|<A HREF="tagsrch.html#:ptjump">:ptjump</A>|  :ptj[ump]		like &quot;<A HREF="tagsrch.html#:tjump">:tjump</A>&quot; but show <A HREF="tagsrch.html#tag">tag</A> in preview <A HREF="windows.html#window">window</A>
+|<A HREF="windows.html#:pclose">:pclose</A>|  :pc[lose]		close <A HREF="tagsrch.html#tag">tag</A> preview <A HREF="windows.html#window">window</A>
+|<A HREF="windows.html#CTRL-W_z">CTRL-W_z</A>|    CTRL-W z		close <A HREF="tagsrch.html#tag">tag</A> preview <A HREF="windows.html#window">window</A>
+------------------------------------------------------------------------------
+
+*<A NAME="Q_sc"></A><B>Q_sc</B>*		Scrolling
+
+|<A HREF="scroll.html#CTRL-E">CTRL-E</A>|	N  CTRL-E	<A HREF="windows.html#window">window</A> N lines downwards (default: 1)
+|<A HREF="scroll.html#CTRL-D">CTRL-D</A>|	N  CTRL-D	<A HREF="windows.html#window">window</A> N lines Downwards (default: 1/2 <A HREF="windows.html#window">window</A>)
+|<A HREF="scroll.html#CTRL-F">CTRL-F</A>|	N  CTRL-F	<A HREF="windows.html#window">window</A> N pages Forwards (downwards)
+|<A HREF="scroll.html#CTRL-Y">CTRL-Y</A>|	N  CTRL-Y	<A HREF="windows.html#window">window</A> N lines upwards (default: 1)
+|<A HREF="scroll.html#CTRL-U">CTRL-U</A>|	N  CTRL-U	<A HREF="windows.html#window">window</A> N lines Upwards (default: 1/2 <A HREF="windows.html#window">window</A>)
+|<A HREF="scroll.html#CTRL-B">CTRL-B</A>|	N  CTRL-B	<A HREF="windows.html#window">window</A> N pages Backwards (upwards)
+|<A HREF="scroll.html#z&lt;CR&gt;">z&lt;CR&gt;</A>|		   z&lt;CR&gt; or <A HREF="scroll.html#zt">zt</A>	redraw, current line at top of <A HREF="windows.html#window">window</A>
+|<A HREF="scroll.html#z.">z.</A>|		   z.	 or <A HREF="scroll.html#zz">zz</A>	redraw, current line at center of <A HREF="windows.html#window">window</A>
+|<A HREF="scroll.html#z-">z-</A>|		   z-	 or <A HREF="scroll.html#zb">zb</A>	redraw, current line at bottom of <A HREF="windows.html#window">window</A>
+
+These only work when <A HREF="options.html#'wrap'">'wrap'</A> is off:
+|<A HREF="scroll.html#zh">zh</A>|		N  zh		scroll screen N characters to the right
+|<A HREF="scroll.html#zl">zl</A>|		N  zl		scroll screen N characters to the left
+|<A HREF="scroll.html#zH">zH</A>|		N  zH		scroll screen half a screenwidth to the right
+|<A HREF="scroll.html#zL">zL</A>|		N  zL		scroll screen half a screenwidth to the left
+------------------------------------------------------------------------------
+
+*<A NAME="Q_in"></A><B>Q_in</B>*		Inserting text
+
+|<A HREF="insert.html#a">a</A>|	N  a	append text after the cursor (N times)
+|<A HREF="insert.html#A">A</A>|	N  A	append text at the end of the line (N times)
+|<A HREF="insert.html#i">i</A>|	N  i	insert text before the cursor (N times) (also: <A HREF="insert.html#&lt;Insert&gt;">&lt;Insert&gt;</A>)
+|<A HREF="insert.html#I">I</A>|	N  I	insert text before the first non-blank in the line (N times)
+|<A HREF="insert.html#gI">gI</A>|	N  gI	insert text in column 1 (N times)
+|<A HREF="insert.html#o">o</A>|	N  o	open a new line below the current line, append text (N times)
+|<A HREF="insert.html#O">O</A>|	N  O	open a new line above the current line, append text (N times)
+|<A HREF="insert.html#:startinsert">:startinsert</A>|  :star[tinsert][!]  start <A HREF="insert.html#Insert">Insert</A> mode, append when [!] used
+|<A HREF="insert.html#:startreplace">:startreplace</A>| :startr[eplace][!]  start <A HREF="insert.html#Replace">Replace</A> mode, at EOL when [!] used
+
+in <A HREF="visual.html#Visual">Visual</A> block mode:
+|<A HREF="visual.html#v_b_I">v_b_I</A>|	   I	insert the same text in front of all the selected lines
+|<A HREF="visual.html#v_b_A">v_b_A</A>|	   A	append the same text after all the selected lines
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ai"></A><B>Q_ai</B>*		<A HREF="insert.html#Insert">Insert</A> mode keys
+
+|<A HREF="index.html#insert-index">insert-index</A>|	alphabetical index of <A HREF="insert.html#Insert">Insert</A> mode commands
+
+leaving <A HREF="insert.html#Insert">Insert</A> mode:
+|<A HREF="insert.html#i_&lt;Esc&gt;">i_&lt;Esc&gt;</A>|	&lt;Esc&gt;		  end <A HREF="insert.html#Insert">Insert</A> mode, back to <A HREF="intro.html#Normal">Normal</A> mode
+|<A HREF="insert.html#i_CTRL-C">i_CTRL-C</A>|	CTRL-C		  like <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>, but <A HREF="diff.html#do">do</A> not use an abbreviation
+|<A HREF="insert.html#i_CTRL-O">i_CTRL-O</A>|	CTRL-O {command}  execute {command} and return to <A HREF="insert.html#Insert">Insert</A> mode
+
+moving around:
+|<A HREF="insert.html#i_&lt;Up&gt;">i_&lt;Up&gt;</A>|	cursor keys	  move cursor left/right/up/down
+|<A HREF="insert.html#i_&lt;S-Left&gt;">i_&lt;S-Left&gt;</A>|	shift-left/right  one <A HREF="motion.html#word">word</A> left/right
+|<A HREF="insert.html#i_&lt;S-Up&gt;">i_&lt;S-Up&gt;</A>|	shift-up/down	  one screenful backward/forward
+|<A HREF="insert.html#i_&lt;End&gt;">i_&lt;End&gt;</A>|	&lt;End&gt;		  cursor after last character in the line
+|<A HREF="insert.html#i_&lt;Home&gt;">i_&lt;Home&gt;</A>|	&lt;Home&gt;		  cursor to first character in the line
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ss"></A><B>Q_ss</B>*		Special keys in <A HREF="insert.html#Insert">Insert</A> mode
+
+|<A HREF="insert.html#i_CTRL-V">i_CTRL-V</A>|	CTRL-V {char}..	  insert character literally, or enter decimal
+				     byte value
+|<A HREF="insert.html#i_&lt;NL&gt;">i_&lt;NL&gt;</A>|	&lt;NL&gt; or <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> or <A HREF="motion.html#CTRL-M">CTRL-M</A> or <A HREF="motion.html#CTRL-J">CTRL-J</A>
+				  begin new line
+|<A HREF="insert.html#i_CTRL-E">i_CTRL-E</A>|	CTRL-E		  insert the character from below the cursor
+|<A HREF="insert.html#i_CTRL-Y">i_CTRL-Y</A>|	CTRL-Y		  insert the character from above the cursor
+
+|<A HREF="insert.html#i_CTRL-A">i_CTRL-A</A>|	CTRL-A		  insert previously inserted text
+|<A HREF="insert.html#i_CTRL-@">i_CTRL-@</A>|	CTRL-@		  insert previously inserted text and stop
+				     <A HREF="insert.html#Insert">Insert</A> mode
+|<A HREF="insert.html#i_CTRL-R">i_CTRL-R</A>|	CTRL-R {0-9a-z&#37;#:.-=&quot;}  insert the contents of a <A HREF="sponsor.html#register">register</A>
+
+|<A HREF="insert.html#i_CTRL-N">i_CTRL-N</A>|	CTRL-N		  insert next match of identifier before the
+				     cursor
+|<A HREF="insert.html#i_CTRL-P">i_CTRL-P</A>|	CTRL-P		  insert previous match of identifier before
+				     the cursor
+|<A HREF="insert.html#i_CTRL-X">i_CTRL-X</A>|	CTRL-X <A HREF="eval.html#...">...</A>	  complete the <A HREF="motion.html#word">word</A> before the cursor in
+				     various ways
+
+|<A HREF="insert.html#i_&lt;BS&gt;">i_&lt;BS&gt;</A>|	&lt;BS&gt; or <A HREF="motion.html#CTRL-H">CTRL-H</A>	  delete the character before the cursor
+|<A HREF="insert.html#i_&lt;Del&gt;">i_&lt;Del&gt;</A>|	&lt;Del&gt;		  delete the character under the cursor
+|<A HREF="insert.html#i_CTRL-W">i_CTRL-W</A>|	CTRL-W		  delete <A HREF="motion.html#word">word</A> before the cursor
+|<A HREF="insert.html#i_CTRL-U">i_CTRL-U</A>|	CTRL-U		  delete all entered characters in the current
+				     line
+|<A HREF="insert.html#i_CTRL-T">i_CTRL-T</A>|	CTRL-T		  insert one shiftwidth of indent in front of
+				       the current line
+|<A HREF="insert.html#i_CTRL-D">i_CTRL-D</A>|	CTRL-D		  delete one shiftwidth of indent in front of
+				     the current line
+|<A HREF="insert.html#i_0_CTRL-D">i_0_CTRL-D</A>|	0 CTRL-D	  delete all indent in the current line
+|<A HREF="insert.html#i_^_CTRL-D">i_^_CTRL-D</A>|	^ CTRL-D	  delete all indent in the current line,
+				     restore indent in next line
+------------------------------------------------------------------------------
+
+*<A NAME="Q_di"></A><B>Q_di</B>*		<A HREF="digraph.html#Digraphs">Digraphs</A>
+
+|<A HREF="digraph.html#:dig">:dig</A>|	   :dig[raphs]		show current list of <A HREF="digraph.html#digraphs">digraphs</A>
+|<A HREF="digraph.html#:dig">:dig</A>|	   :dig[raphs] {char1}{char2} {number} <A HREF="eval.html#...">...</A>
+				add digraph(s) to the list
+
+In <A HREF="insert.html#Insert">Insert</A> or <A HREF="cmdline.html#Command-line">Command-line</A> mode:
+|<A HREF="insert.html#i_CTRL-K">i_CTRL-K</A>|	CTRL-K {char1} {char2}
+				  enter <A HREF="digraph.html#digraph">digraph</A>
+|<A HREF="digraph.html#i_digraph">i_digraph</A>|	{char1} <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A> {char2}
+				  enter <A HREF="digraph.html#digraph">digraph</A> if <A HREF="options.html#'digraph'">'digraph'</A> option set
+------------------------------------------------------------------------------
+
+*<A NAME="Q_si"></A><B>Q_si</B>*		Special inserts
+
+|<A HREF="insert.html#:r">:r</A>|	   :r [file]	   insert the contents of [file] below the cursor
+|<A HREF="insert.html#:r!">:r!</A>|	   :r! {command}   insert the standard output of {command} below the
+			      cursor
+------------------------------------------------------------------------------
+
+*<A NAME="Q_de"></A><B>Q_de</B>*		Deleting text
+
+|<A HREF="change.html#x">x</A>|	N  x		delete N characters under and after the cursor
+|<A HREF="change.html#&lt;Del&gt;">&lt;Del&gt;</A>|	N  &lt;Del&gt;	delete N characters under and after the cursor
+|<A HREF="change.html#X">X</A>|	N  X		delete N characters before the cursor
+|<A HREF="change.html#d">d</A>|	N  d{motion}	delete the text that is moved over with <A HREF="intro.html#{motion}">{motion}</A>
+|<A HREF="change.html#v_d">v_d</A>|	   {visual}d	delete the highlighted text
+|<A HREF="change.html#dd">dd</A>|	N  dd		delete N lines
+|<A HREF="change.html#D">D</A>|	N  D		delete to the end of the line (and N-1 more lines)
+|<A HREF="change.html#J">J</A>|	N  J		join N-1 lines (delete &lt;EOL&gt;s)
+|<A HREF="change.html#v_J">v_J</A>|	   {visual}J	join the highlighted lines
+|<A HREF="change.html#gJ">gJ</A>|	N  gJ		like &quot;J&quot;, but without <A HREF="insert.html#inserting">inserting</A> spaces
+|<A HREF="change.html#v_gJ">v_gJ</A>|	   {visual}gJ	like &quot;{visual}J&quot;, but without <A HREF="insert.html#inserting">inserting</A> spaces
+|<A HREF="change.html#:d">:d</A>|	:[range]d [x]	delete <A HREF="cmdline.html#[range]">[range]</A> lines [into <A HREF="sponsor.html#register">register</A> x]
+------------------------------------------------------------------------------
+
+*<A NAME="Q_cm"></A><B>Q_cm</B>*		Copying and moving text
+
+|<A HREF="change.html#quote">quote</A>|	  &quot;{char}	use <A HREF="sponsor.html#register">register</A> {char} for the next delete, <A HREF="change.html#yank">yank</A>, or put
+|<A HREF="change.html#:reg">:reg</A>|	  :reg		show the contents of all <A HREF="change.html#registers">registers</A>
+|<A HREF="change.html#:reg">:reg</A>|	  :reg {arg}	show the contents of <A HREF="change.html#registers">registers</A> mentioned in {arg}
+|<A HREF="change.html#y">y</A>|	  N  y{motion}	<A HREF="change.html#yank">yank</A> the text moved over with <A HREF="intro.html#{motion}">{motion}</A> into a <A HREF="sponsor.html#register">register</A>
+|<A HREF="change.html#v_y">v_y</A>|	     {visual}y	<A HREF="change.html#yank">yank</A> the highlighted text into a <A HREF="sponsor.html#register">register</A>
+|<A HREF="change.html#yy">yy</A>|	  N  yy		<A HREF="change.html#yank">yank</A> N lines into a <A HREF="sponsor.html#register">register</A>
+|<A HREF="change.html#Y">Y</A>|	  N  Y		<A HREF="change.html#yank">yank</A> N lines into a <A HREF="sponsor.html#register">register</A>
+|<A HREF="change.html#p">p</A>|	  N  p		put a <A HREF="sponsor.html#register">register</A> after the cursor position (N times)
+|<A HREF="change.html#P">P</A>|	  N  P		put a <A HREF="sponsor.html#register">register</A> before the cursor position (N times)
+|<A HREF="change.html#]p">]p</A>|	  N  ]p		like p, but adjust indent to current line
+|<A HREF="change.html#[p">[p</A>|	  N  [p		like <A HREF="change.html#P">P</A>, but adjust indent to current line
+|<A HREF="change.html#gp">gp</A>|	  N  gp		like p, but leave cursor after the new text
+|<A HREF="change.html#gP">gP</A>|	  N  gP		like P, but leave cursor after the new text
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ch"></A><B>Q_ch</B>*		Changing text
+
+|<A HREF="change.html#r">r</A>|	  N  r{char}	replace N characters with {char}
+|<A HREF="change.html#gr">gr</A>|	  N  gr{char}	replace N characters without affecting layout
+|<A HREF="change.html#R">R</A>|	  N  R		enter <A HREF="insert.html#Replace">Replace</A> mode (repeat the entered text N times)
+|<A HREF="change.html#gR">gR</A>|	  N  gR		enter virtual <A HREF="insert.html#Replace">Replace</A> mode: Like <A HREF="insert.html#Replace">Replace</A> mode but
+			   without affecting layout
+|<A HREF="visual.html#v_b_r">v_b_r</A>|	     {visual}r{char}
+			in <A HREF="visual.html#Visual">Visual</A> block mode: <A HREF="insert.html#Replace">Replace</A> each char of the
+			   selected text with {char}
+
+	(change = delete text and enter <A HREF="insert.html#Insert">Insert</A> mode)
+|<A HREF="change.html#c">c</A>|	  N  c{motion}	change the text that is moved over with <A HREF="intro.html#{motion}">{motion}</A>
+|<A HREF="change.html#v_c">v_c</A>|	     {visual}c	change the highlighted text
+|<A HREF="change.html#cc">cc</A>|	  N  cc		change N lines
+|<A HREF="change.html#S">S</A>|	  N  S		change N lines
+|<A HREF="change.html#C">C</A>|	  N  C		change to the end of the line (and N-1 more lines)
+|<A HREF="change.html#s">s</A>|	  N  s		change N characters
+|<A HREF="visual.html#v_b_c">v_b_c</A>|	     {visual}c	in <A HREF="visual.html#Visual">Visual</A> block mode: Change each of the selected
+			   lines with the entered text
+|<A HREF="visual.html#v_b_C">v_b_C</A>|	     {visual}C	in <A HREF="visual.html#Visual">Visual</A> block mode: Change each of the selected
+			   lines until end-of-line with the entered text
+
+|<A HREF="change.html#~">~</A>|	  N  ~		switch <A HREF="change.html#case">case</A> for N characters and advance cursor
+|<A HREF="change.html#v_~">v_~</A>|	     {visual}~	switch <A HREF="change.html#case">case</A> for highlighted text
+|<A HREF="change.html#v_u">v_u</A>|	     {visual}u	make highlighted text <A HREF="change.html#lowercase">lowercase</A>
+|<A HREF="change.html#v_U">v_U</A>|	     {visual}U	make highlighted text <A HREF="change.html#uppercase">uppercase</A>
+|<A HREF="change.html#g~">g~</A>|	     g~{motion} switch <A HREF="change.html#case">case</A> for the text that is moved over with
+			   <A HREF="intro.html#{motion}">{motion}</A>
+|<A HREF="change.html#gu">gu</A>|	     gu{motion} make the text that is moved over with <A HREF="intro.html#{motion}">{motion}</A>
+			   <A HREF="change.html#lowercase">lowercase</A>
+|<A HREF="change.html#gU">gU</A>|	     gU{motion} make the text that is moved over with <A HREF="intro.html#{motion}">{motion}</A>
+			   <A HREF="change.html#uppercase">uppercase</A>
+|<A HREF="change.html#v_g?">v_g?</A>|	     {visual}g? perform <A HREF="change.html#rot13">rot13</A> encoding on highlighted text
+|<A HREF="change.html#g?">g?</A>|	     g?{motion} perform <A HREF="change.html#rot13">rot13</A> encoding on the text that is moved over
+			   with <A HREF="intro.html#{motion}">{motion}</A>
+
+|<A HREF="change.html#CTRL-A">CTRL-A</A>|  N  CTRL-A	add N to the number at or after the cursor
+|<A HREF="change.html#CTRL-X">CTRL-X</A>|  N  CTRL-X	subtract N from the number at or after the cursor
+
+|<A HREF="change.html#&lt;">&lt;</A>|	  N  &lt;{motion}	move the lines that are moved over with <A HREF="intro.html#{motion}">{motion}</A> one
+			   shiftwidth left
+|<A HREF="change.html#&lt;&lt;">&lt;&lt;</A>|	  N  &lt;&lt;		move N lines one shiftwidth left
+|<A HREF="change.html#&gt;">&gt;</A>|	  N  &gt;{motion}	move the lines that are moved over with <A HREF="intro.html#{motion}">{motion}</A> one
+			   shiftwidth right
+|<A HREF="change.html#&gt;&gt;">&gt;&gt;</A>|	  N  &gt;&gt;		move N lines one shiftwidth right
+|<A HREF="change.html#gq">gq</A>|	  N  gq{motion}	format the lines that are moved over with <A HREF="intro.html#{motion}">{motion}</A> to
+			   <A HREF="options.html#'textwidth'">'textwidth'</A> length
+|<A HREF="change.html#:ce">:ce</A>|	  :[range]ce[nter] [width]
+			center the lines in <A HREF="cmdline.html#[range]">[range]</A>
+|<A HREF="change.html#:le">:le</A>|	  :[range]le[ft] [indent]
+			left-align the lines in <A HREF="cmdline.html#[range]">[range]</A> (with [indent])
+|<A HREF="change.html#:ri">:ri</A>|	  :[range]ri[ght] [width]
+			right-align the lines in <A HREF="cmdline.html#[range]">[range]</A>
+------------------------------------------------------------------------------
+
+*<A NAME="Q_co"></A><B>Q_co</B>*		Complex changes
+
+|<A HREF="change.html#!">!</A>|	   N  !{motion}{command}&lt;CR&gt;
+			<A HREF="change.html#filter">filter</A> the lines that are moved over through {command}
+|<A HREF="change.html#!!">!!</A>|	   N  !!{command}&lt;CR&gt;
+			<A HREF="change.html#filter">filter</A> N lines through {command}
+|<A HREF="change.html#v_!">v_!</A>|	      {visual}!{command}&lt;CR&gt;
+			<A HREF="change.html#filter">filter</A> the highlighted lines through {command}
+|<A HREF="change.html#:range!">:range!</A>|  <A HREF="motion.html#:[range]">:[range]</A>! {command}&lt;CR&gt;
+			<A HREF="change.html#filter">filter</A> <A HREF="cmdline.html#[range]">[range]</A> lines through {command}
+|<A HREF="change.html#=">=</A>|	   N  ={motion}
+			<A HREF="change.html#filter">filter</A> the lines that are moved over through <A HREF="options.html#'equalprg'">'equalprg'</A>
+|<A HREF="change.html#==">==</A>|	   N  ==	<A HREF="change.html#filter">filter</A> N lines through <A HREF="options.html#'equalprg'">'equalprg'</A>
+|<A HREF="change.html#v_=">v_=</A>|	      {visual}=
+			<A HREF="change.html#filter">filter</A> the highlighted lines through <A HREF="options.html#'equalprg'">'equalprg'</A>
+|<A HREF="change.html#:s">:s</A>|	   :[range]s[ubstitute]/{pattern}/{string}/[g][c]
+			substitute {pattern} by {string} in <A HREF="cmdline.html#[range]">[range]</A> lines;
+			   with [g], replace all occurrences of {pattern};
+			   with [c], confirm each replacement
+|<A HREF="change.html#:s">:s</A>|	   :[range]s[ubstitute] [g][c]
+			repeat previous &quot;<A HREF="change.html#:s">:s</A>&quot; with new range and <A HREF="options.html#options">options</A>
+|<A HREF="change.html#&amp;">&amp;</A>|	      &amp;		Repeat previous &quot;<A HREF="change.html#:s">:s</A>&quot; on current line without <A HREF="options.html#options">options</A>
+|<A HREF="change.html#:ret">:ret</A>|	   :[range]ret[ab][!] [tabstop]
+			set <A HREF="options.html#'tabstop'">'tabstop'</A> to new value and adjust white space
+			   accordingly
+------------------------------------------------------------------------------
+
+*<A NAME="Q_vi"></A><B>Q_vi</B>*		<A HREF="visual.html#Visual">Visual</A> mode
+
+|<A HREF="index.html#visual-index">visual-index</A>|	list of <A HREF="visual.html#Visual">Visual</A> mode commands.
+
+|<A HREF="visual.html#v">v</A>|        v		start highlighting characters  }  move cursor and use
+|<A HREF="visual.html#V">V</A>|        V		start highlighting <A HREF="motion.html#linewise">linewise</A>    }  <A HREF="motion.html#operator">operator</A> to affect
+|<A HREF="visual.html#CTRL-V">CTRL-V</A>|   CTRL-V	start highlighting blockwise   }  highlighted text
+|<A HREF="visual.html#v_o">v_o</A>|      o		exchange cursor position with start of highlighting
+|<A HREF="visual.html#gv">gv</A>|       gv		start highlighting on previous visual area
+|<A HREF="visual.html#v_v">v_v</A>|      v		highlight characters or stop highlighting
+|<A HREF="visual.html#v_V">v_V</A>|      V		highlight <A HREF="motion.html#linewise">linewise</A> or stop highlighting
+|<A HREF="visual.html#v_CTRL-V">v_CTRL-V</A>| CTRL-V	highlight blockwise or stop highlighting
+------------------------------------------------------------------------------
+
+*<A NAME="Q_to"></A><B>Q_to</B>*		Text <A HREF="index.html#objects">objects</A> (only in <A HREF="visual.html#Visual">Visual</A> mode or after an <A HREF="motion.html#operator">operator</A>)
+
+|<A HREF="motion.html#v_aw">v_aw</A>|	   N  aw	<A HREF="visual.html#Select">Select</A> &quot;a word&quot;
+|<A HREF="motion.html#v_iw">v_iw</A>|	   N  iw	<A HREF="visual.html#Select">Select</A> &quot;inner word&quot;
+|<A HREF="motion.html#v_aW">v_aW</A>|	   N  aW	<A HREF="visual.html#Select">Select</A> &quot;a |<A HREF="motion.html#WORD">WORD</A>|&quot;
+|<A HREF="motion.html#v_iW">v_iW</A>|	   N  iW	<A HREF="visual.html#Select">Select</A> &quot;inner |<A HREF="motion.html#WORD">WORD</A>|&quot;
+|<A HREF="motion.html#v_as">v_as</A>|	   N  as	<A HREF="visual.html#Select">Select</A> &quot;a sentence&quot;
+|<A HREF="motion.html#v_is">v_is</A>|	   N  is	<A HREF="visual.html#Select">Select</A> &quot;inner sentence&quot;
+|<A HREF="motion.html#v_ap">v_ap</A>|	   N  ap	<A HREF="visual.html#Select">Select</A> &quot;a paragraph&quot;
+|<A HREF="motion.html#v_ip">v_ip</A>|	   N  ip	<A HREF="visual.html#Select">Select</A> &quot;inner paragraph&quot;
+|<A HREF="motion.html#v_ab">v_ab</A>|	   N  ab	<A HREF="visual.html#Select">Select</A> &quot;a block&quot; (from &quot;<A HREF="motion.html#[(">[(</A>&quot; to &quot;<A HREF="motion.html#])">])</A>&quot;)
+|<A HREF="motion.html#v_ib">v_ib</A>|	   N  ib	<A HREF="visual.html#Select">Select</A> &quot;inner block&quot; (from &quot;<A HREF="motion.html#[(">[(</A>&quot; to &quot;<A HREF="motion.html#])">])</A>&quot;)
+|<A HREF="motion.html#v_aB">v_aB</A>|	   N  aB	<A HREF="visual.html#Select">Select</A> &quot;a Block&quot; (from &quot;<A HREF="motion.html#[{">[{</A>&quot; to &quot;<A HREF="motion.html#]}">]}</A>&quot;)
+|<A HREF="motion.html#v_iB">v_iB</A>|	   N  iB	<A HREF="visual.html#Select">Select</A> &quot;inner Block&quot; (from &quot;<A HREF="motion.html#[{">[{</A>&quot; to &quot;<A HREF="motion.html#]}">]}</A>&quot;)
+|<A HREF="motion.html#v_a&gt;">v_a&gt;</A>|	   N  a&gt;	<A HREF="visual.html#Select">Select</A> &quot;a <A HREF="intro.html#&lt;&gt;">&lt;&gt;</A> block&quot;
+|<A HREF="motion.html#v_i&gt;">v_i&gt;</A>|	   N  i&gt;	<A HREF="visual.html#Select">Select</A> &quot;inner <A HREF="intro.html#&lt;&gt;">&lt;&gt;</A> block&quot;
+|<A HREF="motion.html#v_at">v_at</A>|	   N  at	<A HREF="visual.html#Select">Select</A> &quot;a <A HREF="tagsrch.html#tag">tag</A> block&quot; (from &lt;aaa&gt; to &lt;/aaa&gt;)
+|<A HREF="motion.html#v_it">v_it</A>|	   N  it	<A HREF="visual.html#Select">Select</A> &quot;inner <A HREF="tagsrch.html#tag">tag</A> block&quot; (from &lt;aaa&gt; to &lt;/aaa&gt;)
+|<A HREF="motion.html#v_a'">v_a'</A>|	   N  a'	<A HREF="visual.html#Select">Select</A> &quot;a single quoted string&quot;
+|<A HREF="motion.html#v_i'">v_i'</A>|	   N  i'	<A HREF="visual.html#Select">Select</A> &quot;inner single quoted string&quot;
+|<A HREF="motion.html#v_aquote">v_aquote</A>| N  a&quot;	<A HREF="visual.html#Select">Select</A> &quot;a double quoted string&quot;
+|<A HREF="motion.html#v_iquote">v_iquote</A>| N  i&quot;	<A HREF="visual.html#Select">Select</A> &quot;inner double quoted string&quot;
+|<A HREF="motion.html#v_a`">v_a`</A>|	   N  a`	<A HREF="visual.html#Select">Select</A> &quot;a backward quoted string&quot;
+|<A HREF="motion.html#v_i`">v_i`</A>|	   N  i`	<A HREF="visual.html#Select">Select</A> &quot;inner backward quoted string&quot;
+
+------------------------------------------------------------------------------
+
+*<A NAME="Q_re"></A><B>Q_re</B>*		Repeating commands
+
+|<A HREF="repeat.html#.">.</A>|	   N  .		repeat last change (with <A HREF="intro.html#count">count</A> replaced with N)
+|<A HREF="repeat.html#q">q</A>|	      q{a-z}	record typed characters into <A HREF="sponsor.html#register">register</A> {a-z}
+|<A HREF="repeat.html#q">q</A>|	      q{A-Z}	record typed characters, appended to <A HREF="sponsor.html#register">register</A> {a-z}
+|<A HREF="repeat.html#q">q</A>|	      q		stop <A HREF="repeat.html#recording">recording</A>
+|<A HREF="repeat.html#@">@</A>|	   N  @{a-z}	execute the contents of <A HREF="sponsor.html#register">register</A> {a-z} (N times)
+|<A HREF="repeat.html#@@">@@</A>|	   N  @@	   repeat previous @{a-z} (N times)
+|<A HREF="repeat.html#:@">:@</A>|	   :@{a-z}	execute the contents of <A HREF="sponsor.html#register">register</A> {a-z} <A HREF="motion.html#as">as</A> an <A HREF="intro.html#Ex">Ex</A>
+			   command
+|<A HREF="repeat.html#:@@">:@@</A>|	   :@@		repeat previous :@{a-z}
+|<A HREF="repeat.html#:g">:g</A>|	   :[range]g[lobal]/{pattern}/[cmd]
+			execute <A HREF="intro.html#Ex">Ex</A> command [cmd] (default: &quot;<A HREF="various.html#:p">:p</A>&quot;) on the lines
+			   within <A HREF="cmdline.html#[range]">[range]</A> where {pattern} matches
+|<A HREF="repeat.html#:g">:g</A>|	   :[range]g[lobal]!/{pattern}/[cmd]
+			execute <A HREF="intro.html#Ex">Ex</A> command [cmd] (default: &quot;<A HREF="various.html#:p">:p</A>&quot;) on the lines
+			   within <A HREF="cmdline.html#[range]">[range]</A> where {pattern} does NOT match
+|<A HREF="repeat.html#:so">:so</A>|	   :so[urce] <A HREF="editing.html#{file}">{file}</A>
+			read <A HREF="intro.html#Ex">Ex</A> commands from <A HREF="editing.html#{file}">{file}</A>
+|<A HREF="repeat.html#:so">:so</A>|	   :so[urce]! <A HREF="editing.html#{file}">{file}</A>
+			read Vim commands from <A HREF="editing.html#{file}">{file}</A>
+|<A HREF="various.html#:sl">:sl</A>|	   :sl[eep] [sec]
+			don't <A HREF="diff.html#do">do</A> anything for [sec] seconds
+|<A HREF="various.html#gs">gs</A>|	   N  gs	goto Sleep for N seconds
+------------------------------------------------------------------------------
+
+*<A NAME="Q_km"></A><B>Q_km</B>*		Key <A HREF="map.html#mapping">mapping</A>
+
+|<A HREF="map.html#:map">:map</A>|       :ma[p] <A HREF="map.html#{lhs}">{lhs}</A> <A HREF="map.html#{rhs}">{rhs}</A>	  map <A HREF="map.html#{lhs}">{lhs}</A> to <A HREF="map.html#{rhs}">{rhs}</A> in <A HREF="intro.html#Normal">Normal</A> and <A HREF="visual.html#Visual">Visual</A> mode
+|<A HREF="map.html#:map!">:map!</A>|      :ma[p]! <A HREF="map.html#{lhs}">{lhs}</A> <A HREF="map.html#{rhs}">{rhs}</A>  map <A HREF="map.html#{lhs}">{lhs}</A> to <A HREF="map.html#{rhs}">{rhs}</A> in <A HREF="insert.html#Insert">Insert</A> and <A HREF="cmdline.html#Command-line">Command-line</A>
+				     mode
+|<A HREF="map.html#:noremap">:noremap</A>|   :no[remap][!] <A HREF="map.html#{lhs}">{lhs}</A> <A HREF="map.html#{rhs}">{rhs}</A>
+				  same <A HREF="motion.html#as">as</A> &quot;<A HREF="map.html#:map">:map</A>&quot;, no remapping for this <A HREF="map.html#{rhs}">{rhs}</A>
+|<A HREF="map.html#:unmap">:unmap</A>|     :unm[ap] <A HREF="map.html#{lhs}">{lhs}</A>	  remove the <A HREF="map.html#mapping">mapping</A> of <A HREF="map.html#{lhs}">{lhs}</A> for <A HREF="intro.html#Normal">Normal</A> and
+				     <A HREF="visual.html#Visual">Visual</A> mode
+|<A HREF="map.html#:unmap!">:unmap!</A>|    :unm[ap]! <A HREF="map.html#{lhs}">{lhs}</A>	  remove the <A HREF="map.html#mapping">mapping</A> of <A HREF="map.html#{lhs}">{lhs}</A> for <A HREF="insert.html#Insert">Insert</A> and
+				     <A HREF="cmdline.html#Command-line">Command-line</A> mode
+|<A HREF="map.html#:map_l">:map_l</A>|     :ma[p] [lhs]	  list mappings (starting with [lhs]) for
+				     <A HREF="intro.html#Normal">Normal</A> and <A HREF="visual.html#Visual">Visual</A> mode
+|<A HREF="map.html#:map_l!">:map_l!</A>|    :ma[p]! [lhs]	  list mappings (starting with [lhs]) for
+				     <A HREF="insert.html#Insert">Insert</A> and <A HREF="cmdline.html#Command-line">Command-line</A> mode
+|<A HREF="map.html#:cmap">:cmap</A>|      :cmap/:cunmap/:cnoremap
+				  like &quot;:map!&quot;/&quot;:unmap!&quot;/&quot;:noremap!&quot; but for
+				     <A HREF="cmdline.html#Command-line">Command-line</A> mode only
+|<A HREF="map.html#:imap">:imap</A>|      :imap/:iunmap/:inoremap
+				  like &quot;:map!&quot;/&quot;:unmap!&quot;/&quot;:noremap!&quot; but for
+				     <A HREF="insert.html#Insert">Insert</A> mode only
+|<A HREF="map.html#:nmap">:nmap</A>|      :nmap/:nunmap/:nnoremap
+				  like &quot;:map&quot;/&quot;:unmap&quot;/&quot;:noremap&quot; but for
+				     <A HREF="intro.html#Normal">Normal</A> mode only
+|<A HREF="map.html#:vmap">:vmap</A>|      :vmap/:vunmap/:vnoremap
+				  like &quot;:map&quot;/&quot;:unmap&quot;/&quot;:noremap&quot; but for
+				     <A HREF="visual.html#Visual">Visual</A> mode only
+|<A HREF="map.html#:omap">:omap</A>|      :omap/:ounmap/:onoremap
+				  like &quot;:map&quot;/&quot;:unmap&quot;/&quot;:noremap&quot; but only for
+				     when an <A HREF="motion.html#operator">operator</A> is pending
+|<A HREF="map.html#:mapc">:mapc</A>|      :mapc[lear]	  remove mappings for <A HREF="intro.html#Normal">Normal</A> and <A HREF="visual.html#Visual">Visual</A> mode
+|<A HREF="map.html#:mapc">:mapc</A>|      :mapc[lear]!	  remove mappings for <A HREF="insert.html#Insert">Insert</A> and <A HREF="cmdline.html#Cmdline">Cmdline</A> mode
+|<A HREF="map.html#:imapc">:imapc</A>|     :imapc[lear]	  remove mappings for <A HREF="insert.html#Insert">Insert</A> mode
+|<A HREF="map.html#:vmapc">:vmapc</A>|     :vmapc[lear]	  remove mappings for <A HREF="visual.html#Visual">Visual</A> mode
+|<A HREF="map.html#:omapc">:omapc</A>|     :omapc[lear]	  remove mappings for <A HREF="intro.html#Operator-pending">Operator-pending</A> mode
+|<A HREF="map.html#:nmapc">:nmapc</A>|     :nmapc[lear]	  remove mappings for <A HREF="intro.html#Normal">Normal</A> mode
+|<A HREF="map.html#:cmapc">:cmapc</A>|     :cmapc[lear]	  remove mappings for <A HREF="cmdline.html#Cmdline">Cmdline</A> mode
+|<A HREF="starting.html#:mkexrc">:mkexrc</A>|    :mk[exrc][!] [file]  write current mappings, <A HREF="map.html#abbreviations">abbreviations</A>, and
+				     settings to [file] (default: &quot;<A HREF="starting.html#.exrc">.exrc</A>&quot;;
+				     use ! to overwrite)
+|<A HREF="starting.html#:mkvimrc">:mkvimrc</A>|   :mkv[imrc][!] [file]
+				  same <A HREF="motion.html#as">as</A> &quot;<A HREF="starting.html#:mkexrc">:mkexrc</A>&quot;, but with default &quot;<A HREF="starting.html#.vimrc">.vimrc</A>&quot;
+|<A HREF="starting.html#:mksession">:mksession</A>| :mks[ession][!] [file]
+				  like &quot;<A HREF="starting.html#:mkvimrc">:mkvimrc</A>&quot;, but store current files,
+				     <A HREF="windows.html#windows">windows</A>, etc. too, to be able to continue
+				     this session later
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ab"></A><B>Q_ab</B>*		<A HREF="map.html#Abbreviations">Abbreviations</A>
+
+|<A HREF="map.html#:abbreviate">:abbreviate</A>|	:ab[breviate] <A HREF="map.html#{lhs}">{lhs}</A> <A HREF="map.html#{rhs}">{rhs}</A>  add abbreviation for <A HREF="map.html#{lhs}">{lhs}</A> to <A HREF="map.html#{rhs}">{rhs}</A>
+|<A HREF="map.html#:abbreviate">:abbreviate</A>|	:ab[breviate] <A HREF="map.html#{lhs}">{lhs}</A>	   show abbr's that start with <A HREF="map.html#{lhs}">{lhs}</A>
+|<A HREF="map.html#:abbreviate">:abbreviate</A>|	:ab[breviate]		   show all <A HREF="map.html#abbreviations">abbreviations</A>
+|<A HREF="map.html#:unabbreviate">:unabbreviate</A>|	:una[bbreviate] <A HREF="map.html#{lhs}">{lhs}</A>	   remove abbreviation for <A HREF="map.html#{lhs}">{lhs}</A>
+|<A HREF="map.html#:noreabbrev">:noreabbrev</A>|	:norea[bbrev] [lhs] [rhs]  like &quot;<A HREF="map.html#:ab">:ab</A>&quot;, but don't remap [rhs]
+|<A HREF="map.html#:iabbrev">:iabbrev</A>|	:iab/:iunab/:inoreab	   like &quot;<A HREF="map.html#:ab">:ab</A>&quot;, but only for <A HREF="insert.html#Insert">Insert</A> mode
+|<A HREF="map.html#:cabbrev">:cabbrev</A>|	:cab/:cunab/:cnoreab	   like &quot;<A HREF="map.html#:ab">:ab</A>&quot;, but only for
+						<A HREF="cmdline.html#Command-line">Command-line</A> mode
+|<A HREF="map.html#:abclear">:abclear</A>|	:abc[lear]		   remove all <A HREF="map.html#abbreviations">abbreviations</A>
+|<A HREF="map.html#:cabclear">:cabclear</A>|	:cabc[lear]		   remove all abbr's for <A HREF="cmdline.html#Cmdline">Cmdline</A> mode
+|<A HREF="map.html#:iabclear">:iabclear</A>|	:iabc[lear]		   remove all abbr's for <A HREF="insert.html#Insert">Insert</A> mode
+------------------------------------------------------------------------------
+
+*<A NAME="Q_op"></A><B>Q_op</B>*		Options
+
+|<A HREF="options.html#:set">:set</A>|		:se[t]			  show all modified <A HREF="options.html#options">options</A>
+|<A HREF="options.html#:set">:set</A>|		:se[t] all		  show all non-termcap <A HREF="options.html#options">options</A>
+|<A HREF="options.html#:set">:set</A>|		:se[t] <A HREF="term.html#termcap">termcap</A>		  show all <A HREF="term.html#termcap">termcap</A> <A HREF="options.html#options">options</A>
+|<A HREF="options.html#:set">:set</A>|		:se[t] {option}		  set <A HREF="options.html#boolean">boolean</A> option (switch <A HREF="motion.html#it">it</A> on),
+					  show string or number option
+|<A HREF="options.html#:set">:set</A>|		:se[t] no{option}	  reset <A HREF="options.html#boolean">boolean</A> option (switch <A HREF="motion.html#it">it</A> off)
+|<A HREF="options.html#:set">:set</A>|		:se[t] inv{option}	  invert <A HREF="options.html#boolean">boolean</A> option
+|<A HREF="options.html#:set">:set</A>|		:se[t] {option}={value}	  set string/number option to {value}
+|<A HREF="options.html#:set">:set</A>|		:se[t] {option}+={value}  append {value} to string option, add
+					  {value} to number option
+|<A HREF="options.html#:set">:set</A>|		:se[t] {option}-={value}  remove {value} to string option,
+					  subtract {value} from number option
+|<A HREF="options.html#:set">:set</A>|		:se[t] {option}?	  show value of {option}
+|<A HREF="options.html#:set">:set</A>|		:se[t] {option}&amp;	  reset {option} to its default value
+
+|<A HREF="options.html#:setlocal">:setlocal</A>|	:setl[ocal]		  like &quot;:set&quot; but set the local value
+					  for <A HREF="options.html#options">options</A> that have one
+|<A HREF="options.html#:setglobal">:setglobal</A>|	:setg[lobal]		  like &quot;:set&quot; but set the global value
+					  of a local option
+
+|<A HREF="options.html#:fix">:fix</A>|		:fix[del]		  set value of <A HREF="term.html#'t_kD'">'t_kD'</A> according to
+					  value of <A HREF="term.html#'t_kb'">'t_kb'</A>
+|<A HREF="options.html#:options">:options</A>|	:opt[ions]		  open a new <A HREF="windows.html#window">window</A> to <A HREF="starting.html#view">view</A> and set
+					  <A HREF="options.html#options">options</A>, grouped by functionality,
+					  a one line explanation and links to
+					  the help
+
+
+Short explanation of each option:		*<A NAME="option-list"></A><B>option-list</B>*
+<A HREF="options.html#'aleph'">'aleph'</A>		  <A HREF="options.html#'al'">'al'</A>	    ASCII code of the <A HREF="print.html#letter">letter</A> <A HREF="options.html#Aleph">Aleph</A> (Hebrew)
+<A HREF="options.html#'allowrevins'">'allowrevins'</A>	  <A HREF="options.html#'ari'">'ari'</A>     allow CTRL-_ in <A HREF="insert.html#Insert">Insert</A> and <A HREF="cmdline.html#Command-line">Command-line</A> mode
+<A HREF="options.html#'altkeymap'">'altkeymap'</A>	  <A HREF="options.html#'akm'">'akm'</A>     for default second language (Farsi/Hebrew)
+<A HREF="options.html#'ambiwidth'">'ambiwidth'</A>	  <A HREF="options.html#'ambw'">'ambw'</A>    what to <A HREF="diff.html#do">do</A> with <A HREF="mbyte.html#Unicode">Unicode</A> chars of ambiguous width
+<A HREF="options.html#'antialias'">'antialias'</A>	  <A HREF="options.html#'anti'">'anti'</A>    <A HREF="os_mac.html#Mac">Mac</A> OS X: use smooth, antialiased fonts
+<A HREF="options.html#'autochdir'">'autochdir'</A>	  <A HREF="options.html#'acd'">'acd'</A>     change directory to the file in the current <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'arabic'">'arabic'</A>	  <A HREF="options.html#'arab'">'arab'</A>    for <A HREF="arabic.html#Arabic">Arabic</A> <A HREF="motion.html#as">as</A> a default second language
+<A HREF="options.html#'arabicshape'">'arabicshape'</A>	  <A HREF="options.html#'arshape'">'arshape'</A> <A HREF="diff.html#do">do</A> shaping for <A HREF="arabic.html#Arabic">Arabic</A> characters
+<A HREF="options.html#'autoindent'">'autoindent'</A>	  <A HREF="options.html#'ai'">'ai'</A>	    take indent for new line from previous line
+<A HREF="options.html#'autoread'">'autoread'</A>	  <A HREF="options.html#'ar'">'ar'</A>	    autom. read file when changed outside of Vim
+<A HREF="options.html#'autowrite'">'autowrite'</A>	  <A HREF="options.html#'aw'">'aw'</A>	    automatically write file if changed
+<A HREF="options.html#'autowriteall'">'autowriteall'</A>	  <A HREF="options.html#'awa'">'awa'</A>     <A HREF="motion.html#as">as</A> <A HREF="options.html#'autowrite'">'autowrite'</A>, but works with more commands
+<A HREF="options.html#'background'">'background'</A>	  <A HREF="options.html#'bg'">'bg'</A>	    &quot;dark&quot; or &quot;light&quot;, used for highlight colors
+<A HREF="options.html#'backspace'">'backspace'</A>	  <A HREF="options.html#'bs'">'bs'</A>	    how backspace works at start of line
+<A HREF="options.html#'backup'">'backup'</A>	  <A HREF="options.html#'bk'">'bk'</A>	    keep <A HREF="editing.html#backup">backup</A> file after overwriting a file
+<A HREF="options.html#'backupcopy'">'backupcopy'</A>	  <A HREF="options.html#'bkc'">'bkc'</A>     make <A HREF="editing.html#backup">backup</A> <A HREF="motion.html#as">as</A> a copy, don't rename the file
+<A HREF="options.html#'backupdir'">'backupdir'</A>	  <A HREF="options.html#'bdir'">'bdir'</A>    list of directories for the <A HREF="editing.html#backup">backup</A> file
+<A HREF="options.html#'backupext'">'backupext'</A>	  <A HREF="options.html#'bex'">'bex'</A>     extension used for the <A HREF="editing.html#backup">backup</A> file
+<A HREF="options.html#'backupskip'">'backupskip'</A>	  <A HREF="options.html#'bsk'">'bsk'</A>     no <A HREF="editing.html#backup">backup</A> for files that match these patterns
+<A HREF="options.html#'balloondelay'">'balloondelay'</A>	  <A HREF="options.html#'bdlay'">'bdlay'</A>   delay in mS before a balloon may pop up
+<A HREF="options.html#'ballooneval'">'ballooneval'</A>	  <A HREF="options.html#'beval'">'beval'</A>   switch on balloon evaluation
+<A HREF="options.html#'balloonexpr'">'balloonexpr'</A>	  <A HREF="options.html#'bexpr'">'bexpr'</A>   <A HREF="eval.html#expression">expression</A> to show in balloon
+<A HREF="options.html#'binary'">'binary'</A>	  <A HREF="options.html#'bin'">'bin'</A>     read/write/edit file in binary mode
+<A HREF="options.html#'bioskey'">'bioskey'</A>	  <A HREF="options.html#'biosk'">'biosk'</A>   <A HREF="os_msdos.html#MS-DOS">MS-DOS</A>: use bios calls for input characters
+<A HREF="options.html#'bomb'">'bomb'</A>			    prepend a Byte Order <A HREF="motion.html#Mark">Mark</A> to the file
+<A HREF="options.html#'breakat'">'breakat'</A>	  <A HREF="options.html#'brk'">'brk'</A>     characters that may cause a line break
+<A HREF="options.html#'browsedir'">'browsedir'</A>	  <A HREF="options.html#'bsdir'">'bsdir'</A>   which directory to start browsing in
+<A HREF="options.html#'bufhidden'">'bufhidden'</A>	  <A HREF="options.html#'bh'">'bh'</A>	    what to <A HREF="diff.html#do">do</A> when buffer is no longer in <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'buflisted'">'buflisted'</A>	  <A HREF="options.html#'bl'">'bl'</A>	    whether the buffer shows up in the buffer list
+<A HREF="options.html#'buftype'">'buftype'</A>	  <A HREF="options.html#'bt'">'bt'</A>	    special type of buffer
+<A HREF="options.html#'casemap'">'casemap'</A>	  <A HREF="options.html#'cmp'">'cmp'</A>     specifies how <A HREF="change.html#case">case</A> of letters is changed
+<A HREF="options.html#'cdpath'">'cdpath'</A>	  <A HREF="options.html#'cd'">'cd'</A>	    list of directories searched with &quot;<A HREF="editing.html#:cd">:cd</A>&quot;
+<A HREF="options.html#'cedit'">'cedit'</A>			    key used to open the command-line <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'charconvert'">'charconvert'</A>	  <A HREF="options.html#'ccv'">'ccv'</A>     <A HREF="eval.html#expression">expression</A> for character encoding conversion
+<A HREF="options.html#'cindent'">'cindent'</A>	  <A HREF="options.html#'cin'">'cin'</A>     <A HREF="diff.html#do">do</A> C program indenting
+<A HREF="options.html#'cinkeys'">'cinkeys'</A>	  <A HREF="options.html#'cink'">'cink'</A>    keys that trigger indent when <A HREF="options.html#'cindent'">'cindent'</A> is set
+<A HREF="options.html#'cinoptions'">'cinoptions'</A>	  <A HREF="options.html#'cino'">'cino'</A>    how to <A HREF="diff.html#do">do</A> indenting when <A HREF="options.html#'cindent'">'cindent'</A> is set
+<A HREF="options.html#'cinwords'">'cinwords'</A>	  <A HREF="options.html#'cinw'">'cinw'</A>    words where <A HREF="options.html#'si'">'si'</A> and <A HREF="options.html#'cin'">'cin'</A> add an indent
+<A HREF="options.html#'clipboard'">'clipboard'</A>	  <A HREF="options.html#'cb'">'cb'</A>	    use the <A HREF="gui.html#clipboard">clipboard</A> <A HREF="motion.html#as">as</A> the unnamed <A HREF="sponsor.html#register">register</A>
+<A HREF="options.html#'cmdheight'">'cmdheight'</A>	  <A HREF="options.html#'ch'">'ch'</A>	    number of lines to use for the command-line
+<A HREF="options.html#'cmdwinheight'">'cmdwinheight'</A>	  <A HREF="options.html#'cwh'">'cwh'</A>     height of the command-line <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'colorcolumn'">'colorcolumn'</A>	  <A HREF="options.html#'cc'">'cc'</A>	    columns to highlight
+<A HREF="options.html#'columns'">'columns'</A>	  <A HREF="options.html#'co'">'co'</A>	    number of columns in the display
+<A HREF="options.html#'comments'">'comments'</A>	  <A HREF="options.html#'com'">'com'</A>     patterns that can start a comment line
+<A HREF="options.html#'commentstring'">'commentstring'</A>   <A HREF="options.html#'cms'">'cms'</A>     <A HREF="autocmd.html#template">template</A> for comments; used for fold marker
+<A HREF="options.html#'compatible'">'compatible'</A>	  <A HREF="options.html#'cp'">'cp'</A>	    behave Vi-compatible <A HREF="motion.html#as">as</A> much <A HREF="motion.html#as">as</A> possible
+<A HREF="options.html#'complete'">'complete'</A>	  <A HREF="options.html#'cpt'">'cpt'</A>     specify how <A HREF="insert.html#Insert">Insert</A> mode completion works
+<A HREF="options.html#'completefunc'">'completefunc'</A>	  <A HREF="options.html#'cfu'">'cfu'</A>     function to be used for <A HREF="insert.html#Insert">Insert</A> mode completion
+<A HREF="options.html#'completeopt'">'completeopt'</A>	  <A HREF="options.html#'cot'">'cot'</A>     <A HREF="options.html#options">options</A> for <A HREF="insert.html#Insert">Insert</A> mode completion
+<A HREF="options.html#'concealcursor'">'concealcursor'</A>	  <A HREF="options.html#'cocu'">'cocu'</A>    whether concealable text is hidden in cursor line
+<A HREF="options.html#'conceallevel'">'conceallevel'</A>	  <A HREF="options.html#'cole'">'cole'</A>    whether concealable text is shown or hidden
+<A HREF="options.html#'confirm'">'confirm'</A>	  <A HREF="options.html#'cf'">'cf'</A>	    ask what to <A HREF="diff.html#do">do</A> about unsaved/read-only files
+<A HREF="options.html#'conskey'">'conskey'</A>	  <A HREF="options.html#'consk'">'consk'</A>   get keys directly from console (MS-DOS only)
+<A HREF="options.html#'copyindent'">'copyindent'</A>	  <A HREF="options.html#'ci'">'ci'</A>	    make <A HREF="options.html#'autoindent'">'autoindent'</A> use existing indent structure
+<A HREF="options.html#'cpoptions'">'cpoptions'</A>	  <A HREF="options.html#'cpo'">'cpo'</A>     flags for Vi-compatible behavior
+<A HREF="options.html#'cryptmethod'">'cryptmethod'</A>	  <A HREF="options.html#'cm'">'cm'</A>	    type of <A HREF="editing.html#encryption">encryption</A> to use for file <A HREF="editing.html#writing">writing</A>
+<A HREF="options.html#'cscopepathcomp'">'cscopepathcomp'</A>  <A HREF="options.html#'cspc'">'cspc'</A>    how many components of the path to show
+<A HREF="options.html#'cscopeprg'">'cscopeprg'</A>       <A HREF="options.html#'csprg'">'csprg'</A>   command to execute <A HREF="if_cscop.html#cscope">cscope</A>
+<A HREF="options.html#'cscopequickfix'">'cscopequickfix'</A>  <A HREF="options.html#'csqf'">'csqf'</A>    use <A HREF="quickfix.html#quickfix">quickfix</A> <A HREF="windows.html#window">window</A> for <A HREF="if_cscop.html#cscope">cscope</A> results
+<A HREF="options.html#'cscoperelative'">'cscoperelative'</A>  <A HREF="options.html#'csre'">'csre'</A>    Use cscope.out path basename <A HREF="motion.html#as">as</A> prefix
+<A HREF="options.html#'cscopetag'">'cscopetag'</A>       <A HREF="options.html#'cst'">'cst'</A>     use <A HREF="if_cscop.html#cscope">cscope</A> for <A HREF="tagsrch.html#tag">tag</A> commands
+<A HREF="options.html#'cscopetagorder'">'cscopetagorder'</A>  <A HREF="options.html#'csto'">'csto'</A>    determines &quot;<A HREF="if_cscop.html#:cstag">:cstag</A>&quot; search order
+<A HREF="options.html#'cscopeverbose'">'cscopeverbose'</A>   <A HREF="options.html#'csverb'">'csverb'</A>  give <A HREF="message.html#messages">messages</A> when adding a <A HREF="if_cscop.html#cscope">cscope</A> database
+<A HREF="options.html#'cursorbind'">'cursorbind'</A>	  <A HREF="options.html#'crb'">'crb'</A>     move cursor in <A HREF="windows.html#window">window</A> <A HREF="motion.html#as">as</A> <A HREF="motion.html#it">it</A> moves in other <A HREF="windows.html#windows">windows</A>
+<A HREF="options.html#'cursorcolumn'">'cursorcolumn'</A>	  <A HREF="options.html#'cuc'">'cuc'</A>	    highlight the screen column of the cursor
+<A HREF="options.html#'cursorline'">'cursorline'</A>	  <A HREF="options.html#'cul'">'cul'</A>	    highlight the screen line of the cursor
+<A HREF="options.html#'debug'">'debug'</A>			    set to &quot;msg&quot; to see all error <A HREF="message.html#messages">messages</A>
+<A HREF="options.html#'define'">'define'</A>	  <A HREF="options.html#'def'">'def'</A>     <A HREF="pattern.html#pattern">pattern</A> to be used to find a <A HREF="map.html#macro">macro</A> definition
+<A HREF="options.html#'delcombine'">'delcombine'</A>	  <A HREF="options.html#'deco'">'deco'</A>    delete combining characters on their own
+<A HREF="options.html#'dictionary'">'dictionary'</A>	  <A HREF="options.html#'dict'">'dict'</A>    list of file names used for keyword completion
+<A HREF="options.html#'diff'">'diff'</A>			    use <A HREF="diff.html#diff">diff</A> mode for the current <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'diffexpr'">'diffexpr'</A>	  <A HREF="options.html#'dex'">'dex'</A>     <A HREF="eval.html#expression">expression</A> used to obtain a <A HREF="diff.html#diff">diff</A> file
+<A HREF="options.html#'diffopt'">'diffopt'</A>	  <A HREF="options.html#'dip'">'dip'</A>     <A HREF="options.html#options">options</A> for using <A HREF="diff.html#diff">diff</A> mode
+<A HREF="options.html#'digraph'">'digraph'</A>	  <A HREF="options.html#'dg'">'dg'</A>	    enable the entering of <A HREF="digraph.html#digraphs">digraphs</A> in <A HREF="insert.html#Insert">Insert</A> mode
+<A HREF="options.html#'directory'">'directory'</A>	  <A HREF="options.html#'dir'">'dir'</A>     list of directory names for the swap file
+<A HREF="options.html#'display'">'display'</A>	  <A HREF="options.html#'dy'">'dy'</A>	    list of flags for how to display text
+<A HREF="options.html#'eadirection'">'eadirection'</A>	  <A HREF="options.html#'ead'">'ead'</A>     in which direction <A HREF="options.html#'equalalways'">'equalalways'</A> works
+<A HREF="options.html#'edcompatible'">'edcompatible'</A>	  <A HREF="options.html#'ed'">'ed'</A>	    toggle flags of &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; command
+<A HREF="options.html#'encoding'">'encoding'</A>	  <A HREF="options.html#'enc'">'enc'</A>     encoding used internally
+<A HREF="options.html#'endofline'">'endofline'</A>	  <A HREF="options.html#'eol'">'eol'</A>     write <A HREF="intro.html#&lt;EOL&gt;">&lt;EOL&gt;</A> for last line in file
+<A HREF="options.html#'equalalways'">'equalalways'</A>	  <A HREF="options.html#'ea'">'ea'</A>	    <A HREF="windows.html#windows">windows</A> are automatically made the same size
+<A HREF="options.html#'equalprg'">'equalprg'</A>	  <A HREF="options.html#'ep'">'ep'</A>	    external program to use for &quot;<A HREF="change.html#=">=</A>&quot; command
+<A HREF="options.html#'errorbells'">'errorbells'</A>	  <A HREF="options.html#'eb'">'eb'</A>	    ring the bell for error <A HREF="message.html#messages">messages</A>
+<A HREF="options.html#'errorfile'">'errorfile'</A>	  <A HREF="options.html#'ef'">'ef'</A>	    name of the errorfile for the QuickFix mode
+<A HREF="options.html#'errorformat'">'errorformat'</A>	  <A HREF="options.html#'efm'">'efm'</A>     description of the lines in the error file
+<A HREF="options.html#'esckeys'">'esckeys'</A>	  <A HREF="options.html#'ek'">'ek'</A>	    recognize function keys in <A HREF="insert.html#Insert">Insert</A> mode
+<A HREF="options.html#'eventignore'">'eventignore'</A>	  <A HREF="options.html#'ei'">'ei'</A>	    <A HREF="autocmd.html#autocommand">autocommand</A> events that are ignored
+<A HREF="options.html#'expandtab'">'expandtab'</A>	  <A HREF="options.html#'et'">'et'</A>	    use spaces when <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> is inserted
+<A HREF="options.html#'exrc'">'exrc'</A>		  <A HREF="options.html#'ex'">'ex'</A>	    read <A HREF="starting.html#.vimrc">.vimrc</A> and <A HREF="starting.html#.exrc">.exrc</A> in the current directory
+<A HREF="options.html#'fileencoding'">'fileencoding'</A>	  <A HREF="options.html#'fenc'">'fenc'</A>    file encoding for <A HREF="mbyte.html#multi-byte">multi-byte</A> text
+<A HREF="options.html#'fileencodings'">'fileencodings'</A>   <A HREF="options.html#'fencs'">'fencs'</A>   automatically detected character encodings
+<A HREF="options.html#'fileformat'">'fileformat'</A>	  <A HREF="options.html#'ff'">'ff'</A>	    file format used for file I/O
+<A HREF="options.html#'fileformats'">'fileformats'</A>	  <A HREF="options.html#'ffs'">'ffs'</A>     automatically detected values for <A HREF="options.html#'fileformat'">'fileformat'</A>
+<A HREF="options.html#'fileignorecase'">'fileignorecase'</A>  <A HREF="options.html#'fic'">'fic'</A>     ignore <A HREF="change.html#case">case</A> when using file names
+<A HREF="options.html#'filetype'">'filetype'</A>	  <A HREF="options.html#'ft'">'ft'</A>	    type of file, used for autocommands
+<A HREF="options.html#'fillchars'">'fillchars'</A>	  <A HREF="options.html#'fcs'">'fcs'</A>     characters to use for displaying special items
+<A HREF="options.html#'fkmap'">'fkmap'</A>		  <A HREF="options.html#'fk'">'fk'</A>	    <A HREF="farsi.html#Farsi">Farsi</A> keyboard <A HREF="map.html#mapping">mapping</A>
+<A HREF="options.html#'foldclose'">'foldclose'</A>	  <A HREF="options.html#'fcl'">'fcl'</A>     close a fold when the cursor leaves <A HREF="motion.html#it">it</A>
+<A HREF="options.html#'foldcolumn'">'foldcolumn'</A>	  <A HREF="options.html#'fdc'">'fdc'</A>     width of the column used to indicate <A HREF="fold.html#folds">folds</A>
+<A HREF="options.html#'foldenable'">'foldenable'</A>	  <A HREF="options.html#'fen'">'fen'</A>     set to display all <A HREF="fold.html#folds">folds</A> open
+<A HREF="options.html#'foldexpr'">'foldexpr'</A>	  <A HREF="options.html#'fde'">'fde'</A>     <A HREF="eval.html#expression">expression</A> used when <A HREF="options.html#'foldmethod'">'foldmethod'</A> is &quot;<A HREF="eval.html#expr">expr</A>&quot;
+<A HREF="options.html#'foldignore'">'foldignore'</A>	  <A HREF="options.html#'fdi'">'fdi'</A>     ignore lines when <A HREF="options.html#'foldmethod'">'foldmethod'</A> is &quot;indent&quot;
+<A HREF="options.html#'foldlevel'">'foldlevel'</A>	  <A HREF="options.html#'fdl'">'fdl'</A>     close <A HREF="fold.html#folds">folds</A> with a level higher than this
+<A HREF="options.html#'foldlevelstart'">'foldlevelstart'</A>  <A HREF="options.html#'fdls'">'fdls'</A>    <A HREF="options.html#'foldlevel'">'foldlevel'</A> when starting to edit a file
+<A HREF="options.html#'foldmarker'">'foldmarker'</A>	  <A HREF="options.html#'fmr'">'fmr'</A>     markers used when <A HREF="options.html#'foldmethod'">'foldmethod'</A> is &quot;marker&quot;
+<A HREF="options.html#'foldmethod'">'foldmethod'</A>	  <A HREF="options.html#'fdm'">'fdm'</A>     <A HREF="fold.html#folding">folding</A> type
+<A HREF="options.html#'foldminlines'">'foldminlines'</A>	  <A HREF="options.html#'fml'">'fml'</A>     minimum number of lines for a fold to be closed
+<A HREF="options.html#'foldnestmax'">'foldnestmax'</A>	  <A HREF="options.html#'fdn'">'fdn'</A>     maximum fold depth
+<A HREF="options.html#'foldopen'">'foldopen'</A>	  <A HREF="options.html#'fdo'">'fdo'</A>     for which commands a fold will be opened
+<A HREF="options.html#'foldtext'">'foldtext'</A>	  <A HREF="options.html#'fdt'">'fdt'</A>     <A HREF="eval.html#expression">expression</A> used to display for a closed fold
+<A HREF="options.html#'formatlistpat'">'formatlistpat'</A>   <A HREF="options.html#'flp'">'flp'</A>     <A HREF="pattern.html#pattern">pattern</A> used to recognize a list header
+<A HREF="options.html#'formatoptions'">'formatoptions'</A>   <A HREF="options.html#'fo'">'fo'</A>	    how automatic <A HREF="change.html#formatting">formatting</A> is to be done
+<A HREF="options.html#'formatprg'">'formatprg'</A>	  <A HREF="options.html#'fp'">'fp'</A>	    name of external program used with &quot;<A HREF="change.html#gq">gq</A>&quot; command
+<A HREF="options.html#'formatexpr'">'formatexpr'</A>	  <A HREF="options.html#'fex'">'fex'</A>     <A HREF="eval.html#expression">expression</A> used with &quot;<A HREF="change.html#gq">gq</A>&quot; command
+<A HREF="options.html#'fsync'">'fsync'</A>		  <A HREF="options.html#'fs'">'fs'</A>	    whether to invoke fsync() after file write
+<A HREF="options.html#'gdefault'">'gdefault'</A>	  <A HREF="options.html#'gd'">'gd'</A>	    the &quot;<A HREF="change.html#:substitute">:substitute</A>&quot; flag '<A HREF="index.html#g">g</A>' is default on
+<A HREF="options.html#'grepformat'">'grepformat'</A>	  <A HREF="options.html#'gfm'">'gfm'</A>     format of <A HREF="options.html#'grepprg'">'grepprg'</A> output
+<A HREF="options.html#'grepprg'">'grepprg'</A>	  <A HREF="options.html#'gp'">'gp'</A>	    program to use for &quot;<A HREF="quickfix.html#:grep">:grep</A>&quot;
+<A HREF="options.html#'guicursor'">'guicursor'</A>	  <A HREF="options.html#'gcr'">'gcr'</A>     <A HREF="gui.html#GUI">GUI</A>: settings for cursor shape and blinking
+<A HREF="options.html#'guifont'">'guifont'</A>	  <A HREF="options.html#'gfn'">'gfn'</A>     <A HREF="gui.html#GUI">GUI</A>: Name(s) of font(s) to be used
+<A HREF="options.html#'guifontset'">'guifontset'</A>	  <A HREF="options.html#'gfs'">'gfs'</A>     <A HREF="gui.html#GUI">GUI</A>: Names of <A HREF="mbyte.html#multi-byte">multi-byte</A> fonts to be used
+<A HREF="options.html#'guifontwide'">'guifontwide'</A>	  <A HREF="options.html#'gfw'">'gfw'</A>     list of font names for double-wide characters
+<A HREF="options.html#'guiheadroom'">'guiheadroom'</A>	  <A HREF="options.html#'ghr'">'ghr'</A>     <A HREF="gui.html#GUI">GUI</A>: pixels room for <A HREF="windows.html#window">window</A> decorations
+<A HREF="options.html#'guioptions'">'guioptions'</A>	  <A HREF="options.html#'go'">'go'</A>	    <A HREF="gui.html#GUI">GUI</A>: Which components and <A HREF="options.html#options">options</A> are used
+<A HREF="options.html#'guipty'">'guipty'</A>		    <A HREF="gui.html#GUI">GUI</A>: try to use a pseudo-tty for &quot;<A HREF="various.html#:!">:!</A>&quot; commands
+<A HREF="options.html#'guitablabel'">'guitablabel'</A>	  <A HREF="options.html#'gtl'">'gtl'</A>     <A HREF="gui.html#GUI">GUI</A>: custom label for a <A HREF="intro.html#tab">tab</A> page
+<A HREF="options.html#'guitabtooltip'">'guitabtooltip'</A>   <A HREF="options.html#'gtt'">'gtt'</A>     <A HREF="gui.html#GUI">GUI</A>: custom tooltip for a <A HREF="intro.html#tab">tab</A> page
+<A HREF="options.html#'helpfile'">'helpfile'</A>	  <A HREF="options.html#'hf'">'hf'</A>	    full path name of the main help file
+<A HREF="options.html#'helpheight'">'helpheight'</A>	  <A HREF="options.html#'hh'">'hh'</A>	    minimum height of a new help <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'helplang'">'helplang'</A>	  <A HREF="options.html#'hlg'">'hlg'</A>     preferred help languages
+<A HREF="options.html#'hidden'">'hidden'</A>	  <A HREF="options.html#'hid'">'hid'</A>     don't unload buffer when <A HREF="motion.html#it">it</A> is YXXYabandon|ed
+<A HREF="options.html#'highlight'">'highlight'</A>	  <A HREF="options.html#'hl'">'hl'</A>	    sets highlighting mode for various occasions
+<A HREF="options.html#'hlsearch'">'hlsearch'</A>	  <A HREF="options.html#'hls'">'hls'</A>     highlight matches with last search <A HREF="pattern.html#pattern">pattern</A>
+<A HREF="options.html#'history'">'history'</A>	  <A HREF="options.html#'hi'">'hi'</A>	    number of command-lines that are remembered
+<A HREF="options.html#'hkmap'">'hkmap'</A>		  <A HREF="options.html#'hk'">'hk'</A>	    Hebrew keyboard <A HREF="map.html#mapping">mapping</A>
+<A HREF="options.html#'hkmapp'">'hkmapp'</A>	  <A HREF="options.html#'hkp'">'hkp'</A>     phonetic Hebrew keyboard <A HREF="map.html#mapping">mapping</A>
+<A HREF="options.html#'icon'">'icon'</A>			    let Vim set the text of the <A HREF="windows.html#window">window</A> icon
+<A HREF="options.html#'iconstring'">'iconstring'</A>		    string to use for the Vim icon text
+<A HREF="options.html#'ignorecase'">'ignorecase'</A>	  <A HREF="options.html#'ic'">'ic'</A>	    ignore <A HREF="change.html#case">case</A> in search patterns
+<A HREF="options.html#'imactivatekey'">'imactivatekey'</A>   <A HREF="options.html#'imak'">'imak'</A>    key that activates the X input method
+<A HREF="options.html#'imactivatefunc'">'imactivatefunc'</A>  <A HREF="options.html#'imaf'">'imaf'</A>    function to enable/disable the X input method
+<A HREF="options.html#'imcmdline'">'imcmdline'</A>	  <A HREF="options.html#'imc'">'imc'</A>     use IM when starting to edit a command line
+<A HREF="options.html#'imdisable'">'imdisable'</A>	  <A HREF="options.html#'imd'">'imd'</A>     <A HREF="diff.html#do">do</A> not use the IM in any mode
+<A HREF="options.html#'iminsert'">'iminsert'</A>	  <A HREF="options.html#'imi'">'imi'</A>     use <A HREF="map.html#:lmap">:lmap</A> or IM in <A HREF="insert.html#Insert">Insert</A> mode
+<A HREF="options.html#'imsearch'">'imsearch'</A>	  <A HREF="options.html#'ims'">'ims'</A>     use <A HREF="map.html#:lmap">:lmap</A> or IM when typing a search <A HREF="pattern.html#pattern">pattern</A>
+<A HREF="options.html#'imstatusfunc'">'imstatusfunc'</A>    <A HREF="options.html#'imsf'">'imsf'</A>    function to obtain X input method status
+<A HREF="options.html#'include'">'include'</A>	  <A HREF="options.html#'inc'">'inc'</A>     <A HREF="pattern.html#pattern">pattern</A> to be used to find an include file
+<A HREF="options.html#'includeexpr'">'includeexpr'</A>	  <A HREF="options.html#'inex'">'inex'</A>    <A HREF="eval.html#expression">expression</A> used to process an include line
+<A HREF="options.html#'incsearch'">'incsearch'</A>	  <A HREF="options.html#'is'">'is'</A>	    highlight match while typing search <A HREF="pattern.html#pattern">pattern</A>
+<A HREF="options.html#'indentexpr'">'indentexpr'</A>	  <A HREF="options.html#'inde'">'inde'</A>    <A HREF="eval.html#expression">expression</A> used to obtain the indent of a line
+<A HREF="options.html#'indentkeys'">'indentkeys'</A>	  <A HREF="options.html#'indk'">'indk'</A>    keys that trigger indenting with <A HREF="options.html#'indentexpr'">'indentexpr'</A>
+<A HREF="options.html#'infercase'">'infercase'</A>	  <A HREF="options.html#'inf'">'inf'</A>     adjust <A HREF="change.html#case">case</A> of match for keyword completion
+<A HREF="options.html#'insertmode'">'insertmode'</A>	  <A HREF="options.html#'im'">'im'</A>	    start the edit of a file in <A HREF="insert.html#Insert">Insert</A> mode
+<A HREF="options.html#'isfname'">'isfname'</A>	  <A HREF="options.html#'isf'">'isf'</A>     characters included in file names and pathnames
+<A HREF="options.html#'isident'">'isident'</A>	  <A HREF="options.html#'isi'">'isi'</A>     characters included in identifiers
+<A HREF="options.html#'iskeyword'">'iskeyword'</A>	  <A HREF="options.html#'isk'">'isk'</A>     characters included in keywords
+<A HREF="options.html#'isprint'">'isprint'</A>	  <A HREF="options.html#'isp'">'isp'</A>     printable characters
+<A HREF="options.html#'joinspaces'">'joinspaces'</A>	  <A HREF="options.html#'js'">'js'</A>	    two spaces after a period with a join command
+<A HREF="options.html#'key'">'key'</A>			    <A HREF="editing.html#encryption">encryption</A> key
+<A HREF="options.html#'keymap'">'keymap'</A>	  <A HREF="options.html#'kmp'">'kmp'</A>     name of a keyboard <A HREF="map.html#mapping">mapping</A>
+<A HREF="options.html#'keymodel'">'keymodel'</A>	  <A HREF="options.html#'km'">'km'</A>	    enable starting/stopping selection with keys
+<A HREF="options.html#'keywordprg'">'keywordprg'</A>	  <A HREF="options.html#'kp'">'kp'</A>	    program to use for the &quot;<A HREF="various.html#K">K</A>&quot; command
+<A HREF="options.html#'langmap'">'langmap'</A>	  <A HREF="options.html#'lmap'">'lmap'</A>    alphabetic characters for other language mode
+<A HREF="options.html#'langmenu'">'langmenu'</A>	  <A HREF="options.html#'lm'">'lm'</A>	    language to be used for the <A HREF="gui.html#menus">menus</A>
+<A HREF="options.html#'laststatus'">'laststatus'</A>	  <A HREF="options.html#'ls'">'ls'</A>	    tells when last <A HREF="windows.html#window">window</A> has status lines
+<A HREF="options.html#'lazyredraw'">'lazyredraw'</A>	  <A HREF="options.html#'lz'">'lz'</A>	    don't redraw while executing macros
+<A HREF="options.html#'linebreak'">'linebreak'</A>	  <A HREF="options.html#'lbr'">'lbr'</A>     wrap long lines at a blank
+<A HREF="options.html#'lines'">'lines'</A>			    number of lines in the display
+<A HREF="options.html#'linespace'">'linespace'</A>	  <A HREF="options.html#'lsp'">'lsp'</A>     number of pixel lines to use between characters
+<A HREF="options.html#'lisp'">'lisp'</A>			    automatic indenting for Lisp
+<A HREF="options.html#'lispwords'">'lispwords'</A>	  <A HREF="options.html#'lw'">'lw'</A>	    words that change how lisp indenting works
+<A HREF="options.html#'list'">'list'</A>			    show <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> and <A HREF="intro.html#&lt;EOL&gt;">&lt;EOL&gt;</A>
+<A HREF="options.html#'listchars'">'listchars'</A>	  <A HREF="options.html#'lcs'">'lcs'</A>     characters for displaying in list mode
+<A HREF="options.html#'loadplugins'">'loadplugins'</A>	  <A HREF="options.html#'lpl'">'lpl'</A>     load <A HREF="usr_05.html#plugin">plugin</A> scripts when starting up
+<A HREF="options.html#'macatsui'">'macatsui'</A>		    <A HREF="os_mac.html#Mac">Mac</A> <A HREF="gui.html#GUI">GUI</A>: use ATSUI text drawing
+<A HREF="options.html#'magic'">'magic'</A>			    changes special characters in search patterns
+<A HREF="options.html#'makeef'">'makeef'</A>	  <A HREF="options.html#'mef'">'mef'</A>     name of the errorfile for &quot;<A HREF="quickfix.html#:make">:make</A>&quot;
+<A HREF="options.html#'makeprg'">'makeprg'</A>	  <A HREF="options.html#'mp'">'mp'</A>	    program to use for the &quot;<A HREF="quickfix.html#:make">:make</A>&quot; command
+<A HREF="options.html#'matchpairs'">'matchpairs'</A>	  <A HREF="options.html#'mps'">'mps'</A>     pairs of characters that &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; can match
+<A HREF="options.html#'matchtime'">'matchtime'</A>	  <A HREF="options.html#'mat'">'mat'</A>     tenths of a second to show matching paren
+<A HREF="options.html#'maxcombine'">'maxcombine'</A>	  <A HREF="options.html#'mco'">'mco'</A>     maximum nr of combining characters displayed
+<A HREF="options.html#'maxfuncdepth'">'maxfuncdepth'</A>	  <A HREF="options.html#'mfd'">'mfd'</A>     maximum recursive depth for user <A HREF="eval.html#functions">functions</A>
+<A HREF="options.html#'maxmapdepth'">'maxmapdepth'</A>	  <A HREF="options.html#'mmd'">'mmd'</A>     maximum recursive depth for <A HREF="map.html#mapping">mapping</A>
+<A HREF="options.html#'maxmem'">'maxmem'</A>	  <A HREF="options.html#'mm'">'mm'</A>	    maximum memory (in Kbyte) used for one buffer
+<A HREF="options.html#'maxmempattern'">'maxmempattern'</A>   <A HREF="options.html#'mmp'">'mmp'</A>     maximum memory (in Kbyte) used for <A HREF="pattern.html#pattern">pattern</A> search
+<A HREF="options.html#'maxmemtot'">'maxmemtot'</A>	  <A HREF="options.html#'mmt'">'mmt'</A>     maximum memory (in Kbyte) used for all <A HREF="windows.html#buffers">buffers</A>
+<A HREF="options.html#'menuitems'">'menuitems'</A>	  <A HREF="options.html#'mis'">'mis'</A>     maximum number of items in a menu
+<A HREF="options.html#'mkspellmem'">'mkspellmem'</A>	  <A HREF="options.html#'msm'">'msm'</A>     memory used before |<A HREF="spell.html#:mkspell">:mkspell</A>| compresses the tree
+<A HREF="options.html#'modeline'">'modeline'</A>	  <A HREF="options.html#'ml'">'ml'</A>	    recognize modelines at start or end of file
+<A HREF="options.html#'modelines'">'modelines'</A>	  <A HREF="options.html#'mls'">'mls'</A>     number of lines checked for modelines
+<A HREF="options.html#'modifiable'">'modifiable'</A>	  <A HREF="options.html#'ma'">'ma'</A>	    changes to the text are not possible
+<A HREF="options.html#'modified'">'modified'</A>	  <A HREF="options.html#'mod'">'mod'</A>     buffer has been modified
+<A HREF="options.html#'more'">'more'</A>			    pause listings when the whole screen is filled
+<A HREF="options.html#'mouse'">'mouse'</A>			    enable the use of mouse clicks
+<A HREF="options.html#'mousefocus'">'mousefocus'</A>	  <A HREF="options.html#'mousef'">'mousef'</A>  keyboard focus follows the mouse
+<A HREF="options.html#'mousehide'">'mousehide'</A>	  <A HREF="options.html#'mh'">'mh'</A>	    hide mouse pointer while typing
+<A HREF="options.html#'mousemodel'">'mousemodel'</A>	  <A HREF="options.html#'mousem'">'mousem'</A>  changes meaning of mouse buttons
+<A HREF="options.html#'mouseshape'">'mouseshape'</A>	  <A HREF="options.html#'mouses'">'mouses'</A>  shape of the mouse pointer in different modes
+<A HREF="options.html#'mousetime'">'mousetime'</A>	  <A HREF="options.html#'mouset'">'mouset'</A>  max time between mouse <A HREF="term.html#double-click">double-click</A>
+<A HREF="options.html#'mzquantum'">'mzquantum'</A>	  <A HREF="options.html#'mzq'">'mzq'</A>     the interval between polls for <A HREF="if_mzsch.html#MzScheme">MzScheme</A> threads
+<A HREF="options.html#'nrformats'">'nrformats'</A>	  <A HREF="options.html#'nf'">'nf'</A>	    number formats recognized for <A HREF="change.html#CTRL-A">CTRL-A</A> command
+<A HREF="options.html#'number'">'number'</A>	  <A HREF="options.html#'nu'">'nu'</A>	    print the line number in front of each line
+<A HREF="options.html#'numberwidth'">'numberwidth'</A>	  <A HREF="options.html#'nuw'">'nuw'</A>     number of columns used for the line number
+<A HREF="options.html#'omnifunc'">'omnifunc'</A>	  <A HREF="options.html#'ofu'">'ofu'</A>     function for filetype-specific completion
+<A HREF="options.html#'opendevice'">'opendevice'</A>	  <A HREF="options.html#'odev'">'odev'</A>    allow reading/writing devices on <A HREF="os_win32.html#MS-Windows">MS-Windows</A>
+<A HREF="options.html#'operatorfunc'">'operatorfunc'</A>	  <A HREF="options.html#'opfunc'">'opfunc'</A>  function to be called for |<A HREF="map.html#g@">g@</A>| <A HREF="motion.html#operator">operator</A>
+<A HREF="options.html#'osfiletype'">'osfiletype'</A> 	  <A HREF="options.html#'oft'">'oft'</A>     no longer supported
+<A HREF="options.html#'paragraphs'">'paragraphs'</A>	  <A HREF="options.html#'para'">'para'</A>    nroff macros that separate paragraphs
+<A HREF="options.html#'paste'">'paste'</A>			    allow pasting text
+<A HREF="options.html#'pastetoggle'">'pastetoggle'</A>	  <A HREF="options.html#'pt'">'pt'</A>	    key code that causes <A HREF="options.html#'paste'">'paste'</A> to toggle
+<A HREF="options.html#'patchexpr'">'patchexpr'</A>	  <A HREF="options.html#'pex'">'pex'</A>     <A HREF="eval.html#expression">expression</A> used to patch a file
+<A HREF="options.html#'patchmode'">'patchmode'</A>	  <A HREF="options.html#'pm'">'pm'</A>	    keep the oldest version of a file
+<A HREF="options.html#'path'">'path'</A>		  <A HREF="options.html#'pa'">'pa'</A>	    list of directories searched with &quot;<A HREF="editing.html#gf">gf</A>&quot; et.al.
+<A HREF="options.html#'preserveindent'">'preserveindent'</A>  <A HREF="options.html#'pi'">'pi'</A>	    preserve the indent structure when reindenting
+<A HREF="options.html#'previewheight'">'previewheight'</A>   <A HREF="options.html#'pvh'">'pvh'</A>     height of the preview <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'previewwindow'">'previewwindow'</A>   <A HREF="options.html#'pvw'">'pvw'</A>     identifies the preview <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'printdevice'">'printdevice'</A>	  <A HREF="options.html#'pdev'">'pdev'</A>    name of the printer to be used for <A HREF="print.html#:hardcopy">:hardcopy</A>
+<A HREF="options.html#'printencoding'">'printencoding'</A>   <A HREF="options.html#'penc'">'penc'</A>    encoding to be used for <A HREF="print.html#printing">printing</A>
+<A HREF="options.html#'printexpr'">'printexpr'</A>	  <A HREF="options.html#'pexpr'">'pexpr'</A>   <A HREF="eval.html#expression">expression</A> used to print PostScript for <A HREF="print.html#:hardcopy">:hardcopy</A>
+<A HREF="options.html#'printfont'">'printfont'</A>	  <A HREF="options.html#'pfn'">'pfn'</A>     name of the font to be used for <A HREF="print.html#:hardcopy">:hardcopy</A>
+<A HREF="options.html#'printheader'">'printheader'</A>	  <A HREF="options.html#'pheader'">'pheader'</A> format of the header used for <A HREF="print.html#:hardcopy">:hardcopy</A>
+<A HREF="options.html#'printmbcharset'">'printmbcharset'</A>  <A HREF="options.html#'pmbcs'">'pmbcs'</A>   CJK character set to be used for <A HREF="print.html#:hardcopy">:hardcopy</A>
+<A HREF="options.html#'printmbfont'">'printmbfont'</A>	  <A HREF="options.html#'pmbfn'">'pmbfn'</A>   font names to be used for CJK output of <A HREF="print.html#:hardcopy">:hardcopy</A>
+<A HREF="options.html#'printoptions'">'printoptions'</A>	  <A HREF="options.html#'popt'">'popt'</A>    controls the format of <A HREF="print.html#:hardcopy">:hardcopy</A> output
+<A HREF="options.html#'pumheight'">'pumheight'</A>	  <A HREF="options.html#'ph'">'ph'</A>	    maximum height of the popup menu
+<A HREF="options.html#'quoteescape'">'quoteescape'</A>	  <A HREF="options.html#'qe'">'qe'</A>	    <A HREF="intro.html#escape">escape</A> characters used in a string
+<A HREF="options.html#'readonly'">'readonly'</A>	  <A HREF="options.html#'ro'">'ro'</A>	    disallow <A HREF="editing.html#writing">writing</A> the buffer
+<A HREF="options.html#'redrawtime'">'redrawtime'</A>	  <A HREF="options.html#'rdt'">'rdt'</A>     timeout for <A HREF="options.html#'hlsearch'">'hlsearch'</A> and |<A HREF="pattern.html#:match">:match</A>| highlighting
+<A HREF="options.html#'regexpengine'">'regexpengine'</A>	  <A HREF="options.html#'re'">'re'</A>	    default <A HREF="pattern.html#regexp">regexp</A> engine to use
+<A HREF="options.html#'relativenumber'">'relativenumber'</A>  <A HREF="options.html#'rnu'">'rnu'</A>	    show relative line number in front of each line
+<A HREF="options.html#'remap'">'remap'</A>			    allow mappings to work recursively
+<A HREF="options.html#'report'">'report'</A>		    threshold for reporting nr. of lines changed
+<A HREF="options.html#'restorescreen'">'restorescreen'</A>   <A HREF="options.html#'rs'">'rs'</A>	    <A HREF="os_win32.html#Win32">Win32</A>: restore screen when exiting
+<A HREF="options.html#'revins'">'revins'</A>	  <A HREF="options.html#'ri'">'ri'</A>	    <A HREF="insert.html#inserting">inserting</A> characters will work backwards
+<A HREF="options.html#'rightleft'">'rightleft'</A>	  <A HREF="options.html#'rl'">'rl'</A>	    <A HREF="windows.html#window">window</A> is right-to-left oriented
+<A HREF="options.html#'rightleftcmd'">'rightleftcmd'</A>	  <A HREF="options.html#'rlc'">'rlc'</A>     commands for which editing works right-to-left
+<A HREF="options.html#'ruler'">'ruler'</A>		  <A HREF="options.html#'ru'">'ru'</A>	    show cursor line and column in the status line
+<A HREF="options.html#'rulerformat'">'rulerformat'</A>	  <A HREF="options.html#'ruf'">'ruf'</A>     custom format for the ruler
+<A HREF="options.html#'runtimepath'">'runtimepath'</A>	  <A HREF="options.html#'rtp'">'rtp'</A>     list of directories used for runtime files
+<A HREF="options.html#'scroll'">'scroll'</A>	  <A HREF="options.html#'scr'">'scr'</A>     lines to scroll with <A HREF="scroll.html#CTRL-U">CTRL-U</A> and <A HREF="scroll.html#CTRL-D">CTRL-D</A>
+<A HREF="options.html#'scrollbind'">'scrollbind'</A>	  <A HREF="options.html#'scb'">'scb'</A>     scroll in <A HREF="windows.html#window">window</A> <A HREF="motion.html#as">as</A> other <A HREF="windows.html#windows">windows</A> scroll
+<A HREF="options.html#'scrolljump'">'scrolljump'</A>	  <A HREF="options.html#'sj'">'sj'</A>	    minimum number of lines to scroll
+<A HREF="options.html#'scrolloff'">'scrolloff'</A>	  <A HREF="options.html#'so'">'so'</A>	    minimum nr. of lines above and below cursor
+<A HREF="options.html#'scrollopt'">'scrollopt'</A>	  <A HREF="options.html#'sbo'">'sbo'</A>     how <A HREF="options.html#'scrollbind'">'scrollbind'</A> should behave
+<A HREF="options.html#'sections'">'sections'</A>	  <A HREF="options.html#'sect'">'sect'</A>    nroff macros that separate sections
+<A HREF="options.html#'secure'">'secure'</A>		    secure mode for reading <A HREF="starting.html#.vimrc">.vimrc</A> in current dir
+<A HREF="options.html#'selection'">'selection'</A>	  <A HREF="options.html#'sel'">'sel'</A>     what type of selection to use
+<A HREF="options.html#'selectmode'">'selectmode'</A>	  <A HREF="options.html#'slm'">'slm'</A>     when to use <A HREF="visual.html#Select">Select</A> mode instead of <A HREF="visual.html#Visual">Visual</A> mode
+<A HREF="options.html#'sessionoptions'">'sessionoptions'</A>  <A HREF="options.html#'ssop'">'ssop'</A>    <A HREF="options.html#options">options</A> for |<A HREF="starting.html#:mksession">:mksession</A>|
+<A HREF="options.html#'shell'">'shell'</A>		  <A HREF="options.html#'sh'">'sh'</A>	    name of shell to use for external commands
+<A HREF="options.html#'shellcmdflag'">'shellcmdflag'</A>	  <A HREF="options.html#'shcf'">'shcf'</A>    flag to shell to execute one command
+<A HREF="options.html#'shellpipe'">'shellpipe'</A>	  <A HREF="options.html#'sp'">'sp'</A>	    string to put output of &quot;<A HREF="quickfix.html#:make">:make</A>&quot; in error file
+<A HREF="options.html#'shellquote'">'shellquote'</A>	  <A HREF="options.html#'shq'">'shq'</A>     <A HREF="change.html#quote">quote</A> character(s) for around shell command
+<A HREF="options.html#'shellredir'">'shellredir'</A>	  <A HREF="options.html#'srr'">'srr'</A>     string to put output of <A HREF="change.html#filter">filter</A> in a temp file
+<A HREF="options.html#'shellslash'">'shellslash'</A>	  <A HREF="options.html#'ssl'">'ssl'</A>     use forward slash for shell file names
+<A HREF="options.html#'shelltemp'">'shelltemp'</A>	  <A HREF="options.html#'stmp'">'stmp'</A>    whether to use a temp file for shell commands
+<A HREF="options.html#'shelltype'">'shelltype'</A>	  <A HREF="options.html#'st'">'st'</A>	    <A HREF="os_amiga.html#Amiga">Amiga</A>: influences how to use a shell
+<A HREF="options.html#'shellxescape'">'shellxescape'</A>	  <A HREF="options.html#'sxe'">'sxe'</A>     characters to <A HREF="intro.html#escape">escape</A> when <A HREF="options.html#'shellxquote'">'shellxquote'</A> is (
+<A HREF="options.html#'shellxquote'">'shellxquote'</A>	  <A HREF="options.html#'sxq'">'sxq'</A>     like <A HREF="options.html#'shellquote'">'shellquote'</A>, but include redirection
+<A HREF="options.html#'shiftround'">'shiftround'</A>	  <A HREF="options.html#'sr'">'sr'</A>	    round indent to multiple of shiftwidth
+<A HREF="options.html#'shiftwidth'">'shiftwidth'</A>	  <A HREF="options.html#'sw'">'sw'</A>	    number of spaces to use for (auto)indent step
+<A HREF="options.html#'shortmess'">'shortmess'</A>	  <A HREF="options.html#'shm'">'shm'</A>     list of flags, reduce length of <A HREF="message.html#messages">messages</A>
+<A HREF="options.html#'shortname'">'shortname'</A>	  <A HREF="options.html#'sn'">'sn'</A>	    non-MS-DOS: Filenames assumed to be 8.3 chars
+<A HREF="options.html#'showbreak'">'showbreak'</A>	  <A HREF="options.html#'sbr'">'sbr'</A>     string to use at the start of wrapped lines
+<A HREF="options.html#'showcmd'">'showcmd'</A>	  <A HREF="options.html#'sc'">'sc'</A>	    show (partial) command in status line
+<A HREF="options.html#'showfulltag'">'showfulltag'</A>	  <A HREF="options.html#'sft'">'sft'</A>     show full <A HREF="tagsrch.html#tag">tag</A> <A HREF="pattern.html#pattern">pattern</A> when completing <A HREF="tagsrch.html#tag">tag</A>
+<A HREF="options.html#'showmatch'">'showmatch'</A>	  <A HREF="options.html#'sm'">'sm'</A>	    briefly jump to matching bracket if insert one
+<A HREF="options.html#'showmode'">'showmode'</A>	  <A HREF="options.html#'smd'">'smd'</A>     message on status line to show current mode
+<A HREF="options.html#'showtabline'">'showtabline'</A>	  <A HREF="options.html#'stal'">'stal'</A>    tells when the <A HREF="intro.html#tab">tab</A> pages line is displayed
+<A HREF="options.html#'sidescroll'">'sidescroll'</A>	  <A HREF="options.html#'ss'">'ss'</A>	    minimum number of columns to scroll horizontal
+<A HREF="options.html#'sidescrolloff'">'sidescrolloff'</A>   <A HREF="options.html#'siso'">'siso'</A>    min. nr. of columns to left and right of cursor
+<A HREF="options.html#'smartcase'">'smartcase'</A>	  <A HREF="options.html#'scs'">'scs'</A>     no ignore <A HREF="change.html#case">case</A> when <A HREF="pattern.html#pattern">pattern</A> has <A HREF="change.html#uppercase">uppercase</A>
+<A HREF="options.html#'smartindent'">'smartindent'</A>	  <A HREF="options.html#'si'">'si'</A>	    smart autoindenting for C programs
+<A HREF="options.html#'smarttab'">'smarttab'</A>	  <A HREF="options.html#'sta'">'sta'</A>     use <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> when <A HREF="insert.html#inserting">inserting</A> <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>
+<A HREF="options.html#'softtabstop'">'softtabstop'</A>	  <A HREF="options.html#'sts'">'sts'</A>     number of spaces that <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> uses while editing
+<A HREF="options.html#'spell'">'spell'</A>			    enable <A HREF="spell.html#spell">spell</A> checking
+<A HREF="options.html#'spellcapcheck'">'spellcapcheck'</A>   <A HREF="options.html#'spc'">'spc'</A>     <A HREF="pattern.html#pattern">pattern</A> to locate end of a <A HREF="motion.html#sentence">sentence</A>
+<A HREF="options.html#'spellfile'">'spellfile'</A>	  <A HREF="options.html#'spf'">'spf'</A>     files where |<A HREF="spell.html#zg">zg</A>| and |<A HREF="spell.html#zw">zw</A>| store words
+<A HREF="options.html#'spelllang'">'spelllang'</A>	  <A HREF="options.html#'spl'">'spl'</A>     language(s) to <A HREF="diff.html#do">do</A> <A HREF="spell.html#spell">spell</A> checking for
+<A HREF="options.html#'spellsuggest'">'spellsuggest'</A>	  <A HREF="options.html#'sps'">'sps'</A>     method(s) used to suggest spelling corrections
+<A HREF="options.html#'splitbelow'">'splitbelow'</A>	  <A HREF="options.html#'sb'">'sb'</A>	    new <A HREF="windows.html#window">window</A> from split is below the current one
+<A HREF="options.html#'splitright'">'splitright'</A>	  <A HREF="options.html#'spr'">'spr'</A>     new <A HREF="windows.html#window">window</A> is put right of the current one
+<A HREF="options.html#'startofline'">'startofline'</A>	  <A HREF="options.html#'sol'">'sol'</A>     commands move cursor to first non-blank in line
+<A HREF="options.html#'statusline'">'statusline'</A>	  <A HREF="options.html#'stl'">'stl'</A>     custom format for the status line
+<A HREF="options.html#'suffixes'">'suffixes'</A>	  <A HREF="options.html#'su'">'su'</A>	    <A HREF="cmdline.html#suffixes">suffixes</A> that are ignored with multiple match
+<A HREF="options.html#'suffixesadd'">'suffixesadd'</A>	  <A HREF="options.html#'sua'">'sua'</A>     <A HREF="cmdline.html#suffixes">suffixes</A> added when searching for a file
+<A HREF="options.html#'swapfile'">'swapfile'</A>	  <A HREF="options.html#'swf'">'swf'</A>     whether to use a swapfile for a buffer
+<A HREF="options.html#'swapsync'">'swapsync'</A>	  <A HREF="options.html#'sws'">'sws'</A>     how to sync the swap file
+<A HREF="options.html#'switchbuf'">'switchbuf'</A>	  <A HREF="options.html#'swb'">'swb'</A>     sets behavior when switching to another buffer
+<A HREF="options.html#'synmaxcol'">'synmaxcol'</A>	  <A HREF="options.html#'smc'">'smc'</A>     maximum column to find <A HREF="syntax.html#syntax">syntax</A> items
+<A HREF="options.html#'syntax'">'syntax'</A>	  <A HREF="options.html#'syn'">'syn'</A>     <A HREF="syntax.html#syntax">syntax</A> to be loaded for current buffer
+<A HREF="options.html#'tabstop'">'tabstop'</A>	  <A HREF="options.html#'ts'">'ts'</A>	    number of spaces that <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> in file uses
+<A HREF="options.html#'tabline'">'tabline'</A>	  <A HREF="options.html#'tal'">'tal'</A>     custom format for the console <A HREF="intro.html#tab">tab</A> pages line
+<A HREF="options.html#'tabpagemax'">'tabpagemax'</A>	  <A HREF="options.html#'tpm'">'tpm'</A>     maximum number of <A HREF="intro.html#tab">tab</A> pages for |<A HREF="starting.html#-p">-p</A>| and &quot;<A HREF="intro.html#tab">tab</A> all&quot;
+<A HREF="options.html#'tagbsearch'">'tagbsearch'</A>	  <A HREF="options.html#'tbs'">'tbs'</A>     use binary searching in <A HREF="tagsrch.html#tags">tags</A> files
+<A HREF="options.html#'taglength'">'taglength'</A>	  <A HREF="options.html#'tl'">'tl'</A>	    number of significant characters for a <A HREF="tagsrch.html#tag">tag</A>
+<A HREF="options.html#'tagrelative'">'tagrelative'</A>	  <A HREF="options.html#'tr'">'tr'</A>	    file names in <A HREF="tagsrch.html#tag">tag</A> file are relative
+<A HREF="options.html#'tags'">'tags'</A>		  <A HREF="options.html#'tag'">'tag'</A>     list of file names used by the <A HREF="tagsrch.html#tag">tag</A> command
+<A HREF="options.html#'tagstack'">'tagstack'</A>	  <A HREF="options.html#'tgst'">'tgst'</A>    push <A HREF="tagsrch.html#tags">tags</A> onto the <A HREF="tagsrch.html#tag">tag</A> stack
+<A HREF="options.html#'term'">'term'</A>			    name of the terminal
+<A HREF="options.html#'termbidi'">'termbidi'</A>	  <A HREF="options.html#'tbidi'">'tbidi'</A>   terminal takes care of bi-directionality
+<A HREF="options.html#'termencoding'">'termencoding'</A>	  <A HREF="options.html#'tenc'">'tenc'</A>    character encoding used by the terminal
+<A HREF="options.html#'terse'">'terse'</A>			    shorten some <A HREF="message.html#messages">messages</A>
+<A HREF="options.html#'textauto'">'textauto'</A>	  <A HREF="options.html#'ta'">'ta'</A>	    obsolete, use <A HREF="options.html#'fileformats'">'fileformats'</A>
+<A HREF="options.html#'textmode'">'textmode'</A>	  <A HREF="options.html#'tx'">'tx'</A>	    obsolete, use <A HREF="options.html#'fileformat'">'fileformat'</A>
+<A HREF="options.html#'textwidth'">'textwidth'</A>	  <A HREF="options.html#'tw'">'tw'</A>	    maximum width of text that is being inserted
+<A HREF="options.html#'thesaurus'">'thesaurus'</A>	  <A HREF="options.html#'tsr'">'tsr'</A>     list of thesaurus files for keyword completion
+<A HREF="options.html#'tildeop'">'tildeop'</A>	  <A HREF="options.html#'top'">'top'</A>     tilde command &quot;<A HREF="change.html#~">~</A>&quot; behaves like an <A HREF="motion.html#operator">operator</A>
+<A HREF="options.html#'timeout'">'timeout'</A>	  <A HREF="options.html#'to'">'to'</A>	    time out on mappings and key codes
+<A HREF="options.html#'timeoutlen'">'timeoutlen'</A>	  <A HREF="options.html#'tm'">'tm'</A>	    time out time in milliseconds
+<A HREF="options.html#'title'">'title'</A>			    let Vim set the title of the <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'titlelen'">'titlelen'</A>		    percentage of <A HREF="options.html#'columns'">'columns'</A> used for <A HREF="windows.html#window">window</A> title
+<A HREF="options.html#'titleold'">'titleold'</A>		    old title, restored when exiting
+<A HREF="options.html#'titlestring'">'titlestring'</A>		    string to use for the Vim <A HREF="windows.html#window">window</A> title
+<A HREF="options.html#'toolbar'">'toolbar'</A>	  <A HREF="options.html#'tb'">'tb'</A>	    <A HREF="gui.html#GUI">GUI</A>: which items to show in the toolbar
+<A HREF="options.html#'toolbariconsize'">'toolbariconsize'</A> <A HREF="options.html#'tbis'">'tbis'</A>    size of the toolbar icons (for <A HREF="gui_x11.html#GTK">GTK</A> 2 only)
+<A HREF="options.html#'ttimeout'">'ttimeout'</A>		    time out on mappings
+<A HREF="options.html#'ttimeoutlen'">'ttimeoutlen'</A>	  <A HREF="options.html#'ttm'">'ttm'</A>     time out time for key codes in milliseconds
+<A HREF="options.html#'ttybuiltin'">'ttybuiltin'</A>	  <A HREF="options.html#'tbi'">'tbi'</A>     use built-in <A HREF="term.html#termcap">termcap</A> before external <A HREF="term.html#termcap">termcap</A>
+<A HREF="options.html#'ttyfast'">'ttyfast'</A>	  <A HREF="options.html#'tf'">'tf'</A>	    indicates a fast terminal connection
+<A HREF="options.html#'ttymouse'">'ttymouse'</A>	  <A HREF="options.html#'ttym'">'ttym'</A>    type of mouse codes generated
+<A HREF="options.html#'ttyscroll'">'ttyscroll'</A>	  <A HREF="options.html#'tsl'">'tsl'</A>     maximum number of lines for a scroll
+<A HREF="options.html#'ttytype'">'ttytype'</A>	  <A HREF="options.html#'tty'">'tty'</A>     alias for <A HREF="options.html#'term'">'term'</A>
+<A HREF="options.html#'undodir'">'undodir'</A>	  <A HREF="options.html#'udir'">'udir'</A>    where to store <A HREF="undo.html#undo">undo</A> files
+<A HREF="options.html#'undofile'">'undofile'</A>	  <A HREF="options.html#'udf'">'udf'</A>	    save <A HREF="undo.html#undo">undo</A> information in a file
+<A HREF="options.html#'undolevels'">'undolevels'</A>	  <A HREF="options.html#'ul'">'ul'</A>	    maximum number of changes that can be undone
+<A HREF="options.html#'undoreload'">'undoreload'</A>	  <A HREF="options.html#'ur'">'ur'</A>	    max nr of lines to save for <A HREF="undo.html#undo">undo</A> on a buffer <A HREF="editing.html#reload">reload</A>
+<A HREF="options.html#'updatecount'">'updatecount'</A>	  <A HREF="options.html#'uc'">'uc'</A>	    after this many characters flush swap file
+<A HREF="options.html#'updatetime'">'updatetime'</A>	  <A HREF="options.html#'ut'">'ut'</A>	    after this many milliseconds flush swap file
+<A HREF="options.html#'verbose'">'verbose'</A>	  <A HREF="options.html#'vbs'">'vbs'</A>     give informative <A HREF="message.html#messages">messages</A>
+<A HREF="options.html#'verbosefile'">'verbosefile'</A>	  <A HREF="options.html#'vfile'">'vfile'</A>   file to write <A HREF="message.html#messages">messages</A> in
+<A HREF="options.html#'viewdir'">'viewdir'</A>	  <A HREF="options.html#'vdir'">'vdir'</A>    directory where to store files with <A HREF="starting.html#:mkview">:mkview</A>
+<A HREF="options.html#'viewoptions'">'viewoptions'</A>	  <A HREF="options.html#'vop'">'vop'</A>     specifies what to save for <A HREF="starting.html#:mkview">:mkview</A>
+<A HREF="options.html#'viminfo'">'viminfo'</A>	  <A HREF="options.html#'vi'">'vi'</A>	    use .viminfo file upon <A HREF="starting.html#startup">startup</A> and exiting
+<A HREF="options.html#'virtualedit'">'virtualedit'</A>	  <A HREF="options.html#'ve'">'ve'</A>	    when to use virtual editing
+<A HREF="options.html#'visualbell'">'visualbell'</A>	  <A HREF="options.html#'vb'">'vb'</A>	    use visual bell instead of beeping
+<A HREF="options.html#'warn'">'warn'</A>			    warn for shell command when buffer was changed
+<A HREF="options.html#'weirdinvert'">'weirdinvert'</A>	  <A HREF="options.html#'wiv'">'wiv'</A>	    for terminals that have weird inversion method
+<A HREF="options.html#'whichwrap'">'whichwrap'</A>	  <A HREF="options.html#'ww'">'ww'</A>	    allow specified keys to cross line boundaries
+<A HREF="options.html#'wildchar'">'wildchar'</A>	  <A HREF="options.html#'wc'">'wc'</A>	    command-line character for <A HREF="editing.html#wildcard">wildcard</A> expansion
+<A HREF="options.html#'wildcharm'">'wildcharm'</A>	  <A HREF="options.html#'wcm'">'wcm'</A>     like <A HREF="options.html#'wildchar'">'wildchar'</A> but also works when mapped
+<A HREF="options.html#'wildignore'">'wildignore'</A>	  <A HREF="options.html#'wig'">'wig'</A>     files matching these patterns are not completed
+<A HREF="options.html#'wildignorecase'">'wildignorecase'</A>  <A HREF="options.html#'wic'">'wic'</A>     ignore <A HREF="change.html#case">case</A> when completing file names
+<A HREF="options.html#'wildmenu'">'wildmenu'</A>	  <A HREF="options.html#'wmnu'">'wmnu'</A>    use menu for command line completion
+<A HREF="options.html#'wildmode'">'wildmode'</A>	  <A HREF="options.html#'wim'">'wim'</A>     mode for <A HREF="options.html#'wildchar'">'wildchar'</A> command-line expansion
+<A HREF="options.html#'wildoptions'">'wildoptions'</A>	  <A HREF="options.html#'wop'">'wop'</A>     specifies how command line completion is done
+<A HREF="options.html#'winaltkeys'">'winaltkeys'</A>	  <A HREF="options.html#'wak'">'wak'</A>     when the <A HREF="windows.html#windows">windows</A> system handles ALT keys
+<A HREF="options.html#'window'">'window'</A>	  <A HREF="options.html#'wi'">'wi'</A>	    nr of lines to scroll for <A HREF="scroll.html#CTRL-F">CTRL-F</A> and <A HREF="scroll.html#CTRL-B">CTRL-B</A>
+<A HREF="options.html#'winheight'">'winheight'</A>	  <A HREF="options.html#'wh'">'wh'</A>	    minimum number of lines for the current <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'winfixheight'">'winfixheight'</A>	  <A HREF="options.html#'wfh'">'wfh'</A>     keep <A HREF="windows.html#window">window</A> height when opening/closing <A HREF="windows.html#windows">windows</A>
+<A HREF="options.html#'winfixwidth'">'winfixwidth'</A>	  <A HREF="options.html#'wfw'">'wfw'</A>     keep <A HREF="windows.html#window">window</A> width when opening/closing <A HREF="windows.html#windows">windows</A>
+<A HREF="options.html#'winminheight'">'winminheight'</A>	  <A HREF="options.html#'wmh'">'wmh'</A>     minimum number of lines for any <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'winminwidth'">'winminwidth'</A>	  <A HREF="options.html#'wmw'">'wmw'</A>     minimal number of columns for any <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'winwidth'">'winwidth'</A>	  <A HREF="options.html#'wiw'">'wiw'</A>     minimal number of columns for current <A HREF="windows.html#window">window</A>
+<A HREF="options.html#'wrap'">'wrap'</A>			    long lines wrap and continue on the next line
+<A HREF="options.html#'wrapmargin'">'wrapmargin'</A>	  <A HREF="options.html#'wm'">'wm'</A>	    chars from the right where wrapping starts
+<A HREF="options.html#'wrapscan'">'wrapscan'</A>	  <A HREF="options.html#'ws'">'ws'</A>	    searches wrap around the end of the file
+<A HREF="options.html#'write'">'write'</A>			    <A HREF="editing.html#writing">writing</A> to a file is allowed
+<A HREF="options.html#'writeany'">'writeany'</A>	  <A HREF="options.html#'wa'">'wa'</A>	    write to file with no need for &quot;<A HREF="change.html#!">!</A>&quot; override
+<A HREF="options.html#'writebackup'">'writebackup'</A>	  <A HREF="options.html#'wb'">'wb'</A>	    make a <A HREF="editing.html#backup">backup</A> before overwriting a file
+<A HREF="options.html#'writedelay'">'writedelay'</A>	  <A HREF="options.html#'wd'">'wd'</A>	    delay this many msec for each char (for debug)
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ur"></A><B>Q_ur</B>*		Undo/Redo commands
+
+|<A HREF="undo.html#u">u</A>|       N  u		<A HREF="undo.html#undo">undo</A> last N changes
+|<A HREF="undo.html#CTRL-R">CTRL-R</A>|  N  CTRL-R	<A HREF="undo.html#redo">redo</A> last N undone changes
+|<A HREF="undo.html#U">U</A>|          U		restore last changed line
+------------------------------------------------------------------------------
+
+*<A NAME="Q_et"></A><B>Q_et</B>*		External commands
+
+|<A HREF="various.html#:shell">:shell</A>|	:sh[ell]	start a shell
+|<A HREF="various.html#:!">:!</A>|		:!{command}	execute {command} with a shell
+|<A HREF="various.html#K">K</A>|		   K		lookup keyword under the cursor with
+				   <A HREF="options.html#'keywordprg'">'keywordprg'</A> program (default: &quot;man&quot;)
+------------------------------------------------------------------------------
+
+*<A NAME="Q_qf"></A><B>Q_qf</B>*		<A HREF="quickfix.html#Quickfix">Quickfix</A> commands
+
+|<A HREF="quickfix.html#:cc">:cc</A>|		:cc [nr]	display error [nr] (default is the same again)
+|<A HREF="quickfix.html#:cnext">:cnext</A>|	:cn		display the next error
+|<A HREF="quickfix.html#:cprevious">:cprevious</A>|	:cp		display the previous error
+|<A HREF="quickfix.html#:clist">:clist</A>|	:cl		list all <A HREF="message.html#errors">errors</A>
+|<A HREF="quickfix.html#:cfile">:cfile</A>|	:cf		read <A HREF="message.html#errors">errors</A> from the file <A HREF="options.html#'errorfile'">'errorfile'</A>
+|<A HREF="quickfix.html#:cgetbuffer">:cgetbuffer</A>|	:cgetb		like <A HREF="quickfix.html#:cbuffer">:cbuffer</A> but don't jump to the first error
+|<A HREF="quickfix.html#:cgetfile">:cgetfile</A>|	:cg		like <A HREF="quickfix.html#:cfile">:cfile</A> but don't jump to the first error
+|<A HREF="quickfix.html#:cgetexpr">:cgetexpr</A>|	:cgete		like <A HREF="quickfix.html#:cexpr">:cexpr</A> but don't jump to the first error
+|<A HREF="quickfix.html#:caddfile">:caddfile</A>|	:caddf		add <A HREF="message.html#errors">errors</A> from the error file to the current
+				   <A HREF="quickfix.html#quickfix">quickfix</A> list
+|<A HREF="quickfix.html#:caddexpr">:caddexpr</A>|	:cad		add <A HREF="message.html#errors">errors</A> from an <A HREF="eval.html#expression">expression</A> to the current
+				   <A HREF="quickfix.html#quickfix">quickfix</A> list
+|<A HREF="quickfix.html#:cbuffer">:cbuffer</A>|	:cb		read <A HREF="message.html#errors">errors</A> from text in a buffer
+|<A HREF="quickfix.html#:cexpr">:cexpr</A>|	:cex		read <A HREF="message.html#errors">errors</A> from an <A HREF="eval.html#expression">expression</A>
+|<A HREF="quickfix.html#:cquit">:cquit</A>|	:cq		quit without <A HREF="editing.html#writing">writing</A> and return error code (to
+				   the compiler)
+|<A HREF="quickfix.html#:make">:make</A>|		:make [args]	start make, read <A HREF="message.html#errors">errors</A>, and jump to first
+				   error
+|<A HREF="quickfix.html#:grep">:grep</A>|		:gr[ep] [args]	execute <A HREF="options.html#'grepprg'">'grepprg'</A> to find matches and jump to
+				   the first one
+------------------------------------------------------------------------------
+
+*<A NAME="Q_vc"></A><B>Q_vc</B>*		Various commands
+
+|<A HREF="various.html#CTRL-L">CTRL-L</A>|	   CTRL-L	clear and redraw the screen
+|<A HREF="editing.html#CTRL-G">CTRL-G</A>|	   CTRL-G	show current file name (with path) and cursor
+				   position
+|<A HREF="various.html#ga">ga</A>|		   ga		show ascii value of character under cursor in
+				   decimal, hex, and <A HREF="eval.html#octal">octal</A>
+|<A HREF="various.html#g8">g8</A>|		   g8		for <A HREF="mbyte.html#utf-8">utf-8</A> encoding: show byte sequence for
+				   character under cursor in hex
+|<A HREF="editing.html#g_CTRL-G">g_CTRL-G</A>|	   g CTRL-G	show cursor column, line, and character
+				   position
+|<A HREF="pattern.html#CTRL-C">CTRL-C</A>|	   CTRL-C	during searches: Interrupt the search
+|<A HREF="os_dos.html#dos-CTRL-Break">dos-CTRL-Break</A>|   CTRL-Break	<A HREF="os_msdos.html#MS-DOS">MS-DOS</A>: during searches: Interrupt the search
+|<A HREF="change.html#&lt;Del&gt;">&lt;Del&gt;</A>|		   &lt;Del&gt;	while entering a <A HREF="intro.html#count">count</A>: delete last character
+|<A HREF="various.html#:version">:version</A>|	:ve[rsion]	show version information
+|<A HREF="term.html#:mode">:mode</A>|		:mode N		<A HREF="os_msdos.html#MS-DOS">MS-DOS</A>: set screen mode to N (number, C80,
+				   C4350, etc.)
+|<A HREF="various.html#:normal">:normal</A>|	:norm[al][!] {commands}
+				execute <A HREF="intro.html#Normal">Normal</A> mode commands
+|<A HREF="intro.html#Q">Q</A>|		   Q		switch to &quot;<A HREF="intro.html#Ex">Ex</A>&quot; mode
+
+|<A HREF="various.html#:redir">:redir</A>|	:redir &gt;{file}		redirect <A HREF="message.html#messages">messages</A> to <A HREF="editing.html#{file}">{file}</A>
+|<A HREF="various.html#:silent">:silent</A>|	:silent[!] {command}	execute {command} silently
+|<A HREF="editing.html#:confirm">:confirm</A>|	:confirm {command}	quit, write, etc., asking about
+					unsaved changes or read-only files
+|<A HREF="editing.html#:browse">:browse</A>|	:browse {command}	open/read/write file, using a
+					file selection <A HREF="gui_w32.html#dialog">dialog</A>
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ce"></A><B>Q_ce</B>*		<A HREF="cmdline.html#Command-line">Command-line</A> editing
+
+|<A HREF="cmdline.html#c_&lt;Esc&gt;">c_&lt;Esc&gt;</A>|	&lt;Esc&gt;		   <A HREF="editing.html#abandon">abandon</A> command-line (if <A HREF="options.html#'wildchar'">'wildchar'</A> is
+				      <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>, type <A HREF="motion.html#it">it</A> <A HREF="if_cscop.html#twice">twice</A>)
+
+|<A HREF="cmdline.html#c_CTRL-V">c_CTRL-V</A>|	CTRL-V {char}	   insert {char} literally
+|<A HREF="cmdline.html#c_CTRL-V">c_CTRL-V</A>|	CTRL-V {number}    enter decimal value of character (up to
+				      three digits)
+|<A HREF="cmdline.html#c_CTRL-K">c_CTRL-K</A>|	CTRL-K {char1} {char2}
+				   enter <A HREF="digraph.html#digraph">digraph</A> (See |<A HREF="#Q_di">Q_di</A>|)
+|<A HREF="cmdline.html#c_CTRL-R">c_CTRL-R</A>|	CTRL-R {0-9a-z&quot;&#37;#:-=}
+				   insert the contents of a <A HREF="sponsor.html#register">register</A>
+
+|<A HREF="cmdline.html#c_&lt;Left&gt;">c_&lt;Left&gt;</A>|	&lt;Left&gt;/&lt;Right&gt;	   cursor left/right
+|<A HREF="cmdline.html#c_&lt;S-Left&gt;">c_&lt;S-Left&gt;</A>|	&lt;S-Left&gt;/&lt;S-Right&gt; cursor one <A HREF="motion.html#word">word</A> left/right
+|<A HREF="cmdline.html#c_CTRL-B">c_CTRL-B</A>|	CTRL-B/CTRL-E	   cursor to beginning/end of command-line
+
+|<A HREF="cmdline.html#c_&lt;BS&gt;">c_&lt;BS&gt;</A>|	&lt;BS&gt;		   delete the character in front of the cursor
+|<A HREF="cmdline.html#c_&lt;Del&gt;">c_&lt;Del&gt;</A>|	&lt;Del&gt;		   delete the character under the cursor
+|<A HREF="cmdline.html#c_CTRL-W">c_CTRL-W</A>|	CTRL-W		   delete the <A HREF="motion.html#word">word</A> in front of the cursor
+|<A HREF="cmdline.html#c_CTRL-U">c_CTRL-U</A>|	CTRL-U		   remove all characters
+
+|<A HREF="cmdline.html#c_&lt;Up&gt;">c_&lt;Up&gt;</A>|	&lt;Up&gt;/&lt;Down&gt;	   recall older/newer command-line that starts
+				      with current command
+|<A HREF="cmdline.html#c_&lt;S-Up&gt;">c_&lt;S-Up&gt;</A>|	&lt;S-Up&gt;/&lt;S-Down&gt;	   recall older/newer command-line from <A HREF="cmdline.html#history">history</A>
+|<A HREF="cmdline.html#:history">:history</A>|	:his[tory]	   show older command-lines
+
+Context-sensitive completion on the command-line:
+
+|<A HREF="cmdline.html#c_wildchar">c_wildchar</A>|	<A HREF="options.html#'wildchar'">'wildchar'</A>  (default: <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>)
+				<A HREF="diff.html#do">do</A> completion on the <A HREF="pattern.html#pattern">pattern</A> in front of the
+				   cursor; if there are multiple matches,
+				   beep and show the first one; further
+				   <A HREF="options.html#'wildchar'">'wildchar'</A> will show the next ones
+|<A HREF="cmdline.html#c_CTRL-D">c_CTRL-D</A>|	CTRL-D		list all names that match the <A HREF="pattern.html#pattern">pattern</A> in
+				   front of the cursor
+|<A HREF="cmdline.html#c_CTRL-A">c_CTRL-A</A>|	CTRL-A		insert all names that match <A HREF="pattern.html#pattern">pattern</A> in front
+				   of cursor
+|<A HREF="cmdline.html#c_CTRL-L">c_CTRL-L</A>|	CTRL-L		insert longest common part of names that
+				   match <A HREF="pattern.html#pattern">pattern</A>
+|<A HREF="cmdline.html#c_CTRL-N">c_CTRL-N</A>|	CTRL-N		after <A HREF="options.html#'wildchar'">'wildchar'</A> with multiple matches: go
+				   to next match
+|<A HREF="cmdline.html#c_CTRL-P">c_CTRL-P</A>|	CTRL-P		after <A HREF="options.html#'wildchar'">'wildchar'</A> with multiple matches: go
+				   to previous match
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ra"></A><B>Q_ra</B>*		<A HREF="intro.html#Ex">Ex</A> ranges
+
+|<A HREF="cmdline.html#:range">:range</A>|	,		separates two line numbers
+|<A HREF="cmdline.html#:range">:range</A>|	;		idem, set cursor to the first line number
+				before interpreting the second one
+
+|<A HREF="cmdline.html#:range">:range</A>|	{number}	an absolute line number
+|<A HREF="cmdline.html#:range">:range</A>|	.		the current line
+|<A HREF="cmdline.html#:range">:range</A>|	$		the last line in the file
+|<A HREF="cmdline.html#:range">:range</A>|	<A HREF="motion.html#&#37;">&#37;</A>		equal to 1,$ (the entire file)
+|<A HREF="cmdline.html#:range">:range</A>|	&#42;		equal to '&lt;,'&gt; (visual area)
+|<A HREF="cmdline.html#:range">:range</A>|	't		position of <A HREF="motion.html#mark">mark</A> t
+|<A HREF="cmdline.html#:range">:range</A>|	/{pattern}[/]	the next line where {pattern} matches
+|<A HREF="cmdline.html#:range">:range</A>|	?{pattern}[?]	the previous line where {pattern} matches
+
+|<A HREF="cmdline.html#:range">:range</A>|	+[num]		add [num] to the preceding line number
+				   (default: 1)
+|<A HREF="cmdline.html#:range">:range</A>|	-[num]		subtract [num] from the preceding line
+				   number (default: 1)
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ex"></A><B>Q_ex</B>*		Special <A HREF="intro.html#Ex">Ex</A> characters
+
+|<A HREF="cmdline.html#:bar">:bar</A>|      &#124;		separates two commands (not for &quot;<A HREF="repeat.html#:global">:global</A>&quot; and &quot;<A HREF="various.html#:!">:!</A>&quot;)
+|<A HREF="cmdline.html#:quote">:quote</A>|    &quot;		begins comment
+
+|<A HREF="cmdline.html#:_&#37;">:_&#37;</A>|       &#37;		current file name (only where a file name is expected)
+|<A HREF="cmdline.html#:_#">:_#</A>|       #[num]	alternate file name [num] (only where a file name is
+			   expected)
+	Note: The next seven are typed literally; these are not special keys!
+|<A HREF="cmdline.html#:&lt;abuf&gt;">:&lt;abuf&gt;</A>|   &lt;abuf&gt;	buffer number, for use in an <A HREF="autocmd.html#autocommand">autocommand</A> (only where a
+			   file name is expected)
+|<A HREF="cmdline.html#:&lt;afile&gt;">:&lt;afile&gt;</A>|  &lt;afile&gt;	file name, for use in an <A HREF="autocmd.html#autocommand">autocommand</A> (only where a
+			   file name is expected)
+|<A HREF="cmdline.html#:&lt;amatch&gt;">:&lt;amatch&gt;</A>| &lt;amatch&gt;	what matched with the <A HREF="pattern.html#pattern">pattern</A>, for use in an
+			   <A HREF="autocmd.html#autocommand">autocommand</A> (only where a file name is expected)
+|<A HREF="cmdline.html#:&lt;cword&gt;">:&lt;cword&gt;</A>|  &lt;cword&gt;	word under the cursor (only where a file name is
+			   expected)
+|<A HREF="cmdline.html#:&lt;cWORD&gt;">:&lt;cWORD&gt;</A>|  &lt;cWORD&gt;	WORD under the cursor (only where a file name is
+			   expected) (see |<A HREF="motion.html#WORD">WORD</A>|)
+|<A HREF="cmdline.html#:&lt;cfile&gt;">:&lt;cfile&gt;</A>|  &lt;cfile&gt;	file name under the cursor (only where a file name is
+			   expected)
+|<A HREF="cmdline.html#:&lt;sfile&gt;">:&lt;sfile&gt;</A>|  &lt;sfile&gt;	file name of a &quot;<A HREF="repeat.html#:source">:source</A>&quot;d file, within that file (only
+			   where a file name is expected)
+
+		After &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot;, &quot;<A HREF="pattern.html##">#</A>&quot;, &quot;<A HREF="cmdline.html#&lt;cfile&gt;">&lt;cfile&gt;</A>&quot;, &quot;<A HREF="cmdline.html#&lt;sfile&gt;">&lt;sfile&gt;</A>&quot; or &quot;<A HREF="cmdline.html#&lt;afile&gt;">&lt;afile&gt;</A>&quot;
+		|<A HREF="cmdline.html#::p">::p</A>|	    :p		full path
+		|<A HREF="cmdline.html#::h">::h</A>|	    :h		head (file name removed)
+		|<A HREF="cmdline.html#::t">::t</A>|	    :t		tail (file name only)
+		|<A HREF="cmdline.html#::r">::r</A>|	    :r		root (extension removed)
+		|<A HREF="cmdline.html#::e">::e</A>|	    :e		extension
+		|<A HREF="cmdline.html#::s">::s</A>|	    :s/{pat}/{repl}/	substitute <A HREF="autocmd.html#{pat}">{pat}</A> with {repl}
+------------------------------------------------------------------------------
+
+*<A NAME="Q_st"></A><B>Q_st</B>*		Starting Vim
+
+|<A HREF="starting.html#-vim">-vim</A>|	   vim [options]		start editing with an empty buffer
+|<A HREF="starting.html#-file">-file</A>|	   vim [options] <A HREF="editing.html#{file}">{file}</A> ..	start editing one or more files
+|<A HREF="starting.html#--">--</A>|	   vim [options] -		read file from stdin
+|<A HREF="starting.html#-tag">-tag</A>|	   vim [options] -t {tag}	edit the file associated with {tag}
+|<A HREF="starting.html#-qf">-qf</A>|	   vim [options] -q [fname]	start editing in QuickFix mode,
+					   display the first error
+
+	Most useful Vim arguments (for full list see |<A HREF="starting.html#startup-options">startup-options</A>|)
+
+|<A HREF="gui_x11.html#-gui">-gui</A>|	-g		    start <A HREF="gui.html#GUI">GUI</A> (also allows other <A HREF="options.html#options">options</A>)
+
+|<A HREF="starting.html#-+">-+</A>|	+[num]		    put the cursor at line [num] (default: last line)
+|<A HREF="starting.html#-+c">-+c</A>|	+{command}	    execute {command} after loading the file
+|<A HREF="starting.html#-+/">-+/</A>|	+/{pat} <A HREF="editing.html#{file}">{file}</A> ..   put the cursor at the first occurrence of <A HREF="autocmd.html#{pat}">{pat}</A>
+|<A HREF="starting.html#-v">-v</A>|	-v		    <A HREF="intro.html#Vi">Vi</A> mode, start <A HREF="starting.html#ex">ex</A> in <A HREF="intro.html#Normal">Normal</A> mode
+|<A HREF="starting.html#-e">-e</A>|	-e		    <A HREF="intro.html#Ex">Ex</A> mode, start vim in <A HREF="intro.html#Ex">Ex</A> mode
+|<A HREF="starting.html#-R">-R</A>|	-R		    Read-only mode, implies <A HREF="starting.html#-n">-n</A>
+|<A HREF="starting.html#-m">-m</A>|	-m		    modifications not allowed (resets <A HREF="options.html#'write'">'write'</A> option)
+|<A HREF="starting.html#-d">-d</A>|	-d		    diff mode |<A HREF="diff.html#diff">diff</A>|
+|<A HREF="starting.html#-b">-b</A>|	-b		    binary mode
+|<A HREF="starting.html#-l">-l</A>|	-l		    lisp mode
+|<A HREF="starting.html#-A">-A</A>|	-A		    <A HREF="arabic.html#Arabic">Arabic</A> mode ('arabic' is set)
+|<A HREF="starting.html#-F">-F</A>|	-F		    <A HREF="farsi.html#Farsi">Farsi</A> mode ('fkmap' and <A HREF="options.html#'rightleft'">'rightleft'</A> are set)
+|<A HREF="starting.html#-H">-H</A>|	-H		    Hebrew mode ('hkmap' and <A HREF="options.html#'rightleft'">'rightleft'</A> are set)
+|<A HREF="starting.html#-V">-V</A>|	-V		    Verbose, give informative <A HREF="message.html#messages">messages</A>
+|<A HREF="starting.html#-C">-C</A>|	-C		    Compatible, set the <A HREF="options.html#'compatible'">'compatible'</A> option
+|<A HREF="starting.html#-N">-N</A>|	-N		    Nocompatible, reset the <A HREF="options.html#'compatible'">'compatible'</A> option
+|<A HREF="starting.html#-r">-r</A>|	-r		    give list of swap files
+|<A HREF="starting.html#-r">-r</A>|	-r <A HREF="editing.html#{file}">{file}</A> ..	    recover aborted edit session
+|<A HREF="starting.html#-n">-n</A>|	-n		    <A HREF="diff.html#do">do</A> not create a swap file
+|<A HREF="starting.html#-o">-o</A>|	-o [num]	    open [num] <A HREF="windows.html#windows">windows</A> (default: one for each file)
+|<A HREF="starting.html#-f">-f</A>|	-f		    <A HREF="gui.html#GUI">GUI</A>: foreground process, don't <A HREF="os_unix.html#fork">fork</A>
+			    <A HREF="os_amiga.html#Amiga">Amiga</A>: <A HREF="diff.html#do">do</A> not restart Vim to open a <A HREF="windows.html#window">window</A> (for
+				e.g., mail)
+|<A HREF="starting.html#-s">-s</A>|	-s {scriptin}	    first read commands from the file {scriptin}
+|<A HREF="starting.html#-w">-w</A>|	-w {scriptout}	    write typed chars to file {scriptout} (append)
+|<A HREF="starting.html#-W">-W</A>|	-W {scriptout}	    write typed chars to file {scriptout} (overwrite)
+|<A HREF="starting.html#-T">-T</A>|	-T {terminal}	    set terminal name
+|<A HREF="starting.html#-d">-d</A>|	-d {device}	    <A HREF="os_amiga.html#Amiga">Amiga</A>: open {device} to be used <A HREF="motion.html#as">as</A> a console
+|<A HREF="starting.html#-u">-u</A>|	-u {vimrc}	    read inits from {vimrc} instead of other inits
+|<A HREF="starting.html#-U">-U</A>|	-U {gvimrc}	    idem, for when starting the <A HREF="gui.html#GUI">GUI</A>
+|<A HREF="starting.html#-i">-i</A>|	-i {viminfo}	    read info from {viminfo} instead of other files
+|<A HREF="starting.html#---">---</A>|	--		    end of <A HREF="options.html#options">options</A>, other arguments are file names
+|<A HREF="starting.html#--help">--help</A>|    --help	    show list of arguments and exit
+|<A HREF="starting.html#--version">--version</A>| --version	    show version info and exit
+|<A HREF="starting.html#--">--</A>|	-		    read file from stdin
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ed"></A><B>Q_ed</B>*		Editing a file
+
+	   Without !: Fail if changes have been made to the current buffer.
+	      With !: Discard any changes to the current buffer.
+|<A HREF="editing.html#:edit_f">:edit_f</A>|  :e[dit][!] <A HREF="editing.html#{file}">{file}</A>	edit <A HREF="editing.html#{file}">{file}</A>
+|<A HREF="editing.html#:edit">:edit</A>|    :e[dit][!]		<A HREF="editing.html#reload">reload</A> the current file
+|<A HREF="editing.html#:enew">:enew</A>|    :ene[w][!]		edit a new, unnamed buffer
+|<A HREF="editing.html#:find">:find</A>|    :fin[d][!] <A HREF="editing.html#{file}">{file}</A>	find <A HREF="editing.html#{file}">{file}</A> in <A HREF="options.html#'path'">'path'</A> and edit <A HREF="motion.html#it">it</A>
+
+|<A HREF="editing.html#CTRL-^">CTRL-^</A>|   N  CTRL-^		edit alternate file N (equivalent to &quot;<A HREF="editing.html#:e">:e</A> #N&quot;)
+|<A HREF="editing.html#gf">gf</A>|          gf  or <A HREF="editing.html#]f">]f</A>		edit the file whose name is under the cursor
+|<A HREF="editing.html#:pwd">:pwd</A>|     :pwd			print the current directory name
+|<A HREF="editing.html#:cd">:cd</A>|      :cd [path]		change the current directory to [path]
+|<A HREF="editing.html#:cd-">:cd-</A>|     :cd -		back to previous current directory
+|<A HREF="editing.html#:file">:file</A>|    :f[ile]		print the current file name and the cursor
+				   position
+|<A HREF="editing.html#:file">:file</A>|    :f[ile] {name}	set the current file name to {name}
+|<A HREF="windows.html#:files">:files</A>|   :files		show alternate file names
+------------------------------------------------------------------------------
+
+*<A NAME="Q_fl"></A><B>Q_fl</B>*		Using the argument list			|<A HREF="editing.html#argument-list">argument-list</A>|
+
+|<A HREF="editing.html#:args">:args</A>|	   :ar[gs]		print the argument list, with the current file
+				   in &quot;<A HREF="motion.html#[]">[]</A>&quot;
+|<A HREF="windows.html#:all">:all</A>|	   :all  or <A HREF="windows.html#:sall">:sall</A>	open a <A HREF="windows.html#window">window</A> for every file in the arg list
+|<A HREF="editing.html#:wn">:wn</A>|	   :wn[ext][!]		write file and edit next file
+|<A HREF="editing.html#:wn">:wn</A>|	   :wn[ext][!] <A HREF="editing.html#{file}">{file}</A>	write to <A HREF="editing.html#{file}">{file}</A> and edit next file, unless
+				   <A HREF="editing.html#{file}">{file}</A> exists; With !, overwrite existing
+				   file
+|<A HREF="editing.html#:wN">:wN</A>|	   :wN[ext][!] [file]	write file and edit previous file
+
+<B><FONT COLOR="PURPLE">	     in current window    in new window	</FONT></B>
+|<A HREF="editing.html#:argument">:argument</A>|  :argu[ment] N	  :sar[gument] N	edit file N
+|<A HREF="editing.html#:next">:next</A>|      :n[ext]		  :sn[ext]		edit next file
+|<A HREF="editing.html#:next_f">:next_f</A>|    :n[ext] <A HREF="editing.html#{arglist}">{arglist}</A>	  :sn[ext] <A HREF="editing.html#{arglist}">{arglist}</A>	define new arg list
+							   and edit first file
+|<A HREF="editing.html#:Next">:Next</A>|      :N[ext]		  :sN[ext]		edit previous file
+|<A HREF="editing.html#:first">:first</A>|     :fir[st]		  :sfir[st]		edit first file
+|<A HREF="editing.html#:last">:last</A>|      :la[st]		  :sla[st]		edit last file
+------------------------------------------------------------------------------
+
+*<A NAME="Q_wq"></A><B>Q_wq</B>*		Writing and quitting
+
+|<A HREF="editing.html#:w">:w</A>|	  :[range]w[rite][!]		write to the current file
+|<A HREF="editing.html#:w_f">:w_f</A>|	  :[range]w[rite] <A HREF="editing.html#{file}">{file}</A>	write to <A HREF="editing.html#{file}">{file}</A>, unless <A HREF="motion.html#it">it</A> already
+					   exists
+|<A HREF="editing.html#:w_f">:w_f</A>|	  :[range]w[rite]! <A HREF="editing.html#{file}">{file}</A>	write to <A HREF="editing.html#{file}">{file}</A>.  Overwrite an existing
+					   file
+|<A HREF="editing.html#:w_a">:w_a</A>|	  :[range]w[rite][!] <A HREF="change.html#&gt;&gt;">&gt;&gt;</A>		append to the current file
+|<A HREF="editing.html#:w_a">:w_a</A>|	  :[range]w[rite][!] <A HREF="change.html#&gt;&gt;">&gt;&gt;</A> <A HREF="editing.html#{file}">{file}</A>	append to <A HREF="editing.html#{file}">{file}</A>
+|<A HREF="editing.html#:w_c">:w_c</A>|	  :[range]w[rite] !{cmd}	execute {cmd} with <A HREF="cmdline.html#[range]">[range]</A> lines <A HREF="motion.html#as">as</A>
+					   standard input
+|<A HREF="editing.html#:up">:up</A>|	  :[range]up[date][!]		write to current file if modified
+|<A HREF="editing.html#:wall">:wall</A>|	  :wa[ll][!]			write all changed <A HREF="windows.html#buffers">buffers</A>
+
+|<A HREF="editing.html#:q">:q</A>|	  :q[uit]		quit current buffer, unless changes have been
+				   made; Exit Vim when there are no other
+				   non-help <A HREF="windows.html#buffers">buffers</A>
+|<A HREF="editing.html#:q">:q</A>|	  :q[uit]!		quit current buffer always, <A HREF="editing.html#discard">discard</A> any
+				   changes.  Exit Vim when there are no other
+				   non-help <A HREF="windows.html#buffers">buffers</A>
+|<A HREF="editing.html#:qa">:qa</A>|	  :qa[ll]		exit Vim, unless changes have been made
+|<A HREF="editing.html#:qa">:qa</A>|	  :qa[ll]!		exit Vim always, <A HREF="editing.html#discard">discard</A> any changes
+|<A HREF="quickfix.html#:cq">:cq</A>|	  :cq			quit without <A HREF="editing.html#writing">writing</A> and return error code
+
+|<A HREF="editing.html#:wq">:wq</A>|	  :wq[!]		write the current file and exit
+|<A HREF="editing.html#:wq">:wq</A>|	  :wq[!] <A HREF="editing.html#{file}">{file}</A>		write to <A HREF="editing.html#{file}">{file}</A> and exit
+|<A HREF="editing.html#:xit">:xit</A>|	  :x[it][!] [file]	like &quot;<A HREF="editing.html#:wq">:wq</A>&quot; but write only when changes have
+				   been made
+|<A HREF="editing.html#ZZ">ZZ</A>|	     ZZ			same <A HREF="motion.html#as">as</A> &quot;<A HREF="editing.html#:x">:x</A>&quot;
+|<A HREF="editing.html#ZQ">ZQ</A>|	     ZQ			same <A HREF="motion.html#as">as</A> &quot;:q!&quot;
+|<A HREF="editing.html#:xall">:xall</A>|	  :xa[ll][!]  or :wqall[!]
+				write all changed <A HREF="windows.html#buffers">buffers</A> and exit
+
+|<A HREF="starting.html#:stop">:stop</A>|	  :st[op][!]		<A HREF="starting.html#suspend">suspend</A> Vim or start new shell; if <A HREF="options.html#'aw'">'aw'</A> option
+				   is set and [!] not given write the buffer
+|<A HREF="starting.html#CTRL-Z">CTRL-Z</A>|     CTRL-Z		same <A HREF="motion.html#as">as</A> &quot;<A HREF="starting.html#:stop">:stop</A>&quot;
+------------------------------------------------------------------------------
+
+*<A NAME="Q_ac"></A><B>Q_ac</B>*		Automatic Commands
+
+|<A HREF="starting.html#viminfo-file">viminfo-file</A>|	read <A HREF="change.html#registers">registers</A>, marks, <A HREF="cmdline.html#history">history</A> at <A HREF="starting.html#startup">startup</A>, save when exiting.
+
+|<A HREF="starting.html#:rviminfo">:rviminfo</A>|	:rv[iminfo] [file]	read info from viminfo file [file]
+|<A HREF="starting.html#:rviminfo">:rviminfo</A>|	:rv[iminfo]! [file]	idem, overwrite existing info
+|<A HREF="starting.html#:wviminfo">:wviminfo</A>|	:wv[iminfo] [file]	add info to viminfo file [file]
+|<A HREF="starting.html#:wviminfo">:wviminfo</A>|	:wv[iminfo]! [file]	write info to viminfo file [file]
+
+|<A HREF="options.html#modeline">modeline</A>|	Automatic option setting when editing a file
+
+|<A HREF="options.html#modeline">modeline</A>|	vim:{set-arg}: ..	In the first and last lines of the
+					file (see <A HREF="options.html#'ml'">'ml'</A> option), {set-arg} is
+					given <A HREF="motion.html#as">as</A> an argument to &quot;<A HREF="options.html#:set">:set</A>&quot;
+
+|<A HREF="autocmd.html#autocommand">autocommand</A>|	Automatic execution of commands on certain events.
+
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au			  list all autocommands
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au <A HREF="autocmd.html#{event}">{event}</A>		  list all autocommands for <A HREF="autocmd.html#{event}">{event}</A>
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au <A HREF="autocmd.html#{event}">{event}</A> <A HREF="autocmd.html#{pat}">{pat}</A>	  list all autocommands for <A HREF="autocmd.html#{event}">{event}</A>
+					  with <A HREF="autocmd.html#{pat}">{pat}</A>
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au <A HREF="autocmd.html#{event}">{event}</A> <A HREF="autocmd.html#{pat}">{pat}</A> {cmd}	  enter new autocommands for <A HREF="autocmd.html#{event}">{event}</A>
+					  with <A HREF="autocmd.html#{pat}">{pat}</A>
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au!			  remove all autocommands
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au! <A HREF="autocmd.html#{event}">{event}</A>		  remove all autocommands for <A HREF="autocmd.html#{event}">{event}</A>
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au! &#42; <A HREF="autocmd.html#{pat}">{pat}</A>		  remove all autocommands for <A HREF="autocmd.html#{pat}">{pat}</A>
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au! <A HREF="autocmd.html#{event}">{event}</A> <A HREF="autocmd.html#{pat}">{pat}</A>	  remove all autocommands for <A HREF="autocmd.html#{event}">{event}</A>
+					  with <A HREF="autocmd.html#{pat}">{pat}</A>
+|<A HREF="autocmd.html#:autocmd">:autocmd</A>|	:au! <A HREF="autocmd.html#{event}">{event}</A> <A HREF="autocmd.html#{pat}">{pat}</A> {cmd}  remove all autocommands for <A HREF="autocmd.html#{event}">{event}</A>
+					  with <A HREF="autocmd.html#{pat}">{pat}</A> and enter new one
+------------------------------------------------------------------------------
+
+*<A NAME="Q_wi"></A><B>Q_wi</B>*		Multi-window commands
+
+|<A HREF="windows.html#CTRL-W_s">CTRL-W_s</A>|	CTRL-W s  or  <A HREF="windows.html#:split">:split</A>	split <A HREF="windows.html#window">window</A> into two parts
+|<A HREF="windows.html#:split_f">:split_f</A>|	:split <A HREF="editing.html#{file}">{file}</A>		split <A HREF="windows.html#window">window</A> and edit <A HREF="editing.html#{file}">{file}</A> in one of
+					   them
+|<A HREF="windows.html#:vsplit">:vsplit</A>|	:vsplit <A HREF="editing.html#{file}">{file}</A>		same, but split vertically
+|<A HREF="windows.html#:vertical">:vertical</A>|	:vertical {cmd}		make {cmd} split vertically
+
+|<A HREF="windows.html#:sfind">:sfind</A>|	:sf[ind] <A HREF="editing.html#{file}">{file}</A>		split <A HREF="windows.html#window">window</A>, find <A HREF="editing.html#{file}">{file}</A> in <A HREF="options.html#'path'">'path'</A>
+					   and edit <A HREF="motion.html#it">it</A>
+|<A HREF="windows.html#CTRL-W_]">CTRL-W_]</A>|	CTRL-W ]		split <A HREF="windows.html#window">window</A> and jump to <A HREF="tagsrch.html#tag">tag</A> under
+					   cursor
+|<A HREF="windows.html#CTRL-W_f">CTRL-W_f</A>|	CTRL-W f		split <A HREF="windows.html#window">window</A> and edit file name under
+					   the cursor
+|<A HREF="windows.html#CTRL-W_^">CTRL-W_^</A>|	CTRL-W ^		split <A HREF="windows.html#window">window</A> and edit alternate file
+|<A HREF="windows.html#CTRL-W_n">CTRL-W_n</A>|	CTRL-W n  or  <A HREF="windows.html#:new">:new</A>	create new empty <A HREF="windows.html#window">window</A>
+|<A HREF="windows.html#CTRL-W_q">CTRL-W_q</A>|	CTRL-W q  or  :q[uit]	quit editing and close <A HREF="windows.html#window">window</A>
+|<A HREF="windows.html#CTRL-W_c">CTRL-W_c</A>|	CTRL-W c  or  :cl[ose]	make buffer hidden and close <A HREF="windows.html#window">window</A>
+|<A HREF="windows.html#CTRL-W_o">CTRL-W_o</A>|	CTRL-W o  or  :on[ly]	make current <A HREF="windows.html#window">window</A> only one on the
+					   screen
+
+|<A HREF="windows.html#CTRL-W_j">CTRL-W_j</A>|	CTRL-W j		move cursor to <A HREF="windows.html#window">window</A> below
+|<A HREF="windows.html#CTRL-W_k">CTRL-W_k</A>|	CTRL-W k		move cursor to <A HREF="windows.html#window">window</A> above
+|<A HREF="windows.html#CTRL-W_CTRL-W">CTRL-W_CTRL-W</A>|	CTRL-W CTRL-W		move cursor to <A HREF="windows.html#window">window</A> below (wrap)
+|<A HREF="windows.html#CTRL-W_W">CTRL-W_W</A>|	CTRL-W W		move cursor to <A HREF="windows.html#window">window</A> above (wrap)
+|<A HREF="windows.html#CTRL-W_t">CTRL-W_t</A>|	CTRL-W t		move cursor to top <A HREF="windows.html#window">window</A>
+|<A HREF="windows.html#CTRL-W_b">CTRL-W_b</A>|	CTRL-W b		move cursor to bottom <A HREF="windows.html#window">window</A>
+|<A HREF="windows.html#CTRL-W_p">CTRL-W_p</A>|	CTRL-W p		move cursor to previous active <A HREF="windows.html#window">window</A>
+
+|<A HREF="windows.html#CTRL-W_r">CTRL-W_r</A>|	CTRL-W r		rotate <A HREF="windows.html#windows">windows</A> downwards
+|<A HREF="windows.html#CTRL-W_R">CTRL-W_R</A>|	CTRL-W R		rotate <A HREF="windows.html#windows">windows</A> upwards
+|<A HREF="windows.html#CTRL-W_x">CTRL-W_x</A>|	CTRL-W x		exchange current <A HREF="windows.html#window">window</A> with next one
+
+|<A HREF="windows.html#CTRL-W_=">CTRL-W_=</A>|	CTRL-W =		make all <A HREF="windows.html#windows">windows</A> equal height
+|<A HREF="windows.html#CTRL-W_-">CTRL-W_-</A>|	CTRL-W -		decrease current <A HREF="windows.html#window">window</A> height
+|<A HREF="windows.html#CTRL-W_+">CTRL-W_+</A>|	CTRL-W +		increase current <A HREF="windows.html#window">window</A> height
+|<A HREF="windows.html#CTRL-W__">CTRL-W__</A>|	CTRL-W _		set current <A HREF="windows.html#window">window</A> height (default:
+					   very high)
+------------------------------------------------------------------------------
+
+*<A NAME="Q_bu"></A><B>Q_bu</B>*		Buffer list commands
+
+|<A HREF="windows.html#:buffers">:buffers</A>|	:buffers  or  <A HREF="windows.html#:files">:files</A>	list all known buffer and file names
+
+|<A HREF="windows.html#:ball">:ball</A>|		:ball	  or  <A HREF="windows.html#:sball">:sball</A>	edit all args/buffers
+|<A HREF="windows.html#:unhide">:unhide</A>|	:unhide   or  <A HREF="windows.html#:sunhide">:sunhide</A>	edit all loaded <A HREF="windows.html#buffers">buffers</A>
+
+|<A HREF="windows.html#:badd">:badd</A>|		:badd {fname}		add file name {fname} to the list
+|<A HREF="windows.html#:bunload">:bunload</A>|	:bunload[!] [N]		unload buffer [N] from memory
+|<A HREF="windows.html#:bdelete">:bdelete</A>|	:bdelete[!] [N]		unload buffer [N] and delete <A HREF="motion.html#it">it</A> from
+					   the buffer list
+
+<B><FONT COLOR="PURPLE">		in current window  in new window       </FONT></B>
+|<A HREF="windows.html#:buffer">:buffer</A>|	:[N]buffer [N]     :[N]sbuffer [N]     to arg/buf N
+|<A HREF="windows.html#:bnext">:bnext</A>|	:[N]bnext [N]      :[N]sbnext [N]      to Nth next arg/buf
+|<A HREF="windows.html#:bNext">:bNext</A>|	:[N]bNext [N]      :[N]sbNext [N]      to Nth previous arg/buf
+|<A HREF="windows.html#:bprevious">:bprevious</A>|	:[N]bprevious [N]  :[N]sbprevious [N]  to Nth previous arg/buf
+|<A HREF="windows.html#:bfirst">:bfirst</A>|	:bfirst	           <A HREF="windows.html#:sbfirst">:sbfirst</A>            to first arg/buf
+|<A HREF="windows.html#:blast">:blast</A>|	:blast	           <A HREF="windows.html#:sblast">:sblast</A>             to last arg/buf
+|<A HREF="windows.html#:bmodified">:bmodified</A>|	:[N]bmod [N]       :[N]sbmod [N]       to Nth modified buf
+------------------------------------------------------------------------------
+
+*<A NAME="Q_sy"></A><B>Q_sy</B>*		<A HREF="autocmd.html#Syntax">Syntax</A> Highlighting
+
+|<A HREF="syntax.html#:syn-on">:syn-on</A>|	<A HREF="syntax.html#:syntax">:syntax</A> on		start using <A HREF="syntax.html#syntax">syntax</A> highlighting
+|<A HREF="usr_06.html#:syn-off">:syn-off</A>|	<A HREF="syntax.html#:syntax">:syntax</A> off		stop using <A HREF="syntax.html#syntax">syntax</A> highlighting
+
+|<A HREF="syntax.html#:syn-keyword">:syn-keyword</A>|	<A HREF="syntax.html#:syntax">:syntax</A> keyword <A HREF="syntax.html#{group-name}">{group-name}</A> {keyword} ..
+					add a <A HREF="syntax.html#syntax">syntax</A> keyword item
+|<A HREF="syntax.html#:syn-match">:syn-match</A>|	<A HREF="syntax.html#:syntax">:syntax</A> match <A HREF="syntax.html#{group-name}">{group-name}</A> {pattern} <A HREF="eval.html#...">...</A>
+					add <A HREF="syntax.html#syntax">syntax</A> match item
+|<A HREF="syntax.html#:syn-region">:syn-region</A>|	<A HREF="syntax.html#:syntax">:syntax</A> region <A HREF="syntax.html#{group-name}">{group-name}</A> {pattern} <A HREF="eval.html#...">...</A>
+					add <A HREF="syntax.html#syntax">syntax</A> region item
+|<A HREF="syntax.html#:syn-sync">:syn-sync</A>|	<A HREF="syntax.html#:syntax">:syntax</A> sync [ccomment &#124; lines {N} &#124; ...]
+					tell <A HREF="syntax.html#syntax">syntax</A> how to sync
+|<A HREF="syntax.html#:syntax">:syntax</A>|	:syntax [list]		list current syntax items
+|<A HREF="syntax.html#:syn-clear">:syn-clear</A>|	<A HREF="syntax.html#:syntax">:syntax</A> clear		clear all <A HREF="syntax.html#syntax">syntax</A> info
+
+|<A HREF="syntax.html#:highlight">:highlight</A>|	:highlight clear	clear all highlight info
+|<A HREF="syntax.html#:highlight">:highlight</A>|	:highlight <A HREF="syntax.html#{group-name}">{group-name}</A> {key}={arg} ..
+					set highlighting for <A HREF="syntax.html#{group-name}">{group-name}</A>
+
+|<A HREF="filetype.html#:filetype">:filetype</A>|	:filetype on		switch on file type detection, without
+					<A HREF="syntax.html#syntax">syntax</A> highlighting
+|<A HREF="filetype.html#:filetype">:filetype</A>|	:filetype <A HREF="usr_05.html#plugin">plugin</A> indent on
+					switch on file type detection, with
+					automatic indenting and settings
+------------------------------------------------------------------------------
+
+*<A NAME="Q_gu"></A><B>Q_gu</B>*		<A HREF="gui.html#GUI">GUI</A> commands
+
+|<A HREF="gui_x11.html#:gui">:gui</A>|		:gui			UNIX: start the <A HREF="gui.html#GUI">GUI</A>
+|<A HREF="gui_x11.html#:gui">:gui</A>|		:gui {fname} ..		idem, and edit {fname} ..
+
+|<A HREF="gui.html#:menu">:menu</A>|		:menu			list all <A HREF="gui.html#menus">menus</A>
+|<A HREF="gui.html#:menu">:menu</A>|		:menu {mpath}		list <A HREF="gui.html#menus">menus</A> starting with {mpath}
+|<A HREF="gui.html#:menu">:menu</A>|		:menu {mpath} <A HREF="map.html#{rhs}">{rhs}</A>	add menu {mpath}, giving <A HREF="map.html#{rhs}">{rhs}</A>
+|<A HREF="gui.html#:menu">:menu</A>|		:menu {pri} {mpath} <A HREF="map.html#{rhs}">{rhs}</A>
+					idem, with priorities {pri}
+|<A HREF="gui.html#:menu">:menu</A>|		:menu ToolBar.{name} <A HREF="map.html#{rhs}">{rhs}</A>
+					add toolbar item, giving <A HREF="map.html#{rhs}">{rhs}</A>
+|<A HREF="gui.html#:tmenu">:tmenu</A>|	:tmenu {mpath} {text}	add tooltip to menu {mpath}
+|<A HREF="gui.html#:unmenu">:unmenu</A>|	:unmenu {mpath}		remove menu {mpath}
+------------------------------------------------------------------------------
+
+*<A NAME="Q_fo"></A><B>Q_fo</B>*		<A HREF="fold.html#Folding">Folding</A>
+
+|<A HREF="options.html#'foldmethod'">'foldmethod'</A>|	set foldmethod=manual	manual <A HREF="fold.html#folding">folding</A>
+		set foldmethod=indent	<A HREF="fold.html#folding">folding</A> by indent
+		set foldmethod=expr	<A HREF="fold.html#folding">folding</A> by <A HREF="options.html#'foldexpr'">'foldexpr'</A>
+		set foldmethod=syntax	<A HREF="fold.html#folding">folding</A> by <A HREF="syntax.html#syntax">syntax</A> regions
+		set foldmethod=marker	<A HREF="fold.html#folding">folding</A> by <A HREF="options.html#'foldmarker'">'foldmarker'</A>
+
+|<A HREF="fold.html#zf">zf</A>|		zf{motion}		<A HREF="motion.html#operator">operator</A>: Define a fold manually
+|<A HREF="fold.html#:fold">:fold</A>|		:{range}fold		define a fold for {range} lines
+|<A HREF="fold.html#zd">zd</A>|		zd			delete one fold under the cursor
+|<A HREF="fold.html#zD">zD</A>|		zD			delete all <A HREF="fold.html#folds">folds</A> under the cursor
+
+|<A HREF="fold.html#zo">zo</A>|		zo			open one fold under the cursor
+|<A HREF="fold.html#zO">zO</A>|		zO			open all <A HREF="fold.html#folds">folds</A> under the cursor
+|<A HREF="fold.html#zc">zc</A>|		zc			close one fold under the cursor
+|<A HREF="fold.html#zC">zC</A>|		zC			close all <A HREF="fold.html#folds">folds</A> under the cursor
+
+|<A HREF="fold.html#zm">zm</A>|		zm			fold more: decrease <A HREF="options.html#'foldlevel'">'foldlevel'</A>
+|<A HREF="fold.html#zM">zM</A>|		zM			close all <A HREF="fold.html#folds">folds</A>: make <A HREF="options.html#'foldlevel'">'foldlevel'</A> zero
+|<A HREF="fold.html#zr">zr</A>|		zr			reduce <A HREF="fold.html#folding">folding</A>: increase <A HREF="options.html#'foldlevel'">'foldlevel'</A>
+|<A HREF="fold.html#zR">zR</A>|		zR			open all <A HREF="fold.html#folds">folds</A>: make <A HREF="options.html#'foldlevel'">'foldlevel'</A> max.
+
+|<A HREF="fold.html#zn">zn</A>|		zn			fold none: reset <A HREF="options.html#'foldenable'">'foldenable'</A>
+|<A HREF="fold.html#zN">zN</A>|		zN			fold normal set <A HREF="options.html#'foldenable'">'foldenable'</A>
+|<A HREF="fold.html#zi">zi</A>|		zi			invert <A HREF="options.html#'foldenable'">'foldenable'</A>
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

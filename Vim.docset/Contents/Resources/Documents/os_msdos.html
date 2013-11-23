@@ -1,0 +1,311 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: os_msdos</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: os_msdos</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="os_msdos.txt"></A><B>os_msdos.txt</B>*  For Vim version 7.4.  Last change: 2005 Mar 29
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+					*<A NAME="msdos"></A><B>msdos</B>* *<A NAME="ms-dos"></A><B>ms-dos</B>* *<A NAME="MSDOS"></A><B>MSDOS</B>* *<A NAME="MS-DOS"></A><B>MS-DOS</B>*
+This file contains the particularities for the <A HREF="#MS-DOS">MS-DOS</A> version of Vim.
+
+1. Two versions for <A HREF="#MS-DOS">MS-DOS</A>	|<A HREF="#msdos-versions">msdos-versions</A>|
+2. Known problems		|<A HREF="#msdos-problems">msdos-problems</A>|
+3. Long file names		|<A HREF="#msdos-longfname">msdos-longfname</A>|
+4. Termcap codes		|<A HREF="#msdos-termcap">msdos-termcap</A>|
+5. Shifted arrow keys		|<A HREF="#msdos-arrows">msdos-arrows</A>|
+6. Filename extensions		|<A HREF="#msdos-fname-extensions">msdos-fname-extensions</A>|
+7. Memory usage and limitations	|<A HREF="#msdos-limitations">msdos-limitations</A>|
+8. Symbolically linked files	|<A HREF="#msdos-linked-files">msdos-linked-files</A>|
+9. Copy/paste in a dos box	|<A HREF="#msdos-copy-paste">msdos-copy-paste</A>|
+
+Additionally, there are a number of common <A HREF="os_win32.html#Win32">Win32</A> and <A HREF="os_dos.html#DOS">DOS</A> items:
+File locations			|<A HREF="os_dos.html#dos-locations">dos-locations</A>|
+Using backslashes		|<A HREF="os_dos.html#dos-backslash">dos-backslash</A>|
+Standard mappings		|<A HREF="os_dos.html#dos-standard-mappings">dos-standard-mappings</A>|
+Screen output and colors	|<A HREF="os_dos.html#dos-colors">dos-colors</A>|
+File formats			|<A HREF="os_dos.html#dos-file-formats">dos-file-formats</A>|
+:cd command			|<A HREF="os_dos.html#dos-:cd">dos-:cd</A>|
+Interrupting			|<A HREF="os_dos.html#dos-CTRL-Break">dos-CTRL-Break</A>|
+Temp files			|<A HREF="os_dos.html#dos-temp-files">dos-temp-files</A>|
+Shell option default		|<A HREF="os_dos.html#dos-shell">dos-shell</A>|
+
+
+For compiling Vim see src/INSTALL.pc.			*<A NAME="msdos-compiling"></A><B>msdos-compiling</B>*
+
+==============================================================================
+
+1. Two versions for <A HREF="#MS-DOS">MS-DOS</A>				*<A NAME="msdos-versions"></A><B>msdos-versions</B>*
+
+There are two versions of Vim that can be used with <A HREF="#MS-DOS">MS-DOS</A> machines:
+
+
+							*<A NAME="dos16"></A><B>dos16</B>*
+Dos16 version	Can be used on any <A HREF="#MS-DOS">MS-DOS</A> system, only uses up to 640 Kbyte of
+		memory.  Also runs on <A HREF="os_os2.html#OS/2">OS/2</A>, Windows 95, and NT.  Excludes some
+		Vim-specific features (autocommands, <A HREF="syntax.html#syntax">syntax</A> highlighting,
+		etc.).  Recommended for use on pre-386 machines.
+
+							*<A NAME="dos32"></A><B>dos32</B>*
+Dos32 version	Requires 386 processor and a |<A HREF="#DPMI">DPMI</A>| driver, uses all
+		available memory.  Supports long file names and the Windows
+		<A HREF="gui.html#clipboard">clipboard</A>, but NOT on Windows NT.  Recommended for <A HREF="#MS-DOS">MS-DOS</A>,
+		Windows 3.1 and Windows 95.
+
+There are also two versions that run under Windows:
+<A HREF="os_win32.html#Win32">Win32</A> version   Requires Windows 95 or Windows NT, uses all available
+		memory, supports long file names, etc.  Has some problems on
+		Windows 95.  Recommended for Windows NT.  See |<A HREF="os_win32.html">os_win32.txt</A>|
+<A HREF="os_win32.html#Win32">Win32</A> <A HREF="gui.html#GUI">GUI</A>	Requirements like the <A HREF="os_win32.html#Win32">Win32</A> version, but runs in its own
+		<A HREF="windows.html#window">window</A>, instead of a console.  Has scrollbars, menu, etc.
+		Recommended for Windows 95 and Windows NT.  See |<A HREF="gui_w32.html#gui-w32">gui-w32</A>|.
+
+It is recommended to use the Dos32 or <A HREF="os_win32.html#Win32">Win32</A> version.  Although the Dos16
+version is able to edit very big files, <A HREF="motion.html#it">it</A> quickly runs out of memory when
+making big changes.  Disabling <A HREF="undo.html#undo">undo</A> helps: &quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'ul'">ul</A>=-1&quot;.  The screen updating
+of the Dos16 version is the fastest of the three on <A HREF="os_dos.html#DOS">DOS</A> or Windows 95; on
+Windows NT, the <A HREF="os_win32.html#Win32">Win32</A> version is just <A HREF="motion.html#as">as</A> fast.
+
+
+								*<A NAME="DPMI"></A><B>DPMI</B>*
+For the Dos32 version, you may need a <A HREF="#DPMI">DPMI</A> driver when running in <A HREF="#MS-DOS">MS-DOS</A>.  If
+you are running Windows or installed a clever memory manager, <A HREF="motion.html#it">it</A> will probably
+work already.  If you get the message &quot;No DPMI&quot;, you need to <A HREF="usr_90.html#install">install</A> a <A HREF="#DPMI">DPMI</A>
+driver.  Such a driver is included with the executable in CSDPMI4B.ZIP.  Run
+&quot;cwsdpmi&quot; just before starting Vim each time.  Or you might want to include
+&quot;cwsdpmi -p&quot; in your autoexec.bat to make <A HREF="motion.html#it">it</A> resident.  The latest version of
+&quot;CSDPMI*.ZIP&quot; can be obtained from: &quot;ftp.neosoft.com:pub/users/s/sandmann&quot;.
+
+
+							*<A NAME="minimal-features"></A><B>minimal-features</B>*
+The 16 bit <A HREF="os_dos.html#DOS">DOS</A> version has been compiled with minimal features.  Check the
+|<A HREF="various.html#+feature-list">+feature-list</A>| which ones are included (marked with a &quot;T&quot;).
+You can include more features by editing feature.h and recompiling.
+
+==============================================================================
+
+2. Known problems					*<A NAME="msdos-problems"></A><B>msdos-problems</B>*
+
+When using smartdrive (MS-DOS 6.x) with write-behind caching, <A HREF="motion.html#it">it</A> is possible
+that Vim will try to create a swap file on a read-only file system (e.g.
+write protected floppy).  You will then be given the message
+<B>	A serious disk error has occurred .., Retry (r)?</B>
+There is nothing you can <A HREF="diff.html#do">do</A> but unprotect the floppy or switch off the
+computer.  Even CTRL-ALT-DEL will not get you out of this.  This is really a
+problem of smartdrive, not Vim.  Smartdrive works fine otherwise.  If this
+bothers you, don't use the write-behind caching.
+
+Vim can't read swap files that have been opened already, unless the &quot;share&quot;
+command has been used.  If you see stray warnings for existing swap files,
+include the &quot;share&quot; command in your config.sys or autoexec.bat (see your <A HREF="#MSDOS">MSDOS</A>
+documentation).
+
+The Dos16 version can only have about 10 files open (in a <A HREF="windows.html#window">window</A> or hidden) at
+one time.  With more files you will get error <A HREF="message.html#messages">messages</A> when trying to read or
+write a file, and for <A HREF="change.html#filter">filter</A> commands.  Or Vim runs out of memory, and random
+problems may result.
+
+The Dos32 version cannot have an unlimited number of files open at any one
+time.  The limit depends on the setting of FILES in your CONFIG.SYS.  This
+defaults to 15; if you need to edit a lot of files, you should increase this.
+If you <A HREF="diff.html#do">do</A> not set FILES high enough, you can get strange <A HREF="message.html#errors">errors</A>, and shell
+commands may cause a crash!
+
+The Dos32 version can work with long file names.  When doing file name
+completion, matches for the short file name will also be found.  But this will
+result in the corresponding long file name.  For example, if you have the long
+file name &quot;this_is_a_test&quot; with the short file name &quot;this_i~1&quot;, the command
+&quot;<A HREF="editing.html#:e">:e</A> *1&quot; will start editing &quot;this_is_a_test&quot;.
+
+When using the Dos32 version and you run into problems with <A HREF="#DPMI">DPMI</A> support,
+check if there is a program in your config.sys that eats resources.  One
+program known to cause this problem is &quot;netx&quot;, which says &quot;NetWare <A HREF="visual.html#v">v</A>. 3.26
+Workstation shell&quot;.  <A HREF="insert.html#Replace">Replace</A> <A HREF="motion.html#it">it</A> with version 3.32 to fix the problem.
+
+The Dos32 version will parse its arguments to handle quotation.  This is good
+to edit a file with spaces in its name, for example:
+<B>	vim "program files\accessories\ppp.scp"</B>
+A side effect is that single <A HREF="quotes.html#quotes">quotes</A> are removed.  <A HREF="insert.html#Insert">Insert</A> a <A HREF="intro.html#backslash">backslash</A> to avoid
+that.  For example, to edit the file &quot;fi'le.txt&quot;:
+<B>	vim fi\'le.txt</B>
+
+==============================================================================
+
+3. Long file names					*<A NAME="msdos-longfname"></A><B>msdos-longfname</B>*
+
+If the Dos32 version is run on Windows 95, <A HREF="motion.html#it">it</A> can use long file names.  It
+will work by default.  If you want to disable this, use this setting:
+	set LFN=N
+You can put this in your autoexec.bat file.
+
+Note: If you have installed DJGPP on your machine, you probably have a
+&quot;djgpp.env&quot; file, which contains &quot;LFN=n&quot;.  You need to use &quot;LFN=Y&quot; to switch
+on using long file names then.
+
+==============================================================================
+
+4. Termcap codes					*<A NAME="msdos-termcap"></A><B>msdos-termcap</B>*
+
+If you want to use another output method (e.g., when using a terminal on a COM
+port), set the terminal name to &quot;pcansi&quot;.  You can change the <A HREF="term.html#termcap">termcap</A> <A HREF="options.html#options">options</A>
+when needed (see |<A HREF="term.html#terminal-options">terminal-options</A>|).  Note that the
+normal IBM ansi.sys does not support all the codes of the builtin pcansi
+terminal.  If you use ansi.sys, you will need to delete the <A HREF="term.html#termcap">termcap</A> entries
+<A HREF="term.html#t_al">t_al</A> and <A HREF="term.html#t_dl">t_dl</A> with
+<B>   :set t_al= t_dl=</B>
+Otherwise, the screen will not be updated correctly.  It is better to use
+nansi.sys, nnansi.sys, or the like instead of ansi.sys.
+
+If you want to use Vim on a terminal connected to a COM: port, reset the
+<A HREF="options.html#'bioskey'">'bioskey'</A> option.  Otherwise the commands will be read from the PC keyboard.
+<A HREF="pattern.html#CTRL-C">CTRL-C</A> and <A HREF="motion.html#CTRL-P">CTRL-P</A> may not work correctly with <A HREF="options.html#'bioskey'">'bioskey'</A> reset.
+
+==============================================================================
+
+5. Shifted arrow keys					*<A NAME="msdos-arrows"></A><B>msdos-arrows</B>*
+
+Use CTRL-arrow-left and CTRL-arrow-right instead of SHIFT-arrow-left and
+SHIFT-arrow-right.  The arrow-up and arrow-down cannot be used with SHIFT or
+CTRL.
+
+==============================================================================
+
+6. Filename extensions				*<A NAME="msdos-fname-extensions"></A><B>msdos-fname-extensions</B>*
+
+<A HREF="#MS-DOS">MS-DOS</A> allows for only one file name extension.  Therefore, when appending an
+extension, the '<A HREF="repeat.html#.">.</A>' in the original file name is replaced with a '<A HREF="motion.html#_">_</A>', the name
+is truncated to 8 characters, and the new extension (e.g., &quot;.swp&quot;) is
+appended.  Two examples: &quot;test.c&quot; becomes &quot;test_c.bak&quot;, &quot;thisisat.est&quot;
+becomes &quot;thisisat.bak&quot;.  To reduce these problems, the default for
+<A HREF="options.html#'backupext'">'backupext'</A> is &quot;<A HREF="change.html#~">~</A>&quot; instead of &quot;.bak&quot;.  The <A HREF="editing.html#backup">backup</A> file for &quot;thisisat.est&quot;
+then becomes &quot;thisisat.es~&quot;.  The <A HREF="options.html#'shortname'">'shortname'</A> option is not available,
+because <A HREF="motion.html#it">it</A> would always be set.
+
+==============================================================================
+
+7. Memory usage and limitations			*<A NAME="msdos-limitations"></A><B>msdos-limitations</B>*
+
+A swap file is used to store most of the text.  You should be able to edit
+very large files.  However, memory is used for <A HREF="undo.html#undo">undo</A> and other things.  If you
+delete a lot of text, you can still run out of memory in the Dos16 version.
+
+If Vim gives an &quot;Out of memory&quot; warning, you should stop editing.  The result
+of further editing actions is unpredictable.  Setting <A HREF="options.html#'undolevels'">'undolevels'</A> to 0 saves
+some memory.  Running the maze macros on a big maze is guaranteed to run out
+of memory, because each change is remembered for <A HREF="undo.html#undo">undo</A>.  In this <A HREF="change.html#case">case</A> set
+<A HREF="options.html#'undolevels'">'undolevels'</A> to a negative number.  This will switch off <A HREF="undo.html#undo">undo</A> completely.
+
+
+						*<A NAME="msdos-clipboard-limits"></A><B>msdos-clipboard-limits</B>*
+In the Dos32 version, extended memory is used to avoid these problems.
+However, if you are using the <A HREF="gui.html#clipboard">clipboard</A>, you can still run into memory
+limitations because the Windows <A HREF="gui.html#clipboard">clipboard</A> can only communicate with Vim using
+Dos memory.  This means that the largest amount of text that can be sent to
+or received from the Windows <A HREF="gui.html#clipboard">clipboard</A> is limited by how much free Dos memory
+is available on your system.
+
+You can usually maximize the amount of available Dos memory by adding the
+following lines to Dos's &quot;config.sys&quot; file:
+
+<B>	DOS=HIGH,UMB</B>
+<B>	DEVICE=C:\WINDOWS\himem.sys</B>
+<B>	DEVICE=C:\WINDOWS\emm386.exe RAM</B>
+
+Modifying config.sys in this way will also help to make more memory available
+for the Dos16 version, if you are using that.
+
+In the Dos16 version the line length is limited to about 32000 characters.
+When reading a file the lines are automatically split.  But editing a line
+in such a way that <A HREF="motion.html#it">it</A> becomes too long may give unexpected results.
+
+==============================================================================
+
+8. Symbolically linked files			*<A NAME="msdos-linked-files"></A><B>msdos-linked-files</B>*
+
+When using Vim to edit a symbolically linked file on a <A HREF="os_unix.html#unix">unix</A> NFS file server,
+you may run into problems.  When <A HREF="editing.html#writing">writing</A> the file, Vim does not &quot;write
+through&quot; the symlink.  Instead, <A HREF="motion.html#it">it</A> deletes the symbolic link and creates a new
+file in its place.
+
+On <A HREF="os_unix.html#Unix">Unix</A>, Vim is prepared for links (symbolic or hard).  A <A HREF="editing.html#backup">backup</A> copy of the
+original file is made and then the original file is overwritten.  This assures
+that all properties of the file remain the same.  On non-Unix systems, the
+original file is renamed and a new file is written.  Only the protection bits
+are set like the original file.  However, this doesn't work properly when
+working on an NFS-mounted file system where links and other things exist.  The
+only way to fix this in the current version is not making a <A HREF="editing.html#backup">backup</A> file, by
+&quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'nobackup'">nobackup</A> nowritebackup&quot;	|<A HREF="options.html#'writebackup'">'writebackup'</A>|
+
+A similar problem occurs when mounting a <A HREF="os_unix.html#Unix">Unix</A> filesystem through Samba or a
+similar system.  When Vim creates a new file <A HREF="motion.html#it">it</A> will get the default user ID
+for the mounted file system.  This may be different from the original user ID.
+To avoid this set the <A HREF="options.html#'backupcopy'">'backupcopy'</A> option to &quot;yes&quot;.
+
+==============================================================================
+
+9. Copy/paste in a <A HREF="os_dos.html#dos">dos</A> box			*<A NAME="msdos-copy-paste"></A><B>msdos-copy-paste</B>*
+
+
+					*<A NAME="E450"></A><B>E450</B>* *<A NAME="E451"></A><B>E451</B>* *<A NAME="E452"></A><B>E452</B>* *<A NAME="E453"></A><B>E453</B>* *<A NAME="E454"></A><B>E454</B>*
+The 32 bit version can copy/paste from/to the Windows <A HREF="gui.html#clipboard">clipboard</A> directly.  Use
+the &quot;* <A HREF="sponsor.html#register">register</A>.  Large amounts of text can be copied this way, but <A HREF="motion.html#it">it</A> must be
+possible to allocate memory for it, see |<A HREF="#msdos-clipboard-limits">msdos-clipboard-limits</A>|.  When moving
+text from one Vim to another, the type of the selection
+(characterwise/linewise/blockwise) is passed on.
+
+In other versions, the following can be used.
+
+(posted to comp.editors by John Velman <A HREF="mailto:velman@igate1.hac.com">&lt;velman@igate1.hac.com&gt;</A>) 
+
+How to copy/paste text from/to vim in a <A HREF="os_dos.html#dos">dos</A> box:
+
+1) To get VIM to run in a <A HREF="windows.html#window">window</A>, instead of full screen, press alt+enter.
+   This toggles back and forth between full screen and a <A HREF="os_dos.html#dos">dos</A> <A HREF="windows.html#window">window</A>.
+   NOTE: In Windows 95 you must have the property &quot;Fast Pasting&quot; unchecked!
+   In the properties <A HREF="gui_w32.html#dialog">dialog</A> box for the <A HREF="#MS-DOS">MS-DOS</A> <A HREF="windows.html#window">window</A>, go to &quot;<A HREF="#MS-DOS">MS-DOS</A>
+   Prompt/Misc/Fast pasting&quot; and make sure that <A HREF="motion.html#it">it</A> is NOT checked.
+   To make this permanent, change the properties for
+   &quot;\windows\system\conagent.exe&quot; (from Philip Nelson, unverified).
+
+2) To paste something _into_ Vim, put Vim in insert mode.
+
+3) Put the text you want to paste on the <A HREF="windows.html#windows">windows</A> <A HREF="gui.html#clipboard">clipboard</A>.
+
+4) Click the <A HREF="intro.html#control">control</A> box in the upper left of the Vim <A HREF="windows.html#window">window</A>.  (This looks
+   like a big minus sign.)  If you don't want to use the mouse, you can get
+   this with alt+spacebar.
+5) On the resulting dropdown menu choose &quot;Edit&quot;.
+6) On the child dropdown menu choose &quot;Paste&quot;.
+
+To copy something from the Vim <A HREF="windows.html#window">window</A> to the <A HREF="gui.html#clipboard">clipboard</A>,
+
+1) <A HREF="visual.html#Select">Select</A> the <A HREF="intro.html#control">control</A> box to get the <A HREF="intro.html#control">control</A> drop down menu.
+2) <A HREF="visual.html#Select">Select</A> &quot;Edit&quot;.
+3) <A HREF="visual.html#Select">Select</A> &quot;<A HREF="motion.html#Mark">Mark</A>&quot;.
+4) Using either the keys or the mouse, select the part of the Vim <A HREF="windows.html#window">window</A> that
+   you want to copy.  To use the keys, use the arrow keys, and hold down <A HREF="intro.html#shift">shift</A>
+   to extend the selection.
+5) When you've completed your selection, press 'enter'.  The selection
+   is now in the <A HREF="windows.html#windows">windows</A> <A HREF="gui.html#clipboard">clipboard</A>.  By the way, this can be any
+   rectangular selection, for example columns 4-25 in rows 7-10.  It can
+   include anything in the VIM <A HREF="windows.html#window">window</A>: the output of a :!dir, for
+   example.
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

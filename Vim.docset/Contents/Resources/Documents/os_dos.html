@@ -1,0 +1,328 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: os_dos</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: os_dos</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="os_dos.txt"></A><B>os_dos.txt</B>*    For Vim version 7.4.  Last change: 2006 Mar 30
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+							*<A NAME="dos"></A><B>dos</B>* *<A NAME="DOS"></A><B>DOS</B>*
+This file documents the common particularities of the <A HREF="os_msdos.html#MS-DOS">MS-DOS</A> and <A HREF="os_win32.html#Win32">Win32</A>
+versions of Vim.  Also see |<A HREF="os_win32.html">os_win32.txt</A>| and |<A HREF="os_msdos.html">os_msdos.txt</A>|.
+
+1. File locations		|<A HREF="#dos-locations">dos-locations</A>|
+2. Using backslashes		|<A HREF="#dos-backslash">dos-backslash</A>|
+3. Standard mappings		|<A HREF="#dos-standard-mappings">dos-standard-mappings</A>|
+4. Screen output and colors	|<A HREF="#dos-colors">dos-colors</A>|
+5. File formats			|<A HREF="#dos-file-formats">dos-file-formats</A>|
+6. :cd command			|<A HREF="#dos-:cd">dos-:cd</A>|
+7. Interrupting			|<A HREF="#dos-CTRL-Break">dos-CTRL-Break</A>|
+8. Temp files			|<A HREF="#dos-temp-files">dos-temp-files</A>|
+9. Shell option default		|<A HREF="#dos-shell">dos-shell</A>|
+
+==============================================================================
+
+1. File locations					*<A NAME="dos-locations"></A><B>dos-locations</B>*
+
+If you keep the Vim executable in the directory that contains the help and
+<A HREF="syntax.html#syntax">syntax</A> subdirectories, there is no need to <A HREF="diff.html#do">do</A> anything special for Vim to
+work.  No registry entries or environment <A HREF="eval.html#variables">variables</A> need to be set.  Just make
+sure that the directory is in your search path, or use a shortcut on the
+desktop.
+
+Your <A HREF="starting.html#vimrc">vimrc</A> files (&quot;_vimrc&quot; and &quot;<A HREF="gui.html#_gvimrc">_gvimrc</A>&quot;) are normally located one directory
+up from the runtime files.  If you want to put them somewhere else, set the
+environment variable <A HREF="starting.html#$VIM">$VIM</A> to the directory where you keep them.  Example:
+<B>	set VIM=C:\user\piet</B>
+Will find &quot;c:\user\piet\_vimrc&quot;.
+Note: This would only be needed when the computer is used by several people.
+Otherwise it's simpler to keep your <A HREF="starting.html#_vimrc">_vimrc</A> file in the default place.
+
+If you move the executable to another location, you also need to set the <A HREF="starting.html#$VIM">$VIM</A>
+environment variable.  The runtime files will be found in &quot;$VIM/vim{version}&quot;.
+Example:
+<B>	set VIM=E:\vim</B>
+Will find the version 5.4 runtime files in &quot;e:\vim\vim54&quot;.
+Note: This is _not_ recommended.  The preferred way is to keep the executable
+in the runtime directory.
+
+If you move your executable AND want to put your &quot;<A HREF="starting.html#_vimrc">_vimrc</A>&quot; and &quot;<A HREF="gui.html#_gvimrc">_gvimrc</A>&quot; files
+somewhere else, you must set <A HREF="starting.html#$VIM">$VIM</A> to where you <A HREF="starting.html#vimrc">vimrc</A> files are, and set
+<A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> to the runtime files.  Example:
+<B>	set VIM=C:\usr\piet</B>
+<B>	set VIMRUNTIME=E:\vim\vim54</B>
+Will find &quot;c:\user\piet\_vimrc&quot; and the runtime files in &quot;e:\vim\vim54&quot;.
+
+See |<A HREF="starting.html#$VIM">$VIM</A>| and |<A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A>| for more information.
+
+Under Windows 95, you can set <A HREF="starting.html#$VIM">$VIM</A> in your C:\autoexec.bat file.  For
+example:
+<B>  set VIM=D:\vim</B>
+Under Windows NT, you can set environment <A HREF="eval.html#variables">variables</A> for each user separately
+under &quot;Start/Settings/Control Panel-&gt;System&quot;, or through the properties in the
+menu of &quot;My Computer&quot;, under the Environment <A HREF="intro.html#Tab">Tab</A>.
+
+==============================================================================
+
+2. Using backslashes					*<A NAME="dos-backslash"></A><B>dos-backslash</B>*
+
+Using backslashes in file names can be a problem.  <A HREF="intro.html#Vi">Vi</A> halves the number of
+backslashes for some commands.  Vim is a bit more tolerant and does not remove
+backslashes from a file name, so &quot;<A HREF="editing.html#:e">:e</A> c:\foo\bar&quot; works <A HREF="motion.html#as">as</A> expected.  But when
+a <A HREF="intro.html#backslash">backslash</A> occurs before a special character (space, comma, <A HREF="intro.html#backslash">backslash</A>, etc.),
+Vim removes the <A HREF="intro.html#backslash">backslash</A>.  Use slashes to avoid problems: &quot;<A HREF="editing.html#:e">:e</A> c:/foo/bar&quot;
+works fine.  Vim replaces the slashes with backslashes internally to avoid
+problems with some <A HREF="os_msdos.html#MS-DOS">MS-DOS</A> programs and <A HREF="os_win32.html#Win32">Win32</A> programs.
+
+When you prefer to use forward slashes, set the <A HREF="options.html#'shellslash'">'shellslash'</A> option.  Vim will
+then replace backslashes with forward slashes when expanding file names.  This
+is especially useful when using a Unix-like <A HREF="options.html#'shell'">'shell'</A>.
+
+==============================================================================
+
+3. Standard mappings				*<A NAME="dos-standard-mappings"></A><B>dos-standard-mappings</B>*
+
+The mappings for CTRL-PageUp and CTRL-PageDown have been removed, they now
+jump to the next or previous <A HREF="intro.html#tab">tab</A> page |<A HREF="tabpage.html#&lt;C-PageUp&gt;">&lt;C-PageUp&gt;</A>| |<A HREF="tabpage.html#&lt;C-PageDown&gt;">&lt;C-PageDown&gt;</A>|
+
+If you want them to move to the first and last screen line you can use these
+mappings:
+
+<B><FONT COLOR="PURPLE">key		key code     Normal/Visual mode	    Insert mode </FONT></B>
+CTRL-PageUp	&lt;M-N&gt;&lt;M-C-D&gt;	    <A HREF="motion.html#H">H</A>		    &lt;C-O&gt;H
+CTRL-PageDown	&lt;M-N&gt;v		    L$		    &lt;C-O&gt;L&lt;C-O&gt;$
+
+Additionally, these keys are available for copy/cut/paste.  In the <A HREF="os_win32.html#Win32">Win32</A>
+and DJGPP versions, they also use the <A HREF="gui.html#clipboard">clipboard</A>.
+
+
+Shift-Insert	paste text (from <A HREF="gui.html#clipboard">clipboard</A>)			*<A NAME="&lt;S-Insert&gt;"></A><B>&lt;S-Insert&gt;</B>*
+
+CTRL-Insert	copy <A HREF="visual.html#Visual">Visual</A> text (to <A HREF="gui.html#clipboard">clipboard</A>)			*<A NAME="&lt;C-Insert&gt;"></A><B>&lt;C-Insert&gt;</B>*
+
+CTRL-Del	cut <A HREF="visual.html#Visual">Visual</A> text (to <A HREF="gui.html#clipboard">clipboard</A>)			*<A NAME="&lt;C-Del&gt;"></A><B>&lt;C-Del&gt;</B>*
+
+Shift-Del	cut <A HREF="visual.html#Visual">Visual</A> text (to <A HREF="gui.html#clipboard">clipboard</A>)			*<A NAME="&lt;S-Del&gt;"></A><B>&lt;S-Del&gt;</B>*
+
+These mappings accomplish this (Win32 and DJGPP versions of Vim):
+
+<B><FONT COLOR="PURPLE">key		key code     Normal	Visual	    Insert </FONT></B>
+Shift-Insert	&lt;M-N&gt;&lt;M-T&gt;   &quot;*P	&quot;-d&quot;*P      &lt;C-R&gt;&lt;C-O&gt;*
+CTRL-Insert	&lt;M-N&gt;&lt;M-U&gt;		&quot;*y
+Shift-Del	&lt;M-N&gt;&lt;M-W&gt;		&quot;*d
+CTRL-Del	&lt;M-N&gt;&lt;M-X&gt;		&quot;*d
+
+Or these mappings (non-Win32 version of Vim):
+
+<B><FONT COLOR="PURPLE">key		key code     Normal	Visual	    Insert </FONT></B>
+Shift-Insert	&lt;M-N&gt;&lt;M-T&gt;   <A HREF="change.html#P">P</A>		&quot;-dP	    &lt;C-R&gt;&lt;C-O&gt;&quot;
+CTRL-Insert	&lt;M-N&gt;&lt;M-U&gt;		<A HREF="change.html#y">y</A>
+Shift-Del	&lt;M-N&gt;&lt;M-W&gt;		<A HREF="change.html#d">d</A>
+CTRL-Del	&lt;M-N&gt;&lt;M-X&gt;		<A HREF="change.html#d">d</A>
+
+When the <A HREF="gui.html#clipboard">clipboard</A> is supported, the &quot;* <A HREF="sponsor.html#register">register</A> is used.
+
+==============================================================================
+
+4. Screen output and colors				*<A NAME="dos-colors"></A><B>dos-colors</B>*
+
+The default output method for the screen is to use bios calls.  This works
+right away on most systems.  You <A HREF="diff.html#do">do</A> not need ansi.sys.  You can use &quot;<A HREF="term.html#:mode">:mode</A>&quot; to
+set the current screen mode.  See |<A HREF="term.html#:mode">:mode</A>|.
+
+To change the screen colors that Vim uses, you can use the |<A HREF="syntax.html#:highlight">:highlight</A>|
+command.  The <A HREF="intro.html#Normal">Normal</A> highlight group specifies the colors Vim uses for normal
+text.  For example, to get grey text on a blue background:
+<B>	:hi Normal ctermbg=Blue ctermfg=grey</B>
+See |<A HREF="syntax.html#highlight-groups">highlight-groups</A>| for other groups that are available.
+
+A <A HREF="#DOS">DOS</A> console does not support attributes like <A HREF="syntax.html#bold">bold</A> and underlining.  You can
+set the color used in five modes with nine terminal <A HREF="options.html#options">options</A>.  Note that this
+is not necessary since you can set the color directly with the &quot;<A HREF="syntax.html#:highlight">:highlight</A>&quot;
+command; these <A HREF="options.html#options">options</A> are for backward compatibility with older Vim versions.
+The |<A HREF="options.html#'highlight'">'highlight'</A>| option specifies which of the five modes is used for which
+action.
+
+<B>	:set t_mr=^V^[\|xxm		start of invert mode</B>
+<B>	:set t_md=^V^[\|xxm		start of bold mode</B>
+<B>	:set t_me=^V^[\|xxm		back to normal text</B>
+
+<B>	:set t_so=^V^[\|xxm		start of standout mode</B>
+<B>	:set t_se=^V^[\|xxm		back to normal text</B>
+
+<B>	:set t_us=^V^[\|xxm		start of underline mode</B>
+<B>	:set t_ue=^V^[\|xxm		back to normal text</B>
+
+<B>	:set t_ZH=^V^[\|xxm		start of italics mode</B>
+<B>	:set t_ZR=^V^[\|xxm		back to normal text</B>
+
+^V is <A HREF="visual.html#CTRL-V">CTRL-V</A>
+^[ is <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>
+You must replace xx with a decimal code, which is the foreground color number
+and background color number added together:
+
+<B><FONT COLOR="PURPLE">COLOR			FOREGROUND	BACKGROUND	</FONT></B>
+Black			    0		    0
+DarkBlue		    1		   16
+DarkGreen		    2		   32
+DarkCyan		    3		   48
+DarkRed			    4		   64
+DarkMagenta		    5		   80
+Brown, DarkYellow	    6		   96
+LightGray		    7		  112
+DarkGray		    8		  128 *
+Blue, LightBlue		    9		  144 *
+Green, LightGreen	   10		  160 *
+Cyan, LightCyan		   11		  176 *
+Red, LightRed		   12		  192 *
+Magenta, LightMagenta	   13		  208 *
+Yellow, LightYellow	   14		  224 *
+White			   15		  240 *
+
+* Depending on the display mode, the color codes above 128 may not be
+  available, and code 128 will make the text blink.
+
+When you use 0, the color is reset to the one used when you started Vim
+(usually 7, lightgray on black, but you can override this.  If you have
+overridden the default colors in a command prompt, you may need to adjust
+some of the highlight colors in your vimrc---see below).
+This is the default for <A HREF="term.html#t_me">t_me</A>.
+
+The defaults for the various highlight modes are:
+	<A HREF="term.html#t_mr">t_mr</A>	112	 reverse mode: Black text (0) on LightGray (112)
+	<A HREF="term.html#t_md">t_md</A>	 15	 <A HREF="syntax.html#bold">bold</A> mode: White text (15) on Black (0)
+	<A HREF="term.html#t_me">t_me</A>	  0	 normal mode (revert to default)
+
+	<A HREF="term.html#t_so">t_so</A>	 31	 <A HREF="syntax.html#standout">standout</A> mode: White (15) text on DarkBlue (16)
+	<A HREF="term.html#t_se">t_se</A>	  0	 <A HREF="syntax.html#standout">standout</A> mode end (revert to default)
+
+	t_czh	225	 <A HREF="syntax.html#italic">italic</A> mode: DarkBlue text (1) on Yellow (224)
+	t_czr	  0	 <A HREF="syntax.html#italic">italic</A> mode end (revert to default)
+
+	<A HREF="term.html#t_us">t_us</A>	 67	 <A HREF="syntax.html#underline">underline</A> mode: DarkCyan text (3) on DarkRed (64)
+	<A HREF="term.html#t_ue">t_ue</A>	  0	 <A HREF="syntax.html#underline">underline</A> mode end (revert to default)
+
+These colors were chosen because they also look good when using an inverted
+display, but you can change them to your liking.
+
+Example:
+<B>  :set t_mr=^V^[\|97m	" start of invert mode: DarkBlue (1) on Brown (96)</B>
+<B>  :set t_md=^V^[\|67m	" start of bold mode: DarkCyan (3) on DarkRed (64)</B>
+<B>  :set t_me=^V^[\|112m	" back to normal mode: Black (0) on LightGray (112)</B>
+
+<B>  :set t_so=^V^[\|37m	" start of standout mode: DarkMagenta (5) on DarkGreen</B>
+<B>									(32)</B>
+<B>  :set t_se=^V^[\|112m	" back to normal mode: Black (0) on LightGray (112)</B>
+
+==============================================================================
+
+5. File formats						*<A NAME="dos-file-formats"></A><B>dos-file-formats</B>*
+
+If the <A HREF="options.html#'fileformat'">'fileformat'</A> option is set to &quot;<A HREF="#dos">dos</A>&quot; (which is the default), Vim accepts
+a single <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A> or a &lt;CR&gt;&lt;NL&gt; pair for end-of-line (&lt;EOL&gt;).  When <A HREF="editing.html#writing">writing</A> a
+file, Vim uses &lt;CR&gt;&lt;NL&gt;.  Thus, if you edit a file and write <A HREF="motion.html#it">it</A>, Vim replaces
+<A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A> with &lt;CR&gt;&lt;NL&gt;.
+
+If the <A HREF="options.html#'fileformat'">'fileformat'</A> option is set to &quot;<A HREF="os_unix.html#unix">unix</A>&quot;, Vim uses a single <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A> for <A HREF="intro.html#&lt;EOL&gt;">&lt;EOL&gt;</A>
+and shows <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> <A HREF="motion.html#as">as</A> ^M.
+
+You can use Vim to replace <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A> with &lt;CR&gt;&lt;NL&gt; by reading in any mode and
+<A HREF="editing.html#writing">writing</A> in Dos mode (&quot;:se ff=dos&quot;).
+You can use Vim to replace &lt;CR&gt;&lt;NL&gt; with <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A> by reading in Dos mode and
+<A HREF="editing.html#writing">writing</A> in <A HREF="os_unix.html#Unix">Unix</A> mode (&quot;:se ff=unix&quot;).
+
+Vim sets <A HREF="options.html#'fileformat'">'fileformat'</A> automatically when <A HREF="options.html#'fileformats'">'fileformats'</A> is not empty (which is
+the default), so you don't really have to worry about what you are doing.
+					|<A HREF="options.html#'fileformat'">'fileformat'</A>| |<A HREF="options.html#'fileformats'">'fileformats'</A>|
+
+If you want to edit a <A HREF="usr_41.html#script">script</A> file or a binary file, you should set the
+<A HREF="options.html#'binary'">'binary'</A> option before loading the file.  Script files and binary files may
+contain single <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A> characters which Vim would replace with &lt;CR&gt;&lt;NL&gt;.  You can
+set <A HREF="options.html#'binary'">'binary'</A> automatically by starting Vim with the &quot;<A HREF="starting.html#-b">-b</A>&quot; (binary) option.
+
+==============================================================================
+
+6. <A HREF="editing.html#:cd">:cd</A> command						*<A NAME="dos-:cd"></A><B>dos-:cd</B>*
+
+The &quot;<A HREF="editing.html#:cd">:cd</A>&quot; command recognizes the drive specifier and changes the current
+drive.  Use &quot;<A HREF="editing.html#:cd">:cd</A> c:&quot; to make drive C the active drive.  Use &quot;<A HREF="editing.html#:cd">:cd</A> d:\foo&quot; to go
+to the directory &quot;foo&quot; in the root of drive <A HREF="change.html#D">D</A>.  Vim also recognizes UNC names
+if the system supports them; e.g., &quot;:cd \\server\share\dir&quot;.  |<A HREF="editing.html#:cd">:cd</A>|
+
+==============================================================================
+
+7. Interrupting						*<A NAME="dos-CTRL-Break"></A><B>dos-CTRL-Break</B>*
+
+Use CTRL-Break instead of <A HREF="pattern.html#CTRL-C">CTRL-C</A> to interrupt searches.  Vim does not detect
+the <A HREF="pattern.html#CTRL-C">CTRL-C</A> until <A HREF="motion.html#it">it</A> tries to read a key.
+
+==============================================================================
+
+8. Temp files						*<A NAME="dos-temp-files"></A><B>dos-temp-files</B>*
+
+Only for the 16 bit and 32 bit <A HREF="#DOS">DOS</A> version:
+Vim puts temporary files (for filtering) in the first of these directories
+that exists and in which Vim can create a file:
+	$TMP
+	$TEMP
+	C:\TMP
+	C:\TEMP
+	current directory
+
+For the <A HREF="os_win32.html#Win32">Win32</A> version (both console and GUI):
+Vim uses standard Windows <A HREF="eval.html#functions">functions</A> to obtain a temporary file name (for
+filtering).  The first of these directories that exists and in which Vim can
+create a file is used:
+	$TMP
+	$TEMP
+	current directory
+
+==============================================================================
+
+9. Shell option default					*<A NAME="dos-shell"></A><B>dos-shell</B>*
+
+The default for the <A HREF="options.html#'sh'">'sh'</A> ('shell') option is &quot;command.com&quot; on Windows 95 and
+&quot;cmd.exe&quot; on Windows NT.  If <A HREF="starting.html#SHELL">SHELL</A> is defined, Vim uses <A HREF="starting.html#SHELL">SHELL</A> instead, and if
+<A HREF="starting.html#SHELL">SHELL</A> is not defined but <A HREF="starting.html#COMSPEC">COMSPEC</A> is, Vim uses <A HREF="starting.html#COMSPEC">COMSPEC</A>.  Vim starts external
+commands with &quot;&lt;shell&gt; /c &lt;command_name&gt;&quot;.  Typing <A HREF="starting.html#CTRL-Z">CTRL-Z</A> starts a new command
+subshell.  Return to Vim with &quot;exit&quot;.	|<A HREF="options.html#'shell'">'shell'</A>| |<A HREF="starting.html#CTRL-Z">CTRL-Z</A>|
+
+If you are running a third-party shell, you may need to set the
+|<A HREF="options.html#'shellcmdflag'">'shellcmdflag'</A>| ('shcf') and |<A HREF="options.html#'shellquote'">'shellquote'</A>| ('shq') or |<A HREF="options.html#'shellxquote'">'shellxquote'</A>|
+('sxq') <A HREF="options.html#options">options</A>.  Unfortunately, this also depends on the version of Vim used.
+For example, with the MKS Korn shell or with bash, the values of the <A HREF="options.html#options">options</A>
+should be:
+
+<B><FONT COLOR="PURPLE">		DOS 16 bit	    DOS 32 bit		Win32  </FONT></B>
+<A HREF="options.html#'shellcmdflag'">'shellcmdflag'</A>	   <A HREF="starting.html#-c">-c</A>			<A HREF="starting.html#-c">-c</A>		 <A HREF="starting.html#-c">-c</A>
+<A HREF="options.html#'shellquote'">'shellquote'</A>	   &quot;
+<A HREF="options.html#'shellxquote'">'shellxquote'</A>						 &quot;
+
+For Dos 16 bit this starts the shell <A HREF="motion.html#as">as</A>:
+	&lt;shell&gt; <A HREF="starting.html#-c">-c</A> &quot;command name&quot; &gt;file
+For <A HREF="os_win32.html#Win32">Win32</A> <A HREF="motion.html#as">as</A>:
+	&lt;shell&gt; <A HREF="starting.html#-c">-c</A> &quot;command name &gt;file&quot;
+For <A HREF="#DOS">DOS</A> 32 bit, DJGPP does this internally somehow.
+
+When starting up, Vim checks for the presence of &quot;sh&quot; anywhere in the <A HREF="options.html#'shell'">'shell'</A>
+option.  If <A HREF="motion.html#it">it</A> is present, Vim sets the <A HREF="options.html#'shellcmdflag'">'shellcmdflag'</A> and <A HREF="options.html#'shellquote'">'shellquote'</A> or
+<A HREF="options.html#'shellxquote'">'shellxquote'</A> <A HREF="options.html#options">options</A> will be set <A HREF="motion.html#as">as</A> described above.
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

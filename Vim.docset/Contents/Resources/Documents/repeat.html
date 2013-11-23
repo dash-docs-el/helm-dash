@@ -1,0 +1,739 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: repeat</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: repeat</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="repeat.txt"></A><B>repeat.txt</B>*    For Vim version 7.4.  Last change: 2013 Jul 25
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Repeating commands, Vim scripts and debugging			*<A NAME="repeating"></A><B>repeating</B>*
+
+Chapter 26 of the user manual introduces <A HREF="#repeating">repeating</A> |<A HREF="usr_26.html">usr_26.txt</A>|.
+
+1. Single repeats	|<A HREF="#single-repeat">single-repeat</A>|
+2. Multiple repeats	|<A HREF="#multi-repeat">multi-repeat</A>|
+3. Complex repeats	|<A HREF="#complex-repeat">complex-repeat</A>|
+4. Using Vim scripts	|<A HREF="#using-scripts">using-scripts</A>|
+5. Debugging scripts	|<A HREF="#debug-scripts">debug-scripts</A>|
+6. Profiling		|<A HREF="#profiling">profiling</A>|
+
+==============================================================================
+
+1. Single repeats					*<A NAME="single-repeat"></A><B>single-repeat</B>*
+
+
+							*<A NAME="."></A><B>.</B>*
+.			Repeat last change, with <A HREF="intro.html#count">count</A> replaced with <A HREF="intro.html#[count]">[count]</A>.
+			Also repeat a <A HREF="change.html#yank">yank</A> command, when the '<A HREF="change.html#y">y</A>' flag is
+			included in <A HREF="options.html#'cpoptions'">'cpoptions'</A>.  Does not repeat a
+			command-line command.
+
+Simple changes can be repeated with the &quot;<A HREF="#.">.</A>&quot; command.  Without a <A HREF="intro.html#count">count</A>, the
+<A HREF="intro.html#count">count</A> of the last change is used.  If you enter a <A HREF="intro.html#count">count</A>, <A HREF="motion.html#it">it</A> will replace the
+last one.  If the last change included a specification of a numbered <A HREF="sponsor.html#register">register</A>,
+the register number will be incremented.  See |<A HREF="undo.html#redo-register">redo-register</A>| for an example
+how to use this.  Note that when <A HREF="#repeating">repeating</A> a command that used a <A HREF="visual.html#Visual">Visual</A>
+selection, the same SIZE of area is used, see |<A HREF="visual.html#visual-repeat">visual-repeat</A>|.
+
+
+							*<A NAME="@:"></A><B>@:</B>*
+<A HREF="#@:">@:</A>			Repeat last command-line <A HREF="intro.html#[count]">[count]</A> times.
+			{not available when compiled without the
+			|<A HREF="various.html#+cmdline_hist">+cmdline_hist</A>| feature}
+
+
+==============================================================================
+
+2. Multiple repeats					*<A NAME="multi-repeat"></A><B>multi-repeat</B>*
+
+
+						*<A NAME=":g"></A><B>:g</B>* *<A NAME=":global"></A><B>:global</B>* *<A NAME="E147"></A><B>E147</B>* *<A NAME="E148"></A><B>E148</B>*
+:[range]g[lobal]/{pattern}/[cmd]
+			Execute the <A HREF="intro.html#Ex">Ex</A> command [cmd] (default &quot;<A HREF="various.html#:p">:p</A>&quot;) on the
+			lines within <A HREF="cmdline.html#[range]">[range]</A> where {pattern} matches.
+
+:[range]g[lobal]!/{pattern}/[cmd]
+			Execute the <A HREF="intro.html#Ex">Ex</A> command [cmd] (default &quot;<A HREF="various.html#:p">:p</A>&quot;) on the
+			lines within <A HREF="cmdline.html#[range]">[range]</A> where {pattern} does NOT match.
+
+
+							*<A NAME=":v"></A><B>:v</B>* *<A NAME=":vglobal"></A><B>:vglobal</B>*
+:[range]v[global]/{pattern}/[cmd]
+			Same <A HREF="motion.html#as">as</A> :g!.
+
+Instead of the '<A HREF="pattern.html#/">/</A>' which surrounds the {pattern}, you can use any other
+single byte character, but not an alphabetic character, '\', &#39;&#34;'' or '&#124;'.
+This is useful if you want to include a '<A HREF="pattern.html#/">/</A>' in the search <A HREF="pattern.html#pattern">pattern</A> or
+replacement string.
+
+For the definition of a pattern, see |<A HREF="pattern.html#pattern">pattern</A>|.
+
+The global commands work by first scanning through the <A HREF="cmdline.html#[range]">[range]</A> lines and
+marking each line where a match occurs (for a multi-line <A HREF="pattern.html#pattern">pattern</A>, only the
+start of the match matters).
+In a second scan the [cmd] is executed for each marked line with its line
+number prepended.  For &quot;<A HREF="#:v">:v</A>&quot; and &quot;:g!&quot; the command is executed for each not
+marked line.  If a line is deleted its <A HREF="motion.html#mark">mark</A> disappears.
+The default for <A HREF="cmdline.html#[range]">[range]</A> is the whole buffer (1,$).  Use &quot;<A HREF="pattern.html#CTRL-C">CTRL-C</A>&quot; to interrupt
+the command.  If an error message is given for a line, the command for that
+line is aborted and the global command continues with the next marked or
+unmarked line.
+
+To repeat a non-Ex command, you can use the &quot;<A HREF="various.html#:normal">:normal</A>&quot; command:
+<B>	:g/pat/normal {commands}</B>
+Make sure that {commands} ends with a whole command, otherwise Vim will wait
+for you to type the rest of the command for each match.  The screen will not
+have been updated, so you don't know what you are doing.  See |<A HREF="various.html#:normal">:normal</A>|.
+
+The undo/redo command will undo/redo the whole global command at once.
+The previous context <A HREF="motion.html#mark">mark</A> will only be set once (with &quot;'&#39;&#34;' you go back to
+where the cursor was before the global command).
+
+The global command sets both the last used search <A HREF="pattern.html#pattern">pattern</A> and the last used
+substitute <A HREF="pattern.html#pattern">pattern</A> (this is <A HREF="intro.html#vi">vi</A> compatible).  This makes <A HREF="motion.html#it">it</A> <A HREF="starting.html#easy">easy</A> to globally
+replace a string:
+	:g/pat/s//PAT/g
+This replaces all occurrences of &quot;pat&quot; with &quot;PAT&quot;.  The same can be done with:
+	:&#37;s/pat/PAT/g
+Which is two characters shorter!
+
+When using &quot;global&quot; in <A HREF="intro.html#Ex">Ex</A> mode, a special <A HREF="change.html#case">case</A> is using &quot;<A HREF="editing.html#:visual">:visual</A>&quot; <A HREF="motion.html#as">as</A> a
+command.  This will move to a matching line, go to <A HREF="intro.html#Normal">Normal</A> mode to let you
+execute commands there until you use |<A HREF="intro.html#Q">Q</A>| to return to <A HREF="intro.html#Ex">Ex</A> mode.  This will be
+repeated for each matching line.  While doing this you cannot use &quot;<A HREF="#:global">:global</A>&quot;.
+To abort this type <A HREF="pattern.html#CTRL-C">CTRL-C</A> <A HREF="if_cscop.html#twice">twice</A>.
+
+==============================================================================
+
+3. Complex repeats					*<A NAME="complex-repeat"></A><B>complex-repeat</B>*
+
+
+							*<A NAME="q"></A><B>q</B>* *<A NAME="recording"></A><B>recording</B>*
+q{0-9a-zA-Z&quot;}		Record typed characters into <A HREF="sponsor.html#register">register</A> {0-9a-zA-Z&quot;}
+			(uppercase to append).  The '<A HREF="#q">q</A>' command is disabled
+			while executing a <A HREF="sponsor.html#register">register</A>, and <A HREF="motion.html#it">it</A> doesn't work inside
+			a <A HREF="map.html#mapping">mapping</A> and |<A HREF="various.html#:normal">:normal</A>|.  {Vi: no recording}
+
+<A HREF="#q">q</A>			Stops <A HREF="#recording">recording</A>.  (Implementation note: The '<A HREF="#q">q</A>' that
+			stops <A HREF="#recording">recording</A> is not stored in the <A HREF="sponsor.html#register">register</A>, unless
+			<A HREF="motion.html#it">it</A> was the result of a <A HREF="map.html#mapping">mapping</A>)  {Vi: no recording}
+
+
+							*<A NAME="@"></A><B>@</B>*
+@{0-9a-z&quot;.=*+}		Execute the contents of <A HREF="sponsor.html#register">register</A> {0-9a-z&quot;.=*+} <A HREF="intro.html#[count]">[count]</A>
+			times.  Note that <A HREF="sponsor.html#register">register</A> '<A HREF="motion.html#&#37;">&#37;</A>' (name of the current
+			file) and '<A HREF="pattern.html##">#</A>' (name of the alternate file) cannot be
+			used.
+			The <A HREF="sponsor.html#register">register</A> is executed like a <A HREF="map.html#mapping">mapping</A>, that means
+			that the difference between <A HREF="options.html#'wildchar'">'wildchar'</A> and <A HREF="options.html#'wildcharm'">'wildcharm'</A>
+			applies.
+			For &quot;<A HREF="change.html#@=">@=</A>&quot; you are prompted to enter an <A HREF="eval.html#expression">expression</A>.  The
+			result of the <A HREF="eval.html#expression">expression</A> is then executed.
+			See also |<A HREF="#@:">@:</A>|.  {Vi: only named registers}
+
+
+							*<A NAME="@@"></A><B>@@</B>* *<A NAME="E748"></A><B>E748</B>*
+<A HREF="#@@">@@</A>			Repeat the previous @{0-9a-z&quot;:*} <A HREF="intro.html#[count]">[count]</A> times.
+
+:[addr]*{0-9a-z&quot;.=+}						*:@* *:star*
+:[addr]@{0-9a-z&quot;.=*+}	Execute the contents of <A HREF="sponsor.html#register">register</A> {0-9a-z&quot;.=*+} <A HREF="motion.html#as">as</A> an <A HREF="intro.html#Ex">Ex</A>
+			command.  First set cursor at line [addr] (default is
+			current line).  When the last line in the <A HREF="sponsor.html#register">register</A> does
+			not have a <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> <A HREF="motion.html#it">it</A> will be added automatically when
+			the '<A HREF="motion.html#e">e</A>' flag is present in <A HREF="options.html#'cpoptions'">'cpoptions'</A>.
+			Note that the &quot;:*&quot; command is only recognized when the
+			'*' flag is present in <A HREF="options.html#'cpoptions'">'cpoptions'</A>.  This is NOT the
+			default when <A HREF="options.html#'nocompatible'">'nocompatible'</A> is used.
+			For &quot;:@=&quot; the last used <A HREF="eval.html#expression">expression</A> is used.  The
+			result of evaluating the <A HREF="eval.html#expression">expression</A> is executed <A HREF="motion.html#as">as</A> an
+			<A HREF="intro.html#Ex">Ex</A> command.
+			Mappings are not recognized in these commands.
+			{Vi: only in some versions} Future: Will execute the
+			<A HREF="sponsor.html#register">register</A> for each line in the address range.
+
+
+							*<A NAME=":@:"></A><B>:@:</B>*
+:[addr]@:		Repeat last command-line.  First set cursor at line
+			[addr] (default is current line).  {not in Vi}
+
+
+							*<A NAME=":@@"></A><B>:@@</B>*
+:[addr]@@		Repeat the previous :@{0-9a-z&quot;}.  First set cursor at
+			line [addr] (default is current line).  {Vi: only in
+			some versions}
+
+==============================================================================
+
+4. Using Vim scripts					*<A NAME="using-scripts"></A><B>using-scripts</B>*
+
+For <A HREF="editing.html#writing">writing</A> a Vim <A HREF="usr_41.html#script">script</A>, see chapter 41 of the user manual |<A HREF="usr_41.html">usr_41.txt</A>|.
+
+
+					*<A NAME=":so"></A><B>:so</B>* *<A NAME=":source"></A><B>:source</B>* *<A NAME="load-vim-script"></A><B>load-vim-script</B>*
+:so[urce] <A HREF="editing.html#{file}">{file}</A>	Read <A HREF="intro.html#Ex">Ex</A> commands from <A HREF="editing.html#{file}">{file}</A>.  These are commands that
+			start with a &quot;<A HREF="cmdline.html#:">:</A>&quot;.
+			Triggers the |<A HREF="autocmd.html#SourcePre">SourcePre</A>| <A HREF="autocmd.html#autocommand">autocommand</A>.
+
+:so[urce]! <A HREF="editing.html#{file}">{file}</A>	Read Vim commands from <A HREF="editing.html#{file}">{file}</A>.  These are commands
+			that are executed from <A HREF="intro.html#Normal">Normal</A> mode, like you type
+			them.
+			When used after |<A HREF="#:global">:global</A>|, |<A HREF="editing.html#:argdo">:argdo</A>|, |<A HREF="windows.html#:windo">:windo</A>|,
+			|<A HREF="windows.html#:bufdo">:bufdo</A>|, in a loop or when another command follows
+			the display won't be updated while executing the
+			commands.
+			{not in Vi}
+
+
+							*<A NAME=":ru"></A><B>:ru</B>* *<A NAME=":runtime"></A><B>:runtime</B>*
+:ru[ntime][!] <A HREF="editing.html#{file}">{file}</A> ..
+			Read <A HREF="intro.html#Ex">Ex</A> commands from <A HREF="editing.html#{file}">{file}</A> in each directory given
+			by <A HREF="options.html#'runtimepath'">'runtimepath'</A>.  There is no error for non-existing
+			files.  Example:
+<B>				:runtime syntax/c.vim</B>
+
+ 			There can be multiple <A HREF="editing.html#{file}">{file}</A> arguments, separated by
+			spaces.  Each <A HREF="editing.html#{file}">{file}</A> is searched for in the first
+			directory from <A HREF="options.html#'runtimepath'">'runtimepath'</A>, then in the second
+			directory, etc.  Use a <A HREF="intro.html#backslash">backslash</A> to include a space
+			inside <A HREF="editing.html#{file}">{file}</A> (although it's better not to use spaces
+			in file names, <A HREF="motion.html#it">it</A> causes trouble).
+
+			When [!] is included, all found files are sourced.
+			When <A HREF="motion.html#it">it</A> is not included only the first found file is
+			sourced.
+
+			When <A HREF="editing.html#{file}">{file}</A> contains <A HREF="editing.html#wildcards">wildcards</A> <A HREF="motion.html#it">it</A> is expanded to all
+			matching files.  Example:
+<B>				:runtime! plugin/*.vim</B>
+ 			This is what Vim uses to load the <A HREF="usr_05.html#plugin">plugin</A> files when
+			starting up.  This similar command:
+<B>				:runtime plugin/*.vim</B>
+ 			would source the first file only.
+
+			When <A HREF="options.html#'verbose'">'verbose'</A> is one or higher, there is a message
+			when no file could be found.
+			When <A HREF="options.html#'verbose'">'verbose'</A> is two or higher, there is a message
+			about each searched file.
+			{not in Vi}
+
+
+:scripte[ncoding] [encoding]		*<A NAME=":scripte"></A><B>:scripte</B>* *<A NAME=":scriptencoding"></A><B>:scriptencoding</B>* *<A NAME="E167"></A><B>E167</B>*
+			Specify the character encoding used in the <A HREF="usr_41.html#script">script</A>.
+			The following lines will be converted from [encoding]
+			to the value of the <A HREF="options.html#'encoding'">'encoding'</A> option, if they are
+			different.  Examples:
+<B>				scriptencoding iso-8859-5</B>
+<B>				scriptencoding cp932</B>
+ 
+			When [encoding] is empty, no conversion is done.  This
+			can be used to restrict conversion to a sequence of
+			lines:
+<B>				scriptencoding euc-jp</B>
+<B>				... lines to be converted ...</B>
+<B>				scriptencoding</B>
+<B>				... not converted ...</B>
+
+ 			When conversion isn't supported by the system, there
+			is no error message and no conversion is done.
+
+			Don't use &quot;ucs-2&quot; or &quot;ucs-4&quot;, scripts cannot be in
+			these encodings (they would contain NUL bytes).
+			When a sourced <A HREF="usr_41.html#script">script</A> starts with a BOM (Byte Order
+			<A HREF="motion.html#Mark">Mark</A>) in <A HREF="mbyte.html#utf-8">utf-8</A> format Vim will recognize <A HREF="motion.html#it">it</A>, no need
+			to use &quot;<A HREF="#:scriptencoding">:scriptencoding</A> utf-8&quot; then.
+
+			When compiled without the |<A HREF="various.html#+multi_byte">+multi_byte</A>| feature this
+			command is ignored.
+			{not in Vi}
+
+
+						*<A NAME=":scrip"></A><B>:scrip</B>* *<A NAME=":scriptnames"></A><B>:scriptnames</B>*
+:scrip[tnames]		<A HREF="eval.html#List">List</A> all sourced <A HREF="usr_41.html#script">script</A> names, in the order they were
+			first sourced.  The number is used for the <A HREF="usr_41.html#script">script</A> ID
+			|<A HREF="map.html#&lt;SID&gt;">&lt;SID&gt;</A>|.
+			{not in Vi} {not available when compiled without the
+			|<A HREF="various.html#+eval">+eval</A>| feature}
+
+
+						*<A NAME=":fini"></A><B>:fini</B>* *<A NAME=":finish"></A><B>:finish</B>* *<A NAME="E168"></A><B>E168</B>*
+:fini[sh]		Stop sourcing a <A HREF="usr_41.html#script">script</A>.  Can only be used in a Vim
+			<A HREF="usr_41.html#script">script</A> file.  This is a quick way to skip the rest of
+			the file.  If <A HREF="motion.html#it">it</A> is used after a |<A HREF="eval.html#:try">:try</A>| but before the
+			matching |<A HREF="eval.html#:finally">:finally</A>| (if present), the commands
+			following the &quot;<A HREF="eval.html#:finally">:finally</A>&quot; up to the matching |<A HREF="eval.html#:endtry">:endtry</A>|
+			are executed first.  This process applies to all
+			nested &quot;<A HREF="eval.html#:try">:try</A>&quot;s in the <A HREF="usr_41.html#script">script</A>.  The outermost &quot;<A HREF="eval.html#:endtry">:endtry</A>&quot;
+			then stops sourcing the <A HREF="usr_41.html#script">script</A>.  {not in Vi}
+
+All commands and command sequences can be repeated by putting them in a named
+<A HREF="sponsor.html#register">register</A> and then executing <A HREF="motion.html#it">it</A>.  There are two ways to get the commands in the
+<A HREF="sponsor.html#register">register</A>:
+- Use the record command &quot;<A HREF="#q">q</A>&quot;.  You type the commands once, and while they are
+  being executed they are stored in a <A HREF="sponsor.html#register">register</A>.  Easy, because you can see
+  what you are doing.  If you make a mistake, &quot;p&quot;ut the <A HREF="sponsor.html#register">register</A> into the
+  file, edit the command sequence, and then delete <A HREF="motion.html#it">it</A> into the <A HREF="sponsor.html#register">register</A>
+  again.  You can continue <A HREF="#recording">recording</A> by appending to the <A HREF="sponsor.html#register">register</A> (use an
+  <A HREF="change.html#uppercase">uppercase</A> <A HREF="print.html#letter">letter</A>).
+- Delete or <A HREF="change.html#yank">yank</A> the command sequence into the <A HREF="sponsor.html#register">register</A>.
+
+Often used command sequences can be put under a function key with the '<A HREF="map.html#:map">:map</A>'
+command.
+
+An alternative is to put the commands in a file, and execute them with the
+':source!' command.  Useful for long command sequences.  Can be combined with
+the '<A HREF="map.html#:map">:map</A>' command to put complicated commands under a function key.
+
+The '<A HREF="#:source">:source</A>' command reads <A HREF="intro.html#Ex">Ex</A> commands from a file line by line.  You will
+have to type any needed keyboard input.  The ':source!' command reads from a
+<A HREF="usr_41.html#script">script</A> file character by character, interpreting each character <A HREF="motion.html#as">as</A> if you
+typed <A HREF="motion.html#it">it</A>.
+
+Example: When you give the &quot;:!ls&quot; command you get the |<A HREF="message.html#hit-enter">hit-enter</A>| prompt.  If
+you '<A HREF="#:source">:source</A>' a file with the line &quot;!ls&quot; in <A HREF="motion.html#it">it</A>, you will have to type the
+<A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> yourself.  But if you ':source!' a file with the line &quot;:!ls&quot; in <A HREF="motion.html#it">it</A>,
+the next characters from that file are read until a <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> is found.  You will
+not have to type <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> yourself, unless &quot;:!ls&quot; was the last line in the file.
+
+It is possible to put ':source[!]' commands in the <A HREF="usr_41.html#script">script</A> file, so you can
+make a top-down hierarchy of <A HREF="usr_41.html#script">script</A> files.  The '<A HREF="#:source">:source</A>' command can be
+nested <A HREF="motion.html#as">as</A> deep <A HREF="motion.html#as">as</A> the number of files that can be opened at one time (about
+15).  The ':source!' command can be nested up to 15 levels deep.
+
+You can use the &quot;<A HREF="cmdline.html#&lt;sfile&gt;">&lt;sfile&gt;</A>&quot; string (literally, this is not a special key) inside
+of the sourced file, in places where a file name is expected.  It will be
+replaced by the file name of the sourced file.  For example, if you have a
+&quot;other.vimrc&quot; file in the same directory <A HREF="motion.html#as">as</A> your &quot;<A HREF="starting.html#.vimrc">.vimrc</A>&quot; file, you can source
+<A HREF="motion.html#it">it</A> from your &quot;<A HREF="starting.html#.vimrc">.vimrc</A>&quot; file with this command:
+<B>	:source &lt;sfile&gt;:h/other.vimrc</B>
+
+In <A HREF="usr_41.html#script">script</A> files terminal-dependent key codes are represented by
+terminal-independent two character codes.  This means that they can be used
+in the same way on different kinds of terminals.  The first character of a
+key code is 0x80 or 128, shown on the screen <A HREF="motion.html#as">as</A> &quot;~@&quot;.  The second one can be
+found in the list |<A HREF="intro.html#key-notation">key-notation</A>|.  Any of these codes can also be entered
+with <A HREF="visual.html#CTRL-V">CTRL-V</A> followed by the three digit decimal code.  This does NOT work for
+the &lt;t_xx&gt; <A HREF="term.html#termcap">termcap</A> codes, these can only be used in mappings.
+
+
+							*<A NAME=":source_crnl"></A><B>:source_crnl</B>* *<A NAME="W15"></A><B>W15</B>*
+<A HREF="os_msdos.html#MS-DOS">MS-DOS</A>, <A HREF="os_win32.html#Win32">Win32</A> and <A HREF="os_os2.html#OS/2">OS/2</A>: Files that are read with &quot;<A HREF="#:source">:source</A>&quot; normally have
+&lt;CR&gt;&lt;NL&gt; &lt;EOL&gt;s.  These always work.  If you are using a file with <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A> &lt;EOL&gt;s
+(for example, a file made on Unix), this will be recognized if <A HREF="options.html#'fileformats'">'fileformats'</A>
+is not empty and the first line does not end in a <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>.  This fails if the
+first line has something like &quot;<A HREF="map.html#:map">:map</A> <A HREF="helphelp.html#&lt;F1&gt;">&lt;F1&gt;</A> :help^M&quot;, where &quot;^M&quot; is a <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>.  If
+the first line ends in a <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>, but following ones don't, you will get an error
+message, because the <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> from the first lines will be lost.
+
+<A HREF="os_mac.html#Mac">Mac</A> Classic: Files that are read with &quot;<A HREF="#:source">:source</A>&quot; normally have <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> &lt;EOL&gt;s.
+These always work.  If you are using a file with <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A> &lt;EOL&gt;s (for example, a
+file made on Unix), this will be recognized if <A HREF="options.html#'fileformats'">'fileformats'</A> is not empty and
+the first line does not end in a <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>.  Be careful not to use a file with <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A>
+linebreaks which has a <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> in first line.
+
+On other systems, Vim expects &quot;:source&quot;ed files to end in a <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A>.  These
+always work.  If you are using a file with &lt;CR&gt;&lt;NL&gt; &lt;EOL&gt;s (for example, a
+file made on MS-DOS), all lines will have a trailing <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>.  This may cause
+problems for some commands (e.g., mappings).  There is no automatic <A HREF="intro.html#&lt;EOL&gt;">&lt;EOL&gt;</A>
+detection, because it's common to start with a line that defines a <A HREF="map.html#mapping">mapping</A>
+that ends in a <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>, which will confuse the automaton.
+
+
+							*<A NAME="line-continuation"></A><B>line-continuation</B>*
+Long lines in a &quot;<A HREF="#:source">:source</A>&quot;d <A HREF="intro.html#Ex">Ex</A> command <A HREF="usr_41.html#script">script</A> file can be split by <A HREF="insert.html#inserting">inserting</A>
+a line continuation symbol &quot;\&quot; (backslash) at the start of the next line.
+There can be white space before the <A HREF="intro.html#backslash">backslash</A>, which is ignored.
+
+Example: the lines
+<B>	:set comments=sr:/*,mb:*,el:*/,</B>
+<B>		     \://,</B>
+<B>		     \b:#,</B>
+<B>		     \:%,</B>
+<B>		     \n:&gt;,</B>
+<B>		     \fb:-</B>
+are interpreted <A HREF="motion.html#as">as</A> if they were given in one line:
+	<A HREF="options.html#:set">:set</A> <A HREF="options.html#'comments'">comments</A>=sr:/*,mb:*,el:*/,://,b:#,:&#37;,n:&gt;,fb:-
+
+All leading <A HREF="pattern.html#whitespace">whitespace</A> characters in the line before a <A HREF="intro.html#backslash">backslash</A> are ignored.
+Note however that trailing <A HREF="pattern.html#whitespace">whitespace</A> in the line before <A HREF="motion.html#it">it</A> cannot be
+inserted freely; <A HREF="motion.html#it">it</A> depends on the position where a command is split up
+whether additional <A HREF="pattern.html#whitespace">whitespace</A> is allowed or not.
+
+When a space is required it's best to put <A HREF="motion.html#it">it</A> right after the <A HREF="intro.html#backslash">backslash</A>.  A
+space at the end of a line is hard to see and may be accidentally deleted.
+<B>	:syn match Comment</B>
+<B>		\ "very long regexp"</B>
+<B>		\ keepend</B>
+
+There is a problem with the &quot;<A HREF="insert.html#:append">:append</A>&quot; and &quot;<A HREF="insert.html#:insert">:insert</A>&quot; commands:
+<B>   :1append</B>
+<B>   \asdf</B>
+<B>   .</B>
+The <A HREF="intro.html#backslash">backslash</A> is seen <A HREF="motion.html#as">as</A> a <A HREF="#line-continuation">line-continuation</A> symbol, thus this results in the
+command:
+<B>   :1appendasdf</B>
+<B>   .</B>
+To avoid this, add the '<A HREF="change.html#C">C</A>' flag to the <A HREF="options.html#'cpoptions'">'cpoptions'</A> option:
+<B>   :set cpo+=C</B>
+<B>   :1append</B>
+<B>   \asdf</B>
+<B>   .</B>
+<B>   :set cpo-=C</B>
+
+Note that when the commands are inside a function, you need to add the '<A HREF="change.html#C">C</A>'
+flag when defining the function, <A HREF="motion.html#it">it</A> is not relevant when executing <A HREF="motion.html#it">it</A>.
+<B>   :set cpo+=C</B>
+<B>   :function Foo()</B>
+<B>   :1append</B>
+<B>   \asdf</B>
+<B>   .</B>
+<B>   :endfunction</B>
+<B>   :set cpo-=C</B>
+
+Rationale:
+	Most programs work with a trailing <A HREF="intro.html#backslash">backslash</A> to indicate line
+	continuation.  Using this in Vim would cause incompatibility with <A HREF="intro.html#Vi">Vi</A>.
+	For example for this <A HREF="intro.html#Vi">Vi</A> <A HREF="map.html#mapping">mapping</A>:
+<B>		:map xx  asdf\</B>
+ 	Therefore the unusual leading <A HREF="intro.html#backslash">backslash</A> is used.
+
+==============================================================================
+
+5. Debugging scripts					*<A NAME="debug-scripts"></A><B>debug-scripts</B>*
+
+Besides the obvious <A HREF="message.html#messages">messages</A> that you can add to your scripts to find out what
+they are doing, Vim offers a debug mode.  This allows you to step through a
+sourced file or user function and set breakpoints.
+
+NOTE: The debugging mode is far from perfect.  Debugging will have side
+effects on how Vim works.  You cannot use <A HREF="motion.html#it">it</A> to debug everything.  For
+example, the display is messed up by the debugging <A HREF="message.html#messages">messages</A>.
+{Vi does not have a debug mode}
+
+An alternative to debug mode is setting the <A HREF="options.html#'verbose'">'verbose'</A> option.  With a bigger
+number <A HREF="motion.html#it">it</A> will give more <A HREF="starting.html#verbose">verbose</A> <A HREF="message.html#messages">messages</A> about what Vim is doing.
+
+
+
+STARTING DEBUG MODE						*<A NAME="debug-mode"></A><B>debug-mode</B>*
+
+To enter debugging mode use one of these methods:
+1. Start Vim with the |<A HREF="starting.html#-D">-D</A>| argument:
+<B>	vim -D file.txt</B>
+   Debugging will start <A HREF="motion.html#as">as</A> soon <A HREF="motion.html#as">as</A> the first <A HREF="starting.html#vimrc">vimrc</A> file is sourced.  This is
+   useful to find out what is happening when Vim is starting up.  A side
+   effect is that Vim will switch the terminal mode before initialisations
+   have finished, with unpredictable results.
+   For a GUI-only version (Windows, <A HREF="os_mac.html#Macintosh">Macintosh</A>) the debugging will start <A HREF="motion.html#as">as</A>
+   soon <A HREF="motion.html#as">as</A> the <A HREF="gui.html#GUI">GUI</A> <A HREF="windows.html#window">window</A> has been opened.  To make this happen early, add a
+   &quot;<A HREF="gui_x11.html#:gui">:gui</A>&quot; command in the <A HREF="starting.html#vimrc">vimrc</A> file.
+
+								*<A NAME=":debug"></A><B>:debug</B>*
+2. Run a command with &quot;<A HREF="#:debug">:debug</A>&quot; prepended.  Debugging will only be done while
+   this command executes.  Useful for debugging a specific <A HREF="usr_41.html#script">script</A> or user
+   function.  And for scripts and <A HREF="eval.html#functions">functions</A> used by autocommands.  Example:
+<B>	:debug edit test.txt.gz</B>
+
+3. Set a breakpoint in a sourced file or user function.  You could <A HREF="diff.html#do">do</A> this in
+   the command line:
+<B>	vim -c "breakadd file */explorer.vim" .</B>
+   This will run Vim and stop in the first line of the &quot;explorer.vim&quot; <A HREF="usr_41.html#script">script</A>.
+   Breakpoints can also be set while in debugging mode.
+
+In debugging mode every executed command is displayed before <A HREF="motion.html#it">it</A> is executed.
+Comment lines, empty lines and lines that are not executed are skipped.  When
+a line contains two commands, separated by &quot;|&quot;, each command will be displayed
+separately.
+
+
+DEBUG MODE
+
+Once in debugging mode, the usual <A HREF="intro.html#Ex">Ex</A> commands can be used.  For example, to
+inspect the value of a variable:
+<B>	echo idx</B>
+When inside a user function, this will print the value of the local variable
+&quot;idx&quot;.  Prepend &quot;<A HREF="eval.html#g:">g:</A>&quot; to get the value of a global variable:
+<B>	echo g:idx</B>
+All commands are executed in the context of the current function or <A HREF="usr_41.html#script">script</A>.
+You can also set <A HREF="options.html#options">options</A>, for example setting or resetting <A HREF="options.html#'verbose'">'verbose'</A> will show
+what happens, but you might want to set <A HREF="motion.html#it">it</A> just before executing the lines you
+are interested in:
+<B>	:set verbose=20</B>
+
+Commands that require updating the screen should be avoided, because their
+effect won't be noticed until after leaving debug mode.  For example:
+<B>	:help</B>
+won't be very helpful.
+
+There is a separate command-line <A HREF="cmdline.html#history">history</A> for debug mode.
+
+The line number for a function line is relative to the start of the function.
+If you have trouble figuring out where you are, edit the file that defines
+the function in another Vim, search for the start of the function and <A HREF="diff.html#do">do</A>
+&quot;99j&quot;.  <A HREF="insert.html#Replace">Replace</A> &quot;99&quot; with the line number.
+
+Additionally, these commands can be used:
+
+							*<A NAME="&gt;cont"></A><B>&gt;cont</B>*
+	cont		Continue execution until the next breakpoint is hit.
+
+							*<A NAME="&gt;quit"></A><B>&gt;quit</B>*
+	quit		Abort execution.  This is like using <A HREF="pattern.html#CTRL-C">CTRL-C</A>, some
+			things might still be executed, doesn't abort
+			everything.  Still stops at the next breakpoint.
+
+							*<A NAME="&gt;next"></A><B>&gt;next</B>*
+	next		Execute the command and come back to debug mode when
+			it's finished.  This steps over user function calls
+			and sourced files.
+
+							*<A NAME="&gt;step"></A><B>&gt;step</B>*
+	step		Execute the command and come back to debug mode for
+			the next command.  This steps into called user
+			<A HREF="eval.html#functions">functions</A> and sourced files.
+
+							*<A NAME="&gt;interrupt"></A><B>&gt;interrupt</B>*
+	interrupt	This is like using <A HREF="pattern.html#CTRL-C">CTRL-C</A>, but unlike &quot;<A HREF="#&gt;quit">&gt;quit</A>&quot; comes
+			back to debug mode for the next command that is
+			executed.  Useful for testing |<A HREF="eval.html#:finally">:finally</A>| and |<A HREF="eval.html#:catch">:catch</A>|
+			on interrupt exceptions.
+
+							*<A NAME="&gt;finish"></A><B>&gt;finish</B>*
+	finish		Finish the current <A HREF="usr_41.html#script">script</A> or user function and come
+			back to debug mode for the command after the one that
+			sourced or called <A HREF="motion.html#it">it</A>.
+
+About the additional commands in debug mode:
+- There is no command-line completion for them, you get the completion for the
+  normal <A HREF="intro.html#Ex">Ex</A> commands only.
+- You can shorten them, up to a single character: &quot;<A HREF="change.html#c">c</A>&quot;, &quot;<A HREF="pattern.html#n">n</A>&quot;, &quot;<A HREF="change.html#s">s</A>&quot; and &quot;<A HREF="motion.html#f">f</A>&quot;.
+- Hitting <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> will repeat the previous one.  When doing another command, this
+  is reset (because it's not clear what you want to repeat).
+- When you want to use the <A HREF="intro.html#Ex">Ex</A> command with the same name, prepend a colon:
+  &quot;:cont&quot;, &quot;<A HREF="editing.html#:next">:next</A>&quot;, &quot;<A HREF="#:finish">:finish</A>&quot; (or shorter).
+
+
+DEFINING BREAKPOINTS
+
+							*<A NAME=":breaka"></A><B>:breaka</B>* *<A NAME=":breakadd"></A><B>:breakadd</B>*
+:breaka[dd] func [lnum] {name}
+		Set a breakpoint in a function.  Example:
+<B>			:breakadd func Explore</B>
+ 		Doesn't check for a valid function name, thus the breakpoint
+		can be set before the function is defined.
+
+:breaka[dd] file [lnum] {name}
+		Set a breakpoint in a sourced file.  Example:
+<B>			:breakadd file 43 .vimrc</B>
+
+:breaka[dd] here
+		Set a breakpoint in the current line of the current file.
+		Like doing:
+<B>			:breakadd file &lt;cursor-line&gt; &lt;current-file&gt;</B>
+ 		Note that this only works for commands that are executed when
+		sourcing the file, not for a function defined in that file.
+
+The [lnum] is the line number of the breakpoint.  Vim will stop at or after
+this line.  When omitted line 1 is used.
+
+
+							*<A NAME=":debug-name"></A><B>:debug-name</B>*
+{name} is a <A HREF="pattern.html#pattern">pattern</A> that is matched with the file or function name.  The
+<A HREF="pattern.html#pattern">pattern</A> is like what is used for autocommands.  There must be a full match (as
+if the <A HREF="pattern.html#pattern">pattern</A> starts with &quot;<A HREF="motion.html#^">^</A>&quot; and ends in &quot;$&quot;).  A &quot;*&quot; matches any sequence
+of characters.  <A HREF="options.html#'ignorecase'">'ignorecase'</A> is not used, but &quot;\c&quot; can be used in the <A HREF="pattern.html#pattern">pattern</A>
+to ignore <A HREF="change.html#case">case</A> |<A HREF="pattern.html#/\c">/\c</A>|.  Don't include the () for the function name!
+
+The match for sourced scripts is done against the full file name.  If no path
+is specified the current directory is used.  Examples:
+<B>	breakadd file explorer.vim</B>
+matches &quot;explorer.vim&quot; in the current directory.
+<B>	breakadd file *explorer.vim</B>
+matches &quot;.../plugin/explorer.vim&quot;, &quot;.../plugin/iexplorer.vim&quot;, etc.
+<B>	breakadd file */explorer.vim</B>
+matches &quot;.../plugin/explorer.vim&quot; and &quot;explorer.vim&quot; in any other directory.
+
+The match for <A HREF="eval.html#functions">functions</A> is done against the name <A HREF="motion.html#as">as</A> it's shown in the output
+of &quot;<A HREF="eval.html#:function">:function</A>&quot;.  For local <A HREF="eval.html#functions">functions</A> this means that something like &quot;&lt;SNR&gt;99_&quot;
+is prepended.
+
+Note that <A HREF="eval.html#functions">functions</A> are first loaded and later executed.  When they are loaded
+the &quot;file&quot; breakpoints are checked, when they are executed the &quot;func&quot;
+breakpoints.
+
+
+DELETING BREAKPOINTS
+
+						*<A NAME=":breakd"></A><B>:breakd</B>* *<A NAME=":breakdel"></A><B>:breakdel</B>* *<A NAME="E161"></A><B>E161</B>*
+:breakd[el] {nr}
+		Delete breakpoint {nr}.  Use |<A HREF="#:breaklist">:breaklist</A>| to see the number of
+		each breakpoint.
+
+:breakd[el] *
+		Delete all breakpoints.
+
+:breakd[el] func [lnum] {name}
+		Delete a breakpoint in a function.
+
+:breakd[el] file [lnum] {name}
+		Delete a breakpoint in a sourced file.
+
+:breakd[el] here
+		Delete a breakpoint at the current line of the current file.
+
+When [lnum] is omitted, the first breakpoint in the function or file is
+deleted.
+The {name} must be exactly the same <A HREF="motion.html#as">as</A> what was typed for the &quot;<A HREF="#:breakadd">:breakadd</A>&quot;
+command.  &quot;explorer&quot;, &quot;*explorer.vim&quot; and &quot;*explorer*&quot; are different.
+
+
+LISTING BREAKPOINTS
+
+							*<A NAME=":breakl"></A><B>:breakl</B>* *<A NAME=":breaklist"></A><B>:breaklist</B>*
+:breakl[ist]
+		<A HREF="eval.html#List">List</A> all breakpoints.
+
+
+OBSCURE
+
+
+						*<A NAME=":debugg"></A><B>:debugg</B>* *<A NAME=":debuggreedy"></A><B>:debuggreedy</B>*
+:debugg[reedy]
+		Read debug mode commands from the normal input stream, instead
+		of getting them directly from the user.  Only useful for test
+		scripts.  Example:
+<B>		  echo 'q^Mq' | vim -e -s -c debuggreedy -c 'breakadd file script.vim' -S script.vim</B>
+
+:0debugg[reedy]
+		Undo &quot;<A HREF="#:debuggreedy">:debuggreedy</A>&quot;: get debug mode commands directly from the
+		user, don't use typeahead for debug commands.
+
+==============================================================================
+
+6. Profiling						*<A NAME="profile"></A><B>profile</B>* *<A NAME="profiling"></A><B>profiling</B>*
+
+Profiling means that Vim measures the time that is spent on executing
+<A HREF="eval.html#functions">functions</A> and/or scripts.  The |<A HREF="various.html#+profile">+profile</A>| feature is required for this.
+It is only included when Vim was compiled with &quot;huge&quot; features.
+{Vi does not have profiling}
+
+You can also use the |<A HREF="eval.html#reltime()">reltime()</A>| function to measure time.  This only requires
+the |<A HREF="various.html#+reltime">+reltime</A>| feature, which is present more often.
+
+For <A HREF="#profiling">profiling</A> <A HREF="syntax.html#syntax">syntax</A> highlighting see |<A HREF="syntax.html#:syntime">:syntime</A>|.
+
+
+
+:prof[ile] start {fname}			*<A NAME=":prof"></A><B>:prof</B>* *<A NAME=":profile"></A><B>:profile</B>* *<A NAME="E750"></A><B>E750</B>*
+		Start <A HREF="#profiling">profiling</A>, write the output in {fname} upon exit.
+		If {fname} already exists <A HREF="motion.html#it">it</A> will be silently overwritten.
+		The variable |<A HREF="eval.html#v:profiling">v:profiling</A>| is set to one.
+
+:prof[ile] pause
+		Don't <A HREF="#profile">profile</A> until the following &quot;<A HREF="#:profile">:profile</A> continue&quot;.  Can be
+		used when doing something that should not be counted (e.g., an
+		external command).  Does not nest.
+
+:prof[ile] continue
+		Continue <A HREF="#profiling">profiling</A> after &quot;<A HREF="#:profile">:profile</A> pause&quot;.
+
+:prof[ile] func {pattern}
+		Profile function that matches the <A HREF="pattern.html#pattern">pattern</A> {pattern}.
+		See |<A HREF="#:debug-name">:debug-name</A>| for how {pattern} is used.
+
+:prof[ile][!] file {pattern}
+		Profile <A HREF="usr_41.html#script">script</A> file that matches the <A HREF="pattern.html#pattern">pattern</A> {pattern}.
+		See |<A HREF="#:debug-name">:debug-name</A>| for how {pattern} is used.
+		This only profiles the <A HREF="usr_41.html#script">script</A> itself, not the <A HREF="eval.html#functions">functions</A>
+		defined in <A HREF="motion.html#it">it</A>.
+		When the [!] is added then all <A HREF="eval.html#functions">functions</A> defined in the <A HREF="usr_41.html#script">script</A>
+		will also be profiled.  But only if the <A HREF="usr_41.html#script">script</A> is loaded after
+		this command.
+
+
+
+:profd[el] <A HREF="eval.html#...">...</A>						*<A NAME=":profd"></A><B>:profd</B>* *<A NAME=":profdel"></A><B>:profdel</B>*
+		Stop <A HREF="#profiling">profiling</A> for the arguments specified. See |<A HREF="#:breakdel">:breakdel</A>|
+		for the arguments.
+
+
+You must always start with a &quot;<A HREF="#:profile">:profile</A> start fname&quot; command.  The resulting
+file is written when Vim exits.  Here is an example of the output, with line
+numbers prepended for the explanation:
+
+<B><FONT COLOR="PURPLE">  1 FUNCTION  Test2() </FONT></B>
+<B><FONT COLOR="PURPLE">  2 Called 1 time </FONT></B>
+<B><FONT COLOR="PURPLE">  3 Total time:   0.155251 </FONT></B>
+<B><FONT COLOR="PURPLE">  4  Self time:   0.002006 </FONT></B>
+<B><FONT COLOR="PURPLE">  5  </FONT></B>
+<B><FONT COLOR="PURPLE">  6 count  total (s)   self (s) </FONT></B>
+<B><FONT COLOR="PURPLE">  7	9	       0.000096   for i in range(8) </FONT></B>
+<B><FONT COLOR="PURPLE">  8	8   0.153655   0.000410     call Test3() </FONT></B>
+<B><FONT COLOR="PURPLE">  9	8	       0.000070   endfor </FONT></B>
+<B><FONT COLOR="PURPLE"> 10				  " Ask a question </FONT></B>
+<B><FONT COLOR="PURPLE"> 11	1	       0.001341   echo input("give me an answer: ") </FONT></B>
+
+The header (lines 1-4) gives the time for the whole function.  The &quot;Total&quot;
+time is the time passed while the function was executing.  The &quot;Self&quot; time is
+the &quot;Total&quot; time reduced by time spent in:
+- other user defined <A HREF="eval.html#functions">functions</A>
+- sourced scripts
+- executed autocommands
+- external (shell) commands
+
+Lines 7-11 show the time spent in each executed line.  Lines that are not
+executed <A HREF="diff.html#do">do</A> not <A HREF="intro.html#count">count</A>.  Thus a comment line is never counted.
+
+The Count column shows how many times a line was executed.  Note that the
+&quot;for&quot; command in line 7 is executed one more time <A HREF="motion.html#as">as</A> the following lines.
+That is because the line is also executed to detect the end of the loop.
+
+The time Vim spends waiting for user input isn't counted at all.  Thus how
+long you take to respond to the <A HREF="eval.html#input()">input()</A> prompt is irrelevant.
+
+Profiling should give a good indication of where time is spent, but keep in
+mind there are various things that may clobber the results:
+
+- The accuracy of the time measured depends on the gettimeofday() system
+  function.  It may only be <A HREF="motion.html#as">as</A> accurate <A HREF="motion.html#as">as</A> 1/100 second, even though the times
+  are displayed in micro seconds.
+
+- Real elapsed time is measured, if other processes are busy they may cause
+  delays at unpredictable moments.  You may want to run the <A HREF="#profiling">profiling</A> several
+  times and use the lowest results.
+
+- If you have several commands in one line you only get one time.  Split the
+  line to see the time for the individual commands.
+
+- The time of the lines added up is mostly <A HREF="various.html#less">less</A> than the time of the whole
+  function.  There is some overhead in between.
+
+- Functions that are deleted before Vim exits will not produce <A HREF="#profiling">profiling</A>
+  information.  You can check the |<A HREF="eval.html#v:profiling">v:profiling</A>| variable if needed:
+<B>	:if !v:profiling</B>
+<B>	:   delfunc MyFunc</B>
+<B>	:endif</B>
+ 
+- Profiling may give weird results on multi-processor systems, when sleep
+  mode kicks in or the processor frequency is reduced to save power.
+
+- The &quot;<A HREF="eval.html#self">self</A>&quot; time is wrong when a function is used recursively.
+
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

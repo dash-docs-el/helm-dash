@@ -1,0 +1,338 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: if_perl</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: if_perl</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="if_perl.txt"></A><B>if_perl.txt</B>*   For Vim version 7.4.  Last change: 2012 Oct 25
+
+
+		  VIM REFERENCE MANUAL    by Sven Verdoolaege
+					 and Matt Gerassimof
+
+
+<A HREF="#Perl">Perl</A> and Vim				*<A NAME="perl"></A><B>perl</B>* *<A NAME="Perl"></A><B>Perl</B>*
+
+1. Editing <A HREF="#Perl">Perl</A> files			|<A HREF="#perl-editing">perl-editing</A>|
+2. Compiling VIM with <A HREF="#Perl">Perl</A> interface	|<A HREF="#perl-compiling">perl-compiling</A>|
+3. Using the <A HREF="#Perl">Perl</A> interface		|<A HREF="#perl-using">perl-using</A>|
+4. Dynamic loading			|<A HREF="#perl-dynamic">perl-dynamic</A>|
+
+{Vi does not have any of these commands}
+
+The <A HREF="#Perl">Perl</A> interface only works when Vim was compiled with the |<A HREF="various.html#+perl">+perl</A>| feature.
+
+==============================================================================
+
+1. Editing <A HREF="#Perl">Perl</A> files					*<A NAME="perl-editing"></A><B>perl-editing</B>*
+
+Vim <A HREF="syntax.html#syntax">syntax</A> highlighting supports <A HREF="#Perl">Perl</A> and POD files.  Vim assumes a file is
+<A HREF="#Perl">Perl</A> code if the filename has a .pl or .pm suffix.  Vim also examines the first
+line of a file, regardless of the filename suffix, to check if a file is a
+<A HREF="#Perl">Perl</A> <A HREF="usr_41.html#script">script</A> (see scripts.vim in Vim's <A HREF="syntax.html#syntax">syntax</A> directory).  Vim assumes a file
+is POD text if the filename has a .POD suffix.
+
+To use <A HREF="tagsrch.html#tags">tags</A> with <A HREF="#Perl">Perl</A>, you need a recent version of Exuberant <A HREF="tagsrch.html#ctags">ctags</A>.  Look
+here:
+	<A HREF="http://ctags.sourceforge.net">http://ctags.sourceforge.net</A>
+
+Alternatively, you can use the <A HREF="#Perl">Perl</A> <A HREF="usr_41.html#script">script</A> pltags.pl, which is shipped with
+Vim in the $VIMRUNTIME/tools directory.  This <A HREF="usr_41.html#script">script</A> has currently more
+features than Exuberant ctags' <A HREF="#Perl">Perl</A> support.
+
+==============================================================================
+
+2. Compiling VIM with <A HREF="#Perl">Perl</A> interface			*<A NAME="perl-compiling"></A><B>perl-compiling</B>*
+
+To compile Vim with <A HREF="#Perl">Perl</A> interface, you need <A HREF="#Perl">Perl</A> 5.004 (or later).  <A HREF="#Perl">Perl</A> must
+be installed before you compile Vim.  Vim's <A HREF="#Perl">Perl</A> interface does NOT work with
+the 5.003 version that has been officially released!  It will probably work
+with <A HREF="#Perl">Perl</A> 5.003_05 and later.
+
+The <A HREF="#Perl">Perl</A> patches for Vim were made by:
+	Sven Verdoolaege <A HREF="mailto:skimo@breughel.ufsia.ac.be">&lt;skimo@breughel.ufsia.ac.be&gt;</A> 
+	Matt Gerassimof
+
+ Perl for MS-Windows can be found at:	<A HREF="http://www.perl.com/">http://www.perl.com/</A>
+The ActiveState one should work.
+
+==============================================================================
+
+3. Using the <A HREF="#Perl">Perl</A> interface				*<A NAME="perl-using"></A><B>perl-using</B>*
+
+
+							*<A NAME=":perl"></A><B>:perl</B>* *<A NAME=":pe"></A><B>:pe</B>*
+:pe[rl] {cmd}		Execute <A HREF="#Perl">Perl</A> command {cmd}.  The current package
+			is &quot;main&quot;.  Simple example to test if `:perl` is
+			working:
+<B>				:perl VIM::Msg("Hello")</B>
+
+:pe[rl] <A HREF="change.html#&lt;&lt;">&lt;&lt;</A> {endpattern}
+{script}
+{endpattern}
+			Execute <A HREF="#Perl">Perl</A> <A HREF="usr_41.html#script">script</A> {script}.
+			{endpattern} must NOT be preceded by any white space.
+			If {endpattern} is omitted, <A HREF="motion.html#it">it</A> defaults to a dot '<A HREF="repeat.html#.">.</A>'
+			like for the |<A HREF="insert.html#:append">:append</A>| and |<A HREF="insert.html#:insert">:insert</A>| commands.  Using
+			'<A HREF="repeat.html#.">.</A>' helps when inside a function, because &quot;$i;&quot; looks
+			like the start of an |<A HREF="insert.html#:insert">:insert</A>| command to Vim.
+			This form of the |<A HREF="#:perl">:perl</A>| command is mainly useful for
+			including <A HREF="#perl">perl</A> code in vim scripts.
+			Note: This command doesn't work when the <A HREF="#Perl">Perl</A> feature
+			wasn't compiled in.  To avoid <A HREF="message.html#errors">errors</A>, see
+			|<A HREF="#script-here">script-here</A>|.
+
+
+Example vim <A HREF="usr_41.html#script">script</A>:
+
+<B>	function! WhitePearl()</B>
+<B>	perl &lt;&lt; EOF</B>
+<B>		VIM::Msg("pearls are nice for necklaces");</B>
+<B>		VIM::Msg("rubys for rings");</B>
+<B>		VIM::Msg("pythons for bags");</B>
+<B>		VIM::Msg("tcls????");</B>
+<B>	EOF</B>
+<B>	endfunction</B>
+ 
+
+
+							*<A NAME=":perldo"></A><B>:perldo</B>* *<A NAME=":perld"></A><B>:perld</B>*
+:[range]perld[o] {cmd}	Execute <A HREF="#Perl">Perl</A> command {cmd} for each line in the
+			<A HREF="cmdline.html#[range]">[range]</A>, with $_ being set to the text of each line in
+			turn, without a trailing <A HREF="intro.html#&lt;EOL&gt;">&lt;EOL&gt;</A>.  Setting $_ will change
+			the text, but note that <A HREF="motion.html#it">it</A> is not possible to add or
+			delete lines using this command.
+			The default for <A HREF="cmdline.html#[range]">[range]</A> is the whole file: &quot;1,$&quot;.
+
+Here are some things you can try:
+
+<B>  :perl $a=1</B>
+<B>  :perldo $_ = reverse($_);1</B>
+<B>  :perl VIM::Msg("hello")</B>
+<B>  :perl $line = $curbuf-&gt;Get(42)</B>
+ 
+
+							*<A NAME="E299"></A><B>E299</B>*
+Executing <A HREF="#Perl">Perl</A> commands in the |<A HREF="eval.html#sandbox">sandbox</A>| is limited.  &quot;<A HREF="#:perldo">:perldo</A>&quot; will not be
+possible at all.  &quot;<A HREF="#:perl">:perl</A>&quot; will be evaluated in the Safe environment, if
+possible.
+
+
+
+							*<A NAME="perl-overview"></A><B>perl-overview</B>*
+Here is an overview of the <A HREF="eval.html#functions">functions</A> that are available to <A HREF="#Perl">Perl</A>:
+
+<B>  :perl VIM::Msg("Text")		# displays a message</B>
+<B>  :perl VIM::Msg("Error", "ErrorMsg")	# displays an error message</B>
+<B>  :perl VIM::Msg("remark", "Comment")	# displays a highlighted message</B>
+<B>  :perl VIM::SetOption("ai")		# sets a vim option</B>
+<B>  :perl $nbuf = VIM::Buffers()		# returns the number of buffers</B>
+<B>  :perl @buflist = VIM::Buffers()	# returns array of all buffers</B>
+<B>  :perl $mybuf = (VIM::Buffers('qq.c'))[0] # returns buffer object for 'qq.c'</B>
+<B>  :perl @winlist = VIM::Windows()	# returns array of all windows</B>
+<B>  :perl $nwin = VIM::Windows()		# returns the number of windows</B>
+<B>  :perl ($success, $v) = VIM::Eval('&amp;path') # $v: option 'path', $success: 1</B>
+<B>  :perl ($success, $v) = VIM::Eval('&amp;xyz')  # $v: '' and $success: 0</B>
+<B>  :perl $v = VIM::Eval('expand("&lt;cfile&gt;")') # expands &lt;cfile&gt;</B>
+<B>  :perl $curwin-&gt;SetHeight(10)		# sets the window height</B>
+<B>  :perl @pos = $curwin-&gt;Cursor()	# returns (row, col) array</B>
+<B>  :perl @pos = (10, 10)</B>
+<B>  :perl $curwin-&gt;Cursor(@pos)		# sets cursor to @pos</B>
+<B>  :perl $curwin-&gt;Cursor(10,10)		# sets cursor to row 10 col 10</B>
+<B>  :perl $mybuf = $curwin-&gt;Buffer()	# returns the buffer object for window</B>
+<B>  :perl $curbuf-&gt;Name()			# returns buffer name</B>
+<B>  :perl $curbuf-&gt;Number()		# returns buffer number</B>
+<B>  :perl $curbuf-&gt;Count()		# returns the number of lines</B>
+<B>  :perl $l = $curbuf-&gt;Get(10)		# returns line 10</B>
+<B>  :perl @l = $curbuf-&gt;Get(1 .. 5)	# returns lines 1 through 5</B>
+<B>  :perl $curbuf-&gt;Delete(10)		# deletes line 10</B>
+<B>  :perl $curbuf-&gt;Delete(10, 20)		# delete lines 10 through 20</B>
+<B>  :perl $curbuf-&gt;Append(10, "Line")	# appends a line</B>
+<B>  :perl $curbuf-&gt;Append(10, "Line1", "Line2", "Line3") # appends 3 lines</B>
+<B>  :perl @l = ("L1", "L2", "L3")</B>
+<B>  :perl $curbuf-&gt;Append(10, @l)		# appends L1, L2 and L3</B>
+<B>  :perl $curbuf-&gt;Set(10, "Line")	# replaces line 10</B>
+<B>  :perl $curbuf-&gt;Set(10, "Line1", "Line2")	# replaces lines 10 and 11</B>
+<B>  :perl $curbuf-&gt;Set(10, @l)		# replaces 3 lines</B>
+ 
+
+							*<A NAME="perl-Msg"></A><B>perl-Msg</B>*
+VIM::Msg({msg}, {group}?)
+			Displays the message {msg}.  The optional {group}
+			argument specifies a highlight group for Vim to use
+			for the message.
+
+
+							*<A NAME="perl-SetOption"></A><B>perl-SetOption</B>*
+VIM::SetOption({arg})	Sets a vim option.  {arg} can be any argument that the
+			&quot;<A HREF="options.html#:set">:set</A>&quot; command accepts.  Note that this means that no
+			spaces are allowed in the argument!  See |<A HREF="options.html#:set">:set</A>|.
+
+
+							*<A NAME="perl-Buffers"></A><B>perl-Buffers</B>*
+VIM::Buffers([{bn}...])	With no arguments, returns a list of all the <A HREF="windows.html#buffers">buffers</A>
+			in an array context or returns the number of <A HREF="windows.html#buffers">buffers</A>
+			in a scalar context.  For a list of buffer names or
+			numbers {bn}, returns a list of the <A HREF="windows.html#buffers">buffers</A> matching
+			{bn}, using the same rules <A HREF="motion.html#as">as</A> Vim's internal
+			|<A HREF="eval.html#bufname()">bufname()</A>| function.
+			WARNING: the list becomes invalid when |<A HREF="windows.html#:bwipe">:bwipe</A>| is
+			used.  Using <A HREF="motion.html#it">it</A> anyway may crash Vim.
+
+
+							*<A NAME="perl-Windows"></A><B>perl-Windows</B>*
+VIM::Windows([{wn}...])	With no arguments, returns a list of all the <A HREF="windows.html#windows">windows</A>
+			in an array context or returns the number of <A HREF="windows.html#windows">windows</A>
+			in a scalar context.  For a list of <A HREF="windows.html#window">window</A> numbers
+			{wn}, returns a list of the <A HREF="windows.html#windows">windows</A> with those
+			numbers.
+			WARNING: the list becomes invalid when a <A HREF="windows.html#window">window</A> is
+			closed.  Using <A HREF="motion.html#it">it</A> anyway may crash Vim.
+
+
+							*<A NAME="perl-DoCommand"></A><B>perl-DoCommand</B>*
+VIM::DoCommand({cmd})	Executes <A HREF="intro.html#Ex">Ex</A> command {cmd}.
+
+
+							*<A NAME="perl-Eval"></A><B>perl-Eval</B>*
+VIM::Eval({expr})	Evaluates {expr} and returns (success, value) in list 
+			context or just value in scalar context.
+			success=1 indicates that val contains the value of
+			{expr}; success=0 indicates a failure to evaluate
+			the <A HREF="eval.html#expression">expression</A>.  '@x' returns the contents of <A HREF="sponsor.html#register">register</A>
+			<A HREF="change.html#x">x</A>, '&amp;x' returns the value of option <A HREF="change.html#x">x</A>, '<A HREF="change.html#x">x</A>' returns the
+			value of internal |<A HREF="eval.html#variables">variables</A>| <A HREF="change.html#x">x</A>, and '$x' is equivalent
+			to perl's $ENV{x}.  All |<A HREF="eval.html#functions">functions</A>| accessible from
+			the command-line are valid for {expr}.
+			A |<A HREF="eval.html#List">List</A>| is turned into a string by joining the items
+			and <A HREF="insert.html#inserting">inserting</A> line breaks.
+
+
+							*<A NAME="perl-SetHeight"></A><B>perl-SetHeight</B>*
+Window-&gt;SetHeight({height})
+			Sets the Window height to {height}, within screen
+			<A HREF="vi_diff.html#limits">limits</A>.
+
+
+							*<A NAME="perl-GetCursor"></A><B>perl-GetCursor</B>*
+Window-&gt;Cursor({row}?, {col}?)
+			With no arguments, returns a (row, col) array for the
+			current cursor position in the Window.  With {row} and
+			{col} arguments, sets the Window's cursor position to
+			{row} and {col}.  Note that {col} is numbered from 0,
+			Perl-fashion, and thus is one <A HREF="various.html#less">less</A> than the value in
+			Vim's ruler.
+
+
+Window-&gt;Buffer()					*<A NAME="perl-Buffer"></A><B>perl-Buffer</B>*
+			Returns the Buffer object corresponding to the given
+			Window.
+
+
+							*<A NAME="perl-Name"></A><B>perl-Name</B>*
+Buffer-&gt;Name()		Returns the filename for the Buffer.
+
+
+							*<A NAME="perl-Number"></A><B>perl-Number</B>*
+Buffer-&gt;Number()	Returns the number of the Buffer.
+
+
+							*<A NAME="perl-Count"></A><B>perl-Count</B>*
+Buffer-&gt;Count()		Returns the number of lines in the Buffer.
+
+
+							*<A NAME="perl-Get"></A><B>perl-Get</B>*
+Buffer-&gt;Get({lnum}, {lnum}?, <A HREF="eval.html#...">...</A>)
+			Returns a text string of line {lnum} in the Buffer
+			for each {lnum} specified.  An array can be passed
+			with a list of {lnum}'s specified.
+
+
+							*<A NAME="perl-Delete"></A><B>perl-Delete</B>*
+Buffer-&gt;Delete({lnum}, {lnum}?)
+			Deletes line {lnum} in the Buffer.  With the second
+			{lnum}, deletes the range of lines from the first
+			{lnum} to the second {lnum}.
+
+
+							*<A NAME="perl-Append"></A><B>perl-Append</B>*
+Buffer-&gt;Append({lnum}, {line}, {line}?, <A HREF="eval.html#...">...</A>)
+			Appends each {line} string after Buffer line {lnum}.
+			The list of {line}s can be an array.
+
+
+							*<A NAME="perl-Set"></A><B>perl-Set</B>*
+Buffer-&gt;Set({lnum}, {line}, {line}?, <A HREF="eval.html#...">...</A>)
+			Replaces one or more Buffer lines with specified
+			{lines}s, starting at Buffer line {lnum}.  The list of
+			{line}s can be an array.  If the arguments are
+			invalid, replacement does not occur.
+
+$main::curwin
+			The current <A HREF="windows.html#window">window</A> object.
+
+$main::curbuf
+			The current buffer object.
+
+
+
+							*<A NAME="script-here"></A><B>script-here</B>*
+When using a <A HREF="usr_41.html#script">script</A> language in-line, you might want to skip this when the
+language isn't supported.  But this mechanism doesn't work:
+<B>   if has('perl')</B>
+<B>     perl &lt;&lt; EOF</B>
+<B>       this will NOT work!</B>
+<B>   EOF</B>
+<B>   endif</B>
+Instead, put the Perl/Python/Ruby/etc. command in a function and call that
+function:
+<B>    if has('perl')</B>
+<B>      function DefPerl()</B>
+<B>	perl &lt;&lt; EOF</B>
+<B>	  this works</B>
+<B>    EOF</B>
+<B>      endfunction</B>
+<B>      call DefPerl()</B>
+<B>    endif</B>
+Note that &quot;EOF&quot; must be at the start of the line.
+
+==============================================================================
+
+4. Dynamic loading					*<A NAME="perl-dynamic"></A><B>perl-dynamic</B>*
+
+On <A HREF="os_win32.html#MS-Windows">MS-Windows</A> and <A HREF="os_unix.html#Unix">Unix</A> the <A HREF="#Perl">Perl</A> library can be loaded dynamically.  The
+|<A HREF="various.html#:version">:version</A>| output then includes |<A HREF="various.html#+perl/dyn">+perl/dyn</A>|.
+
+This means that Vim will search for the <A HREF="#Perl">Perl</A> DLL or shared library file only
+when needed.  When you don't use the <A HREF="#Perl">Perl</A> interface you don't need <A HREF="motion.html#it">it</A>, thus
+you can use Vim without this file.
+
+
+<B><FONT COLOR="PURPLE">MS-Windows </FONT></B>
+
+ You can download Perl from	<A HREF="http://www.perl.org">http://www.perl.org</A>. The one from ActiveState was
+used for building Vim.
+
+To use the <A HREF="#Perl">Perl</A> interface the <A HREF="#Perl">Perl</A> DLL must be in your search path.
+If Vim reports <A HREF="motion.html#it">it</A> cannot find the perl512.dll, make sure your $PATH includes
+the directory where <A HREF="motion.html#it">it</A> is located.  The <A HREF="#Perl">Perl</A> installer normally does that.
+In a console <A HREF="windows.html#window">window</A> type &quot;path&quot; to see what directories are used.
+
+The name of the DLL must match the <A HREF="#Perl">Perl</A> version Vim was compiled with.
+Currently the name is &quot;perl512.dll&quot;.  That is for <A HREF="#Perl">Perl</A> 5.12.  To know for
+sure edit &quot;gvim.exe&quot; and search for &quot;perl\d*.dll\c&quot;.
+
+==============================================================================
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

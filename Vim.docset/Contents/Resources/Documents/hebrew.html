@@ -1,0 +1,157 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: hebrew</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: hebrew</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="hebrew.txt"></A><B>hebrew.txt</B>*    For Vim version 7.4.  Last change: 2007 Jun 14
+
+
+	   VIM REFERENCE MANUAL    by Ron Aaron (and Avner Lottem)
+
+
+
+Hebrew Language support (options <A HREF="change.html#&amp;">&amp;</A> <A HREF="map.html#mapping">mapping</A>) for Vim		*<A NAME="hebrew"></A><B>hebrew</B>*
+
+The supporting <A HREF="options.html#'rightleft'">'rightleft'</A> functionality was originally created by Avner
+Lottem. &lt;alottem at gmail dot com&gt;  Ron Aaron &lt;ron at ronware dot org&gt; is
+currently helping support these features.
+
+{Vi does not have any of these commands}
+
+All this is only available when the |<A HREF="various.html#+rightleft">+rightleft</A>| feature was enabled at
+compile time.
+
+
+Introduction
+Hebrew-specific <A HREF="options.html#options">options</A> are <A HREF="options.html#'hkmap'">'hkmap'</A>, <A HREF="options.html#'hkmapp'">'hkmapp'</A> 'keymap'=hebrew and <A HREF="options.html#'aleph'">'aleph'</A>.
+Hebrew-useful <A HREF="options.html#options">options</A> are <A HREF="options.html#'delcombine'">'delcombine'</A>, <A HREF="options.html#'allowrevins'">'allowrevins'</A>, <A HREF="options.html#'revins'">'revins'</A>, <A HREF="options.html#'rightleft'">'rightleft'</A>
+and <A HREF="options.html#'rightleftcmd'">'rightleftcmd'</A>.
+
+The <A HREF="options.html#'rightleft'">'rightleft'</A> mode reverses the display order, so characters are displayed
+from right to left instead of the usual left to right.  This is useful
+primarily when editing Hebrew or other Middle-Eastern languages.
+See |<A HREF="rileft.html">rileft.txt</A>| for further details.
+
+Details
++  Options:
+   +  <A HREF="options.html#'rightleft'">'rightleft'</A> ('rl') sets <A HREF="windows.html#window">window</A> orientation to right-to-left.  This means
+      that the logical text 'ABC' will be displayed <A HREF="motion.html#as">as</A> 'CBA', and will start
+      drawing at the right edge of the <A HREF="windows.html#window">window</A>, not the left edge.
+   +  <A HREF="options.html#'hkmap'">'hkmap'</A> ('hk') sets keyboard <A HREF="map.html#mapping">mapping</A> to Hebrew, in insert/replace modes.
+   +  <A HREF="options.html#'aleph'">'aleph'</A> ('al'), numeric, holds the decimal code of <A HREF="options.html#Aleph">Aleph</A>, for keyboard
+      <A HREF="map.html#mapping">mapping</A>.
+   +  <A HREF="options.html#'hkmapp'">'hkmapp'</A> ('hkp') sets keyboard <A HREF="map.html#mapping">mapping</A> to 'phonetic hebrew'
+
+   NOTE: these three ('hkmap', <A HREF="options.html#'hkmapp'">'hkmapp'</A> and <A HREF="options.html#'aleph'">'aleph'</A>) are obsolete.  You should
+	 use &quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'keymap'">keymap</A>=hebrewp&quot; instead.
+
+   +  <A HREF="options.html#'delcombine'">'delcombine'</A> ('deco'), <A HREF="options.html#boolean">boolean</A>, if editing <A HREF="mbyte.html#UTF-8">UTF-8</A> encoded Hebrew, allows
+      one to remove the niqud or te`amim by pressing '<A HREF="change.html#x">x</A>' on a character (with
+      associated niqud).
+
+   +  <A HREF="options.html#'rightleftcmd'">'rightleftcmd'</A> ('rlc') makes the command-prompt for searches show up on
+      the right side.  It only takes effect if the <A HREF="windows.html#window">window</A> is <A HREF="options.html#'rightleft'">'rightleft'</A>.
+
++  Encoding:
+   +  Under <A HREF="os_unix.html#Unix">Unix</A>, ISO 8859-8 encoding (Hebrew letters codes: 224-250).
+   +  Under MS <A HREF="os_dos.html#DOS">DOS</A>, PC encoding (Hebrew letters codes: 128-154).
+      These are defaults, that can be overridden using the <A HREF="options.html#'aleph'">'aleph'</A> option.
+   +  You should prefer using UTF8, <A HREF="motion.html#as">as</A> <A HREF="motion.html#it">it</A> supports the combining-characters
+      ('deco' does nothing if UTF8 encoding is not active).
+
++  Vim arguments:
+   +  'vim <A HREF="starting.html#-H">-H</A> file' starts editing a Hebrew file, i.e. <A HREF="options.html#'rightleft'">'rightleft'</A> and <A HREF="options.html#'hkmap'">'hkmap'</A>
+      are set.
+
++  Keyboard:
+   +  The <A HREF="options.html#'allowrevins'">'allowrevins'</A> option enables the CTRL-_ command in <A HREF="insert.html#Insert">Insert</A> mode and
+      in <A HREF="cmdline.html#Command-line">Command-line</A> mode.
+
+   +  CTRL-_ in insert/replace modes toggles <A HREF="options.html#'revins'">'revins'</A> and <A HREF="options.html#'hkmap'">'hkmap'</A> <A HREF="motion.html#as">as</A> follows:
+
+      When in rightleft <A HREF="windows.html#window">window</A>, <A HREF="options.html#'revins'">'revins'</A> and <A HREF="options.html#'nohkmap'">'nohkmap'</A> are toggled, since
+      English will likely be inserted in this <A HREF="change.html#case">case</A>.
+
+      When in norightleft <A HREF="windows.html#window">window</A>, <A HREF="options.html#'revins'">'revins'</A> <A HREF="options.html#'hkmap'">'hkmap'</A> are toggled, since Hebrew
+      will likely be inserted in this <A HREF="change.html#case">case</A>.
+
+      CTRL-_ moves the cursor to the end of the typed text.
+
+   +  CTRL-_ in command mode only toggles keyboard <A HREF="map.html#mapping">mapping</A> (see Bugs below).
+      This setting is independent of <A HREF="options.html#'hkmap'">'hkmap'</A> option, which only applies to
+      insert/replace mode.
+
+      Note: On some keyboards, CTRL-_ is mapped to CTRL-?.
+
+   +  Keyboard <A HREF="map.html#mapping">mapping</A> while <A HREF="options.html#'hkmap'">'hkmap'</A> is set (standard Israeli keyboard):
+
+	<A HREF="repeat.html#q">q</A> <A HREF="motion.html#w">w</A> <A HREF="motion.html#e">e</A> <A HREF="change.html#r">r</A> t <A HREF="change.html#y">y</A> <A HREF="undo.html#u">u</A> <A HREF="insert.html#i">i</A> <A HREF="insert.html#o">o</A> <A HREF="change.html#p">p</A>
+	/ '' ק ר א ט ו ן ם פ
+
+	 a <A HREF="change.html#s">s</A> <A HREF="change.html#d">d</A> <A HREF="motion.html#f">f</A> <A HREF="index.html#g">g</A> <A HREF="motion.html#h">h</A> <A HREF="motion.html#j">j</A> <A HREF="motion.html#k">k</A> <A HREF="motion.html#l">l</A> ; ''
+	 ש ד ג כ ע י ח ל ך ף ,
+
+	  <A HREF="index.html#z">z</A> <A HREF="change.html#x">x</A> <A HREF="change.html#c">c</A> <A HREF="visual.html#v">v</A> <A HREF="motion.html#b">b</A> <A HREF="pattern.html#n">n</A> <A HREF="motion.html#m">m</A> , . /
+	  ז ס ב ה נ מ צ ת ץ .
+
+      This is also the keymap when 'keymap=hebrew' is set.  The advantage of
+      <A HREF="options.html#'keymap'">'keymap'</A> is that <A HREF="motion.html#it">it</A> works properly when using UTF8, e.g. <A HREF="motion.html#it">it</A> inserts the
+      correct characters; <A HREF="options.html#'hkmap'">'hkmap'</A> does not.  The <A HREF="options.html#'keymap'">'keymap'</A> keyboard can also
+      insert niqud and te`amim.  To see what those mappings are, look at the
+      keymap file 'hebrew.vim' etc.
+
+
+Typing backwards
+
+If the <A HREF="options.html#'revins'">'revins'</A> (reverse insert) option is set, <A HREF="insert.html#inserting">inserting</A> happens backwards.
+This can be used to type Hebrew.  When <A HREF="insert.html#inserting">inserting</A> characters the cursor is not
+moved and the text moves rightwards.  A <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A> deletes the character under the
+cursor.  <A HREF="index.html#CTRL-W">CTRL-W</A> and <A HREF="scroll.html#CTRL-U">CTRL-U</A> also work in the opposite direction.  <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A>, <A HREF="index.html#CTRL-W">CTRL-W</A>
+and <A HREF="scroll.html#CTRL-U">CTRL-U</A> <A HREF="diff.html#do">do</A> not stop at the start of insert or end of line, no matter how
+the <A HREF="options.html#'backspace'">'backspace'</A> option is set.
+
+There is no reverse replace mode (yet).
+
+If the <A HREF="options.html#'showmode'">'showmode'</A> option is set, &quot;<A HREF="starting.html#--">--</A> REVERSE INSERT --&quot; will be shown in the
+status line when reverse <A HREF="insert.html#Insert">Insert</A> mode is active.
+
+When the <A HREF="options.html#'allowrevins'">'allowrevins'</A> option is set, reverse <A HREF="insert.html#Insert">Insert</A> mode can be also entered
+via CTRL-_, which has some extra functionality: First, keyboard <A HREF="map.html#mapping">mapping</A> is
+changed according to the <A HREF="windows.html#window">window</A> orientation <A HREF="starting.html#--">--</A> if in a left-to-right <A HREF="windows.html#window">window</A>,
+<A HREF="options.html#'revins'">'revins'</A> is used to enter Hebrew text, so the keyboard changes to Hebrew
+('hkmap' is set); if in a right-to-left <A HREF="windows.html#window">window</A>, <A HREF="options.html#'revins'">'revins'</A> is used to enter
+English text, so the keyboard changes to English ('hkmap' is reset).  Second,
+when exiting <A HREF="options.html#'revins'">'revins'</A> via CTRL-_, the cursor moves to the end of the typed
+text (if possible).
+
+
+Pasting when in a rightleft <A HREF="windows.html#window">window</A>
+When cutting text with the mouse and pasting <A HREF="motion.html#it">it</A> in a rightleft <A HREF="windows.html#window">window</A>
+the text will be reversed, because the characters come from the cut buffer
+from the left to the right, while inserted in the file from the right to
+the left.   In order to avoid <A HREF="motion.html#it">it</A>, toggle <A HREF="options.html#'revins'">'revins'</A> (by typing CTRL-? or CTRL-_)
+before pasting.
+
+
+Hebrew characters and the <A HREF="options.html#'isprint'">'isprint'</A> variable
+Sometimes Hebrew character codes are in the non-printable range defined by
+the <A HREF="options.html#'isprint'">'isprint'</A> variable.  For example in the Linux console, the Hebrew font
+encoding starts from 128, while the default <A HREF="options.html#'isprint'">'isprint'</A> variable is @,161-255.
+The result is that all Hebrew characters are displayed <A HREF="motion.html#as">as</A> ~x.  To solve this
+problem, set isprint=@,128-255.
+
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

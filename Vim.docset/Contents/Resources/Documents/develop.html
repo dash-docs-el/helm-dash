@@ -1,0 +1,541 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: develop</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: develop</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="develop.txt"></A><B>develop.txt</B>*   For Vim version 7.4.  Last change: 2013 Apr 27
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Development of Vim.					*<A NAME="development"></A><B>development</B>*
+
+This text is important for those who want to be involved in further developing
+Vim.
+
+1. Design goals		|<A HREF="#design-goals">design-goals</A>|
+2. Coding style		|<A HREF="#coding-style">coding-style</A>|
+3. Design decisions	|<A HREF="#design-decisions">design-decisions</A>|
+4. Assumptions		|<A HREF="#design-assumptions">design-assumptions</A>|
+
+See the file README.txt in the &quot;src&quot; directory for an overview of the source
+code.
+
+Vim is open source software.  Everybody is encouraged to contribute to help
+improving Vim.  For sending patches a context <A HREF="diff.html#diff">diff</A> &quot;<A HREF="diff.html#diff">diff</A> -c&quot; is preferred.
+ Also see	<A HREF="http://www.vim.org/tips/tip.php?tip_id=618">http://www.vim.org/tips/tip.php?tip_id=618</A>.
+ Also see	<A HREF="http://vim.wikia.com/wiki/How_to_make_and_submit_a_patch">http://vim.wikia.com/wiki/How_to_make_and_submit_a_patch</A>.
+
+==============================================================================
+
+1. Design goals						*<A NAME="design-goals"></A><B>design-goals</B>*
+
+Most important things come first (roughly).
+
+Note that quite a few items are contradicting.  This is intentional.  A
+balance must be found between them.
+
+
+
+VIM IS... VI COMPATIBLE					*<A NAME="design-compatible"></A><B>design-compatible</B>*
+
+First of all, <A HREF="motion.html#it">it</A> should be possible to use Vim <A HREF="motion.html#as">as</A> a drop-in replacement for
+<A HREF="intro.html#Vi">Vi</A>.  When the user wants to, he can use Vim in compatible mode and hardly
+notice any difference with the original <A HREF="intro.html#Vi">Vi</A>.
+
+Exceptions:
+- We don't reproduce obvious <A HREF="intro.html#Vi">Vi</A> bugs in Vim.
+- There are different versions of <A HREF="intro.html#Vi">Vi</A>.  I am using Version 3.7 (6/7/85) <A HREF="motion.html#as">as</A> a
+  reference.  But support for other versions is also included when possible.
+  The <A HREF="intro.html#Vi">Vi</A> part of POSIX is not considered a definitive source.
+- Vim adds new commands, you cannot rely on some command to fail because <A HREF="motion.html#it">it</A>
+  didn't exist in <A HREF="intro.html#Vi">Vi</A>.
+- Vim will have a lot of features that <A HREF="intro.html#Vi">Vi</A> doesn't have.  Going back from Vim
+  to <A HREF="intro.html#Vi">Vi</A> will be a problem, this cannot be avoided.
+- Some things are hardly ever used (open mode, sending an e-mail when
+  crashing, etc.).  Those will only be included when someone has a good reason
+  why <A HREF="motion.html#it">it</A> should be included and it's not too much work.
+- For some items <A HREF="motion.html#it">it</A> is debatable whether <A HREF="intro.html#Vi">Vi</A> compatibility should be
+  maintained.  There will be an option flag for these.
+
+
+
+VIM IS... IMPROVED					*<A NAME="design-improved"></A><B>design-improved</B>*
+
+The IMproved bits of Vim should make <A HREF="motion.html#it">it</A> a better <A HREF="intro.html#Vi">Vi</A>, without becoming a
+completely different editor.  Extensions are done with a &quot;<A HREF="intro.html#Vi">Vi</A> spirit&quot;.
+- Use the keyboard <A HREF="motion.html#as">as</A> much <A HREF="motion.html#as">as</A> feasible.  The mouse requires a third hand,
+  which we don't have.  Many terminals don't have a mouse.
+- When the mouse is used anyway, avoid the need to switch back to the
+  keyboard.  Avoid mixing mouse and keyboard handling.
+- Add commands and <A HREF="options.html#options">options</A> in a consistent way.  Otherwise people will have a
+  hard time finding and remembering them.  Keep in mind that more commands and
+  <A HREF="options.html#options">options</A> will be added later.
+- A feature that people <A HREF="diff.html#do">do</A> not know about is a useless feature.  Don't add
+  obscure features, or at least add hints in documentation that they exist.
+- Minimize using CTRL and other modifiers, they are more difficult to type.
+- There are many first-time and inexperienced Vim users.  Make <A HREF="motion.html#it">it</A> <A HREF="starting.html#easy">easy</A> for
+  them to start using Vim and learn more over time.
+- There is no limit to the features that can be added.  Selecting new features
+  is one based on (1) what users ask for, (2) how much effort <A HREF="motion.html#it">it</A> takes to
+  implement and (3) someone actually implementing <A HREF="motion.html#it">it</A>.
+
+
+
+VIM IS... MULTI PLATFORM				*<A NAME="design-multi-platform"></A><B>design-multi-platform</B>*
+
+Vim tries to help <A HREF="motion.html#as">as</A> many users on <A HREF="motion.html#as">as</A> many platforms <A HREF="motion.html#as">as</A> possible.
+- Support many kinds of terminals.  The minimal demands are cursor positioning
+  and clear-screen.  Commands should only use key strokes that most keyboards
+  have.  Support all the keys on the keyboard for <A HREF="map.html#mapping">mapping</A>.
+- Support many platforms.  A condition is that there is someone willing to <A HREF="diff.html#do">do</A>
+  Vim <A HREF="#development">development</A> on that platform, and <A HREF="motion.html#it">it</A> doesn't mean messing up the code.
+- Support many compilers and libraries.  Not everybody is able or allowed to
+  <A HREF="usr_90.html#install">install</A> another compiler or <A HREF="gui.html#GUI">GUI</A> library.
+- People switch from one platform to another, and from <A HREF="gui.html#GUI">GUI</A> to terminal
+  version.  Features should be present in all versions, or at least in <A HREF="motion.html#as">as</A> many
+  <A HREF="motion.html#as">as</A> possible with a reasonable effort.  Try to avoid that users must switch
+  between platforms to accomplish their work efficiently.
+- That a feature is not possible on some platforms, or only possible on one
+  platform, does not mean <A HREF="motion.html#it">it</A> cannot be implemented.  [This intentionally
+  contradicts the previous item, these two must be balanced.]
+
+
+
+VIM IS... WELL DOCUMENTED				*<A NAME="design-documented"></A><B>design-documented</B>*
+
+- A feature that isn't documented is a useless feature.  A patch for a new
+  feature must include the documentation.
+- Documentation should be comprehensive and understandable.  Using examples is
+  recommended.
+- Don't make the text unnecessarily long.  Less documentation means that an
+  item is easier to find.
+
+
+
+VIM IS... HIGH SPEED AND SMALL IN SIZE			*<A NAME="design-speed-size"></A><B>design-speed-size</B>*
+
+Using Vim must not be a big attack on system resources.  Keep <A HREF="motion.html#it">it</A> small and
+fast.
+- Computers are becoming faster and bigger each year.  Vim can grow too, but
+  no faster than computers are growing.  Keep Vim usable on older systems.
+- Many users start Vim from a shell very often.  Startup time must be short.
+- Commands must work efficiently.  The time they consume must be <A HREF="motion.html#as">as</A> small <A HREF="motion.html#as">as</A>
+  possible.  Useful commands may take longer.
+- Don't forget that some people use Vim over a slow connection.  Minimize the
+  communication overhead.
+- Items that add considerably to the size and are not used by many people
+  should be a feature that can be disabled.
+- Vim is a component among other components.  Don't turn <A HREF="motion.html#it">it</A> into a massive
+  application, but have <A HREF="motion.html#it">it</A> work well together with other programs.
+
+
+
+VIM IS... MAINTAINABLE					*<A NAME="design-maintain"></A><B>design-maintain</B>*
+
+- The source code should not become a mess.  It should be reliable code.
+- Use the same layout in all files to make <A HREF="motion.html#it">it</A> <A HREF="starting.html#easy">easy</A> to read |<A HREF="#coding-style">coding-style</A>|.
+- Use comments in a useful way!  Quoting the function name and argument names
+  is NOT useful.  Do explain what they are for.
+- Porting to another platform should be made <A HREF="starting.html#easy">easy</A>, without having to change
+  too much platform-independent code.
+- Use the object-oriented spirit: Put data and code together.  Minimize the
+  knowledge spread to other parts of the code.
+
+
+
+VIM IS... FLEXIBLE					*<A NAME="design-flexible"></A><B>design-flexible</B>*
+
+Vim should make <A HREF="motion.html#it">it</A> <A HREF="starting.html#easy">easy</A> for users to work in their preferred styles rather
+than coercing its users into particular patterns of work.  This can be for
+items with a large impact (e.g., the <A HREF="options.html#'compatible'">'compatible'</A> option) or for details.  The
+defaults are carefully chosen such that most users will enjoy using Vim <A HREF="motion.html#as">as</A> <A HREF="motion.html#it">it</A>
+is.  Commands and <A HREF="options.html#options">options</A> can be used to adjust Vim to the desire of the user
+and its environment.
+
+
+
+VIM IS... NOT						*<A NAME="design-not"></A><B>design-not</B>*
+
+- Vim is not a shell or an Operating System.  You will not be able to run a
+  shell inside Vim or use <A HREF="motion.html#it">it</A> to <A HREF="intro.html#control">control</A> a debugger.  This should work the
+  other way around: Use Vim <A HREF="motion.html#as">as</A> a component from a shell or in an IDE.
+  A satirical way to say this: &quot;Unlike Emacs, Vim does not attempt to include
+  everything but the kitchen sink, but some people say that you can clean one
+  with <A HREF="motion.html#it">it</A>.  ;-)&quot;
+ To use Vim with gdb see:	<A HREF="http://www.agide.org">http://www.agide.org</A> and	<A HREF="http://clewn.sf.net">http://clewn.sf.net</A>.
+- Vim is not a fancy <A HREF="gui.html#GUI">GUI</A> editor that tries to look <A HREF="todo.html#nice">nice</A> at the cost of
+  being <A HREF="various.html#less">less</A> consistent over all platforms.  But functional <A HREF="gui.html#GUI">GUI</A> features are
+  welcomed.
+
+==============================================================================
+
+2. Coding style						*<A NAME="coding-style"></A><B>coding-style</B>*
+
+These are the rules to use when making changes to the Vim source code.  Please
+stick to these rules, to keep the sources readable and maintainable.
+
+This list is not complete.  Look in the source code for more examples.
+
+
+
+MAKING CHANGES						*<A NAME="style-changes"></A><B>style-changes</B>*
+
+The basic steps to make changes to the code:
+1. Adjust the documentation.  Doing this first gives you an impression of how
+   your changes affect the user.
+2. Make the source code changes.
+3. Check ../doc/todo.txt if the change affects any listed item.
+4. Make a patch with &quot;<A HREF="diff.html#diff">diff</A> -c&quot; against the unmodified code and docs.
+5. Make a note about what changed and include <A HREF="motion.html#it">it</A> with the patch.
+
+
+
+USE OF COMMON FUNCTIONS					*<A NAME="style-functions"></A><B>style-functions</B>*
+
+Some <A HREF="eval.html#functions">functions</A> that are common to use, have a special Vim version.  Always
+consider using the Vim version, because they were introduced with a reason.
+
+NORMAL NAME	VIM NAME	DIFFERENCE OF VIM VERSION
+free()		vim_free()	Checks for freeing NULL
+malloc()	alloc()		Checks for out of memory situation
+malloc()	lalloc()	Like alloc(), but has long argument
+strcpy()	STRCPY()	Includes cast to (char *), for char_u &#42; args
+<A HREF="eval.html#strchr()">strchr()</A>	vim_strchr()	Accepts special characters
+<A HREF="eval.html#strrchr()">strrchr()</A>	vim_strrchr()	Accepts special characters
+isspace()	vim_isspace()	Can handle characters <A HREF="change.html#&gt;">&gt;</A> 128
+iswhite()	vim_iswhite()	Only TRUE for <A HREF="intro.html#tab">tab</A> and space
+memcpy()	mch_memmove()	Handles overlapped copies
+bcopy()		mch_memmove()	Handles overlapped copies
+memset()	vim_memset()	Uniform for all systems
+
+
+
+NAMES							*<A NAME="style-names"></A><B>style-names</B>*
+
+Function names can not be more than 31 characters long (because of <A HREF="os_vms.html#VMS">VMS</A>).
+
+Don't use &quot;delete&quot; <A HREF="motion.html#as">as</A> a variable name, C++ doesn't like <A HREF="motion.html#it">it</A>.
+
+Because of the requirement that Vim runs on <A HREF="motion.html#as">as</A> many systems <A HREF="motion.html#as">as</A> possible, we
+need to avoid using names that are already defined by the system.  This is a
+list of names that are known to cause trouble.  The name is given <A HREF="motion.html#as">as</A> a <A HREF="pattern.html#regexp">regexp</A>
+<A HREF="pattern.html#pattern">pattern</A>.
+
+is.*()		POSIX, ctype.h
+to.*()		POSIX, ctype.h
+
+d_.*		POSIX, dirent.h
+l_.*		POSIX, fcntl.h
+gr_.*		POSIX, grp.h
+pw_.*		POSIX, pwd.h
+sa_.*		POSIX, signal.h
+mem.*		POSIX, string.h
+str.*		POSIX, string.h
+wcs.*		POSIX, string.h
+st_.*		POSIX, stat.h
+tms_.*		POSIX, times.h
+tm_.*		POSIX, time.h
+c_.*		POSIX, termios.h
+MAX.*		POSIX, limits.h
+__.*		POSIX, system
+_[A-Z].*	POSIX, system
+E[A-Z0-9]*	POSIX, errno.h
+
+.*_t		POSIX, for typedefs.  Use .*_T instead.
+
+wait		don't use <A HREF="motion.html#as">as</A> argument to a function, conflicts with types.h
+index		shadows global declaration
+time		shadows global declaration
+new		C++ reserved keyword
+try		Borland C++ doesn't like <A HREF="motion.html#it">it</A> to be used <A HREF="motion.html#as">as</A> a variable.
+
+clear		<A HREF="os_mac.html#Mac">Mac</A> curses.h
+echo		<A HREF="os_mac.html#Mac">Mac</A> curses.h
+instr		<A HREF="os_mac.html#Mac">Mac</A> curses.h
+<A HREF="intro.html#meta">meta</A>		<A HREF="os_mac.html#Mac">Mac</A> curses.h
+newwin		<A HREF="os_mac.html#Mac">Mac</A> curses.h
+nl		<A HREF="os_mac.html#Mac">Mac</A> curses.h
+overwrite	<A HREF="os_mac.html#Mac">Mac</A> curses.h
+refresh		<A HREF="os_mac.html#Mac">Mac</A> curses.h
+scroll		<A HREF="os_mac.html#Mac">Mac</A> curses.h
+typeahead	<A HREF="os_mac.html#Mac">Mac</A> curses.h
+
+basename()	GNU string function
+dirname()	GNU string function
+get_env_value()	Linux system function
+
+
+
+VARIOUS							*<A NAME="style-various"></A><B>style-various</B>*
+
+Typedef'ed names should end in &quot;_T&quot;:
+<B>    typedef int some_T;</B>
+Define'ed names should be <A HREF="change.html#uppercase">uppercase</A>:
+<B>    #define SOME_THING</B>
+Features always start with &quot;FEAT_&quot;:
+<B>    #define FEAT_FOO</B>
+
+Don't use '\&quot;', some compilers can't handle <A HREF="motion.html#it">it</A>.  &#39;&#34;'' works fine.
+
+Don't use:
+    #if HAVE_SOME
+Some compilers can't handle that and complain that &quot;HAVE_SOME&quot; is not defined.
+Use
+    #ifdef HAVE_SOME
+or
+    #if defined(HAVE_SOME)
+
+
+
+STYLE							*<A NAME="style-examples"></A><B>style-examples</B>*
+
+General rule: One statement per line.
+
+Wrong:	    if (cond) a = 1;
+
+OK:	    if (cond)
+		a = 1;
+
+Wrong:	    while (cond);
+
+OK:	    while (cond)
+		;
+
+Wrong:	    <A HREF="diff.html#do">do</A> a = 1; while (cond);
+
+OK:	    <A HREF="diff.html#do">do</A>
+		a = 1;
+	    while (cond);
+
+
+Functions start with:
+
+Wrong:	int function_name(int arg1, int arg2)
+
+OK:	/*
+	 &#42; Explanation of what this function is used for.
+	 *
+	 &#42; Return value explanation.
+	 */
+	    int
+	function_name(arg1, arg2)
+	    int		arg1;		/* short comment about arg1 */
+	    int		arg2;		/* short comment about arg2 */
+	{
+	    int		local;		/* comment about local */
+
+	    local = arg1 &#42; arg2;
+
+NOTE: Don't use ANSI style function declarations.  A few people still have to
+use a compiler that doesn't support <A HREF="motion.html#it">it</A>.
+
+
+
+SPACES AND PUNCTUATION					*<A NAME="style-spaces"></A><B>style-spaces</B>*
+
+No space between a function name and the bracket:
+
+Wrong:  func (arg);
+OK:	func(arg);
+
+Do use a space after if, while, switch, etc.
+
+Wrong:	if(arg)		for(;;)
+OK:	if (arg)	for (;;)
+
+Use a space after a comma and semicolon:
+
+Wrong:  func(arg1,arg2);	for (i = 0;i <A HREF="change.html#&lt;">&lt;</A> 2;++i)
+OK:	func(arg1, arg2);	for (i = 0; <A HREF="insert.html#i">i</A> <A HREF="change.html#&lt;">&lt;</A> 2; ++i)
+
+Use a space before and after '<A HREF="change.html#=">=</A>', '<A HREF="motion.html#+">+</A>', '<A HREF="pattern.html#/">/</A>', etc.
+
+Wrong:	var=a*5;
+OK:	var = a &#42; 5;
+
+In general: Use empty lines to group lines of code together.  Put a comment
+just above the group of lines.  This makes <A HREF="motion.html#it">it</A> easier to quickly see what is
+being done.
+
+OK:	/* Prepare for building the table. */
+	get_first_item();
+	table_idx = 0;
+
+	/* Build the table */
+	while (has_item())
+	    table[table_idx++] = next_item();
+
+	/* Finish up. */
+	cleanup_items();
+	generate_hash(table);
+
+==============================================================================
+
+3. Design decisions					*<A NAME="design-decisions"></A><B>design-decisions</B>*
+
+<A HREF="fold.html#Folding">Folding</A>
+
+Several forms of <A HREF="fold.html#folding">folding</A> should be possible for the same buffer.  For example,
+have one <A HREF="windows.html#window">window</A> that shows the text with function bodies folded, another
+<A HREF="windows.html#window">window</A> that shows a function body.
+
+<A HREF="fold.html#Folding">Folding</A> is a way to display the text.  It should not change the text itself.
+Therefore the <A HREF="fold.html#folding">folding</A> has been implemented <A HREF="motion.html#as">as</A> a <A HREF="change.html#filter">filter</A> between the text stored
+in a buffer (buffer lines) and the text displayed in a <A HREF="windows.html#window">window</A> (logical lines).
+
+
+Naming the <A HREF="windows.html#window">window</A>
+
+The <A HREF="motion.html#word">word</A> &quot;<A HREF="windows.html#window">window</A>&quot; is commonly used for several things: A <A HREF="windows.html#window">window</A> on the screen,
+the xterm <A HREF="windows.html#window">window</A>, a <A HREF="windows.html#window">window</A> inside Vim to <A HREF="starting.html#view">view</A> a buffer.
+To avoid confusion, other items that are sometimes called <A HREF="windows.html#window">window</A> have been
+given another name.  Here is an overview of the related items:
+
+screen		The whole display.  For the <A HREF="gui.html#GUI">GUI</A> it's something like 1024x768
+		pixels.  The Vim shell can use the whole screen or part of <A HREF="motion.html#it">it</A>.
+shell		The Vim application.  This can cover the whole screen (e.g.,
+		when running in a console) or part of <A HREF="motion.html#it">it</A> (xterm or <A HREF="gui.html#GUI">GUI</A>).
+<A HREF="windows.html#window">window</A>		<A HREF="starting.html#View">View</A> on a buffer.  There can be several <A HREF="windows.html#windows">windows</A> in Vim,
+		together with the command line, menubar, toolbar, etc. they
+		fit in the shell.
+
+
+
+Spell checking						*<A NAME="develop-spell"></A><B>develop-spell</B>*
+
+When <A HREF="spell.html#spell">spell</A> checking was going to be added to Vim a survey was done over the
+available <A HREF="spell.html#spell">spell</A> checking libraries and programs.  Unfortunately, the result
+was that none of them provided sufficient capabilities to be used <A HREF="motion.html#as">as</A> the <A HREF="spell.html#spell">spell</A>
+checking engine in Vim, for various reasons:
+
+- Missing support for <A HREF="mbyte.html#multi-byte">multi-byte</A> encodings.  At least <A HREF="mbyte.html#UTF-8">UTF-8</A> must be supported,
+  so that more than one language can be used in the same file.
+  Doing on-the-fly conversion is not always possible (would require iconv
+  support).
+- For the programs and libraries: Using them as-is would require installing
+  them separately from Vim.  That's mostly not impossible, but a drawback.
+- Performance: A few tests showed that it's possible to check spelling on the
+  fly (while redrawing), just like <A HREF="syntax.html#syntax">syntax</A> highlighting.  But the mechanisms
+  used by other code are much slower.  <A HREF="spell.html#Myspell">Myspell</A> uses a hashtable, for example.
+  The affix compression that most <A HREF="spell.html#spell">spell</A> checkers use makes <A HREF="motion.html#it">it</A> slower too.
+- For using an external program like aspell a communication mechanism would
+  have to be setup.  That's complicated to <A HREF="diff.html#do">do</A> in a portable way (Unix-only
+  would be relatively simple, but that's not good enough).  And performance
+  will become a problem (lots of process switching involved).
+- Missing support for words with non-word characters, such <A HREF="motion.html#as">as</A> &quot;Etten-Leur&quot; and
+  &quot;et al.&quot;, would require marking the pieces of them OK, lowering the
+  reliability.
+- Missing support for regions or dialects.  Makes <A HREF="motion.html#it">it</A> difficult to accept
+  all English words and highlight non-Canadian words differently.
+- Missing support for rare words.  Many words are correct but hardly ever used
+  and could be a misspelled often-used <A HREF="motion.html#word">word</A>.
+- For making suggestions the speed is <A HREF="various.html#less">less</A> important and requiring to <A HREF="usr_90.html#install">install</A>
+  another program or library would be acceptable.  But the <A HREF="motion.html#word">word</A> lists probably
+  differ, the suggestions may be wrong words.
+
+
+
+Spelling suggestions				*<A NAME="develop-spell-suggestions"></A><B>develop-spell-suggestions</B>*
+
+For making suggestions there are two basic mechanisms:
+1. Try <A HREF="change.html#changing">changing</A> the bad <A HREF="motion.html#word">word</A> a little bit and check for a match with a good
+   <A HREF="motion.html#word">word</A>.  Or go through the list of good words, change them a little bit and
+   check for a match with the bad <A HREF="motion.html#word">word</A>.  The changes are <A HREF="change.html#deleting">deleting</A> a character,
+   <A HREF="insert.html#inserting">inserting</A> a character, swapping two characters, etc.
+2. Perform soundfolding on both the bad <A HREF="motion.html#word">word</A> and the good words and then find
+   matches, possibly with a few changes like with the first mechanism.
+
+The first is good for finding typing mistakes.  After experimenting with
+hashtables and looking at solutions from other <A HREF="spell.html#spell">spell</A> checkers the conclusion
+was that a trie (a kind of tree structure) is ideal for this.  Both for
+reducing memory use and being able to try sensible changes.  For example, when
+<A HREF="insert.html#inserting">inserting</A> a character only characters that lead to good words need to be
+tried.  Other mechanisms (with hashtables) need to try all possible letters at
+every position in the <A HREF="motion.html#word">word</A>.  Also, a hashtable has the requirement that <A HREF="motion.html#word">word</A>
+boundaries are identified separately, while a trie does not require this.
+That makes the mechanism a lot simpler.
+
+Soundfolding is useful when someone knows how the words sounds but doesn't
+know how <A HREF="motion.html#it">it</A> is spelled.  For example, the <A HREF="motion.html#word">word</A> &quot;dictionary&quot; might be written
+<A HREF="motion.html#as">as</A> &quot;daktonerie&quot;.  The number of changes that the first method would need to
+try is very big, it's hard to find the good <A HREF="motion.html#word">word</A> that way.  After soundfolding
+the words become &quot;tktnr&quot; and &quot;tkxnry&quot;, these differ by only two letters.
+
+To find words by their soundfolded equivalent (soundalike <A HREF="motion.html#word">word</A>) we need a list
+of all soundfolded words.  A few experiments have been done to find out what
+the best method is.  Alternatives:
+1. Do the sound <A HREF="fold.html#folding">folding</A> on the fly when looking for suggestions.  This means
+   walking through the trie of good words, soundfolding each <A HREF="motion.html#word">word</A> and
+   checking how different <A HREF="motion.html#it">it</A> is from the bad <A HREF="motion.html#word">word</A>.  This is very efficient for
+   memory use, but takes a long time.  On a fast PC <A HREF="motion.html#it">it</A> takes a couple of
+   seconds for English, which can be acceptable for interactive use.  But for
+   some languages <A HREF="motion.html#it">it</A> takes more than ten seconds (e.g., German, Catalan),
+   which is unacceptable slow.  For batch processing (automatic corrections)
+   it's too slow for all languages.
+2. Use a trie for the soundfolded words, so that searching can be done just
+   like how <A HREF="motion.html#it">it</A> works without soundfolding.  This requires remembering a list
+   of good words for each soundfolded <A HREF="motion.html#word">word</A>.  This makes finding matches very
+   fast but requires quite a lot of memory, in the order of 1 to 10 Mbyte.
+   For some languages more than the original <A HREF="motion.html#word">word</A> list.
+3. Like the second alternative, but reduce the amount of memory by using affix
+   compression and store only the soundfolded basic <A HREF="motion.html#word">word</A>.  This is what Aspell
+   does.  Disadvantage is that affixes need to be stripped from the bad <A HREF="motion.html#word">word</A>
+   before soundfolding <A HREF="motion.html#it">it</A>, which means that mistakes at the start and/or end
+   of the <A HREF="motion.html#word">word</A> will cause the mechanism to fail.  Also, this becomes slow when
+   the bad <A HREF="motion.html#word">word</A> is quite different from the good <A HREF="motion.html#word">word</A>.
+
+The choice made is to use the second mechanism and use a separate file.  This
+way a user with sufficient memory can get very good suggestions while a user
+who is short of memory or just wants the <A HREF="spell.html#spell">spell</A> checking and no suggestions
+doesn't use so much memory.
+
+
+Word frequency
+
+For <A HREF="change.html#sorting">sorting</A> suggestions <A HREF="motion.html#it">it</A> helps to know which words are common.  In theory we
+could store a <A HREF="motion.html#word">word</A> frequency with the <A HREF="motion.html#word">word</A> in the dictionary.  However, this
+requires storing a <A HREF="intro.html#count">count</A> per <A HREF="motion.html#word">word</A>.  That degrades <A HREF="motion.html#word">word</A> tree compression a lot.
+And maintaining the <A HREF="motion.html#word">word</A> frequency for all languages will be a heavy task.
+Also, <A HREF="motion.html#it">it</A> would be <A HREF="todo.html#nice">nice</A> to prefer words that are already in the text.  This way
+the words that appear in the specific text are preferred for suggestions.
+
+What has been implemented is to <A HREF="intro.html#count">count</A> words that have been seen during
+displaying.  A hashtable is used to quickly find the <A HREF="motion.html#word">word</A> <A HREF="intro.html#count">count</A>.  The <A HREF="intro.html#count">count</A> is
+initialized from words listed in COMMON items in the affix file, so that <A HREF="motion.html#it">it</A>
+also works when starting a new file.
+
+This isn't ideal, because the longer Vim is running the higher the counts
+become.  But in practice <A HREF="motion.html#it">it</A> is a noticeable improvement over not using the <A HREF="motion.html#word">word</A>
+<A HREF="intro.html#count">count</A>.
+
+==============================================================================
+
+4. Assumptions						*<A NAME="design-assumptions"></A><B>design-assumptions</B>*
+
+Size of <A HREF="eval.html#variables">variables</A>:
+char	    8 bit signed
+char_u	    8 bit unsigned
+int	    32 or 64 bit signed (16 might be possible with limited features)
+unsigned    32 or 64 bit unsigned (16 <A HREF="motion.html#as">as</A> with ints)
+long	    32 or 64 bit signed, can hold a pointer
+
+Note that some compilers cannot handle long lines or strings.  The C89
+standard specifies a limit of 509 characters.
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

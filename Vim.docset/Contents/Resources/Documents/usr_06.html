@@ -1,0 +1,307 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_06</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_06</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_06.txt"></A><B>usr_06.txt</B>*	For Vim version 7.4.  Last change: 2009 Oct 28
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			  Using <A HREF="syntax.html#syntax">syntax</A> highlighting
+
+
+Black and white text is boring.  With colors your file comes to life.  This
+not only looks <A HREF="todo.html#nice">nice</A>, <A HREF="motion.html#it">it</A> also speeds up your work.  Change the colors used for
+the different sorts of text.  Print your text, with the colors you see on the
+screen.
+
+|<A HREF="#06.1">06.1</A>|	Switching <A HREF="motion.html#it">it</A> on
+|<A HREF="#06.2">06.2</A>|	No or wrong colors?
+|<A HREF="#06.3">06.3</A>|	Different colors
+|<A HREF="#06.4">06.4</A>|	With colors or without colors
+|<A HREF="#06.5">06.5</A>|	Printing with colors
+|<A HREF="#06.6">06.6</A>|	Further reading
+
+     Next chapter: |<A HREF="usr_07.html">usr_07.txt</A>|  Editing more than one file
+ Previous chapter: |<A HREF="usr_05.html">usr_05.txt</A>|  Set your settings
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="06.1"></A><B>06.1</B>*	Switching <A HREF="motion.html#it">it</A> on
+
+It all starts with one simple command:
+
+<B>	:syntax enable</B>
+
+That should work in most situations to get color in your files.  Vim will
+automagically detect the type of file and load the right <A HREF="syntax.html#syntax">syntax</A> highlighting.
+Suddenly comments are blue, keywords brown and strings red.  This makes <A HREF="motion.html#it">it</A>
+<A HREF="starting.html#easy">easy</A> to overview the file.  After a while you will find that black&amp;white text
+slows you down!
+
+If you always want to use <A HREF="syntax.html#syntax">syntax</A> highlighting, put the &quot;<A HREF="syntax.html#:syntax">:syntax</A> enable&quot;
+command in your |<A HREF="starting.html#vimrc">vimrc</A>| file.
+
+If you want <A HREF="syntax.html#syntax">syntax</A> highlighting only when the terminal supports colors, you
+can put this in your |<A HREF="starting.html#vimrc">vimrc</A>| file:
+
+<B>	if &amp;t_Co &gt; 1</B>
+<B>	   syntax enable</B>
+<B>	endif</B>
+
+If you want <A HREF="syntax.html#syntax">syntax</A> highlighting only in the <A HREF="gui.html#GUI">GUI</A> version, put the &quot;<A HREF="syntax.html#:syntax">:syntax</A>
+enable&quot; command in your |<A HREF="gui.html#gvimrc">gvimrc</A>| file.
+
+==============================================================================
+
+*<A NAME="06.2"></A><B>06.2</B>*	No or wrong colors?
+
+There can be a number of reasons why you don't see colors:
+
+- Your terminal does not support colors.
+	Vim will use <A HREF="syntax.html#bold">bold</A>, <A HREF="syntax.html#italic">italic</A> and underlined text, but this doesn't look
+	very <A HREF="todo.html#nice">nice</A>.  You probably will want to try to get a terminal with
+	colors.  For <A HREF="os_unix.html#Unix">Unix</A>, I recommend the xterm from the XFree86 project:
+	|<A HREF="syntax.html#xfree-xterm">xfree-xterm</A>|.
+
+- Your terminal does support colors, but Vim doesn't know this.
+	Make sure your $TERM setting is correct.  For example, when using an
+	xterm that supports colors:
+
+<B>		setenv TERM xterm-color</B>
+ 
+	or (depending on your shell):
+
+<B>		TERM=xterm-color; export TERM</B>
+
+ 	The terminal name must match the terminal you are using.  If <A HREF="motion.html#it">it</A>
+	still doesn't work, have a look at |<A HREF="syntax.html#xterm-color">xterm-color</A>|, which shows a few
+	ways to make Vim display colors (not only for an xterm).
+
+- The file type is not recognized.
+	Vim doesn't know all file types, and sometimes it's near to impossible
+	to tell what language a file uses.  Try this command:
+
+<B>		:set filetype</B>
+ 
+	If the result is &quot;filetype=&quot; then the problem is indeed that Vim
+	doesn't know what type of file this is.  You can set the type
+	manually:
+
+<B>		:set filetype=fortran</B>
+
+ 	To see which types are available, look in the directory
+	$VIMRUNTIME/syntax.  For the <A HREF="gui.html#GUI">GUI</A> you can use the <A HREF="autocmd.html#Syntax">Syntax</A> menu.
+	Setting the <A HREF="filetype.html#filetype">filetype</A> can also be done with a |<A HREF="options.html#modeline">modeline</A>|, so that the
+	file will be highlighted each time you edit <A HREF="motion.html#it">it</A>.  For example, this
+	line can be used in a Makefile (put <A HREF="motion.html#it">it</A> near the start or end of the
+	file):
+
+<B>		# vim: syntax=make</B>
+
+ 	You might know how to detect the file type yourself.  Often the file
+	name extension (after the dot) can be used.
+	See |<A HREF="filetype.html#new-filetype">new-filetype</A>| for how to tell Vim to detect that file type.
+
+- There is no highlighting for your file type.
+	You could try using a similar file type by manually setting <A HREF="motion.html#it">it</A> <A HREF="motion.html#as">as</A>
+	mentioned above.  If that isn't good enough, you can write your own
+	syntax file, see |<A HREF="syntax.html#mysyntaxfile">mysyntaxfile</A>|.
+
+
+Or the colors could be wrong:
+
+- The colored text is very hard to read.
+	Vim guesses the background color that you are using.  If <A HREF="motion.html#it">it</A> is black
+	(or another dark color) <A HREF="motion.html#it">it</A> will use light colors for text.  If <A HREF="motion.html#it">it</A> is
+	white (or another light color) <A HREF="motion.html#it">it</A> will use dark colors for text.  If
+	Vim guessed wrong the text will be hard to read.  To solve this, set
+	the <A HREF="options.html#'background'">'background'</A> option.  For a dark background:
+
+<B>		:set background=dark</B>
+
+ 	And for a light background:
+
+<B>		:set background=light</B>
+
+ 	Make sure you put this _before_ the &quot;<A HREF="syntax.html#:syntax">:syntax</A> enable&quot; command,
+	otherwise the colors will already have been set.  You could <A HREF="diff.html#do">do</A>
+	&quot;<A HREF="syntax.html#:syntax">:syntax</A> reset&quot; after setting <A HREF="options.html#'background'">'background'</A> to make Vim set the default
+	colors again.
+
+- The colors are wrong when <A HREF="scroll.html#scrolling">scrolling</A> bottom to top.
+	Vim doesn't read the whole file to parse the text.  It starts parsing
+	wherever you are viewing the file.  That saves a lot of time, but
+	sometimes the colors are wrong.  A simple fix is hitting <A HREF="various.html#CTRL-L">CTRL-L</A>.  Or
+	scroll back a bit and then forward again.
+	For a real fix, see |<A HREF="syntax.html#:syn-sync">:syn-sync</A>|.  Some <A HREF="syntax.html#syntax">syntax</A> files have a way to make
+	<A HREF="motion.html#it">it</A> look further back, see the help for the specific <A HREF="syntax.html#syntax">syntax</A> file.  For
+	example, |<A HREF="tex.html">tex.vim</A>| for the TeX <A HREF="syntax.html#syntax">syntax</A>.
+
+==============================================================================
+
+*<A NAME="06.3"></A><B>06.3</B>*	Different colors				*<A NAME=":syn-default-override"></A><B>:syn-default-override</B>*
+
+If you don't like the default colors, you can select another color scheme.  In
+the <A HREF="gui.html#GUI">GUI</A> use the Edit/Color Scheme menu.  You can also type the command:
+
+<B>	:colorscheme evening</B>
+
+&quot;evening&quot; is the name of the color scheme.  There are several others you might
+want to try out.  Look in the directory $VIMRUNTIME/colors.
+
+When you found the color scheme that you like, add the &quot;<A HREF="syntax.html#:colorscheme">:colorscheme</A>&quot; command
+to your |<A HREF="starting.html#vimrc">vimrc</A>| file.
+
+You could also write your own color scheme.  This is how you <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A>:
+
+1. <A HREF="visual.html#Select">Select</A> a color scheme that comes close.  Copy this file to your own Vim
+   directory.  For <A HREF="os_unix.html#Unix">Unix</A>, this should work:
+
+<B>	!mkdir ~/.vim/colors</B>
+<B>	!cp $VIMRUNTIME/colors/morning.vim ~/.vim/colors/mine.vim</B>
+ 
+   This is done from Vim, because <A HREF="motion.html#it">it</A> knows the value of <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A>.
+
+2. Edit the color scheme file.  These entries are useful:
+
+	term		attributes in a B&amp;W terminal
+	cterm		attributes in a color terminal
+	ctermfg		foreground color in a color terminal
+	ctermbg		background color in a color terminal
+	<A HREF="gui.html#gui">gui</A>		attributes in the <A HREF="gui.html#GUI">GUI</A>
+	guifg		foreground color in the <A HREF="gui.html#GUI">GUI</A>
+	guibg		background color in the <A HREF="gui.html#GUI">GUI</A>
+
+   For example, to make comments green:
+
+<B>	:highlight Comment ctermfg=green guifg=green</B>
+ 
+   Attributes you can use for &quot;cterm&quot; and &quot;<A HREF="gui.html#gui">gui</A>&quot; are &quot;<A HREF="syntax.html#bold">bold</A>&quot; and &quot;<A HREF="syntax.html#underline">underline</A>&quot;.
+   If you want both, use &quot;bold,underline&quot;.  For details see the |<A HREF="syntax.html#:highlight">:highlight</A>|
+   command.
+
+3. Tell Vim to always use your color scheme.  Put this line in your YXXYvimrc|:
+
+<B>	colorscheme mine</B>
+
+If you want to see what the most often used color combinations look like, use
+this command:
+
+<B>	:runtime syntax/colortest.vim</B>
+
+You will see text in various color combinations.  You can check which ones are
+readable and look <A HREF="todo.html#nice">nice</A>.
+
+==============================================================================
+
+*<A NAME="06.4"></A><B>06.4</B>*	With colors or without colors
+
+Displaying text in color takes a lot of effort.  If you find the displaying
+too slow, you might want to disable <A HREF="syntax.html#syntax">syntax</A> highlighting for a moment:
+
+<B>	:syntax clear</B>
+
+When editing another file (or the same one) the colors will come back.
+
+
+							*<A NAME=":syn-off"></A><B>:syn-off</B>*
+If you want to stop highlighting completely use:
+
+<B>	:syntax off</B>
+
+This will completely disable <A HREF="syntax.html#syntax">syntax</A> highlighting and remove <A HREF="motion.html#it">it</A> immediately for
+all <A HREF="windows.html#buffers">buffers</A>.
+
+
+							*<A NAME=":syn-manual"></A><B>:syn-manual</B>*
+If you want <A HREF="syntax.html#syntax">syntax</A> highlighting only for specific files, use this:
+
+<B>	:syntax manual</B>
+
+This will enable the <A HREF="syntax.html#syntax">syntax</A> highlighting, but not switch <A HREF="motion.html#it">it</A> on automatically
+when starting to edit a buffer.  To switch highlighting on for the current
+buffer, set the <A HREF="options.html#'syntax'">'syntax'</A> option:
+
+<B>	:set syntax=ON</B>
+ 
+==============================================================================
+
+*<A NAME="06.5"></A><B>06.5</B>*	Printing with colors				*<A NAME="syntax-printing"></A><B>syntax-printing</B>*
+
+In the <A HREF="os_win32.html#MS-Windows">MS-Windows</A> version you can print the current file with this command:
+
+<B>	:hardcopy</B>
+
+You will get the usual printer <A HREF="gui_w32.html#dialog">dialog</A>, where you can select the printer and a
+few settings.  If you have a color printer, the paper output should look the
+same <A HREF="motion.html#as">as</A> what you see inside Vim.  But when you use a dark background the
+colors will be adjusted to look good on white paper.
+
+There are several <A HREF="options.html#options">options</A> that change the way Vim prints:
+	<A HREF="options.html#'printdevice'">'printdevice'</A>
+	<A HREF="options.html#'printheader'">'printheader'</A>
+	<A HREF="options.html#'printfont'">'printfont'</A>
+	<A HREF="options.html#'printoptions'">'printoptions'</A>
+
+To print only a range of lines,  use <A HREF="visual.html#Visual">Visual</A> mode to select the lines and then
+type the command:
+
+<B>	v100j:hardcopy</B>
+
+&quot;<A HREF="visual.html#v">v</A>&quot; starts <A HREF="visual.html#Visual">Visual</A> mode.  &quot;100j&quot; moves a hundred lines down, they will be
+highlighted.  Then &quot;<A HREF="print.html#:hardcopy">:hardcopy</A>&quot; will print those lines.  You can use other
+commands to move in <A HREF="visual.html#Visual">Visual</A> mode, of course.
+
+This also works on <A HREF="os_unix.html#Unix">Unix</A>, if you have a PostScript printer.  Otherwise, you
+will have to <A HREF="diff.html#do">do</A> a bit more work.  You need to convert the text to HTML first,
+and then print <A HREF="motion.html#it">it</A> from a web browser.
+
+Convert the current file to HTML with this command:
+
+<B>	:TOhtml</B>
+
+In <A HREF="change.html#case">case</A> that doesn't work:
+
+<B>	:source $VIMRUNTIME/syntax/2html.vim</B>
+
+You will see <A HREF="motion.html#it">it</A> crunching away, this can take quite a while for a large file.
+Some time later another <A HREF="windows.html#window">window</A> shows the HTML code.  Now write this somewhere
+(doesn't matter where, you throw <A HREF="motion.html#it">it</A> away later):
+
+<B>	:write main.c.html</B>
+
+Open this file in your favorite browser and print <A HREF="motion.html#it">it</A> from there.  If all goes
+well, the output should look exactly <A HREF="motion.html#as">as</A> <A HREF="motion.html#it">it</A> does in Vim.  See |<A HREF="2html.html">2html.vim</A>| for
+details.  Don't forget to delete the HTML file when you are done with <A HREF="motion.html#it">it</A>.
+
+Instead of <A HREF="print.html#printing">printing</A>, you could also put the HTML file on a web server, and let
+others look at the colored text.
+
+==============================================================================
+
+*<A NAME="06.6"></A><B>06.6</B>*	Further reading
+
+|<A HREF="usr_44.html">usr_44.txt</A>|  Your own <A HREF="syntax.html#syntax">syntax</A> highlighted.
+|<A HREF="syntax.html#syntax">syntax</A>|      All the details.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_07.html">usr_07.txt</A>|  Editing more than one file
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

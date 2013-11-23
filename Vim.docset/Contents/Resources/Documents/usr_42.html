@@ -1,0 +1,389 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_42</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_42</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_42.txt"></A><B>usr_42.txt</B>*	For Vim version 7.4.  Last change: 2008 May 05
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			      Add new <A HREF="gui.html#menus">menus</A>
+
+
+By now you know that Vim is very flexible.  This includes the <A HREF="gui.html#menus">menus</A> used in
+the <A HREF="gui.html#GUI">GUI</A>.  You can define your own menu entries to make certain commands easily
+accessible.  This is for mouse-happy users only.
+
+|<A HREF="#42.1">42.1</A>|	Introduction
+|<A HREF="#42.2">42.2</A>|	Menu commands
+|<A HREF="#42.3">42.3</A>|	Various
+|<A HREF="#42.4">42.4</A>|	Toolbar and popup <A HREF="gui.html#menus">menus</A>
+
+     Next chapter: |<A HREF="usr_43.html">usr_43.txt</A>|  Using <A HREF="filetype.html#filetypes">filetypes</A>
+ Previous chapter: |<A HREF="usr_41.html">usr_41.txt</A>|  Write a Vim <A HREF="usr_41.html#script">script</A>
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="42.1"></A><B>42.1</B>*	Introduction
+
+The <A HREF="gui.html#menus">menus</A> that Vim uses are defined in the file &quot;$VIMRUNTIME/menu.vim&quot;.  If
+you want to write your own <A HREF="gui.html#menus">menus</A>, you might first want to look through that
+file.
+   To define a menu item, use the &quot;<A HREF="gui.html#:menu">:menu</A>&quot; command.  The basic form of this
+command is <A HREF="motion.html#as">as</A> follows:
+
+<B>	:menu {menu-item} {keys}</B>
+
+The {menu-item} describes where on the menu to put the item.  A typical
+{menu-item} is &quot;File.Save&quot;, which represents the item &quot;Save&quot; under the
+&quot;File&quot; menu.  A dot is used to separate the names.  Example:
+
+<B>	:menu File.Save  :update&lt;CR&gt;</B>
+
+The &quot;<A HREF="editing.html#:update">:update</A>&quot; command writes the file when <A HREF="motion.html#it">it</A> was modified.
+   You can add another level: &quot;Edit.Settings.Shiftwidth&quot; defines a submenu
+&quot;Settings&quot; under the &quot;Edit&quot; menu, with an item &quot;Shiftwidth&quot;.  You could use
+even deeper levels.  Don't use this too much, you need to move the mouse quite
+a bit to use such an item.
+   The &quot;<A HREF="gui.html#:menu">:menu</A>&quot; command is very similar to the &quot;<A HREF="map.html#:map">:map</A>&quot; command: the left side
+specifies how the item is triggered and the right hand side defines the
+characters that are executed.  {keys} are characters, they are used just like
+you would have typed them.  Thus in <A HREF="insert.html#Insert">Insert</A> mode, when {keys} is plain text,
+that text is inserted.
+
+
+ACCELERATORS
+
+The ampersand character (&amp;) is used to indicate an accelerator.  For instance,
+you can use Alt-F to select &quot;File&quot; and <A HREF="change.html#S">S</A> to select &quot;Save&quot;.  (The <A HREF="options.html#'winaltkeys'">'winaltkeys'</A>
+option may disable this though!).  Therefore, the {menu-item} looks like
+&quot;&amp;File.&amp;Save&quot;.  The accelerator characters will be underlined in the menu.
+   You must take care that each key is used only once in each menu.  Otherwise
+you will not know which of the two will actually be used.  Vim doesn't warn
+you for this.
+
+
+PRIORITIES
+
+The actual definition of the File.Save menu item is <A HREF="motion.html#as">as</A> follows:
+
+<B>	:menu 10.340 &amp;File.&amp;Save&lt;Tab&gt;:w  :confirm w&lt;CR&gt;</B>
+
+The number 10.340 is called the priority number.  It is used by the editor to
+decide where <A HREF="motion.html#it">it</A> places the menu item.  The first number (10) indicates the
+position on the menu <A HREF="motion.html#bar">bar</A>.  Lower numbered <A HREF="gui.html#menus">menus</A> are positioned to the left,
+higher numbers to the right.
+   These are the priorities used for the standard <A HREF="gui.html#menus">menus</A>:
+
+	  10	20     40     50      60       70		9999
+
+	+------------------------------------------------------------+
+	&#124; File	Edit  Tools  <A HREF="autocmd.html#Syntax">Syntax</A>  Buffers  Window		Help |
+	+------------------------------------------------------------+
+
+Notice that the Help menu is given a very high number, to make <A HREF="motion.html#it">it</A> appear on
+the far right.
+   The second number (340) determines the location of the item within the
+pull-down menu.  Lower numbers go on top, higher number on the bottom.  These
+are the priorities in the File menu:
+
+			+-----------------+
+	    10.310	|Open...	  |
+	    10.320	|Split-Open...	  |
+	    10.325	|New		  |
+	    10.330	|Close		  |
+	    10.335	|---------------- |
+	    10.340	|Save		  |
+	    10.350	|Save As...	  |
+	    10.400	|---------------- |
+	    10.410	|Split Diff with  |
+	    10.420	|Split Patched By |
+	    10.500	|---------------- |
+	    10.510	|Print		  |
+	    10.600	|---------------- |
+	    10.610	|Save-Exit	  |
+	    10.620	|Exit		  |
+			+-----------------+
+
+Notice that there is room in between the numbers.  This is where you can
+insert your own items, if you really want to (it's often better to leave the
+standard <A HREF="gui.html#menus">menus</A> alone and add a new menu for your own items).
+   When you create a submenu, you can add another &quot;.number&quot; to the priority.
+Thus each name in {menu-item} has its priority number.
+
+
+SPECIAL CHARACTERS
+
+The {menu-item} in this example is &quot;&amp;File.&amp;Save&lt;Tab&gt;:w&quot;.  This brings up an
+important point: {menu-item} must be one <A HREF="motion.html#word">word</A>.  If you want to put a dot,
+space or tabs in the name, you either use the <A HREF="intro.html#&lt;&gt;">&lt;&gt;</A> <A HREF="intro.html#notation">notation</A> (&lt;Space&gt; and <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>,
+for instance) or use the <A HREF="intro.html#backslash">backslash</A> (\) <A HREF="intro.html#escape">escape</A>.
+
+<B>	:menu 10.305 &amp;File.&amp;Do\ It\.\.\. :exit&lt;CR&gt;</B>
+
+In this example, the name of the menu item &quot;Do It...&quot; contains a space and the
+command is &quot;:exit&lt;CR&gt;&quot;.
+
+The <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> character in a menu name is used to separate the part that defines
+the menu name from the part that gives a hint to the user.  The part after the
+<A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> is displayed right aligned in the menu.  In the File.Save menu the name
+used is &quot;&amp;File.&amp;Save&lt;Tab&gt;:w&quot;.  Thus the menu name is &quot;File.Save&quot; and the hint
+is &quot;<A HREF="editing.html#:w">:w</A>&quot;.
+
+
+SEPARATORS
+
+The separator lines, used to group related menu items together, can be defined
+by using a name that starts and ends in a '<A HREF="motion.html#-">-</A>'.  For example &quot;-sep-&quot;.  When
+using several separators the names must be different.  Otherwise the names
+don't matter.
+   The command from a separator will never be executed, but you have to define
+one anyway.  A single colon will <A HREF="diff.html#do">do</A>.  Example:
+
+<B>	:amenu 20.510 Edit.-sep3- :</B>
+
+==============================================================================
+
+*<A NAME="42.2"></A><B>42.2</B>*	Menu commands
+
+You can define menu items that exist for only certain modes.  This works just
+like the variations on the &quot;<A HREF="map.html#:map">:map</A>&quot; command:
+
+	<A HREF="gui.html#:menu">:menu</A>		<A HREF="intro.html#Normal">Normal</A>, <A HREF="visual.html#Visual">Visual</A> and <A HREF="intro.html#Operator-pending">Operator-pending</A> mode
+	<A HREF="gui.html#:nmenu">:nmenu</A>		<A HREF="intro.html#Normal">Normal</A> mode
+	<A HREF="gui.html#:vmenu">:vmenu</A>		<A HREF="visual.html#Visual">Visual</A> mode
+	<A HREF="gui.html#:omenu">:omenu</A>		<A HREF="intro.html#Operator-pending">Operator-pending</A> mode
+	<A HREF="gui.html#:menu">:menu</A>!		<A HREF="insert.html#Insert">Insert</A> and <A HREF="cmdline.html#Command-line">Command-line</A> mode
+	<A HREF="gui.html#:imenu">:imenu</A>		<A HREF="insert.html#Insert">Insert</A> mode
+	<A HREF="gui.html#:cmenu">:cmenu</A>		<A HREF="cmdline.html#Command-line">Command-line</A> mode
+	<A HREF="gui.html#:amenu">:amenu</A>		All modes
+
+To avoid that the commands of a menu item are being mapped, use the command
+&quot;<A HREF="gui.html#:noremenu">:noremenu</A>&quot;, &quot;<A HREF="gui.html#:nnoremenu">:nnoremenu</A>&quot;, &quot;<A HREF="gui.html#:anoremenu">:anoremenu</A>&quot;, etc.
+
+
+USING :AMENU
+
+The &quot;<A HREF="gui.html#:amenu">:amenu</A>&quot; command is a bit different.  It assumes that the {keys} you
+give are to be executed in <A HREF="intro.html#Normal">Normal</A> mode.  When Vim is in <A HREF="visual.html#Visual">Visual</A> or <A HREF="insert.html#Insert">Insert</A> mode
+when the menu is used, Vim first has to go back to <A HREF="intro.html#Normal">Normal</A> mode.  &quot;<A HREF="gui.html#:amenu">:amenu</A>&quot;
+inserts a <A HREF="pattern.html#CTRL-C">CTRL-C</A> or <A HREF="motion.html#CTRL-O">CTRL-O</A> for you.  For example, if you use this command:
+
+<B>	:amenu  90.100 Mine.Find\ Word  *</B>
+
+Then the resulting menu commands will be:
+
+	<A HREF="intro.html#Normal">Normal</A> mode:		*
+	<A HREF="visual.html#Visual">Visual</A> mode:		<A HREF="pattern.html#CTRL-C">CTRL-C</A> *
+	<A HREF="intro.html#Operator-pending">Operator-pending</A> mode:	<A HREF="pattern.html#CTRL-C">CTRL-C</A> *
+	<A HREF="insert.html#Insert">Insert</A> mode:		<A HREF="motion.html#CTRL-O">CTRL-O</A> *
+	<A HREF="cmdline.html#Command-line">Command-line</A> mode:	<A HREF="pattern.html#CTRL-C">CTRL-C</A> *
+
+When in <A HREF="cmdline.html#Command-line">Command-line</A> mode the <A HREF="pattern.html#CTRL-C">CTRL-C</A> will <A HREF="editing.html#abandon">abandon</A> the command typed so far.
+In <A HREF="visual.html#Visual">Visual</A> and <A HREF="intro.html#Operator-pending">Operator-pending</A> mode <A HREF="pattern.html#CTRL-C">CTRL-C</A> will stop the mode.  The <A HREF="motion.html#CTRL-O">CTRL-O</A> in
+<A HREF="insert.html#Insert">Insert</A> mode will execute the command and then return to <A HREF="insert.html#Insert">Insert</A> mode.
+   <A HREF="motion.html#CTRL-O">CTRL-O</A> only works for one command.  If you need to use two or more
+commands, put them in a function and call that function.  Example:
+
+<B>	:amenu  Mine.Next\ File  :call &lt;SID&gt;NextFile()&lt;CR&gt;</B>
+<B>	:function &lt;SID&gt;NextFile()</B>
+<B>	:  next</B>
+<B>	:  1/^Code</B>
+<B>	:endfunction</B>
+
+This menu entry goes to the next file in the argument list with &quot;<A HREF="editing.html#:next">:next</A>&quot;.  Then
+<A HREF="motion.html#it">it</A> searches for the line that starts with &quot;Code&quot;.
+   The <A HREF="map.html#&lt;SID&gt;">&lt;SID&gt;</A> before the function name is the <A HREF="usr_41.html#script">script</A> ID.  This makes the
+function local to the current Vim <A HREF="usr_41.html#script">script</A> file.  This avoids problems when a
+function with the same name is defined in another <A HREF="usr_41.html#script">script</A> file.  See |<A HREF="map.html#&lt;SID&gt;">&lt;SID&gt;</A>|.
+
+
+SILENT MENUS
+
+The menu executes the {keys} <A HREF="motion.html#as">as</A> if you typed them.  For a &quot;<A HREF="cmdline.html#:">:</A>&quot; command this
+means you will see the command being echoed on the command line.  If it's a
+long command, the hit-Enter prompt will appear.  That can be very annoying!
+   To avoid this, make the menu silent.  This is done with the &lt;silent&gt;
+argument.  For example, take the call to NextFile() in the previous example.
+When you use this menu, you will see this on the command line:
+
+<B><FONT COLOR="PURPLE">	:call &lt;SNR&gt;34_NextFile() </FONT></B>
+
+To avoid this text on the command line, insert &quot;&lt;silent&gt;&quot; <A HREF="motion.html#as">as</A> the first
+argument:
+
+<B>	:amenu &lt;silent&gt; Mine.Next\ File :call &lt;SID&gt;NextFile()&lt;CR&gt;</B>
+
+Don't use &quot;&lt;silent&gt;&quot; too often.  It is not needed for short commands.  If you
+make a menu for someone else, being able the see the executed command will
+give him a hint about what he could have typed, instead of using the mouse.
+
+
+LISTING MENUS
+
+When a menu command is used without a {keys} part, <A HREF="motion.html#it">it</A> lists the already
+defined <A HREF="gui.html#menus">menus</A>.  You can specify a {menu-item}, or part of <A HREF="motion.html#it">it</A>, to list specific
+<A HREF="gui.html#menus">menus</A>.  Example:
+
+<B>	:amenu</B>
+
+This lists all <A HREF="gui.html#menus">menus</A>.  That's a long list!  Better specify the name of a menu
+to get a shorter list:
+
+<B>	:amenu Edit</B>
+
+This lists only the &quot;Edit&quot; menu items for all modes.  To list only one
+specific menu item for <A HREF="insert.html#Insert">Insert</A> mode:
+
+<B>	:imenu Edit.Undo</B>
+
+Take care that you type exactly the right name.  Case matters here.  But the
+'<A HREF="change.html#&amp;">&amp;</A>' for accelerators can be omitted.  The <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> and what comes after <A HREF="motion.html#it">it</A> can be
+left out <A HREF="motion.html#as">as</A> well.
+
+
+DELETING MENUS
+
+To delete a menu, the same command is used <A HREF="motion.html#as">as</A> for listing, but with &quot;menu&quot;
+changed to &quot;unmenu&quot;.  Thus &quot;<A HREF="gui.html#:menu">:menu</A>&quot; becomes, &quot;<A HREF="gui.html#:unmenu">:unmenu</A>&quot;, &quot;<A HREF="gui.html#:nmenu">:nmenu</A>&quot; becomes
+&quot;<A HREF="gui.html#:nunmenu">:nunmenu</A>&quot;, etc.  To delete the &quot;Tools.Make&quot; item for <A HREF="insert.html#Insert">Insert</A> mode:
+
+<B>	:iunmenu Tools.Make</B>
+
+You can delete a whole menu, with all its items, by using the menu name.
+Example:
+
+<B>	:aunmenu Syntax</B>
+
+This deletes the <A HREF="autocmd.html#Syntax">Syntax</A> menu and all the items in <A HREF="motion.html#it">it</A>.
+
+==============================================================================
+
+*<A NAME="42.3"></A><B>42.3</B>*	Various
+
+You can change the appearance of the <A HREF="gui.html#menus">menus</A> with flags in <A HREF="options.html#'guioptions'">'guioptions'</A>.  In the
+default value they are all included, except &quot;<A HREF="motion.html#M">M</A>&quot;.  You can remove a flag with a
+command like:
+
+<B>	:set guioptions-=m</B>
+ 
+	<A HREF="motion.html#m">m</A>		When removed the menubar is not displayed.
+
+	<A HREF="motion.html#M">M</A>		When added the default <A HREF="gui.html#menus">menus</A> are not loaded.
+
+	<A HREF="index.html#g">g</A>		When removed the inactive menu items are not made grey
+			but are completely removed.  (Does not work on all
+			systems.)
+
+	t		When removed the tearoff feature is not enabled.
+
+The dotted line at the top of a menu is not a separator line.  When you select
+this item, the menu is &quot;teared-off&quot;: It is displayed in a separate <A HREF="windows.html#window">window</A>.
+This is called a tearoff menu.  This is useful when you use the same menu
+often.
+
+For translating menu items, see |<A HREF="mlang.html#:menutrans">:menutrans</A>|.
+
+Since the mouse has to be used to select a menu item, <A HREF="motion.html#it">it</A> is a good idea to use
+the &quot;<A HREF="editing.html#:browse">:browse</A>&quot; command for selecting a file.  And &quot;<A HREF="editing.html#:confirm">:confirm</A>&quot; to get a <A HREF="gui_w32.html#dialog">dialog</A>
+instead of an error message, e.g., when the current buffer contains changes.
+These two can be combined:
+
+<B>	:amenu File.Open  :browse confirm edit&lt;CR&gt;</B>
+
+The &quot;<A HREF="editing.html#:browse">:browse</A>&quot; makes a file browser appear to select the file to edit.  The
+&quot;<A HREF="editing.html#:confirm">:confirm</A>&quot; will pop up a <A HREF="gui_w32.html#dialog">dialog</A> when the current buffer has changes.  You can
+then select to save the changes, throw them away or cancel the command.
+   For more complicated items, the <A HREF="eval.html#confirm()">confirm()</A> and <A HREF="eval.html#inputdialog()">inputdialog()</A> <A HREF="eval.html#functions">functions</A> can
+be used.  The default <A HREF="gui.html#menus">menus</A> contain a few examples.
+
+==============================================================================
+
+*<A NAME="42.4"></A><B>42.4</B>*	Toolbar and popup <A HREF="gui.html#menus">menus</A>
+
+There are two special <A HREF="gui.html#menus">menus</A>: ToolBar and PopUp.  Items that start with these
+names <A HREF="diff.html#do">do</A> not appear in the normal menu <A HREF="motion.html#bar">bar</A>.
+
+
+TOOLBAR
+
+The toolbar appears only when the &quot;<A HREF="motion.html#T">T</A>&quot; flag is included in the <A HREF="options.html#'guioptions'">'guioptions'</A>
+option.
+   The toolbar uses icons rather than text to represent the command.  For
+example, the {menu-item} named &quot;ToolBar.New&quot; causes the &quot;New&quot; icon to appear
+on the toolbar.
+   The Vim editor has 28 built-in icons.  You can find a table here:
+|<A HREF="gui.html#builtin-tools">builtin-tools</A>|.  Most of them are used in the default toolbar.  You can
+redefine what these items <A HREF="diff.html#do">do</A> (after the default <A HREF="gui.html#menus">menus</A> are setup).
+   You can add another bitmap for a toolbar item.  Or define a new toolbar
+item with a bitmap.  For example, define a new toolbar item with:
+
+<B>	:tmenu ToolBar.Compile  Compile the current file</B>
+<B>	:amenu ToolBar.Compile  :!cc % -o %:r&lt;CR&gt;</B>
+
+Now you need to create the icon.  For <A HREF="os_win32.html#MS-Windows">MS-Windows</A> <A HREF="motion.html#it">it</A> must be in bitmap format,
+with the name &quot;Compile.bmp&quot;.  For <A HREF="os_unix.html#Unix">Unix</A> XPM format is used, the file name is
+&quot;Compile.xpm&quot;.  The size must be 18 by 18 pixels.  On <A HREF="os_win32.html#MS-Windows">MS-Windows</A> other sizes
+can be used <A HREF="motion.html#as">as</A> well, but <A HREF="motion.html#it">it</A> will look ugly.
+   Put the bitmap in the directory &quot;bitmaps&quot; in one of the directories from
+<A HREF="options.html#'runtimepath'">'runtimepath'</A>.  E.g., for <A HREF="os_unix.html#Unix">Unix</A> &quot;~/.vim/bitmaps/Compile.xpm&quot;.
+
+You can define tooltips for the items in the toolbar.  A tooltip is a short
+text that explains what a toolbar item will <A HREF="diff.html#do">do</A>.  For example &quot;Open file&quot;.  It
+appears when the mouse pointer is on the item, without moving for a moment.
+This is very useful if the meaning of the picture isn't that obvious.
+Example:
+
+<B>	:tmenu ToolBar.Make  Run make in the current directory</B>
+ 
+	Note:
+	Pay attention to the <A HREF="change.html#case">case</A> used.  &quot;Toolbar&quot; and &quot;toolbar&quot; are different
+	from &quot;ToolBar&quot;!
+
+To remove a tooltip, use the |<A HREF="gui.html#:tunmenu">:tunmenu</A>| command.
+
+The <A HREF="options.html#'toolbar'">'toolbar'</A> option can be used to display text instead of a bitmap, or both
+text and a bitmap.  Most people use just the bitmap, since the text takes
+quite a bit of space.
+
+
+POPUP MENU
+
+The popup menu pops up where the mouse pointer is.  On <A HREF="os_win32.html#MS-Windows">MS-Windows</A> you activate
+<A HREF="motion.html#it">it</A> by clicking the right mouse button.  Then you can select an item with the
+left mouse button.  On <A HREF="os_unix.html#Unix">Unix</A> the popup menu is used by pressing and holding the
+right mouse button.
+   The popup menu only appears when the <A HREF="options.html#'mousemodel'">'mousemodel'</A> has been set to &quot;popup&quot;
+or &quot;popup_setpos&quot;.  The difference between the two is that &quot;popup_setpos&quot;
+moves the cursor to the mouse pointer position.  When clicking inside a
+selection, the selection will be used unmodified.  When there is a selection
+but you click outside of <A HREF="motion.html#it">it</A>, the selection is removed.
+   There is a separate popup menu for each mode.  Thus there are never grey
+items like in the normal <A HREF="gui.html#menus">menus</A>.
+
+
+What is the meaning of life, the universe and everything?  *<A NAME="42"></A><B>42</B>*
+Douglas Adams, the only person who knew what this question really was about is
+now dead, unfortunately.  So now you might wonder what the meaning of death
+is...
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_43.html">usr_43.txt</A>|  Using <A HREF="filetype.html#filetypes">filetypes</A>
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

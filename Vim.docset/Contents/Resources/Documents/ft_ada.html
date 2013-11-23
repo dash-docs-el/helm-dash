@@ -1,0 +1,606 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: ft_ada</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: ft_ada</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="ft_ada.txt"></A><B>ft_ada.txt</B>*	For Vim version 7.4.  Last change: 2010 Jul 20
+
+
+<B><FONT COLOR="PURPLE">		    ADA FILE TYPE PLUG-INS REFERENCE MANUAL</FONT></B>
+
+
+ADA								      *<A NAME="ada.vim"></A><B>ada.vim</B>*
+
+1.  <A HREF="autocmd.html#Syntax">Syntax</A> Highlighting			    |<A HREF="#ft-ada-syntax">ft-ada-syntax</A>|
+2.  File type Plug-in			    |<A HREF="#ft-ada-plugin">ft-ada-plugin</A>|
+3.  Omni Completion			    |<A HREF="#ft-ada-omni">ft-ada-omni</A>|
+    3.1 Omni Completion with &quot;gnat xref&quot;	|<A HREF="#gnat-xref">gnat-xref</A>|
+    3.2 Omni Completion with &quot;ctags&quot;		|<A HREF="#ada-ctags">ada-ctags</A>|
+4.  Compiler Support			    |<A HREF="#ada-compiler">ada-compiler</A>|
+    4.1 GNAT					|<A HREF="#compiler-gnat">compiler-gnat</A>|
+    4.2 Dec Ada					|<A HREF="#compiler-decada">compiler-decada</A>|
+5.  References				    |<A HREF="#ada-reference">ada-reference</A>|
+    5.1 Options					|<A HREF="#ft-ada-options">ft-ada-options</A>|
+    5.2 Commands				|<A HREF="#ft-ada-commands">ft-ada-commands</A>|
+    5.3 Variables				|<A HREF="#ft-ada-variables">ft-ada-variables</A>|
+    5.4 Constants				|<A HREF="#ft-ada-constants">ft-ada-constants</A>|
+    5.5 Functions				|<A HREF="#ft-ada-functions">ft-ada-functions</A>|
+6.  Extra Plug-ins			    |<A HREF="#ada-extra-plugins">ada-extra-plugins</A>|
+
+==============================================================================
+<B><FONT COLOR="PURPLE">1. Syntax Highlighting </FONT></B>
+
+							       *<A NAME="ft-ada-syntax"></A><B>ft-ada-syntax</B>*
+
+This mode is designed for the 2005 edition of Ada (&quot;Ada 2005&quot;), which includes
+support for objected-programming, protected types, and so on.  It handles code
+written for the original Ada language (&quot;Ada83&quot;, &quot;Ada87&quot;, &quot;Ada95&quot;) <A HREF="motion.html#as">as</A> well,
+though code which uses Ada 2005-only keywords will be wrongly colored (such
+code should be fixed anyway).  For more information about Ada, see
+	<A HREF="http://www.adapower.com">http://www.adapower.com</A>.
+
+The Ada mode handles a number of situations cleanly.
+
+For example, <A HREF="motion.html#it">it</A> knows that the &quot;<A HREF="motion.html#-">-</A>&quot; in &quot;-5&quot; is a number, but the same character
+in &quot;A-5&quot; is an <A HREF="motion.html#operator">operator</A>.  Normally, a &quot;with&quot; or &quot;use&quot; clause referencing
+another compilation unit is coloured the same way <A HREF="motion.html#as">as</A> C's &quot;#include&quot; is coloured.
+If you have &quot;Conditional&quot; or &quot;Repeat&quot; groups coloured differently, then &quot;end
+if&quot; and &quot;end loop&quot; will be coloured <A HREF="motion.html#as">as</A> part of those respective groups.
+
+You can set these to different colours using vim's &quot;highlight&quot; command (e.g.,
+to change how loops are displayed, enter the command &quot;<A HREF="syntax.html#:hi">:hi</A> Repeat&quot; followed by
+the colour specification; on simple terminals the colour specification
+ctermfg=White often shows well).
+
+There are several options you can select in this Ada mode. See |<A HREF="#ft-ada-options">ft-ada-options</A>|
+for a complete list.
+
+To enable them, assign a value to the option.  For example, to turn one on:
+
+<B>    &gt; let g:ada_standard_types = 1</B>
+
+To disable them use &quot;<A HREF="eval.html#:unlet">:unlet</A>&quot;.  Example:
+
+<B>    &gt; unlet g:ada_standard_types</B>
+
+You can just use &quot;<A HREF="cmdline.html#:">:</A>&quot; and type these into the command line to set these
+temporarily before loading an Ada file.  You can make these option settings
+permanent by adding the &quot;let&quot; command(s), without a colon, to your &quot;~/.vimrc&quot;
+file.
+
+Even on a slow (90Mhz) PC this mode works quickly, but if you find the
+performance unacceptable, turn on |<A HREF="#g:ada_withuse_ordinary">g:ada_withuse_ordinary</A>|.
+
+<A HREF="autocmd.html#Syntax">Syntax</A> folding instructions (|<A HREF="fold.html#fold-syntax">fold-syntax</A>|) are added when |<A HREF="#g:ada_folding">g:ada_folding</A>| is
+set.
+
+==============================================================================
+<B><FONT COLOR="PURPLE">2. File type Plug-in </FONT></B>
+
+					       *<A NAME="ft-ada-indent"></A><B>ft-ada-indent</B>* *<A NAME="ft-ada-plugin"></A><B>ft-ada-plugin</B>*
+
+The Ada plug-in provides support for:
+
+ - auto indenting	(|<A HREF="indent.html">indent.txt</A>|)
+ - insert completion	(|<A HREF="insert.html#i_CTRL-N">i_CTRL-N</A>|)
+ - user completion	(|<A HREF="insert.html#i_CTRL-X_CTRL-U">i_CTRL-X_CTRL-U</A>|)
+ - tag searches		(|<A HREF="tagsrch.html">tagsrch.txt</A>|)
+ - Quick Fix		(|<A HREF="quickfix.html">quickfix.txt</A>|)
+ - backspace handling	(|<A HREF="options.html#'backspace'">'backspace'</A>|)
+ - comment handling	(|<A HREF="options.html#'comments'">'comments'</A>|, |<A HREF="options.html#'commentstring'">'commentstring'</A>|)
+
+The plug-in only activates the features of the Ada mode whenever an Ada
+file is opened and adds Ada related entries to the main and pop-up menu.
+
+==============================================================================
+<B><FONT COLOR="PURPLE">3. Omni Completion </FONT></B>
+
+								 *<A NAME="ft-ada-omni"></A><B>ft-ada-omni</B>*
+
+The Ada omni-completions (|<A HREF="insert.html#i_CTRL-X_CTRL-O">i_CTRL-X_CTRL-O</A>|) uses <A HREF="tagsrch.html#tags">tags</A> database created either
+ by &quot;gnat xref -v&quot; or the &quot;exuberant Ctags	<A HREF="http://ctags.sourceforge.net">http://ctags.sourceforge.net</A>. The
+complete function will automatically detect which tool was used to create the
+<A HREF="tagsrch.html#tags">tags</A> file.
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">3.1 Omni Completion with "gnat xref" </FONT></B>
+
+								   *<A NAME="gnat-xref"></A><B>gnat-xref</B>*
+
+GNAT XREF uses the compiler internal information (ali-files) to produce the
+<A HREF="tagsrch.html#tags">tags</A> file. This has the advantage to be 100&#37; correct and the option of deep
+nested analysis. However the code must compile, the generator is quite
+slow and the created <A HREF="tagsrch.html#tags">tags</A> file contains only the basic Ctags information for
+each entry - not enough for some of the more advanced Vim code browser
+plug-ins.
+
+NOTE: &quot;gnat xref -v&quot; is very tricky to use <A HREF="motion.html#as">as</A> <A HREF="motion.html#it">it</A> has almost no diagnostic
+       output - If nothing is printed then usually the parameters are wrong.
+       Here some important <A HREF="tips.html#tips">tips</A>:
+
+1)  You need to compile your code first and use the &quot;-aO&quot; option to point to
+    your .ali files.
+2)  &quot;gnat xref <A HREF="starting.html#-v">-v</A> ../Include/adacl.ads&quot; won't work - use  the &quot;gnat xref <A HREF="starting.html#-v">-v</A>
+    -aI../Include adacl.ads&quot; instead.
+3)  &quot;gnat xref <A HREF="starting.html#-v">-v</A> -aI../Include *.ad?&quot; won't work - use &quot;cd ../Include&quot; and
+    then &quot;gnat xref <A HREF="starting.html#-v">-v</A> *.ad?&quot;
+4)  Project manager support is completely broken - don't even try &quot;gnat xref
+    -Padacl.gpr&quot;.
+5)  VIM is faster when the <A HREF="tagsrch.html#tags">tags</A> file is sorted - use &quot;sort --unique
+    --ignore-case --output=tags tags&quot; .
+6)  Remember to insert &quot;!_TAG_FILE_SORTED 2 &#37;sort ui&quot; <A HREF="motion.html#as">as</A> first line to <A HREF="motion.html#mark">mark</A>
+    the file assorted.
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">3.2 Omni Completion with "ctags"</FONT></B>
+
+								   *<A NAME="ada-ctags"></A><B>ada-ctags</B>*
+
+Exuberant Ctags uses its own multi-language code parser. The parser is quite
+fast, produces a lot of extra information (hence the name &quot;Exuberant Ctags&quot;)
+and can run on files which currently <A HREF="diff.html#do">do</A> not compile.
+
+There are also lots of other Vim-tools which use exuberant Ctags.
+
+You will need to <A HREF="usr_90.html#install">install</A> a version of the Exuberant Ctags which has Ada
+support patched in. Such a version is available from the GNU Ada Project
+	<A HREF="http://gnuada.sourceforge.net">http://gnuada.sourceforge.net</A>.
+
+The Ada parser for Exuberant Ctags is fairly new - don't expect complete
+support yet.
+
+==============================================================================
+<B><FONT COLOR="PURPLE">4. Compiler Support </FONT></B>
+
+								*<A NAME="ada-compiler"></A><B>ada-compiler</B>*
+
+The Ada mode supports more than one Ada compiler and will automatically load the
+compiler set in |<A HREF="#g:ada_default_compiler">g:ada_default_compiler</A>| whenever an Ada source is opened. The
+provided compiler plug-ins are split into the actual compiler plug-in and a
+collection of support <A HREF="eval.html#functions">functions</A> and <A HREF="eval.html#variables">variables</A>. This allows the <A HREF="starting.html#easy">easy</A>
+<A HREF="develop.html#development">development</A> of specialized compiler plug-ins fine tuned to your <A HREF="develop.html#development">development</A>
+environment.
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">4.1 GNAT </FONT></B>
+
+							       *<A NAME="compiler-gnat"></A><B>compiler-gnat</B>*
+
+GNAT is the only free (beer and speech) Ada compiler available. There are
+several versions available which differ in the licence terms used.
+
+The GNAT compiler plug-in will perform a compile on pressing <A HREF="term.html#&lt;F7&gt;">&lt;F7&gt;</A> and then
+immediately shows the result. You can set the project file to be used by
+setting:
+
+<B> &gt; call g:gnat.Set_Project_File ('my_project.gpr')</B>
+
+Setting a project file will also create a Vim session (|<A HREF="starting.html#views-sessions">views-sessions</A>|) so -
+like with the GPS - opened files, <A HREF="windows.html#window">window</A> positions etc. will be remembered
+separately for all projects.
+
+
+								*<A NAME="gnat_members"></A><B>gnat_members</B>*
+<B><FONT COLOR="PURPLE">GNAT OBJECT </FONT></B>
+
+
+							       *<A NAME="g:gnat.Make()"></A><B>g:gnat.Make()</B>*
+<A HREF="#g:gnat.Make()">g:gnat.Make()</A>
+		Calls |<A HREF="g:gnat.html">g:gnat.Make_Command</A>| and displays the result inside a
+               |<A HREF="quickfix.html#quickfix">quickfix</A>| <A HREF="windows.html#window">window</A>.
+
+
+							     *<A NAME="g:gnat.Pretty()"></A><B>g:gnat.Pretty()</B>*
+<A HREF="#g:gnat.Pretty()">g:gnat.Pretty()</A>
+		Calls |<A HREF="g:gnat.html">g:gnat.Pretty_Program</A>|
+
+
+							       *<A NAME="g:gnat.Find()"></A><B>g:gnat.Find()</B>*
+<A HREF="#g:gnat.Find()">g:gnat.Find()</A>
+		Calls |<A HREF="g:gnat.html">g:gnat.Find_Program</A>|
+
+
+							       *<A NAME="g:gnat.Tags()"></A><B>g:gnat.Tags()</B>*
+<A HREF="#g:gnat.Tags()">g:gnat.Tags()</A>
+		Calls |<A HREF="g:gnat.html">g:gnat.Tags_Command</A>|
+
+
+						   *<A NAME="g:gnat.Set_Project_File()"></A><B>g:gnat.Set_Project_File()</B>*
+g:gnat.Set_Project_File([{file}])
+		Set gnat project file and load associated session.  An open
+		project will be closed and the session written.  If called
+		without file name the file selector opens for selection of a
+		project file. If called with an empty string then the project
+		and associated session are closed.
+
+
+							 *<A NAME="g:gnat.Project_File"></A><B>g:gnat.Project_File</B>*
+<A HREF="#g:gnat.Project_File">g:gnat.Project_File</A>	string
+		Current project file.
+
+
+							 *<A NAME="g:gnat.Make_Command"></A><B>g:gnat.Make_Command</B>*
+<A HREF="#g:gnat.Make_Command">g:gnat.Make_Command</A>	string
+		External command used for |<A HREF="g:gnat.html">g:gnat.Make()</A>| (|<A HREF="options.html#'makeprg'">'makeprg'</A>|).
+
+
+						       *<A NAME="g:gnat.Pretty_Program"></A><B>g:gnat.Pretty_Program</B>*
+<A HREF="#g:gnat.Pretty_Program">g:gnat.Pretty_Program</A>	string
+		External command used for |<A HREF="g:gnat.html">g:gnat.Pretty()</A>|
+
+
+							 *<A NAME="g:gnat.Find_Program"></A><B>g:gnat.Find_Program</B>*
+<A HREF="#g:gnat.Find_Program">g:gnat.Find_Program</A>	string
+		External command used for |<A HREF="g:gnat.html">g:gnat.Find()</A>|
+
+
+							 *<A NAME="g:gnat.Tags_Command"></A><B>g:gnat.Tags_Command</B>*
+<A HREF="#g:gnat.Tags_Command">g:gnat.Tags_Command</A>	string
+		External command used for |<A HREF="g:gnat.html">g:gnat.Tags()</A>|
+
+
+							 *<A NAME="g:gnat.Error_Format"></A><B>g:gnat.Error_Format</B>*
+<A HREF="#g:gnat.Error_Format">g:gnat.Error_Format</A>	string
+		Error format (|<A HREF="options.html#'errorformat'">'errorformat'</A>|)
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">4.2 Dec Ada </FONT></B>
+
+					    *<A NAME="compiler-hpada"></A><B>compiler-hpada</B>* *<A NAME="compiler-decada"></A><B>compiler-decada</B>*
+
+					*<A NAME="compiler-vaxada"></A><B>compiler-vaxada</B>* *<A NAME="compiler-compaqada"></A><B>compiler-compaqada</B>*
+
+Dec Ada (also known by - in chronological order - VAX Ada, Dec Ada, Compaq Ada
+and HP Ada) is a fairly dated Ada 83 compiler. Support is basic: <A HREF="term.html#&lt;F7&gt;">&lt;F7&gt;</A> will
+compile the current unit.
+
+The Dec Ada compiler expects the package name and not the file name to be
+passed <A HREF="motion.html#as">as</A> a parameter. The compiler plug-in supports the usual file name
+convention to convert the file into a unit name. Both '<A HREF="motion.html#-">-</A>' and '__' are allowed
+<A HREF="motion.html#as">as</A> separators.
+
+
+							      *<A NAME="decada_members"></A><B>decada_members</B>*
+<B><FONT COLOR="PURPLE">DEC ADA OBJECT </FONT></B>
+
+
+							     *<A NAME="g:decada.Make()"></A><B>g:decada.Make()</B>*
+<A HREF="#g:decada.Make()">g:decada.Make()</A>		function
+		Calls |<A HREF="g:decada.html">g:decada.Make_Command</A>| and displays the result inside a
+		|<A HREF="quickfix.html#quickfix">quickfix</A>| <A HREF="windows.html#window">window</A>.
+
+
+							*<A NAME="g:decada.Unit_Name()"></A><B>g:decada.Unit_Name()</B>*
+<A HREF="#g:decada.Unit_Name()">g:decada.Unit_Name()</A>	function
+		Get the Unit name for the current file.
+
+
+						       *<A NAME="g:decada.Make_Command"></A><B>g:decada.Make_Command</B>*
+<A HREF="#g:decada.Make_Command">g:decada.Make_Command</A>	string
+		External command used for |<A HREF="g:decada.html">g:decada.Make()</A>| (|<A HREF="options.html#'makeprg'">'makeprg'</A>|).
+
+
+						       *<A NAME="g:decada.Error_Format"></A><B>g:decada.Error_Format</B>*
+g:decada.Error_Format|	string
+		Error format (|<A HREF="options.html#'errorformat'">'errorformat'</A>|).
+
+==============================================================================
+<B><FONT COLOR="PURPLE">5. References </FONT></B>
+
+							       *<A NAME="ada-reference"></A><B>ada-reference</B>*
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">5.1 Options </FONT></B>
+
+							      *<A NAME="ft-ada-options"></A><B>ft-ada-options</B>*
+
+
+							*<A NAME="g:ada_standard_types"></A><B>g:ada_standard_types</B>*
+<A HREF="#g:ada_standard_types">g:ada_standard_types</A>	bool (true when exists)
+		Highlight types in package Standard (e.g., &quot;Float&quot;).
+
+
+							  *<A NAME="g:ada_space_errors"></A><B>g:ada_space_errors</B>*
+
+						  *<A NAME="g:ada_no_trail_space_error"></A><B>g:ada_no_trail_space_error</B>*
+
+						    *<A NAME="g:ada_no_tab_space_error"></A><B>g:ada_no_tab_space_error</B>*
+
+							 *<A NAME="g:ada_all_tab_usage"></A><B>g:ada_all_tab_usage</B>*
+<A HREF="#g:ada_space_errors">g:ada_space_errors</A>	 bool (true when exists)
+		Highlight extraneous <A HREF="message.html#errors">errors</A> in spaces <A HREF="eval.html#...">...</A>
+		<A HREF="#g:ada_no_trail_space_error">g:ada_no_trail_space_error</A>
+		    - but ignore trailing spaces at the end of a line
+		<A HREF="#g:ada_no_tab_space_error">g:ada_no_tab_space_error</A>
+		    - but ignore tabs after spaces
+		<A HREF="#g:ada_all_tab_usage">g:ada_all_tab_usage</A>
+		    - highlight all <A HREF="intro.html#tab">tab</A> use
+
+
+							   *<A NAME="g:ada_line_errors"></A><B>g:ada_line_errors</B>*
+<A HREF="#g:ada_line_errors">g:ada_line_errors</A>	  bool (true when exists)
+		Highlight lines which are too long. Note: This highlighting
+		option is quite CPU intensive.
+
+
+							 *<A NAME="g:ada_rainbow_color"></A><B>g:ada_rainbow_color</B>*
+<A HREF="#g:ada_rainbow_color">g:ada_rainbow_color</A>	  bool (true when exists)
+		Use rainbow colours for '<A HREF="motion.html#(">(</A>' and '<A HREF="motion.html#)">)</A>'. You need the
+		rainbow_parenthesis for this to work.
+
+
+							       *<A NAME="g:ada_folding"></A><B>g:ada_folding</B>*
+<A HREF="#g:ada_folding">g:ada_folding</A>		  set ('sigpft')
+		Use <A HREF="fold.html#folding">folding</A> for Ada sources.
+		    '<A HREF="change.html#s">s</A>':    activate <A HREF="syntax.html#syntax">syntax</A> <A HREF="fold.html#folding">folding</A> on load
+			'<A HREF="change.html#p">p</A>':    fold packages
+			'<A HREF="motion.html#f">f</A>':    fold <A HREF="eval.html#functions">functions</A> and procedures
+			'<A HREF="motion.html#t">t</A>':    fold types
+			'<A HREF="change.html#c">c</A>':    fold conditionals
+		    '<A HREF="index.html#g">g</A>':    activate gnat pretty print <A HREF="fold.html#folding">folding</A> on load
+			'<A HREF="insert.html#i">i</A>':    lone <A HREF="options.html#'is'">'is'</A> folded with line above
+			'<A HREF="motion.html#b">b</A>':	lone 'begin' folded with line above
+			'<A HREF="change.html#p">p</A>':	lone 'private' folded with line above
+			'<A HREF="change.html#x">x</A>':	lone 'exception' folded with line above
+		    '<A HREF="insert.html#i">i</A>':    activate indent <A HREF="fold.html#folding">folding</A> on load
+
+		Note: <A HREF="autocmd.html#Syntax">Syntax</A> <A HREF="fold.html#folding">folding</A> is in an early (unusable) stage and
+		      indent or gnat pretty <A HREF="fold.html#folding">folding</A> is suggested.
+
+		For gnat pretty <A HREF="fold.html#folding">folding</A> to work the following settings are
+		suggested: -cl3 -M79 -c2 -c3 -c4 -A1 -A2 -A3 -A4 -A5
+
+		For indent <A HREF="fold.html#folding">folding</A> to work the following settings are
+		suggested: shiftwidth=3 softtabstop=3
+
+
+								*<A NAME="g:ada_abbrev"></A><B>g:ada_abbrev</B>*
+<A HREF="#g:ada_abbrev">g:ada_abbrev</A>		  bool (true when exists)
+		Add some <A HREF="map.html#abbreviations">abbreviations</A>. This feature is more or <A HREF="various.html#less">less</A> superseded
+		by the various completion methods.
+
+
+						      *<A NAME="g:ada_withuse_ordinary"></A><B>g:ada_withuse_ordinary</B>*
+<A HREF="#g:ada_withuse_ordinary">g:ada_withuse_ordinary</A>	  bool (true when exists)
+		Show &quot;with&quot; and &quot;use&quot; <A HREF="motion.html#as">as</A> ordinary keywords (when used to
+		reference other compilation units they're normally highlighted
+		specially).
+
+
+							 *<A NAME="g:ada_begin_preproc"></A><B>g:ada_begin_preproc</B>*
+<A HREF="#g:ada_begin_preproc">g:ada_begin_preproc</A>	  bool (true when exists)
+		Show all begin-like keywords using the colouring of C
+		preprocessor commands.
+
+
+						    *<A NAME="g:ada_omni_with_keywords"></A><B>g:ada_omni_with_keywords</B>*
+<A HREF="#g:ada_omni_with_keywords">g:ada_omni_with_keywords</A>
+		Add Keywords, Pragmas, Attributes to omni-completions
+		(|<A HREF="insert.html#compl-omni">compl-omni</A>|). Note: You can always complete then with user
+		completion (|<A HREF="insert.html#i_CTRL-X_CTRL-U">i_CTRL-X_CTRL-U</A>|).
+
+
+						      *<A NAME="g:ada_extended_tagging"></A><B>g:ada_extended_tagging</B>*
+<A HREF="#g:ada_extended_tagging">g:ada_extended_tagging</A>	  enum ('jump', <A HREF="options.html#'list'">'list'</A>)
+		use extended tagging, two <A HREF="options.html#options">options</A> are available
+		    'jump': use tjump to jump.
+		    <A HREF="options.html#'list'">'list'</A>: add <A HREF="tagsrch.html#tags">tags</A> quick fix list.
+		<A HREF="intro.html#Normal">Normal</A> tagging does not support function or <A HREF="motion.html#operator">operator</A>
+		overloading <A HREF="motion.html#as">as</A> these features are not available in C and
+		tagging was originally developed for C.
+
+
+						   *<A NAME="g:ada_extended_completion"></A><B>g:ada_extended_completion</B>*
+<A HREF="#g:ada_extended_completion">g:ada_extended_completion</A>
+		Uses extended completion for &lt;C-N&gt; and &lt;C-R&gt; completions
+		(|<A HREF="insert.html#i_CTRL-N">i_CTRL-N</A>|). In this mode the '<A HREF="repeat.html#.">.</A>' is used <A HREF="motion.html#as">as</A> part of the
+		identifier so that 'Object.Method' or 'Package.Procedure' are
+		completed together.
+
+
+						       *<A NAME="g:ada_gnat_extensions"></A><B>g:ada_gnat_extensions</B>*
+<A HREF="#g:ada_gnat_extensions">g:ada_gnat_extensions</A>	  bool (true when exists)
+		 Support GNAT extensions.
+
+
+					       *<A NAME="g:ada_with_gnat_project_files"></A><B>g:ada_with_gnat_project_files</B>*
+<A HREF="#g:ada_with_gnat_project_files">g:ada_with_gnat_project_files</A>	 bool (true when exists)
+		 Add gnat project file keywords and Attributes.
+
+
+						      *<A NAME="g:ada_default_compiler"></A><B>g:ada_default_compiler</B>*
+<A HREF="#g:ada_default_compiler">g:ada_default_compiler</A>	  string
+		set default compiler. Currently supported are 'gnat' and
+		'decada'.
+
+An &quot;exists&quot; type is a <A HREF="options.html#boolean">boolean</A> considered true when the variable is defined and
+false when the variable is undefined. The value to which the variable is set
+makes no difference.
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">5.2 Commands </FONT></B>
+
+							     *<A NAME="ft-ada-commands"></A><B>ft-ada-commands</B>*
+
+
+<A HREF="#:AdaRainbow">:AdaRainbow</A>							 *<A NAME=":AdaRainbow"></A><B>:AdaRainbow</B>*
+		Toggles rainbow colour (|<A HREF="#g:ada_rainbow_color">g:ada_rainbow_color</A>|) mode for
+		'<A HREF="motion.html#(">(</A>' and '<A HREF="motion.html#)">)</A>'.
+
+
+<A HREF="#:AdaLines">:AdaLines</A>							   *<A NAME=":AdaLines"></A><B>:AdaLines</B>*
+		Toggles line error (|<A HREF="#g:ada_line_errors">g:ada_line_errors</A>|) display.
+
+
+<A HREF="#:AdaSpaces">:AdaSpaces</A>							  *<A NAME=":AdaSpaces"></A><B>:AdaSpaces</B>*
+		Toggles space error (|<A HREF="#g:ada_space_errors">g:ada_space_errors</A>|) display.
+
+
+<A HREF="#:AdaTagDir">:AdaTagDir</A>							  *<A NAME=":AdaTagDir"></A><B>:AdaTagDir</B>*
+		Creates <A HREF="tagsrch.html#tags">tags</A> file for the directory of the current file.
+
+
+<A HREF="#:AdaTagFile">:AdaTagFile</A>							 *<A NAME=":AdaTagFile"></A><B>:AdaTagFile</B>*
+		Creates <A HREF="tagsrch.html#tags">tags</A> file for the current file.
+
+
+<A HREF="#:AdaTypes">:AdaTypes</A>							   *<A NAME=":AdaTypes"></A><B>:AdaTypes</B>*
+		Toggles standard types (|<A HREF="#g:ada_standard_types">g:ada_standard_types</A>|) colour.
+
+
+<A HREF="#:GnatFind">:GnatFind</A>							   *<A NAME=":GnatFind"></A><B>:GnatFind</B>*
+		Calls |<A HREF="g:gnat.html">g:gnat.Find()</A>|
+
+
+<A HREF="#:GnatPretty">:GnatPretty</A>							 *<A NAME=":GnatPretty"></A><B>:GnatPretty</B>*
+		Calls |<A HREF="g:gnat.html">g:gnat.Pretty()</A>|
+
+
+<A HREF="#:GnatTags">:GnatTags</A>							   *<A NAME=":GnatTags"></A><B>:GnatTags</B>*
+		Calls |<A HREF="g:gnat.html">g:gnat.Tags()</A>|
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">5.3 Variables </FONT></B>
+
+							    *<A NAME="ft-ada-variables"></A><B>ft-ada-variables</B>*
+
+
+								      *<A NAME="g:gnat"></A><B>g:gnat</B>*
+<A HREF="#g:gnat">g:gnat</A>			    object
+		Control object which manages GNAT compiles.  The object
+		is created when the first Ada source code is loaded provided
+		that |<A HREF="#g:ada_default_compiler">g:ada_default_compiler</A>| is set to 'gnat'. See
+		|<A HREF="#gnat_members">gnat_members</A>| for details.
+
+
+								    *<A NAME="g:decada"></A><B>g:decada</B>*
+<A HREF="#g:decada">g:decada</A>		      object
+		Control object which manages Dec Ada compiles.	The object
+		is created when the first Ada source code is loaded provided
+		that |<A HREF="#g:ada_default_compiler">g:ada_default_compiler</A>| is set to 'decada'. See
+		|<A HREF="#decada_members">decada_members</A>| for details.
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">5.4 Constants </FONT></B>
+
+							    *<A NAME="ft-ada-constants"></A><B>ft-ada-constants</B>*
+
+All constants are locked. See |<A HREF="eval.html#:lockvar">:lockvar</A>| for details.
+
+
+							     *<A NAME="g:ada#WordRegex"></A><B>g:ada#WordRegex</B>*
+<A HREF="#g:ada#WordRegex">g:ada#WordRegex</A>		string
+		Regular <A HREF="eval.html#expression">expression</A> to search for Ada words.
+
+
+							  *<A NAME="g:ada#DotWordRegex"></A><B>g:ada#DotWordRegex</B>*
+<A HREF="#g:ada#DotWordRegex">g:ada#DotWordRegex</A>	string
+		Regular <A HREF="eval.html#expression">expression</A> to search for Ada words separated by dots.
+
+
+							       *<A NAME="g:ada#Comment"></A><B>g:ada#Comment</B>*
+<A HREF="#g:ada#Comment">g:ada#Comment</A>		string
+		Regular <A HREF="eval.html#expression">expression</A> to search for Ada comments.
+
+
+							      *<A NAME="g:ada#Keywords"></A><B>g:ada#Keywords</B>*
+<A HREF="#g:ada#Keywords">g:ada#Keywords</A>		list of dictionaries
+		<A HREF="eval.html#List">List</A> of keywords, attributes etc. pp. in the format used by
+		omni completion. See |<A HREF="insert.html#complete-items">complete-items</A>| for details.
+
+
+							   *<A NAME="g:ada#Ctags_Kinds"></A><B>g:ada#Ctags_Kinds</B>*
+<A HREF="#g:ada#Ctags_Kinds">g:ada#Ctags_Kinds</A>	dictionary of lists
+		<A HREF="eval.html#Dictionary">Dictionary</A> of the various kinds of items which the Ada support
+		for Ctags generates.
+
+------------------------------------------------------------------------------
+<B><FONT COLOR="PURPLE">5.5 Functions </FONT></B>
+
+							    *<A NAME="ft-ada-functions"></A><B>ft-ada-functions</B>*
+
+
+ada#Word([{line}, {col}])					  *<A NAME="ada#Word()"></A><B>ada#Word()</B>*
+		Return full name of Ada entity under the cursor (or at given
+		line/column), stripping white space/newlines <A HREF="motion.html#as">as</A> necessary.
+
+
+ada#List_Tag([{line}, {col}])				      *<A NAME="ada#Listtags()"></A><B>ada#Listtags()</B>*
+		<A HREF="eval.html#List">List</A> all occurrences of the Ada entity under the cursor (or at
+		given line/column) inside the quick-fix <A HREF="windows.html#window">window</A>.
+
+
+ada#Jump_Tag ({ident}, {mode})				      *<A NAME="ada#Jump_Tag()"></A><B>ada#Jump_Tag()</B>*
+		<A HREF="eval.html#List">List</A> all occurrences of the Ada entity under the cursor (or at
+		given line/column) in the <A HREF="tagsrch.html#tag">tag</A> jump list. Mode can either be
+		'tjump' or 'stjump'.
+
+
+ada#Create_Tags ({option})				   *<A NAME="ada#Create_Tags()"></A><B>ada#Create_Tags()</B>*
+		Creates <A HREF="tagsrch.html#tag">tag</A> file using Ctags. The option can either be 'file'
+		for the current file, <A HREF="options.html#'dir'">'dir'</A> for the directory of the current
+		file or a file name.
+
+
+<A HREF="#gnat#Insert_Tags_Header()">gnat#Insert_Tags_Header()</A>			   *<A NAME="gnat#Insert_Tags_Header()"></A><B>gnat#Insert_Tags_Header()</B>*
+		Adds the <A HREF="tagsrch.html#tag">tag</A> file header (!_TAG_) information to the current
+		file which are missing from the GNAT XREF output.
+
+
+ada#Switch_Syntax_Option ({option})		  *<A NAME="ada#Switch_Syntax_Option()"></A><B>ada#Switch_Syntax_Option()</B>*
+		Toggles highlighting <A HREF="options.html#options">options</A> on or off. Used for the Ada menu.
+
+
+								  *<A NAME="gnat#New()"></A><B>gnat#New()</B>*
+gnat#New ()
+		Create a new gnat object. See |<A HREF="#g:gnat">g:gnat</A>| for details.
+
+
+==============================================================================
+<B><FONT COLOR="PURPLE">6. Extra Plugins </FONT></B>
+
+							   *<A NAME="ada-extra-plugins"></A><B>ada-extra-plugins</B>*
+
+You can optionally <A HREF="usr_90.html#install">install</A> the following extra plug-ins. They work well with
+Ada and enhance the ability of the Ada mode:
+
+backup.vim
+	<A HREF="http://www.vim.org/scripts/script.php?script_id=1537">http://www.vim.org/scripts/script.php?script_id=1537</A>
+	Keeps <A HREF="motion.html#as">as</A> many backups <A HREF="motion.html#as">as</A> you like so you don't have to.
+
+rainbow_parenthsis.vim
+	<A HREF="http://www.vim.org/scripts/script.php?script_id=1561">http://www.vim.org/scripts/script.php?script_id=1561</A>
+	Very helpful since Ada uses only '<A HREF="motion.html#(">(</A>' and '<A HREF="motion.html#)">)</A>'.
+
+nerd_comments.vim
+	<A HREF="http://www.vim.org/scripts/script.php?script_id=1218">http://www.vim.org/scripts/script.php?script_id=1218</A>
+	Excellent commenting and uncommenting support for almost any
+	programming language.
+
+matchit.vim
+	<A HREF="http://www.vim.org/scripts/script.php?script_id=39">http://www.vim.org/scripts/script.php?script_id=39</A>
+	'<A HREF="motion.html#&#37;">&#37;</A>' jumping for any language. The normal '<A HREF="motion.html#&#37;">&#37;</A>' jump only works for '<A HREF="intro.html#{}">{}</A>'
+	style languages. The Ada mode will set the needed search patterns.
+
+taglist.vim
+	<A HREF="http://www.vim.org/scripts/script.php?script_id=273">http://www.vim.org/scripts/script.php?script_id=273</A>
+	Source code explorer sidebar. There is a patch for Ada available.
+
+ The GNU Ada Project distribution	<A HREF="http://gnuada.sourceforge.net">http://gnuada.sourceforge.net</A> of Vim
+contains all of the above.
+
+==============================================================================
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

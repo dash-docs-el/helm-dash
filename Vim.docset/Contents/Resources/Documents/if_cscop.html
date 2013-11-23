@@ -1,0 +1,540 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: if_cscop</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: if_cscop</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="if_cscop.txt"></A><B>if_cscop.txt</B>*  For Vim version 7.4.  Last change: 2011 Jun 12
+
+
+		  VIM REFERENCE MANUAL    by Andy Kahn
+
+
+							*<A NAME="cscope"></A><B>cscope</B>* *<A NAME="Cscope"></A><B>Cscope</B>*
+This document explains how to use Vim's <A HREF="#cscope">cscope</A> interface.
+
+<A HREF="#Cscope">Cscope</A> is a tool like <A HREF="tagsrch.html#ctags">ctags</A>, but think of <A HREF="motion.html#it">it</A> <A HREF="motion.html#as">as</A> <A HREF="tagsrch.html#ctags">ctags</A> on steroids since <A HREF="motion.html#it">it</A>
+does a lot more than what <A HREF="tagsrch.html#ctags">ctags</A> provides.  In Vim, jumping to a result from
+a <A HREF="#cscope">cscope</A> query is just like jumping to any <A HREF="tagsrch.html#tag">tag</A>; <A HREF="motion.html#it">it</A> is saved on the <A HREF="tagsrch.html#tag">tag</A> stack
+so that with the right keyboard mappings, you can jump back and forth between
+<A HREF="eval.html#functions">functions</A> <A HREF="motion.html#as">as</A> you normally would with |<A HREF="tagsrch.html#tags">tags</A>|.
+
+1. <A HREF="#Cscope">Cscope</A> introduction		|<A HREF="#cscope-intro">cscope-intro</A>|
+2. <A HREF="#Cscope">Cscope</A> related commands	|<A HREF="#cscope-commands">cscope-commands</A>|
+3. <A HREF="#Cscope">Cscope</A> options		|<A HREF="#cscope-options">cscope-options</A>|
+4. How to use cscope in Vim	|<A HREF="#cscope-howtouse">cscope-howtouse</A>|
+5. Limitations			|<A HREF="#cscope-limitations">cscope-limitations</A>|
+6. Suggested usage		|<A HREF="#cscope-suggestions">cscope-suggestions</A>|
+7. Availability <A HREF="change.html#&amp;">&amp;</A> Information	|<A HREF="#cscope-info">cscope-info</A>|
+
+This is currently for <A HREF="os_unix.html#Unix">Unix</A> and <A HREF="os_win32.html#Win32">Win32</A> only.
+{Vi does not have any of these commands}
+
+==============================================================================
+
+1. <A HREF="#Cscope">Cscope</A> introduction					*<A NAME="cscope-intro"></A><B>cscope-intro</B>*
+
+The following text is taken from a version of the <A HREF="#cscope">cscope</A> man page:
+
+				    -----
+
+  <A HREF="#Cscope">Cscope</A> is an interactive screen-oriented tool that helps you:
+
+       Learn how a C program works without endless flipping through a thick
+       listing.
+
+       Locate the section of code to change to fix a bug without having to
+       learn the entire program.
+
+       Examine the effect of a proposed change such <A HREF="motion.html#as">as</A> adding a value to an
+       enum variable.
+
+       Verify that a change has been made in all source files such <A HREF="motion.html#as">as</A> adding
+       an argument to an existing function.
+
+       Rename a global variable in all source files.
+
+       Change a constant to a preprocessor symbol in selected lines of files.
+
+  It is designed to answer questions like:
+       Where is this symbol used?
+       Where is <A HREF="motion.html#it">it</A> defined?
+       Where did this variable get its value?
+       What is this global symbol's definition?
+       Where is this function in the source files?
+       What <A HREF="eval.html#functions">functions</A> call this function?
+       What <A HREF="eval.html#functions">functions</A> are called by this function?
+       Where does the message &quot;out of space&quot; come from?
+       Where is this source file in the directory structure?
+       What files include this header file?
+
+  <A HREF="#Cscope">Cscope</A> answers these questions from a symbol database that <A HREF="motion.html#it">it</A> builds the
+  first time <A HREF="motion.html#it">it</A> is used on the source files.  On a subsequent call, <A HREF="#cscope">cscope</A>
+  rebuilds the database only if a source file has changed or the list of
+  source files is different.  When the database is rebuilt the data for the
+  unchanged files is copied from the old database, which makes rebuilding
+  much faster than the initial build.
+
+				    -----
+
+When <A HREF="#cscope">cscope</A> is normally invoked, you will get a full-screen selection
+screen allowing you to make a query for one of the above questions.
+However, once a match is found to your query and you have entered your
+text editor to edit the source file containing match, you cannot simply
+jump from <A HREF="tagsrch.html#tag">tag</A> to <A HREF="tagsrch.html#tag">tag</A> <A HREF="motion.html#as">as</A> you normally would with vi's Ctrl-] or <A HREF="tagsrch.html#:tag">:tag</A>
+command.
+
+Vim's <A HREF="#cscope">cscope</A> interface is done by invoking <A HREF="#cscope">cscope</A> with its line-oriented
+interface, and then parsing the output returned from a query.  The end
+result is that <A HREF="#cscope">cscope</A> query results become just like regular <A HREF="tagsrch.html#tags">tags</A>, so
+you can jump to them just like you <A HREF="diff.html#do">do</A> with normal <A HREF="tagsrch.html#tags">tags</A> (Ctrl-] or <A HREF="tagsrch.html#:tag">:tag</A>)
+and then go back by popping off the <A HREF="tagsrch.html#tagstack">tagstack</A> with Ctrl-T.  (Please note
+however, that you don't actually jump to a <A HREF="#cscope">cscope</A> <A HREF="tagsrch.html#tag">tag</A> simply by doing
+Ctrl-] or <A HREF="tagsrch.html#:tag">:tag</A> without remapping these commands or setting an option.
+See the remaining sections on how the <A HREF="#cscope">cscope</A> interface works and for
+suggested use.)
+
+
+==============================================================================
+
+2. <A HREF="#Cscope">Cscope</A> related commands				*<A NAME="cscope-commands"></A><B>cscope-commands</B>*
+
+
+		*<A NAME=":cscope"></A><B>:cscope</B>* *<A NAME=":cs"></A><B>:cs</B>* *<A NAME=":scs"></A><B>:scs</B>* *<A NAME=":scscope"></A><B>:scscope</B>* *<A NAME="E259"></A><B>E259</B>* *<A NAME="E262"></A><B>E262</B>* *<A NAME="E561"></A><B>E561</B>* *<A NAME="E560"></A><B>E560</B>*
+All <A HREF="#cscope">cscope</A> commands are accessed through suboptions to the main <A HREF="#cscope">cscope</A>
+command &quot;<A HREF="#:cscope">:cscope</A>&quot;.  The shortest abbreviation is &quot;<A HREF="#:cs">:cs</A>&quot;.  The &quot;<A HREF="#:scscope">:scscope</A>&quot;
+command does the same and also splits the <A HREF="windows.html#window">window</A> (short: &quot;scs&quot;).
+
+The available subcommands are:
+
+
+			*<A NAME="E563"></A><B>E563</B>* *<A NAME="E564"></A><B>E564</B>* *<A NAME="E566"></A><B>E566</B>* *<A NAME="E568"></A><B>E568</B>* *<A NAME="E569"></A><B>E569</B>* *<A NAME="E622"></A><B>E622</B>* *<A NAME="E623"></A><B>E623</B>*
+
+			*<A NAME="E625"></A><B>E625</B>* *<A NAME="E626"></A><B>E626</B>* *<A NAME="E609"></A><B>E609</B>*
+    add   : Add a new <A HREF="#cscope">cscope</A> database/connection.
+
+	USAGE	<A HREF="#:cs">:cs</A> add {file|dir} [pre-path] [flags]
+
+	    [pre-path] is the pathname used with the <A HREF="starting.html#-P">-P</A> command to <A HREF="#cscope">cscope</A>.
+
+	    [flags] are any additional flags you want to pass to <A HREF="#cscope">cscope</A>.
+
+	EXAMPLES
+<B>	    :cscope add /usr/local/cdb/cscope.out</B>
+<B>	    :cscope add /projects/vim/cscope.out /usr/local/vim</B>
+<B>	    :cscope add cscope.out /usr/local/vim -C</B>
+ 
+
+				      *<A NAME="cscope-find"></A><B>cscope-find</B>* *<A NAME="cs-find"></A><B>cs-find</B>* *<A NAME="E567"></A><B>E567</B>*
+    find  : Query <A HREF="#cscope">cscope</A>.  All <A HREF="#cscope">cscope</A> query <A HREF="options.html#options">options</A> are available
+	    except option #5 (&quot;Change this <A HREF="quickfix.html#grep">grep</A> pattern&quot;).
+
+	USAGE	<A HREF="#:cs">:cs</A> find {querytype} {name}
+
+	    {querytype} corresponds to the actual <A HREF="#cscope">cscope</A> line
+	    interface numbers <A HREF="motion.html#as">as</A> well <A HREF="motion.html#as">as</A> default nvi commands:
+
+		0 or <A HREF="change.html#s">s</A>: Find this C symbol
+		1 or <A HREF="eval.html#g:">g:</A> Find this definition
+		2 or <A HREF="change.html#d">d</A>: Find <A HREF="eval.html#functions">functions</A> called by this function
+		3 or <A HREF="change.html#c">c</A>: Find <A HREF="eval.html#functions">functions</A> calling this function
+		4 or <A HREF="eval.html#t:">t:</A> Find this text string
+		6 or <A HREF="motion.html#e">e</A>: Find this egrep <A HREF="pattern.html#pattern">pattern</A>
+		7 or <A HREF="motion.html#f">f</A>: Find this file
+		8 or <A HREF="insert.html#i">i</A>: Find files #including this file
+
+	For all types, except 4 and 6, leading white space for {name} is
+	removed.  For 4 and 6 there is exactly one space between {querytype}
+	and {name}.  Further white space is included in {name}.
+
+	EXAMPLES
+<B>	    :cscope find c vim_free</B>
+<B>	    :cscope find 3  vim_free</B>
+ 
+	    These two examples perform the same query: <A HREF="eval.html#functions">functions</A> calling
+	    &quot;vim_free&quot;.
+
+<B>	    :cscope find t initOnce</B>
+<B>	    :cscope find t  initOnce</B>
+ 
+	    The first one searches for the text &quot;initOnce&quot;, the second one for
+	    &quot; initOnce&quot;.
+
+<B>	    :cscope find 0 DEFAULT_TERM</B>
+ 
+	    Executing this example on the source code for Vim 5.1 produces the
+	    following output:
+
+	    <A HREF="#Cscope">Cscope</A> <A HREF="tagsrch.html#tag">tag</A>: DEFAULT_TERM
+	       #   line  filename / context / line
+	       1   1009  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;amiga&quot;
+	       2   1013  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;win32&quot;
+	       3   1017  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;pcterm&quot;
+	       4   1021  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;ansi&quot;
+	       5   1025  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;vt52&quot;
+	       6   1029  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;os2ansi&quot;
+	       7   1033  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;ansi&quot;
+	       8   1037  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 # undef DEFAULT_TERM
+	       9   1038  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;beos-ansi&quot;
+	      10   1042  vim-5.1-gtk/src/term.c &lt;&lt;GLOBAL&gt;&gt;
+			 #define DEFAULT_TERM (char_u *)&quot;mac-ansi&quot;
+	      11   1335  vim-5.1-gtk/src/term.c &lt;&lt;set_termname&gt;&gt;
+			 term = DEFAULT_TERM;
+	      12   1459  vim-5.1-gtk/src/term.c &lt;&lt;set_termname&gt;&gt;
+			 if (STRCMP(term, DEFAULT_TERM))
+	      13   1826  vim-5.1-gtk/src/term.c &lt;&lt;termcapinit&gt;&gt;
+			 term = DEFAULT_TERM;
+	      14   1833  vim-5.1-gtk/src/term.c &lt;&lt;termcapinit&gt;&gt;
+			 term = DEFAULT_TERM;
+	      15   3635  vim-5.1-gtk/src/term.c &lt;&lt;update_tcap&gt;&gt;
+			 <A HREF="change.html#p">p</A> = find_builtin_term(DEFAULT_TERM);
+	    Enter nr of choice (&lt;CR&gt; to abort):
+
+	    The output shows several pieces of information:
+	    1. The <A HREF="tagsrch.html#tag">tag</A> number (there are 15 in this example).
+	    2. The line number where the <A HREF="tagsrch.html#tag">tag</A> occurs.
+	    3. The filename where the <A HREF="tagsrch.html#tag">tag</A> occurs.
+	    4. The context of the <A HREF="tagsrch.html#tag">tag</A> (e.g., global, or the function name).
+	    5. The line from the file itself.
+
+    help  : Show a brief synopsis.
+
+	    USAGE   <A HREF="#:cs">:cs</A> help
+
+
+							*<A NAME="E261"></A><B>E261</B>*
+    kill  : Kill a <A HREF="#cscope">cscope</A> connection (or kill all <A HREF="#cscope">cscope</A> connections).
+
+	    USAGE   <A HREF="#:cs">:cs</A> kill {num|partial_name}
+
+	    To kill a <A HREF="#cscope">cscope</A> connection, the connection number or a partial
+	    name must be specified.  The partial name is simply any part of
+	    the pathname of the <A HREF="#cscope">cscope</A> database.  Kill a <A HREF="#cscope">cscope</A> connection
+	    using the partial name with caution!
+
+	    If the specified connection number is -1, then _ALL_ <A HREF="#cscope">cscope</A>
+	    connections will be killed.
+
+    reset : Reinit all <A HREF="#cscope">cscope</A> connections.
+
+	    USAGE   <A HREF="#:cs">:cs</A> reset
+
+    show  : Show <A HREF="#cscope">cscope</A> connections.
+
+	    USAGE   <A HREF="#:cs">:cs</A> show
+
+
+							*<A NAME=":lcscope"></A><B>:lcscope</B>* *<A NAME=":lcs"></A><B>:lcs</B>*
+This command is same <A HREF="motion.html#as">as</A> the &quot;<A HREF="#:cscope">:cscope</A>&quot; command, except when the
+<A HREF="options.html#'cscopequickfix'">'cscopequickfix'</A> option is set, the location list for the current <A HREF="windows.html#window">window</A> is
+used instead of the <A HREF="quickfix.html#quickfix">quickfix</A> list to show the <A HREF="#cscope">cscope</A> results.
+
+
+							*<A NAME=":cstag"></A><B>:cstag</B>* *<A NAME="E257"></A><B>E257</B>* *<A NAME="E562"></A><B>E562</B>*
+If you use <A HREF="#cscope">cscope</A> <A HREF="motion.html#as">as</A> well <A HREF="motion.html#as">as</A> <A HREF="tagsrch.html#ctags">ctags</A>, |<A HREF="#:cstag">:cstag</A>| allows you to search one or
+the other before making a jump.  For example, you can choose to first
+search your <A HREF="#cscope">cscope</A> database(s) for a match, and if one is not found, then
+your <A HREF="tagsrch.html#tags">tags</A> file(s) will be searched.  The order in which this happens
+is determined by the value of |<A HREF="#csto">csto</A>|.  See |<A HREF="#cscope-options">cscope-options</A>| for more
+details.
+
+|<A HREF="#:cstag">:cstag</A>| performs the equivalent of &quot;:cs find g&quot; on the identifier when
+searching through the <A HREF="#cscope">cscope</A> database(s).
+
+|<A HREF="#:cstag">:cstag</A>| performs the equivalent of |<A HREF="tagsrch.html#:tjump">:tjump</A>| on the identifier when searching
+through your <A HREF="tagsrch.html#tags">tags</A> file(s).
+
+
+==============================================================================
+
+3. <A HREF="#Cscope">Cscope</A> <A HREF="options.html#options">options</A>					*<A NAME="cscope-options"></A><B>cscope-options</B>*
+
+Use the |<A HREF="options.html#:set">:set</A>| command to set all <A HREF="#cscope">cscope</A> <A HREF="options.html#options">options</A>.  Ideally, you would <A HREF="diff.html#do">do</A>
+this in one of your <A HREF="starting.html#startup">startup</A> files (e.g., <A HREF="starting.html#.vimrc">.vimrc</A>).  Some <A HREF="#cscope">cscope</A> related
+<A HREF="eval.html#variables">variables</A> are only valid within |<A HREF="starting.html#.vimrc">.vimrc</A>|.  Setting them after vim has
+started will have no effect!
+
+
+							*<A NAME="cscopeprg"></A><B>cscopeprg</B>* *<A NAME="csprg"></A><B>csprg</B>*
+<A HREF="options.html#'cscopeprg'">'cscopeprg'</A> specifies the command to execute <A HREF="#cscope">cscope</A>.  The default is
+&quot;<A HREF="#cscope">cscope</A>&quot;.  For example:
+<B>	:set csprg=/usr/local/bin/cscope</B>
+ 
+
+					    *<A NAME="cscopequickfix"></A><B>cscopequickfix</B>* *<A NAME="csqf"></A><B>csqf</B>* *<A NAME="E469"></A><B>E469</B>*
+{not available when compiled without the |<A HREF="various.html#+quickfix">+quickfix</A>| feature}
+<A HREF="options.html#'cscopequickfix'">'cscopequickfix'</A> specifies whether to use <A HREF="quickfix.html#quickfix">quickfix</A> <A HREF="windows.html#window">window</A> to show <A HREF="#cscope">cscope</A>
+results.  This is a list of comma-separated values. Each item consists of
+|<A HREF="#cscope-find">cscope-find</A>| command (s, <A HREF="motion.html#g,">g,</A> d, c, t, e, f or <A HREF="motion.html#i)">i)</A> and flag (+, - or 0).
+'<A HREF="motion.html#+">+</A>' indicates that results must be appended to <A HREF="quickfix.html#quickfix">quickfix</A> <A HREF="windows.html#window">window</A>,
+'<A HREF="motion.html#-">-</A>' implies previous results clearance, '<A HREF="motion.html#0">0</A>' or command absence - don't use
+<A HREF="quickfix.html#quickfix">quickfix</A>.  Search is performed from start until first command occurrence.
+The default value is &quot;&quot; (don't use <A HREF="quickfix.html#quickfix">quickfix</A> anyway).  The following value
+seems to be useful:
+<B>	:set cscopequickfix=s-,c-,d-,i-,t-,e-</B>
+ 
+
+							*<A NAME="cscopetag"></A><B>cscopetag</B>* *<A NAME="cst"></A><B>cst</B>*
+If <A HREF="options.html#'cscopetag'">'cscopetag'</A> is set, the commands &quot;<A HREF="tagsrch.html#:tag">:tag</A>&quot; and <A HREF="tagsrch.html#CTRL-]">CTRL-]</A> <A HREF="motion.html#as">as</A> well <A HREF="motion.html#as">as</A> &quot;vim -t&quot;
+will always use |<A HREF="#:cstag">:cstag</A>| instead of the default <A HREF="tagsrch.html#:tag">:tag</A> behavior.  Effectively,
+by setting <A HREF="options.html#'cst'">'cst'</A>, you will always search your <A HREF="#cscope">cscope</A> databases <A HREF="motion.html#as">as</A> well <A HREF="motion.html#as">as</A>
+your <A HREF="tagsrch.html#tag">tag</A> files.  The default is off.  Examples:
+<B>	:set cst</B>
+<B>	:set nocst</B>
+ 
+
+							*<A NAME="cscoperelative"></A><B>cscoperelative</B>* *<A NAME="csre"></A><B>csre</B>*
+If <A HREF="options.html#'cscoperelative'">'cscoperelative'</A> is set, then in absence of a prefix given to <A HREF="#cscope">cscope</A>
+(prefix is the argument of <A HREF="starting.html#-P">-P</A> option of cscope), basename of cscope.out
+location (usually the project root directory) will be used <A HREF="motion.html#as">as</A> the prefix
+to construct an absolute path.  The default is off.  Note: This option is
+only effective when <A HREF="#cscope">cscope</A> (cscopeprg) is initialized without a prefix
+path (-P).  Examples:
+<B>	:set csre</B>
+<B>	:set nocsre</B>
+ 
+
+							*<A NAME="cscopetagorder"></A><B>cscopetagorder</B>* *<A NAME="csto"></A><B>csto</B>*
+The value of <A HREF="options.html#'csto'">'csto'</A> determines the order in which |<A HREF="#:cstag">:cstag</A>| performs a search.
+If <A HREF="options.html#'csto'">'csto'</A> is set to zero, <A HREF="#cscope">cscope</A> database(s) are searched first, followed
+by <A HREF="tagsrch.html#tag">tag</A> file(s) if <A HREF="#cscope">cscope</A> did not return any matches.  If <A HREF="options.html#'csto'">'csto'</A> is set to
+one, <A HREF="tagsrch.html#tag">tag</A> file(s) are searched before <A HREF="#cscope">cscope</A> database(s).  The default is zero.
+Examples:
+<B>	:set csto=0</B>
+<B>	:set csto=1</B>
+ 
+
+						*<A NAME="cscopeverbose"></A><B>cscopeverbose</B>* *<A NAME="csverb"></A><B>csverb</B>*
+If <A HREF="options.html#'cscopeverbose'">'cscopeverbose'</A> is not set (the default), <A HREF="message.html#messages">messages</A> will not be printed
+indicating success or failure when adding a <A HREF="#cscope">cscope</A> database.  Ideally, you
+should reset this option in your |<A HREF="starting.html#.vimrc">.vimrc</A>| before adding any <A HREF="#cscope">cscope</A> databases,
+and after adding them, set <A HREF="motion.html#it">it</A>.  From then on, when you add more databases
+within Vim, you will get a (hopefully) useful message should the database fail
+to be added.  Examples:
+<B>	:set csverb</B>
+<B>	:set nocsverb</B>
+ 
+
+						      *<A NAME="cscopepathcomp"></A><B>cscopepathcomp</B>* *<A NAME="cspc"></A><B>cspc</B>*
+The value of <A HREF="options.html#'cspc'">'cspc'</A> determines how many components of a file's path to
+display.  With the default value of zero the entire path will be displayed.
+The value one will display only the filename with no path.  Other values
+display that many components.  For example:
+<B>	:set cspc=3</B>
+will display the last 3 components of the file's path, including the file
+name itself.
+
+==============================================================================
+
+4. How to use <A HREF="#cscope">cscope</A> in Vim				*<A NAME="cscope-howtouse"></A><B>cscope-howtouse</B>*
+
+The first thing you need to <A HREF="diff.html#do">do</A> is to build a <A HREF="#cscope">cscope</A> database for your
+source files.  For the most basic <A HREF="change.html#case">case</A>, simply <A HREF="diff.html#do">do</A> &quot;<A HREF="#cscope">cscope</A> -b&quot;.  Please
+refer to the <A HREF="#cscope">cscope</A> man page for more details.
+
+Assuming you have a <A HREF="#cscope">cscope</A> database, you need to &quot;add&quot; the database to Vim.
+This establishes a <A HREF="#cscope">cscope</A> &quot;connection&quot; and makes <A HREF="motion.html#it">it</A> available for Vim to use.
+You can <A HREF="diff.html#do">do</A> this in your <A HREF="starting.html#.vimrc">.vimrc</A> file, or you can <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A> manually after starting
+vim.  For example, to add the <A HREF="#cscope">cscope</A> database &quot;cscope.out&quot;, you would <A HREF="diff.html#do">do</A>:
+
+	<A HREF="#:cs">:cs</A> add cscope.out
+
+You can double-check the result of this by executing &quot;<A HREF="#:cs">:cs</A> show&quot;.  This will
+produce output which looks like this:
+
+ # pid	  database name			      prepend path
+ 0 28806  cscope.out			      &lt;none&gt;
+
+Note:
+Because of the Microsoft RTL limitations, <A HREF="os_win32.html#Win32">Win32</A> version shows 0 instead
+of the real pid.
+
+Once a <A HREF="#cscope">cscope</A> connection is established, you can make queries to <A HREF="#cscope">cscope</A> and
+the results will be printed to you.  Queries are made using the command
+&quot;<A HREF="#:cs">:cs</A> find&quot;.  For example:
+
+	<A HREF="#:cs">:cs</A> find <A HREF="index.html#g">g</A> ALIGN_SIZE
+
+This can get a little cumbersome since one ends up doing a significant
+amount of typing.  Fortunately, there are ways around this by <A HREF="map.html#mapping">mapping</A>
+shortcut keys.  See |<A HREF="#cscope-suggestions">cscope-suggestions</A>| for suggested usage.
+
+If the results return only one match, you will automatically be taken to <A HREF="motion.html#it">it</A>.
+If there is more than one match, you will be given a selection screen to pick
+the match you want to go to.  After you have jumped to the new location,
+simply hit Ctrl-T to get back to the previous one.
+
+
+==============================================================================
+
+5. Limitations						*<A NAME="cscope-limitations"></A><B>cscope-limitations</B>*
+
+<A HREF="#Cscope">Cscope</A> support for Vim is only available on systems that support these four
+system calls: fork(), pipe(), execl(), waitpid().  This means <A HREF="motion.html#it">it</A> is mostly
+limited to <A HREF="os_unix.html#Unix">Unix</A> systems.
+
+Additionally <A HREF="#Cscope">Cscope</A> support works for <A HREF="os_win32.html#Win32">Win32</A>.  For more information and a
+<A HREF="#cscope">cscope</A> version for <A HREF="os_win32.html#Win32">Win32</A> see:
+
+	<A HREF="http://iamphet.nm.ru/cscope/index.html">http://iamphet.nm.ru/cscope/index.html</A>
+
+ The DJGPP-built version from	<A HREF="http://cscope.sourceforge.net">http://cscope.sourceforge.net</A> is known to not
+work with Vim.
+
+Hard-coded limitation: doing a |<A HREF="tagsrch.html#:tjump">:tjump</A>| when |<A HREF="#:cstag">:cstag</A>| searches the tag files
+is not configurable (e.g., you can't <A HREF="diff.html#do">do</A> a tselect instead).
+
+==============================================================================
+
+6. Suggested usage					*<A NAME="cscope-suggestions"></A><B>cscope-suggestions</B>*
+
+Put these entries in your <A HREF="starting.html#.vimrc">.vimrc</A> (adjust the pathname accordingly to your
+setup):
+
+<B>	if has("cscope")</B>
+<B>		set csprg=/usr/local/bin/cscope</B>
+<B>		set csto=0</B>
+<B>		set cst</B>
+<B>		set nocsverb</B>
+<B>		" add any database in current directory</B>
+<B>		if filereadable("cscope.out")</B>
+<B>		    cs add cscope.out</B>
+<B>		" else add database pointed to by environment</B>
+<B>		elseif $CSCOPE_DB != ""</B>
+<B>		    cs add $CSCOPE_DB</B>
+<B>		endif</B>
+<B>		set csverb</B>
+<B>	endif</B>
+
+By setting <A HREF="options.html#'cscopetag'">'cscopetag'</A>, we have effectively replaced all instances of the <A HREF="tagsrch.html#:tag">:tag</A>
+command with <A HREF="#:cstag">:cstag</A>.  This includes <A HREF="tagsrch.html#:tag">:tag</A>, Ctrl-], and &quot;vim -t&quot;.  In doing
+this, the regular <A HREF="tagsrch.html#tag">tag</A> command not only searches your <A HREF="tagsrch.html#ctags">ctags</A> generated <A HREF="tagsrch.html#tag">tag</A>
+files, but your <A HREF="#cscope">cscope</A> databases <A HREF="motion.html#as">as</A> well.
+
+Some users may want to keep the regular <A HREF="tagsrch.html#tag">tag</A> behavior and have a different
+shortcut to access <A HREF="#:cstag">:cstag</A>.  For example, one could map Ctrl-_  (underscore)
+to <A HREF="#:cstag">:cstag</A> with the following command:
+
+<B>	map &lt;C-_&gt; :cstag &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+
+A couple of very commonly used <A HREF="#cscope">cscope</A> queries (using &quot;<A HREF="#:cs">:cs</A> find&quot;) is to
+find all <A HREF="eval.html#functions">functions</A> calling a certain function and to find all occurrences
+of a particular C symbol.  To <A HREF="diff.html#do">do</A> this, you can use these mappings <A HREF="motion.html#as">as</A> an
+example:
+
+<B>	map g&lt;C-]&gt; :cs find 3 &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	map g&lt;C-\&gt; :cs find 0 &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+
+These mappings for Ctrl-] (right bracket) and Ctrl-\ (backslash) allow you to
+place your cursor over the function name or C symbol and quickly query <A HREF="#cscope">cscope</A>
+for any matches.
+
+Or you may use the following scheme, inspired by Vim/Cscope tutorial from
+ Cscope Home Page	<A HREF="http://cscope.sourceforge.net/:">http://cscope.sourceforge.net/:</A>
+
+<B>	nmap &lt;C-_&gt;s :cs find s &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-_&gt;g :cs find g &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-_&gt;c :cs find c &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-_&gt;t :cs find t &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-_&gt;e :cs find e &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-_&gt;f :cs find f &lt;C-R&gt;=expand("&lt;cfile&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-_&gt;i :cs find i ^&lt;C-R&gt;=expand("&lt;cfile&gt;")&lt;CR&gt;$&lt;CR&gt;</B>
+<B>	nmap &lt;C-_&gt;d :cs find d &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+
+<B>	" Using 'CTRL-spacebar' then a search type makes the vim window</B>
+<B>	" split horizontally, with search result displayed in</B>
+<B>	" the new window.</B>
+
+<B>	nmap &lt;C-Space&gt;s :scs find s &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;g :scs find g &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;c :scs find c &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;t :scs find t &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;e :scs find e &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;f :scs find f &lt;C-R&gt;=expand("&lt;cfile&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;i :scs find i ^&lt;C-R&gt;=expand("&lt;cfile&gt;")&lt;CR&gt;$&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;d :scs find d &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+
+<B>	" Hitting CTRL-space *twice* before the search type does a vertical</B>
+<B>	" split instead of a horizontal one</B>
+
+<B>	nmap &lt;C-Space&gt;&lt;C-Space&gt;s</B>
+<B>		\:vert scs find s &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;&lt;C-Space&gt;g</B>
+<B>		\:vert scs find g &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;&lt;C-Space&gt;c</B>
+<B>		\:vert scs find c &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;&lt;C-Space&gt;t</B>
+<B>		\:vert scs find t &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;&lt;C-Space&gt;e</B>
+<B>		\:vert scs find e &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;&lt;C-Space&gt;i</B>
+<B>		\:vert scs find i ^&lt;C-R&gt;=expand("&lt;cfile&gt;")&lt;CR&gt;$&lt;CR&gt;</B>
+<B>	nmap &lt;C-Space&gt;&lt;C-Space&gt;d</B>
+<B>		\:vert scs find d &lt;C-R&gt;=expand("&lt;cword&gt;")&lt;CR&gt;&lt;CR&gt;</B>
+
+==============================================================================
+
+7. <A HREF="#Cscope">Cscope</A> availability and information			*<A NAME="cscope-info"></A><B>cscope-info</B>*
+
+If you <A HREF="diff.html#do">do</A> not already have <A HREF="#cscope">cscope</A> (it did not come with your compiler
+<A HREF="uganda.html#license">license</A> or OS distribution), then you can <A HREF="intro.html#download">download</A> <A HREF="motion.html#it">it</A> for free from:
+	<A HREF="http://cscope.sourceforge.net/">http://cscope.sourceforge.net/</A>
+This is released by SCO under the BSD <A HREF="uganda.html#license">license</A>.
+
+If you want a newer version of <A HREF="#cscope">cscope</A>, you will probably have to buy <A HREF="motion.html#it">it</A>.
+According to the (old) nvi documentation:
+
+	You can buy version 13.3 source with an unrestricted <A HREF="uganda.html#license">license</A>
+	for $400 from AT&amp;T Software Solutions by calling +1-800-462-8146.
+
+Also you can <A HREF="intro.html#download">download</A> <A HREF="#cscope">cscope</A> 13.x and mlcscope 14.x (multi-lingual <A HREF="#cscope">cscope</A>
+which supports C, C++, Java, lex, yacc, breakpoint listing, Ingres, and SDL)
+from World-Wide Exptools Open Source packages page:
+	<A HREF="http://www.bell-labs.com/project/wwexptools/packages.html">http://www.bell-labs.com/project/wwexptools/packages.html</A>
+
+In Solaris 2.x, if you have the C compiler <A HREF="uganda.html#license">license</A>, you will also have
+<A HREF="#cscope">cscope</A>.  Both are usually located under /opt/SUNWspro/bin
+
+SGI developers can also get <A HREF="motion.html#it">it</A>.  Search for <A HREF="#Cscope">Cscope</A> on this page:
+	<A HREF="http://freeware.sgi.com/index-by-alpha.html">http://freeware.sgi.com/index-by-alpha.html</A>
+	https://toolbox.sgi.com/toolbox/utilities/cscope/
+The second one is for those who have a password for the SGI toolbox.
+
+There is source to an older version of a <A HREF="#cscope">cscope</A> clone (called &quot;cs&quot;) available
+on the net.  Due to various reasons, this is not supported with Vim.
+
+The <A HREF="#cscope">cscope</A> interface/support for Vim was originally written by
+Andy Kahn <A HREF="mailto:ackahn@netapp.com">&lt;ackahn@netapp.com&gt;</A>. The original structure (as well as a tiny 
+bit of code) was adapted from the <A HREF="#cscope">cscope</A> interface in nvi.  Please report
+any problems, suggestions, patches, et al., you have for the usage of
+<A HREF="#cscope">cscope</A> within Vim to him.
+
+							*<A NAME="cscope-win32"></A><B>cscope-win32</B>*
+For a <A HREF="#cscope">cscope</A> version for <A HREF="os_win32.html#Win32">Win32</A> see:
+	<A HREF="http://code.google.com/p/cscope-win32/">http://code.google.com/p/cscope-win32/</A>
+
+Win32 support was added by Sergey Khorev <A HREF="mailto:sergey.khorev@gmail.com">&lt;sergey.khorev@gmail.com&gt;</A>. Contact 
+him if you have Win32-specific issues.
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

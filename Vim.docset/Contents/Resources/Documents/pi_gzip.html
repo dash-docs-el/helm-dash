@@ -1,0 +1,61 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: pi_gzip</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: pi_gzip</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="pi_gzip.txt"></A><B>pi_gzip.txt</B>*   For Vim version 7.4.  Last change: 2012 Jul 19
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Editing compressed files with Vim		*<A NAME="gzip"></A><B>gzip</B>* *<A NAME="bzip2"></A><B>bzip2</B>* *<A NAME="compress"></A><B>compress</B>*
+
+1. Autocommands			|<A HREF="#gzip-autocmd">gzip-autocmd</A>|
+
+The functionality mentioned here is a |<A HREF="usr_05.html#standard-plugin">standard-plugin</A>|.
+This <A HREF="usr_05.html#plugin">plugin</A> is only available if <A HREF="options.html#'compatible'">'compatible'</A> is not set.
+You can avoid loading this <A HREF="usr_05.html#plugin">plugin</A> by setting the &quot;loaded_gzip&quot; variable:
+<B>	:let loaded_gzip = 1</B>
+
+{Vi does not have any of this}
+
+==============================================================================
+
+1. Autocommands						*<A NAME="gzip-autocmd"></A><B>gzip-autocmd</B>*
+
+The <A HREF="usr_05.html#plugin">plugin</A> installs autocommands to intercept reading and <A HREF="editing.html#writing">writing</A> of files
+with these extensions:
+
+<B><FONT COLOR="PURPLE">	extension	compression </FONT></B>
+	*.Z		<A HREF="#compress">compress</A> (Lempel-Ziv)
+	*.gz		<A HREF="#gzip">gzip</A>
+	*.bz2		<A HREF="#bzip2">bzip2</A>
+	*.lzma		lzma
+	*.xz		xz
+
+That's actually the only thing you need to know.  There are no <A HREF="options.html#options">options</A>.
+
+After decompressing a file, the <A HREF="filetype.html#filetype">filetype</A> will be detected again.  This will
+make a file like &quot;foo.c.gz&quot; get the &quot;<A HREF="change.html#c">c</A>&quot; <A HREF="filetype.html#filetype">filetype</A>.
+
+If you have <A HREF="options.html#'patchmode'">'patchmode'</A> set, <A HREF="motion.html#it">it</A> will be appended after the extension for
+compression.  Thus editing the patchmode file will not give you the automatic
+decompression.  You have to rename the file if you want this.
+
+==============================================================================
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

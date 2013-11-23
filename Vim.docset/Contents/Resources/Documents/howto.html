@@ -1,0 +1,115 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: howto</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: howto</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="howto.txt"></A><B>howto.txt</B>*	For Vim version 7.4.  Last change: 2006 Apr 02
+
+
+		  VIM REFERENCE MANUAL	  by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+How to <A HREF="eval.html#...">...</A>				*<A NAME="howdoi"></A><B>howdoi</B>* *<A NAME="how-do-i"></A><B>how-do-i</B>* *<A NAME="howto"></A><B>howto</B>* *<A NAME="how-to"></A><B>how-to</B>*
+
+|<A HREF="usr_01.html#tutor">tutor</A>|			get started
+|<A HREF="editing.html#:quit">:quit</A>|			exit?  I'm trapped, help me!
+|<A HREF="starting.html#initialization">initialization</A>|	initialize Vim
+|<A HREF="usr_05.html#vimrc-intro">vimrc-intro</A>|		write a Vim <A HREF="usr_41.html#script">script</A> file (vimrc)
+|<A HREF="starting.html#suspend">suspend</A>|		suspend Vim
+|<A HREF="usr_11.html">usr_11.txt</A>|		recover after a crash
+|<A HREF="usr_07.html#07.4">07.4</A>|			keep a <A HREF="editing.html#backup">backup</A> of my file when <A HREF="editing.html#writing">writing</A> over <A HREF="motion.html#it">it</A>
+
+|<A HREF="usr_07.html">usr_07.txt</A>|		edit files
+|<A HREF="usr_23.html#23.4">23.4</A>|			edit binary files
+|<A HREF="usr_24.html">usr_24.txt</A>|		insert text
+|<A HREF="change.html#deleting">deleting</A>|		delete text
+|<A HREF="usr_04.html">usr_04.txt</A>|		change text
+|<A HREF="usr_04.html#04.5">04.5</A>|			copy and move text
+|<A HREF="usr_25.html">usr_25.txt</A>|		format text
+|<A HREF="usr_30.html#30.6">30.6</A>|			format comments
+|<A HREF="usr_30.html#30.2">30.2</A>|			indent C programs
+|<A HREF="usr_25.html#25.3">25.3</A>|			automatically set indent
+
+|<A HREF="usr_26.html">usr_26.txt</A>|		repeat commands
+|<A HREF="usr_02.html#02.5">02.5</A>|			<A HREF="undo.html#undo">undo</A> and <A HREF="undo.html#redo">redo</A>
+
+|<A HREF="usr_03.html">usr_03.txt</A>|		move around
+|<A HREF="motion.html#word-motions">word-motions</A>|		word motions
+|<A HREF="motion.html#left-right-motions">left-right-motions</A>|	left-right motions
+|<A HREF="motion.html#up-down-motions">up-down-motions</A>|	up-down motions
+|<A HREF="motion.html#object-motions">object-motions</A>|	text-object motions
+|<A HREF="motion.html#various-motions">various-motions</A>|	various motions
+|<A HREF="motion.html#object-select">object-select</A>|		text-object selection
+|<A HREF="options.html#'whichwrap'">'whichwrap'</A>|		move over line breaks
+|<A HREF="options.html#'virtualedit'">'virtualedit'</A>|		move to where there is no text
+|<A HREF="usr_27.html">usr_27.txt</A>|		specify <A HREF="pattern.html#pattern">pattern</A> for searches
+|<A HREF="tagsrch.html#tags-and-searches">tags-and-searches</A>|	<A HREF="diff.html#do">do</A> tags and special searches
+|<A HREF="usr_29.html#29.4">29.4</A>|			search in include'd files used to find
+			<A HREF="eval.html#variables">variables</A>, <A HREF="eval.html#functions">functions</A>, or macros
+|<A HREF="various.html#K">K</A>|			look up manual for the keyword under cursor
+
+|<A HREF="usr_03.html#03.7">03.7</A>|			scroll
+|<A HREF="options.html#'sidescroll'">'sidescroll'</A>|		scroll horizontally/sideways
+|<A HREF="options.html#'scrolloff'">'scrolloff'</A>|		set visible context lines
+
+|<A HREF="intro.html#mode-switching">mode-switching</A>|	change modes
+|<A HREF="usr_04.html#04.4">04.4</A>|			use <A HREF="visual.html#Visual">Visual</A> mode
+|<A HREF="options.html#'insertmode'">'insertmode'</A>|		start Vim in <A HREF="insert.html#Insert">Insert</A> mode
+
+|<A HREF="usr_40.html#40.1">40.1</A>|			map keys
+|<A HREF="usr_24.html#24.7">24.7</A>|			create <A HREF="map.html#abbreviations">abbreviations</A>
+
+|<A HREF="insert.html#ins-expandtab">ins-expandtab</A>|		expand a tab to spaces in <A HREF="insert.html#Insert">Insert</A> mode
+|<A HREF="insert.html#i_CTRL-R">i_CTRL-R</A>|		insert contents of a <A HREF="sponsor.html#register">register</A> in <A HREF="insert.html#Insert">Insert</A> mode
+|<A HREF="usr_24.html#24.3">24.3</A>|			complete words in <A HREF="insert.html#Insert">Insert</A> mode
+|<A HREF="usr_25.html#25.1">25.1</A>|			break a line before <A HREF="motion.html#it">it</A> gets too long
+
+|<A HREF="usr_20.html#20.1">20.1</A>|			<A HREF="diff.html#do">do</A> command-line editing
+|<A HREF="usr_20.html#20.3">20.3</A>|			<A HREF="diff.html#do">do</A> command-line completion
+|<A HREF="options.html#'cmdheight'">'cmdheight'</A>|		increase the height of command-line
+|<A HREF="usr_10.html#10.3">10.3</A>|			specify command-line ranges
+|<A HREF="usr_40.html#40.3">40.3</A>|			specify commands to be executed automatically
+			before/after reading/writing entering/leaving a
+			buffer/window
+
+|<A HREF="options.html#'autowrite'">'autowrite'</A>|		write automatically
+|<A HREF="usr_30.html#30.1">30.1</A>|			speedup edit-compile-edit cycle or compile and fix
+			<A HREF="message.html#errors">errors</A> within Vim
+
+|<A HREF="options.html#options">options</A>|		set options
+|<A HREF="options.html#auto-setting">auto-setting</A>|		set <A HREF="options.html#options">options</A> automatically
+|<A HREF="term.html#term-dependent-settings">term-dependent-settings</A>| set <A HREF="options.html#options">options</A> depending on terminal name
+|<A HREF="starting.html#save-settings">save-settings</A>|		save settings
+|<A HREF="cmdline.html#:quote">:quote</A>|		comment my .vim files
+|<A HREF="options.html#'helpheight'">'helpheight'</A>|		change the default help height
+|<A HREF="options.html#'highlight'">'highlight'</A>|		set various highlighting modes
+|<A HREF="options.html#'title'">'title'</A>|		set the <A HREF="windows.html#window">window</A> title
+|<A HREF="options.html#'icon'">'icon'</A>|		set <A HREF="windows.html#window">window</A> icon title
+|<A HREF="options.html#'report'">'report'</A>|		avoid seeing the change <A HREF="message.html#messages">messages</A> on every line
+|<A HREF="options.html#'shortmess'">'shortmess'</A>|		avoid |<A HREF="message.html#hit-enter">hit-enter</A>| prompts
+
+|<A HREF="term.html#mouse-using">mouse-using</A>|		use mouse with Vim
+|<A HREF="usr_08.html">usr_08.txt</A>|		manage multiple <A HREF="windows.html#windows">windows</A> and <A HREF="windows.html#buffers">buffers</A>
+|<A HREF="gui.html">gui.txt</A>|		use the gui
+
+|You can't! (yet)|	<A HREF="diff.html#do">do</A> dishes using Vim
+
+|<A HREF="usr_06.html">usr_06.txt</A>|		switch on <A HREF="syntax.html#syntax">syntax</A> highlighting
+|<A HREF="2html.html">2html.vim</A>|		convert a colored file to HTML
+|<A HREF="various.html#less">less</A>|			use Vim like less or more with <A HREF="syntax.html#syntax">syntax</A> highlighting
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

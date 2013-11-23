@@ -1,0 +1,312 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_09</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_09</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_09.txt"></A><B>usr_09.txt</B>*	For Vim version 7.4.  Last change: 2006 Apr 24
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+				Using the <A HREF="gui.html#GUI">GUI</A>
+
+
+Vim works in an ordinary terminal.  GVim can <A HREF="diff.html#do">do</A> the same things and a few
+more.  The <A HREF="gui.html#GUI">GUI</A> offers <A HREF="gui.html#menus">menus</A>, a toolbar, scrollbars and other items.  This
+chapter is about these extra things that the <A HREF="gui.html#GUI">GUI</A> offers.
+
+|<A HREF="#09.1">09.1</A>|	Parts of the <A HREF="gui.html#GUI">GUI</A>
+|<A HREF="#09.2">09.2</A>|	Using the mouse
+|<A HREF="#09.3">09.3</A>|	The <A HREF="gui.html#clipboard">clipboard</A>
+|<A HREF="#09.4">09.4</A>|	<A HREF="visual.html#Select">Select</A> mode
+
+     Next chapter: |<A HREF="usr_10.html">usr_10.txt</A>|  Making big changes
+ Previous chapter: |<A HREF="usr_08.html">usr_08.txt</A>|  Splitting <A HREF="windows.html#windows">windows</A>
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="09.1"></A><B>09.1</B>*	Parts of the <A HREF="gui.html#GUI">GUI</A>
+
+You might have an icon on your desktop that starts gVim.  Otherwise, one of
+these commands should <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A>:
+
+<B>	gvim file.txt</B>
+<B>	vim -g file.txt</B>
+
+If this doesn't work you don't have a version of Vim with <A HREF="gui.html#GUI">GUI</A> support.  You
+will have to <A HREF="usr_90.html#install">install</A> one first.
+   Vim will open a <A HREF="windows.html#window">window</A> and display &quot;file.txt&quot; in <A HREF="motion.html#it">it</A>.  What the <A HREF="windows.html#window">window</A> looks
+like depends on the version of Vim.  It should resemble the following picture
+(for <A HREF="motion.html#as">as</A> far <A HREF="motion.html#as">as</A> this can be shown in ASCII!).
+
+	+----------------------------------------------------+
+	&#124; file.txt + (~/dir) - VIM			   X &#124;	&lt;- <A HREF="windows.html#window">window</A> title
+	+----------------------------------------------------+
+	&#124; File	Edit  Tools  <A HREF="autocmd.html#Syntax">Syntax</A>  Buffers  Window  Help   &#124;	&lt;- menubar
+	+----------------------------------------------------+
+	&#124; aaa  bbb  ccc  ddd  eee  fff	ggg  hhh  iii  jjj   &#124;	&lt;- toolbar
+	&#124; aaa  bbb  ccc  ddd  eee  fff	ggg  hhh  iii  jjj   |
+	+----------------------------------------------------+
+	&#124; file text					 &#124; ^ |
+	&#124; ~						 &#124; # |
+	&#124; ~						 &#124; # &#124;	&lt;- scrollbar
+	&#124; ~						 &#124; # |
+	&#124; ~						 &#124; # |
+	&#124; ~						 &#124; # |
+	&#124;						 &#124; <A HREF="visual.html#V">V</A> |
+	+----------------------------------------------------+
+
+The largest space is occupied by the file text.  This shows the file in the
+same way <A HREF="motion.html#as">as</A> in a terminal.  With some different colors and another font
+perhaps.
+
+
+THE WINDOW TITLE
+
+At the very top is the <A HREF="windows.html#window">window</A> title.  This is drawn by your <A HREF="windows.html#window">window</A> system.
+Vim will set the title to show the name of the current file.  First comes the
+name of the file.  Then some special characters and the directory of the file
+in parens.  These special character can be present:
+
+	-	The file cannot be modified (e.g., a help file)
+	+	The file contains changes
+	=	The file is read-only
+	=+	The file is read-only, contains changes anyway
+
+If nothing is shown you have an ordinary, unchanged file.
+
+
+THE MENUBAR
+
+You know how <A HREF="gui.html#menus">menus</A> work, right?  Vim has the usual items, plus a few more.
+Browse them to get an idea of what you can use them for.  A relevant submenu
+is Edit/Global Settings.  You will find these entries:
+
+	Toggle Toolbar		make the toolbar appear/disappear
+	Toggle Bottom Scrollbar	make a scrollbar appear/disappear at the bottom
+	Toggle Left Scrollbar	make a scrollbar appear/disappear at the left
+	Toggle Right Scrollbar	make a scrollbar appear/disappear at the right
+
+On most systems you can tear-off the <A HREF="gui.html#menus">menus</A>.  <A HREF="visual.html#Select">Select</A> the top item of the menu,
+the one that looks like a dashed line.  You will get a separate <A HREF="windows.html#window">window</A> with
+the items of the menu.  It will hang around until you close the <A HREF="windows.html#window">window</A>.
+
+
+THE TOOLBAR
+
+This contains icons for the most often used actions.  Hopefully the icons are
+self-explanatory.  There are tooltips to get an extra hint (move the mouse
+pointer to the icon without clicking and don't move <A HREF="motion.html#it">it</A> for a second).
+
+The &quot;Edit/Global Settings/Toggle Toolbar&quot; menu item can be used to make the
+toolbar disappear.  If you never want a toolbar, use this command in your
+<A HREF="starting.html#vimrc">vimrc</A> file:
+
+<B>	:set guioptions-=T</B>
+
+This removes the '<A HREF="motion.html#T">T</A>' flag from the <A HREF="options.html#'guioptions'">'guioptions'</A> option.  Other parts of the
+<A HREF="gui.html#GUI">GUI</A> can also be enabled or disabled with this option.  See the help for <A HREF="motion.html#it">it</A>.
+
+
+THE SCROLLBARS
+
+By default there is one scrollbar on the right.  It does the obvious thing.
+When you split the <A HREF="windows.html#window">window</A>, each <A HREF="windows.html#window">window</A> will get its own scrollbar.
+   You can make a horizontal scrollbar appear with the menu item
+Edit/Global Settings/Toggle Bottom Scrollbar.  This is useful in <A HREF="diff.html#diff">diff</A> mode, or
+when the <A HREF="options.html#'wrap'">'wrap'</A> option has been reset (more about that later).
+
+When there are vertically split <A HREF="windows.html#windows">windows</A>, only the <A HREF="windows.html#windows">windows</A> on the right side
+will have a scrollbar.  However, when you move the cursor to a <A HREF="windows.html#window">window</A> on the
+left, <A HREF="motion.html#it">it</A> will be this one the that scrollbar controls.  This takes a bit of
+time to get used to.
+   When you work with vertically split <A HREF="windows.html#windows">windows</A>, consider adding a scrollbar on
+the left.  This can be done with a menu item, or with the <A HREF="options.html#'guioptions'">'guioptions'</A> option:
+
+<B>	:set guioptions+=l</B>
+
+This adds the '<A HREF="motion.html#l">l</A>' flag to <A HREF="options.html#'guioptions'">'guioptions'</A>.
+
+==============================================================================
+
+*<A NAME="09.2"></A><B>09.2</B>*	Using the mouse
+
+Standards are wonderful.  In Microsoft Windows, you can use the mouse to
+select text in a standard manner.  The X Window system also has a standard
+system for using the mouse.  Unfortunately, these two standards are not the
+same.
+   Fortunately, you can customize Vim.  You can make the behavior of the mouse
+work like an X Window system mouse or a Microsoft Windows mouse.  The following
+command makes the mouse behave like an X Window mouse:
+
+<B>	:behave xterm</B>
+
+The following command makes the mouse work like a Microsoft Windows mouse:
+
+<B>	:behave mswin</B>
+
+The default behavior of the mouse on UNIX systems is xterm.  The default
+behavior on a Microsoft Windows system is selected during the installation
+process.  For details about what the two behaviors are, see |<A HREF="gui.html#:behave">:behave</A>|.  Here
+follows a summary.
+
+
+XTERM MOUSE BEHAVIOR
+
+Left mouse click		position the cursor
+Left mouse drag			select text in <A HREF="visual.html#Visual">Visual</A> mode
+Middle mouse click		paste text from the <A HREF="gui.html#clipboard">clipboard</A>
+Right mouse click		extend the selected text until the mouse
+				pointer
+
+
+MSWIN MOUSE BEHAVIOR
+
+Left mouse click		position the cursor
+Left mouse drag			select text in <A HREF="visual.html#Select">Select</A> mode (see |<A HREF="#09.4">09.4</A>|)
+Left mouse click, with Shift	extend the selected text until the mouse
+				pointer
+Middle mouse click		paste text from the <A HREF="gui.html#clipboard">clipboard</A>
+Right mouse click		display a pop-up menu
+
+
+The mouse can be further tuned.  Check out these <A HREF="options.html#options">options</A> if you want to change
+the way how the mouse works:
+
+	<A HREF="options.html#'mouse'">'mouse'</A>			in which mode the mouse is used by Vim
+	<A HREF="options.html#'mousemodel'">'mousemodel'</A>		what effect a mouse click has
+	<A HREF="options.html#'mousetime'">'mousetime'</A>		time between clicks for a <A HREF="term.html#double-click">double-click</A>
+	<A HREF="options.html#'mousehide'">'mousehide'</A>		hide the mouse while typing
+	<A HREF="options.html#'selectmode'">'selectmode'</A>		whether the mouse starts <A HREF="visual.html#Visual">Visual</A> or <A HREF="visual.html#Select">Select</A> mode
+
+==============================================================================
+
+*<A NAME="09.3"></A><B>09.3</B>*	The <A HREF="gui.html#clipboard">clipboard</A>
+
+In section |<A HREF="usr_04.html#04.7">04.7</A>| the basic use of the <A HREF="gui.html#clipboard">clipboard</A> was explained.  There is one
+essential thing to explain about X-windows: There are actually two places to
+exchange text between programs.  <A HREF="os_win32.html#MS-Windows">MS-Windows</A> doesn't have this.
+
+In X-Windows there is the &quot;current selection&quot;.  This is the text that is
+currently highlighted.  In Vim this is the <A HREF="visual.html#Visual">Visual</A> area (this assumes you are
+using the default option settings).  You can paste this selection in another
+application without any further action.
+   For example, in this text select a few words with the mouse.  Vim will
+switch to <A HREF="visual.html#Visual">Visual</A> mode and highlight the text.  Now start another gVim, without
+a file name argument, so that <A HREF="motion.html#it">it</A> displays an empty <A HREF="windows.html#window">window</A>.  Click the middle
+mouse button.  The selected text will be inserted.
+
+The &quot;current selection&quot; will only remain valid until some other text is
+selected.  After doing the paste in the other gVim, now select some characters
+in that <A HREF="windows.html#window">window</A>.  You will notice that the words that were previously selected
+in the other gVim <A HREF="windows.html#window">window</A> are displayed differently.  This means that <A HREF="motion.html#it">it</A> no
+longer is the current selection.
+
+You don't need to select text with the mouse, using the keyboard commands for
+<A HREF="visual.html#Visual">Visual</A> mode works just <A HREF="motion.html#as">as</A> well.
+
+
+THE REAL CLIPBOARD
+
+Now for the other place with which text can be exchanged.  We call this the
+&quot;real clipboard&quot;, to avoid confusion.  Often both the &quot;current selection&quot; and
+the &quot;real clipboard&quot; are called <A HREF="gui.html#clipboard">clipboard</A>, you'll have to get used to that.
+   To put text on the real <A HREF="gui.html#clipboard">clipboard</A>, select a few different words in one of
+the gVims you have running.  Then use the Edit/Copy menu entry.  Now the text
+has been copied to the real <A HREF="gui.html#clipboard">clipboard</A>.  You can't see this, unless you have
+some application that shows the <A HREF="gui.html#clipboard">clipboard</A> contents (e.g., KDE's klipper).
+   Now select the other gVim, position the cursor somewhere and use the
+Edit/Paste menu.  You will see the text from the real <A HREF="gui.html#clipboard">clipboard</A> is inserted.
+
+
+USING BOTH
+
+This use of both the &quot;current selection&quot; and the &quot;real clipboard&quot; might sound
+a bit confusing.  But <A HREF="motion.html#it">it</A> is very useful.  Let's show this with an example.
+Use one gVim with a text file and perform these actions:
+
+-  <A HREF="visual.html#Select">Select</A> two words in <A HREF="visual.html#Visual">Visual</A> mode.
+-  Use the Edit/Copy menu to get these words onto the <A HREF="gui.html#clipboard">clipboard</A>.
+-  <A HREF="visual.html#Select">Select</A> one other <A HREF="motion.html#word">word</A> in <A HREF="visual.html#Visual">Visual</A> mode.
+-  Use the Edit/Paste menu item.  What will happen is that the single selected
+   <A HREF="motion.html#word">word</A> is replaced with the two words from the <A HREF="gui.html#clipboard">clipboard</A>.
+-  Move the mouse pointer somewhere else and click the middle button.  You
+   will see that the <A HREF="motion.html#word">word</A> you just overwrote with the <A HREF="gui.html#clipboard">clipboard</A> is inserted
+   here.
+
+If you use the &quot;current selection&quot; and the &quot;real clipboard&quot; with care, you can
+<A HREF="diff.html#do">do</A> a lot of useful editing with them.
+
+
+USING THE KEYBOARD
+
+If you don't like using the mouse, you can access the current selection and
+the real <A HREF="gui.html#clipboard">clipboard</A> with two <A HREF="change.html#registers">registers</A>.  The &quot;* <A HREF="sponsor.html#register">register</A> is for the current
+selection.
+   To make text become the current selection, use <A HREF="visual.html#Visual">Visual</A> mode.  For example,
+to select a whole line just press &quot;<A HREF="visual.html#V">V</A>&quot;.
+   To insert the current selection before the cursor:
+
+<B>	"*P</B>
+
+Notice the <A HREF="change.html#uppercase">uppercase</A> &quot;<A HREF="change.html#P">P</A>&quot;.  The <A HREF="change.html#lowercase">lowercase</A> &quot;<A HREF="change.html#p">p</A>&quot; puts the text after the cursor.
+
+The &quot;<A HREF="motion.html#+">+</A> <A HREF="sponsor.html#register">register</A> is used for the real <A HREF="gui.html#clipboard">clipboard</A>.  For example, to copy the text
+from the cursor position until the end of the line to the <A HREF="gui.html#clipboard">clipboard</A>:
+
+<B>	"+y$</B>
+
+Remember, &quot;<A HREF="change.html#y">y</A>&quot; is <A HREF="change.html#yank">yank</A>, which is Vim's copy command.
+   To insert the contents of the real <A HREF="gui.html#clipboard">clipboard</A> before the cursor:
+
+<B>	"+P</B>
+
+It's the same <A HREF="motion.html#as">as</A> for the current selection, but uses the plus (+) <A HREF="sponsor.html#register">register</A>
+instead of the <A HREF="pattern.html#star">star</A> (*) <A HREF="sponsor.html#register">register</A>.
+
+==============================================================================
+
+*<A NAME="09.4"></A><B>09.4</B>*	<A HREF="visual.html#Select">Select</A> mode
+
+And now something that is used more often on <A HREF="os_win32.html#MS-Windows">MS-Windows</A> than on X-Windows.
+But both can <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A>.  You already know about <A HREF="visual.html#Visual">Visual</A> mode.  <A HREF="visual.html#Select">Select</A> mode is like
+<A HREF="visual.html#Visual">Visual</A> mode, because <A HREF="motion.html#it">it</A> is also used to select text.  But there is an obvious
+difference: When typing text, the selected text is deleted and the typed text
+replaces <A HREF="motion.html#it">it</A>.
+
+To start working with <A HREF="visual.html#Select">Select</A> mode, you must first enable <A HREF="motion.html#it">it</A> (for <A HREF="os_win32.html#MS-Windows">MS-Windows</A>
+<A HREF="motion.html#it">it</A> is probably already enabled, but you can <A HREF="diff.html#do">do</A> this anyway):
+
+<B>	:set selectmode+=mouse</B>
+
+Now use the mouse to select some text.  It is highlighted like in <A HREF="visual.html#Visual">Visual</A> mode.
+Now press a <A HREF="print.html#letter">letter</A>.  The selected text is deleted, and the single <A HREF="print.html#letter">letter</A>
+replaces <A HREF="motion.html#it">it</A>.  You are in <A HREF="insert.html#Insert">Insert</A> mode now, thus you can continue typing.
+
+Since typing normal text causes the selected text to be deleted, you can not
+use the normal <A HREF="intro.html#movement">movement</A> commands &quot;<A HREF="usr_02.html#hjkl">hjkl</A>&quot;, &quot;<A HREF="motion.html#w">w</A>&quot;, etc.  Instead, use the shifted
+function keys.  <A HREF="motion.html#&lt;S-Left&gt;">&lt;S-Left&gt;</A> (shifted cursor left key) moves the cursor left.  The
+selected text is changed like in <A HREF="visual.html#Visual">Visual</A> mode.  The other shifted cursor keys
+<A HREF="diff.html#do">do</A> what you expect.  <A HREF="term.html#&lt;S-End&gt;">&lt;S-End&gt;</A> and <A HREF="term.html#&lt;S-Home&gt;">&lt;S-Home&gt;</A> also work.
+
+You can tune the way <A HREF="visual.html#Select">Select</A> mode works with the <A HREF="options.html#'selectmode'">'selectmode'</A> option.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_10.html">usr_10.txt</A>|  Making big changes
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

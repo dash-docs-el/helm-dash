@@ -1,0 +1,684 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_03</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_03</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_03.txt"></A><B>usr_03.txt</B>*	For Vim version 7.4.  Last change: 2006 Jun 21
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			     Moving around
+
+
+Before you can insert or delete text the cursor has to be moved to the right
+place.  Vim has a large number of commands to position the cursor.  This
+chapter shows you how to use the most important ones.  You can find a list of
+these commands below |<A HREF="quickref.html#Q_lr">Q_lr</A>|.
+
+|<A HREF="#03.1">03.1</A>|	Word <A HREF="intro.html#movement">movement</A>
+|<A HREF="#03.2">03.2</A>|	Moving to the start or end of a line
+|<A HREF="#03.3">03.3</A>|	Moving to a character
+|<A HREF="#03.4">03.4</A>|	Matching a parenthesis
+|<A HREF="#03.5">03.5</A>|	Moving to a specific line
+|<A HREF="#03.6">03.6</A>|	Telling where you are
+|<A HREF="#03.7">03.7</A>|	Scrolling around
+|<A HREF="#03.8">03.8</A>|	Simple searches
+|<A HREF="#03.9">03.9</A>|	Simple search patterns
+|<A HREF="#03.10">03.10</A>|	Using marks
+
+     Next chapter: |<A HREF="usr_04.html">usr_04.txt</A>|  Making small changes
+ Previous chapter: |<A HREF="usr_02.html">usr_02.txt</A>|  The first steps in Vim
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="03.1"></A><B>03.1</B>*	Word <A HREF="intro.html#movement">movement</A>
+
+To move the cursor forward one <A HREF="motion.html#word">word</A>, use the &quot;<A HREF="motion.html#w">w</A>&quot; command.  Like most Vim
+commands, you can use a numeric prefix to move past multiple words.  For
+example, &quot;3w&quot; moves three words.  This figure shows how <A HREF="motion.html#it">it</A> works:
+
+<B><FONT COLOR="PURPLE">	This is a line with example text </FONT></B>
+	  ---&gt;--&gt;-&gt;-----------------&gt;
+	   <A HREF="motion.html#w">w</A>  <A HREF="motion.html#w">w</A>  <A HREF="motion.html#w">w</A>    3w
+
+Notice that &quot;<A HREF="motion.html#w">w</A>&quot; moves to the start of the next <A HREF="motion.html#word">word</A> if <A HREF="motion.html#it">it</A> already is at the
+start of a <A HREF="motion.html#word">word</A>.
+   The &quot;<A HREF="motion.html#b">b</A>&quot; command moves backward to the start of the previous <A HREF="motion.html#word">word</A>:
+
+<B><FONT COLOR="PURPLE">	This is a line with example text </FONT></B>
+	&lt;----&lt;--&lt;-&lt;---------&lt;---
+	   <A HREF="motion.html#b">b</A>   <A HREF="motion.html#b">b</A> <A HREF="motion.html#b">b</A>    2b      <A HREF="motion.html#b">b</A>
+
+There is also the &quot;<A HREF="motion.html#e">e</A>&quot; command that moves to the next end of a <A HREF="motion.html#word">word</A> and &quot;<A HREF="motion.html#ge">ge</A>&quot;,
+which moves to the previous end of a <A HREF="motion.html#word">word</A>:
+
+<B><FONT COLOR="PURPLE">	This is a line with example text </FONT></B>
+	   &lt;-   &lt;--- -----&gt;   ----&gt;
+	   <A HREF="motion.html#ge">ge</A>    <A HREF="motion.html#ge">ge</A>     <A HREF="motion.html#e">e</A>       <A HREF="motion.html#e">e</A>
+
+If you are at the last <A HREF="motion.html#word">word</A> of a line, the &quot;<A HREF="motion.html#w">w</A>&quot; command will take you to the
+first <A HREF="motion.html#word">word</A> in the next line.  Thus you can use this to move through a
+<A HREF="motion.html#paragraph">paragraph</A>, much faster than using &quot;<A HREF="motion.html#l">l</A>&quot;.  &quot;<A HREF="motion.html#b">b</A>&quot; does the same in the other
+direction.
+
+A <A HREF="motion.html#word">word</A> ends at a non-word character, such <A HREF="motion.html#as">as</A> a &quot;<A HREF="repeat.html#.">.</A>&quot;, &quot;<A HREF="motion.html#-">-</A>&quot; or &quot;<A HREF="motion.html#)">)</A>&quot;.  To change
+what Vim considers to be a <A HREF="motion.html#word">word</A>, see the <A HREF="options.html#'iskeyword'">'iskeyword'</A> option.
+   It is also possible to move by <A HREF="pattern.html#white-space">white-space</A> separated WORDs.  This is not a
+<A HREF="motion.html#word">word</A> in the normal sense, that's why the <A HREF="change.html#uppercase">uppercase</A> is used.  The commands for
+moving by WORDs are also <A HREF="change.html#uppercase">uppercase</A>, <A HREF="motion.html#as">as</A> this figure shows:
+
+	       <A HREF="motion.html#ge">ge</A>      <A HREF="motion.html#b">b</A>	  <A HREF="motion.html#w">w</A>				<A HREF="motion.html#e">e</A>
+	       &lt;-     &lt;-	 ---&gt;			       ---&gt;
+<B><FONT COLOR="PURPLE">	This is-a line, with special/separated/words (and some more). </FONT></B>
+	   &lt;----- &lt;-----	 --------------------&gt;	       -----&gt;
+	     <A HREF="motion.html#gE">gE</A>      <A HREF="motion.html#B">B</A>			 <A HREF="motion.html#W">W</A>			 <A HREF="motion.html#E">E</A>
+
+With this mix of <A HREF="change.html#lowercase">lowercase</A> and <A HREF="change.html#uppercase">uppercase</A> commands, you can quickly move
+forward and backward through a <A HREF="motion.html#paragraph">paragraph</A>.
+
+==============================================================================
+
+*<A NAME="03.2"></A><B>03.2</B>*	Moving to the start or end of a line
+
+The &quot;<A HREF="motion.html#$">$</A>&quot; command moves the cursor to the end of a line.  If your keyboard has
+an <A HREF="motion.html#&lt;End&gt;">&lt;End&gt;</A> key <A HREF="motion.html#it">it</A> will <A HREF="diff.html#do">do</A> the same thing.
+
+The &quot;<A HREF="motion.html#^">^</A>&quot; command moves to the first non-blank character of the line.  The &quot;<A HREF="motion.html#0">0</A>&quot;
+command (zero) moves to the very first character of the line.  The <A HREF="motion.html#&lt;Home&gt;">&lt;Home&gt;</A> key
+does the same thing.  In a picture:
+
+		  ^
+	     &lt;------------
+<B><FONT COLOR="PURPLE">	.....This is a line with example text </FONT></B>
+	&lt;-----------------   ---------------&gt;
+		0		   $
+
+(the &quot;.....&quot; indicates blanks here)
+
+   The &quot;<A HREF="motion.html#$">$</A>&quot; command takes a <A HREF="intro.html#count">count</A>, like most <A HREF="intro.html#movement">movement</A> commands.  But moving to
+the end of the line several times doesn't make sense.  Therefore <A HREF="motion.html#it">it</A> causes the
+editor to move to the end of another line.  For example, &quot;1$&quot; moves you to
+the end of the first line (the one you're on), &quot;2$&quot; to the end of the next
+line, and so on.
+   The &quot;<A HREF="motion.html#0">0</A>&quot; command doesn't take a <A HREF="intro.html#count">count</A> argument, because the &quot;<A HREF="motion.html#0">0</A>&quot; would be
+part of the <A HREF="intro.html#count">count</A>.  Unexpectedly, using a <A HREF="intro.html#count">count</A> with &quot;<A HREF="motion.html#^">^</A>&quot; doesn't have any
+effect.
+
+==============================================================================
+
+*<A NAME="03.3"></A><B>03.3</B>*	Moving to a character
+
+One of the most useful <A HREF="intro.html#movement">movement</A> commands is the single-character search
+command.  The command &quot;fx&quot; searches forward in the line for the single
+character <A HREF="change.html#x">x</A>.  Hint: &quot;<A HREF="motion.html#f">f</A>&quot; stands for &quot;Find&quot;.
+   For example, you are at the beginning of the following line.  Suppose you
+want to go to the <A HREF="motion.html#h">h</A> of human.  Just execute the command &quot;fh&quot; and the cursor
+will be positioned over the <A HREF="motion.html#h">h</A>:
+
+<B><FONT COLOR="PURPLE">	To err is human.  To really foul up you need a computer. </FONT></B>
+	----------&gt;---------------&gt;
+	    fh		 fy
+
+This also shows that the command &quot;fy&quot; moves to the end of the <A HREF="motion.html#word">word</A> really.
+   You can specify a <A HREF="intro.html#count">count</A>; therefore, you can go to the &quot;<A HREF="motion.html#l">l</A>&quot; of &quot;foul&quot; with
+&quot;3fl&quot;:
+
+<B><FONT COLOR="PURPLE">	To err is human.  To really foul up you need a computer. </FONT></B>
+		  ---------------------&gt;
+			   3fl
+
+The &quot;<A HREF="motion.html#F">F</A>&quot; command searches to the left:
+
+<B><FONT COLOR="PURPLE">	To err is human.  To really foul up you need a computer. </FONT></B>
+		  &lt;---------------------
+			    Fh
+
+The &quot;tx&quot; command works like the &quot;fx&quot; command, except <A HREF="motion.html#it">it</A> stops one character
+before the searched character.  Hint: &quot;<A HREF="motion.html#t">t</A>&quot; stands for &quot;To&quot;.  The backward
+version of this command is &quot;Tx&quot;.
+
+<B><FONT COLOR="PURPLE">	To err is human.  To really foul up you need a computer. </FONT></B>
+		   &lt;------------  -------------&gt;
+			Th		tn
+
+These four commands can be repeated with &quot;<A HREF="motion.html#;">;</A>&quot;.  &quot;<A HREF="motion.html#,">,</A>&quot; repeats in the other
+direction.  The cursor is never moved to another line.  Not even when the
+<A HREF="motion.html#sentence">sentence</A> continues.
+
+Sometimes you will start a search, only to realize that you have typed the
+wrong command.  You type &quot;<A HREF="motion.html#f">f</A>&quot; to search backward, for example, only to realize
+that you really meant &quot;<A HREF="motion.html#F">F</A>&quot;.  To abort a search, press <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>.  So &quot;f&lt;Esc&gt;&quot; is an
+aborted forward search and doesn't <A HREF="diff.html#do">do</A> anything.  Note: <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A> cancels most
+operations, not just searches.
+
+==============================================================================
+
+*<A NAME="03.4"></A><B>03.4</B>*	Matching a parenthesis
+
+When <A HREF="editing.html#writing">writing</A> a program you often end up with nested () constructs.  Then the
+&quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; command is very handy: It moves to the matching paren.  If the cursor is
+on a &quot;<A HREF="motion.html#(">(</A>&quot; <A HREF="motion.html#it">it</A> will move to the matching &quot;<A HREF="motion.html#)">)</A>&quot;.  If it's on a &quot;<A HREF="motion.html#)">)</A>&quot; <A HREF="motion.html#it">it</A> will move to
+the matching &quot;<A HREF="motion.html#(">(</A>&quot;.
+
+			    <A HREF="motion.html#&#37;">&#37;</A>
+			 &lt;-----&gt;
+<B><FONT COLOR="PURPLE">		if (a == (b * c) / d) </FONT></B>
+		   &lt;----------------&gt;
+			    <A HREF="motion.html#&#37;">&#37;</A>
+
+This also works for <A HREF="motion.html#[]">[]</A> and <A HREF="intro.html#{}">{}</A> pairs.  (This can be defined with the
+<A HREF="options.html#'matchpairs'">'matchpairs'</A> option.)
+
+When the cursor is not on a useful character, &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; will search forward to find
+one.  Thus if the cursor is at the start of the line of the previous example,
+&quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; will search forward and find the first &quot;<A HREF="motion.html#(">(</A>&quot;.  Then <A HREF="motion.html#it">it</A> moves to its match:
+
+<B><FONT COLOR="PURPLE">		if (a == (b * c) / d) </FONT></B>
+		---+----------------&gt;
+			   <A HREF="motion.html#&#37;">&#37;</A>
+
+==============================================================================
+
+*<A NAME="03.5"></A><B>03.5</B>*	Moving to a specific line
+
+If you are a C or C++ programmer, you are familiar with error <A HREF="message.html#messages">messages</A> such <A HREF="motion.html#as">as</A>
+the following:
+
+<B><FONT COLOR="PURPLE">	prog.c:33: j   undeclared (first use in this function) </FONT></B>
+
+This tells you that you might want to fix something on line 33.  So how <A HREF="diff.html#do">do</A> you
+find line 33?  One way is to <A HREF="diff.html#do">do</A> &quot;9999k&quot; to go to the top of the file and &quot;32j&quot;
+to go down thirty two lines.  It is not a good way, but <A HREF="motion.html#it">it</A> works.  A much
+better way of doing things is to use the &quot;<A HREF="motion.html#G">G</A>&quot; command.  With a <A HREF="intro.html#count">count</A>, this
+command positions you at the given line number.  For example, &quot;33G&quot; puts you
+on line 33.  (For a better way of going through a compiler's error list, see
+|<A HREF="usr_30.html">usr_30.txt</A>|, for information on the <A HREF="quickfix.html#:make">:make</A> command.)
+   With no argument, &quot;<A HREF="motion.html#G">G</A>&quot; positions you at the end of the file.  A quick way to
+go to the start of a file use &quot;<A HREF="motion.html#gg">gg</A>&quot;.  &quot;1G&quot; will <A HREF="diff.html#do">do</A> the same, but is a tiny bit
+more typing.
+
+	    &#124;	first line of a file   ^
+	    &#124;	text text text text    |
+	    &#124;	text text text text    &#124;  <A HREF="motion.html#gg">gg</A>
+	7G  &#124;	text text text text    |
+	    &#124;	text text text text
+	    &#124;	text text text text
+	    <A HREF="visual.html#V">V</A>	text text text text    |
+		text text text text    &#124;  <A HREF="motion.html#G">G</A>
+		text text text text    |
+		last line of a file    <A HREF="visual.html#V">V</A>
+
+Another way to move to a line is using the &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; command with a <A HREF="intro.html#count">count</A>.  For
+example &quot;50&#37;&quot; moves you to halfway the file.  &quot;90&#37;&quot; goes to near the end.
+
+The previous assumes that you want to move to a line in the file, no matter if
+it's currently visible or not.  What if you want to move to one of the lines
+you can see?  This figure shows the three commands you can use:
+
+			+---------------------------+
+		<A HREF="motion.html#H">H</A> --&gt;	&#124; text sample text	    |
+			&#124; sample text		    |
+			&#124; text sample text	    |
+			&#124; sample text		    |
+		<A HREF="motion.html#M">M</A> --&gt;	&#124; text sample text	    |
+			&#124; sample text		    |
+			&#124; text sample text	    |
+			&#124; sample text		    |
+		<A HREF="motion.html#L">L</A> --&gt;	&#124; text sample text	    |
+			+---------------------------+
+
+Hints: &quot;<A HREF="motion.html#H">H</A>&quot; stands for Home, &quot;<A HREF="motion.html#M">M</A>&quot; for Middle and &quot;<A HREF="motion.html#L">L</A>&quot; for Last.
+
+==============================================================================
+
+*<A NAME="03.6"></A><B>03.6</B>*	Telling where you are
+
+To see where you are in a file, there are three ways:
+
+1.  Use the <A HREF="editing.html#CTRL-G">CTRL-G</A> command.  You get a message like this (assuming the <A HREF="options.html#'ruler'">'ruler'</A>
+    option is off):
+
+<B><FONT COLOR="PURPLE">	"usr_03.txt" line 233 of 650 --35%-- col 45-52 </FONT></B>
+
+    This shows the name of the file you are editing, the line number where the
+    cursor is, the total number of lines, the percentage of the way through
+    the file and the column of the cursor.
+       Sometimes you will see a split column number.  For example, &quot;col 2-9&quot;.
+    This indicates that the cursor is positioned on the second character, but
+    because character one is a <A HREF="intro.html#tab">tab</A>, occupying eight spaces worth of columns,
+    the screen column is 9.
+
+2.  Set the <A HREF="options.html#'number'">'number'</A> option.  This will display a line number in front of
+    every line:
+
+<B>	:set number</B>
+ 
+    To switch this off again:
+
+<B>	:set nonumber</B>
+ 
+    Since <A HREF="options.html#'number'">'number'</A> is a <A HREF="options.html#boolean">boolean</A> option, prepending &quot;no&quot; to its name has the
+    effect of switching <A HREF="motion.html#it">it</A> off.  A <A HREF="options.html#boolean">boolean</A> option has only these two values,
+    <A HREF="motion.html#it">it</A> is either on or off.
+       Vim has many <A HREF="options.html#options">options</A>.  Besides the <A HREF="options.html#boolean">boolean</A> ones there are <A HREF="options.html#options">options</A> with
+    a numerical value and string <A HREF="options.html#options">options</A>.  You will see examples of this where
+    they are used.
+
+3.  Set the <A HREF="options.html#'ruler'">'ruler'</A> option.  This will display the cursor position in the
+    lower right corner of the Vim <A HREF="windows.html#window">window</A>:
+
+<B>	:set ruler</B>
+
+Using the <A HREF="options.html#'ruler'">'ruler'</A> option has the advantage that <A HREF="motion.html#it">it</A> doesn't take much room,
+thus there is more space for your text.
+
+==============================================================================
+
+*<A NAME="03.7"></A><B>03.7</B>*	Scrolling around
+
+The <A HREF="scroll.html#CTRL-U">CTRL-U</A> command scrolls down half a screen of text.  Think of looking
+through a viewing <A HREF="windows.html#window">window</A> at the text and moving this <A HREF="windows.html#window">window</A> up by half the
+height of the <A HREF="windows.html#window">window</A>.  Thus the <A HREF="windows.html#window">window</A> moves up over the text, which is
+backward in the file.  Don't worry if you have a little trouble remembering
+which end is up.  Most users have the same problem.
+   The <A HREF="scroll.html#CTRL-D">CTRL-D</A> command moves the viewing <A HREF="windows.html#window">window</A> down half a screen in the file,
+thus scrolls the text up half a screen.
+
+				       +----------------+
+				       &#124; some text	|
+				       &#124; some text	|
+				       &#124; some text	|
+	+---------------+	       &#124; some text	|
+	&#124; some text	&#124;  <A HREF="scroll.html#CTRL-U">CTRL-U</A>  --&gt; &#124;		|
+	&#124;		&#124;	       &#124; 123456		|
+	&#124; 123456	&#124;	       +----------------+
+	&#124; 7890		|
+	&#124;		&#124;	       +----------------+
+	&#124; example	&#124;  <A HREF="scroll.html#CTRL-D">CTRL-D</A> --&gt;  &#124; 7890		|
+	+---------------+	       &#124;		|
+				       &#124; example	|
+				       &#124; example	|
+				       &#124; example	|
+				       &#124; example	|
+				       +----------------+
+
+To scroll one line at a time use <A HREF="scroll.html#CTRL-E">CTRL-E</A> (scroll up) and <A HREF="scroll.html#CTRL-Y">CTRL-Y</A> (scroll down).
+Think of <A HREF="scroll.html#CTRL-E">CTRL-E</A> to give you one line Extra.  (If you use <A HREF="os_win32.html#MS-Windows">MS-Windows</A> compatible
+key mappings <A HREF="scroll.html#CTRL-Y">CTRL-Y</A> will <A HREF="undo.html#redo">redo</A> a change instead of scroll.)
+
+To scroll forward by a whole screen (except for two lines) use <A HREF="scroll.html#CTRL-F">CTRL-F</A>.  The
+other way is backward, <A HREF="scroll.html#CTRL-B">CTRL-B</A> is the command to use.  Fortunately <A HREF="scroll.html#CTRL-F">CTRL-F</A> is
+Forward and <A HREF="scroll.html#CTRL-B">CTRL-B</A> is Backward, that's <A HREF="starting.html#easy">easy</A> to remember.
+
+A common issue is that after moving down many lines with &quot;<A HREF="motion.html#j">j</A>&quot; your cursor is at
+the bottom of the screen.  You would like to see the context of the line with
+the cursor.  That's done with the &quot;<A HREF="scroll.html#zz">zz</A>&quot; command.
+
+	+------------------+		 +------------------+
+	&#124; some text	   &#124;		 &#124; some text	    |
+	&#124; some text	   &#124;		 &#124; some text	    |
+	&#124; some text	   &#124;		 &#124; some text	    |
+	&#124; some text	   &#124;   <A HREF="scroll.html#zz">zz</A>  --&gt;	 &#124; line with cursor |
+	&#124; some text	   &#124;		 &#124; some text	    |
+	&#124; some text	   &#124;		 &#124; some text	    |
+	&#124; line with cursor &#124;		 &#124; some text	    |
+	+------------------+		 +------------------+
+
+The &quot;<A HREF="scroll.html#zt">zt</A>&quot; command puts the cursor line at the top, &quot;<A HREF="scroll.html#zb">zb</A>&quot; at the bottom.  There
+are a few more <A HREF="scroll.html#scrolling">scrolling</A> commands, see |<A HREF="quickref.html#Q_sc">Q_sc</A>|.  To always keep a few lines of
+context around the cursor, use the <A HREF="options.html#'scrolloff'">'scrolloff'</A> option.
+
+==============================================================================
+
+*<A NAME="03.8"></A><B>03.8</B>*	Simple searches
+
+To search for a string, use the &quot;/string&quot; command.  To find the <A HREF="motion.html#word">word</A> include,
+for example, use the command:
+
+<B>	/include</B>
+
+You will notice that when you type the &quot;<A HREF="pattern.html#/">/</A>&quot; the cursor jumps to the last line
+of the Vim <A HREF="windows.html#window">window</A>, like with colon commands.  That is where you type the <A HREF="motion.html#word">word</A>.
+You can press the backspace key (backarrow or <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A>) to make corrections.  Use
+the <A HREF="motion.html#&lt;Left&gt;">&lt;Left&gt;</A> and <A HREF="motion.html#&lt;Right&gt;">&lt;Right&gt;</A> cursor keys when necessary.
+   Pressing <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> executes the command.
+
+	Note:
+	The characters .*[]^&#37;/\?~$ have special meanings.  If you want to use
+	them in a search you must put a \ in front of them.  See below.
+
+To find the next occurrence of the same string use the &quot;<A HREF="pattern.html#n">n</A>&quot; command.  Use this
+to find the first #include after the cursor:
+
+<B>	/#include</B>
+
+And then type &quot;<A HREF="pattern.html#n">n</A>&quot; several times.  You will move to each #include in the text.
+You can also use a <A HREF="intro.html#count">count</A> if you know which match you want.  Thus &quot;3n&quot; finds
+the third match.  Using a <A HREF="intro.html#count">count</A> with &quot;<A HREF="pattern.html#/">/</A>&quot; doesn't work.
+
+The &quot;<A HREF="pattern.html#?">?</A>&quot; command works like &quot;<A HREF="pattern.html#/">/</A>&quot; but searches backwards:
+
+<B>	?word</B>
+
+The &quot;<A HREF="pattern.html#N">N</A>&quot; command repeats the last search the opposite direction.  Thus using
+&quot;<A HREF="pattern.html#N">N</A>&quot; after a &quot;<A HREF="pattern.html#/">/</A>&quot; command search backwards, using &quot;<A HREF="pattern.html#N">N</A>&quot; after &quot;<A HREF="pattern.html#?">?</A>&quot; searches
+forward.
+
+
+IGNORING CASE
+
+Normally you have to type exactly what you want to find.  If you don't care
+about upper or <A HREF="change.html#lowercase">lowercase</A> in a <A HREF="motion.html#word">word</A>, set the <A HREF="options.html#'ignorecase'">'ignorecase'</A> option:
+
+<B>	:set ignorecase</B>
+
+If you now search for &quot;<A HREF="motion.html#word">word</A>&quot;, <A HREF="motion.html#it">it</A> will also match &quot;Word&quot; and &quot;<A HREF="motion.html#WORD">WORD</A>&quot;.  To match
+<A HREF="change.html#case">case</A> again:
+
+<B>	:set noignorecase</B>
+
+
+HISTORY
+
+Suppose you <A HREF="diff.html#do">do</A> three searches:
+
+<B>	/one</B>
+<B>	/two</B>
+<B>	/three</B>
+
+Now let's start searching by typing a simple &quot;<A HREF="pattern.html#/">/</A>&quot; without pressing <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A>.  If
+you press <A HREF="motion.html#&lt;Up&gt;">&lt;Up&gt;</A> (the cursor key), Vim puts &quot;/three&quot; on the command line.
+Pressing <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> at this point searches for three.  If you <A HREF="diff.html#do">do</A> not press
+<A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A>, but press <A HREF="motion.html#&lt;Up&gt;">&lt;Up&gt;</A> instead, Vim changes the prompt to &quot;/two&quot;.  Another
+press of <A HREF="motion.html#&lt;Up&gt;">&lt;Up&gt;</A> moves you to &quot;/one&quot;.
+   You can also use the <A HREF="motion.html#&lt;Down&gt;">&lt;Down&gt;</A> cursor key to move through the <A HREF="cmdline.html#history">history</A> of
+search commands in the other direction.
+
+If you know what a previously used <A HREF="pattern.html#pattern">pattern</A> starts with, and you want to use <A HREF="motion.html#it">it</A>
+again, type that character before pressing <A HREF="motion.html#&lt;Up&gt;">&lt;Up&gt;</A>.  With the previous example,
+you can type &quot;/o&lt;Up&gt;&quot; and Vim will put &quot;/one&quot; on the command line.
+
+The commands starting with &quot;<A HREF="cmdline.html#:">:</A>&quot; also have a <A HREF="cmdline.html#history">history</A>.  That allows you to recall
+a previous command and execute <A HREF="motion.html#it">it</A> again.  These two histories are separate.
+
+
+SEARCHING FOR A <A HREF="motion.html#WORD">WORD</A> IN THE TEXT
+
+Suppose you see the <A HREF="motion.html#word">word</A> &quot;TheLongFunctionName&quot; in the text and you want to
+find the next occurrence of <A HREF="motion.html#it">it</A>.  You could type &quot;/TheLongFunctionName&quot;, but
+that's a lot of typing.  And when you make a mistake Vim won't find <A HREF="motion.html#it">it</A>.
+   There is an easier way: Position the cursor on the <A HREF="motion.html#word">word</A> and use the &quot;*&quot;
+command.  Vim will grab the <A HREF="motion.html#word">word</A> under the cursor and use <A HREF="motion.html#it">it</A> <A HREF="motion.html#as">as</A> the search
+string.
+   The &quot;<A HREF="pattern.html##">#</A>&quot; command does the same in the other direction.  You can prepend a
+<A HREF="intro.html#count">count</A>: &quot;3*&quot; searches for the third occurrence of the <A HREF="motion.html#word">word</A> under the cursor.
+
+
+SEARCHING FOR WHOLE WORDS
+
+If you type &quot;/the&quot; <A HREF="motion.html#it">it</A> will also match &quot;there&quot;.  To only find words that end
+in &quot;the&quot; use:
+
+<B>	/the\&gt;</B>
+
+The &quot;\&gt;&quot; item is a special marker that only matches at the end of a <A HREF="motion.html#word">word</A>.
+Similarly &quot;\&lt;&quot; only matches at the begin of a <A HREF="motion.html#word">word</A>.  Thus to search for the
+<A HREF="motion.html#word">word</A> &quot;the&quot; only:
+
+<B>	/\&lt;the\&gt;</B>
+
+This does not match &quot;there&quot; or &quot;soothe&quot;.  Notice that the &quot;*&quot; and &quot;<A HREF="pattern.html##">#</A>&quot; commands
+use these start-of-word and end-of-word markers to only find whole words (you
+can use &quot;g*&quot; and &quot;<A HREF="pattern.html#g#">g#</A>&quot; to match partial words).
+
+
+HIGHLIGHTING MATCHES
+
+While editing a program you see a variable called &quot;nr&quot;.  You want to check
+where it's used.  You could move the cursor to &quot;nr&quot; and use the &quot;*&quot; command
+and press &quot;<A HREF="pattern.html#n">n</A>&quot; to go along all the matches.
+   There is another way.  Type this command:
+
+<B>	:set hlsearch</B>
+
+If you now search for &quot;nr&quot;, Vim will highlight all matches.  That is a very
+good way to see where the variable is used, without the need to type commands.
+   To switch this off:
+
+<B>	:set nohlsearch</B>
+
+Then you need to switch <A HREF="motion.html#it">it</A> on again if you want to use <A HREF="motion.html#it">it</A> for the next search
+command.  If you only want to remove the highlighting, use this command:
+
+<B>	:nohlsearch</B>
+
+This doesn't reset the option.  Instead, <A HREF="motion.html#it">it</A> disables the highlighting.  As
+soon <A HREF="motion.html#as">as</A> you execute a search command, the highlighting will be used again.
+Also for the &quot;<A HREF="pattern.html#n">n</A>&quot; and &quot;<A HREF="pattern.html#N">N</A>&quot; commands.
+
+
+TUNING SEARCHES
+
+There are a few <A HREF="options.html#options">options</A> that change how searching works.  These are the
+essential ones:
+
+<B>	:set incsearch</B>
+
+This makes Vim display the match for the string while you are still typing <A HREF="motion.html#it">it</A>.
+Use this to check if the right match will be found.  Then press <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> to
+really jump to that location.  Or type more to change the search string.
+
+<B>	:set nowrapscan</B>
+
+This stops the search at the end of the file.  Or, when you are searching
+backwards, at the start of the file.  The <A HREF="options.html#'wrapscan'">'wrapscan'</A> option is on by default,
+thus searching wraps around the end of the file.
+
+
+INTERMEZZO
+
+If you like one of the <A HREF="options.html#options">options</A> mentioned before, and set <A HREF="motion.html#it">it</A> each time you use
+Vim, you can put the command in your Vim <A HREF="starting.html#startup">startup</A> file.
+   Edit the file, <A HREF="motion.html#as">as</A> mentioned at |<A HREF="usr_01.html#not-compatible">not-compatible</A>|.  Or use this command to
+find out where <A HREF="motion.html#it">it</A> is:
+
+<B>	:scriptnames</B>
+
+Edit the file, for example with:
+
+<B>	:edit ~/.vimrc</B>
+
+Then add a line with the command to set the option, just like you typed <A HREF="motion.html#it">it</A> in
+Vim.  Example:
+
+<B>	Go:set hlsearch&lt;Esc&gt;</B>
+
+&quot;<A HREF="motion.html#G">G</A>&quot; moves to the end of the file.  &quot;<A HREF="insert.html#o">o</A>&quot; starts a new line, where you type the
+&quot;<A HREF="options.html#:set">:set</A>&quot; command.  You end insert mode with <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>.  Then write the file:
+
+<B>	ZZ</B>
+
+If you now start Vim again, the <A HREF="options.html#'hlsearch'">'hlsearch'</A> option will already be set.
+
+==============================================================================
+
+*<A NAME="03.9"></A><B>03.9</B>*	Simple search patterns
+
+The Vim editor uses regular expressions to specify what to search for.
+Regular expressions are an extremely powerful and compact way to specify a
+search <A HREF="pattern.html#pattern">pattern</A>.  Unfortunately, this power comes at a price, because regular
+expressions are a bit tricky to specify.
+   In this section we mention only a few essential ones.  More about search
+patterns and commands in chapter 27 |<A HREF="usr_27.html">usr_27.txt</A>|.  You can find the full
+explanation here: |<A HREF="pattern.html#pattern">pattern</A>|.
+
+
+BEGINNING AND END OF A LINE
+
+The ^ character matches the beginning of a line.  On an English-US keyboard
+you find <A HREF="motion.html#it">it</A> above the 6.  The <A HREF="pattern.html#pattern">pattern</A> &quot;include&quot; matches the <A HREF="motion.html#word">word</A> include
+anywhere on the line.  But the <A HREF="pattern.html#pattern">pattern</A> &quot;^include&quot; matches the <A HREF="motion.html#word">word</A> include
+only if <A HREF="motion.html#it">it</A> is at the beginning of a line.
+   The $ character matches the end of a line.  Therefore, &quot;was$&quot; matches the
+<A HREF="motion.html#word">word</A> was only if <A HREF="motion.html#it">it</A> is at the end of a line.
+
+Let's <A HREF="motion.html#mark">mark</A> the places where &quot;the&quot; matches in this example line with &quot;x&quot;s:
+
+<B><FONT COLOR="PURPLE">	the solder holding one of the chips melted and the </FONT></B>
+	xxx			  xxx		       xxx
+
+Using &quot;/the$&quot; we find this match:
+
+<B><FONT COLOR="PURPLE">	the solder holding one of the chips melted and the </FONT></B>
+						       xxx
+
+And with &quot;/^the&quot; we find this one:
+<B><FONT COLOR="PURPLE">	the solder holding one of the chips melted and the </FONT></B>
+	xxx
+
+You can try searching with &quot;/^the$&quot;, <A HREF="motion.html#it">it</A> will only match a single line
+consisting of &quot;the&quot;.  White space does matter here, thus if a line contains a
+space after the <A HREF="motion.html#word">word</A>, like &quot;the &quot;<A HREF="motion.html#,">,</A> the <A HREF="pattern.html#pattern">pattern</A> will not match.
+
+
+MATCHING ANY SINGLE CHARACTER
+
+The . (dot) character matches any existing character.  For example, the
+<A HREF="pattern.html#pattern">pattern</A> &quot;c.m&quot; matches a string whose first character is a <A HREF="change.html#c">c</A>, whose second
+character is anything, and whose the third character is <A HREF="motion.html#m">m</A>.  Example:
+
+<B><FONT COLOR="PURPLE">	We use a computer that became the cummin winter. </FONT></B>
+		 xxx		 xxx	  xxx
+
+
+MATCHING SPECIAL CHARACTERS
+
+If you really want to match a dot, you must avoid its special meaning by
+putting a <A HREF="intro.html#backslash">backslash</A> before <A HREF="motion.html#it">it</A>.
+   If you search for &quot;ter.&quot;, you will find these matches:
+
+<B><FONT COLOR="PURPLE">	We use a computer that became the cummin winter. </FONT></B>
+		      xxxx			    xxxx
+
+Searching for &quot;ter\.&quot; only finds the second match.
+
+==============================================================================
+
+*<A NAME="03.10"></A><B>03.10</B>*	Using marks
+
+When you make a jump to a position with the &quot;<A HREF="motion.html#G">G</A>&quot; command, Vim remembers the
+position from before this jump.  This position is called a <A HREF="motion.html#mark">mark</A>.  To go back
+where you came from, use this command:
+
+<B>	``</B>
+
+This ` is a backtick or open single-quote character.
+   If you use the same command a second time you will jump back again.  That's
+because the ` command is a jump itself, and the position from before this jump
+is remembered.
+
+Generally, every time you <A HREF="diff.html#do">do</A> a command that can move the cursor further than
+within the same line, this is called a jump.  This includes the search
+commands &quot;<A HREF="pattern.html#/">/</A>&quot; and &quot;<A HREF="pattern.html#n">n</A>&quot; (it doesn't matter how far away the match is).  But not
+the character searches with &quot;fx&quot; and &quot;tx&quot; or the <A HREF="motion.html#word">word</A> movements &quot;<A HREF="motion.html#w">w</A>&quot; and &quot;<A HREF="motion.html#e">e</A>&quot;.
+   Also, &quot;<A HREF="motion.html#j">j</A>&quot; and &quot;<A HREF="motion.html#k">k</A>&quot; are not considered to be a jump.  Even when you use a
+<A HREF="intro.html#count">count</A> to make them move the cursor quite a long way away.
+
+The <A HREF="motion.html#``">``</A> command jumps back and forth, between two points.  The <A HREF="motion.html#CTRL-O">CTRL-O</A> command
+jumps to older positions (Hint: <A HREF="insert.html#O">O</A> for older).  <A HREF="motion.html#CTRL-I">CTRL-I</A> then jumps back to newer
+positions (Hint: I is just next to <A HREF="insert.html#O">O</A> on the keyboard).  Consider this sequence
+of commands:
+
+<B>	33G</B>
+<B>	/^The</B>
+<B>	CTRL-O</B>
+
+You first jump to line 33, then search for a line that starts with &quot;The&quot;.
+Then with <A HREF="motion.html#CTRL-O">CTRL-O</A> you jump back to line 33.  Another <A HREF="motion.html#CTRL-O">CTRL-O</A> takes you back to
+where you started.  If you now use <A HREF="motion.html#CTRL-I">CTRL-I</A> you jump to line 33 again.  And
+to the match for &quot;The&quot; with another <A HREF="motion.html#CTRL-I">CTRL-I</A>.
+
+
+	     &#124;	example text   ^	     |
+	33G  &#124;	example text   &#124;  <A HREF="motion.html#CTRL-O">CTRL-O</A>     &#124; <A HREF="motion.html#CTRL-I">CTRL-I</A>
+	     &#124;	example text   &#124;	     |
+	     <A HREF="visual.html#V">V</A>	line 33 text   ^	     <A HREF="visual.html#V">V</A>
+	     &#124;	example text   &#124;	     |
+       /^The &#124;	example text   &#124;  <A HREF="motion.html#CTRL-O">CTRL-O</A>     &#124; <A HREF="motion.html#CTRL-I">CTRL-I</A>
+	     <A HREF="visual.html#V">V</A>	There you are  &#124;	     <A HREF="visual.html#V">V</A>
+		example text
+
+	Note:
+	<A HREF="motion.html#CTRL-I">CTRL-I</A> is the same <A HREF="motion.html#as">as</A> <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>.
+
+The &quot;<A HREF="motion.html#:jumps">:jumps</A>&quot; command gives a list of positions you jumped to.  The entry which
+you used last is marked with a &quot;<A HREF="change.html#&gt;">&gt;</A>&quot;.
+
+
+
+NAMED MARKS							*<A NAME="bookmark"></A><B>bookmark</B>*
+
+Vim enables you to place your own marks in the text.  The command &quot;ma&quot; marks
+the place under the cursor <A HREF="motion.html#as">as</A> <A HREF="motion.html#mark">mark</A> a.  You can place 26 marks (a through <A HREF="index.html#z">z</A>) in
+your text.  You can't see them, it's just a position that Vim remembers.
+   To go to a <A HREF="motion.html#mark">mark</A>, use the command `{mark}, where {mark} is the <A HREF="motion.html#mark">mark</A> <A HREF="print.html#letter">letter</A>.
+Thus to move to the a <A HREF="motion.html#mark">mark</A>:
+
+<B>	`a</B>
+
+The command 'mark (single quotation <A HREF="motion.html#mark">mark</A>, or apostrophe) moves you to the
+beginning of the line containing the <A HREF="motion.html#mark">mark</A>.  This differs from the `mark
+command, which moves you to marked column.
+
+The marks can be very useful when working on two related parts in a file.
+Suppose you have some text near the start of the file you need to look at,
+while working on some text near the end of the file.
+   Move to the text at the start and place the <A HREF="change.html#s">s</A> (start) <A HREF="motion.html#mark">mark</A> there:
+
+<B>	ms</B>
+
+Then move to the text you want to work on and put the <A HREF="motion.html#e">e</A> (end) <A HREF="motion.html#mark">mark</A> there:
+
+<B>	me</B>
+
+Now you can move around, and when you want to look at the start of the file,
+you use this to jump there:
+
+<B>	's</B>
+
+Then you can use <A HREF="motion.html#''">''</A> to jump back to where you were, or 'e to jump to the text
+you were working on at the end.
+   There is nothing special about using <A HREF="change.html#s">s</A> for start and <A HREF="motion.html#e">e</A> for end, they are
+just <A HREF="starting.html#easy">easy</A> to remember.
+
+You can use this command to get a list of marks:
+
+<B>	:marks</B>
+
+You will notice a few special marks.  These include:
+
+	''	The cursor position before doing a jump
+	&quot;	The cursor position when last editing the file
+	[	Start of the last change
+	]	End of the last change
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_04.html">usr_04.txt</A>|  Making small changes
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

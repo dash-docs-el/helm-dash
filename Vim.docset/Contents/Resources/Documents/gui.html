@@ -1,0 +1,1111 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: gui</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: gui</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="gui.txt"></A><B>gui.txt</B>*       For Vim version 7.4.  Last change: 2013 Jun 12
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Vim's Graphical <A HREF="autocmd.html#User">User</A> Interface				*<A NAME="gui"></A><B>gui</B>* *<A NAME="GUI"></A><B>GUI</B>*
+
+1. Starting the <A HREF="#GUI">GUI</A>		|<A HREF="#gui-start">gui-start</A>|
+2. Scrollbars			|<A HREF="#gui-scrollbars">gui-scrollbars</A>|
+3. Mouse Control		|<A HREF="#gui-mouse">gui-mouse</A>|
+4. Making <A HREF="#GUI">GUI</A> Selections	|<A HREF="#gui-selections">gui-selections</A>|
+5. Menus			|<A HREF="#menus">menus</A>|
+6. Extras			|<A HREF="#gui-extras">gui-extras</A>|
+7. Shell Commands		|<A HREF="#gui-shell">gui-shell</A>|
+
+Other <A HREF="#GUI">GUI</A> documentation:
+|<A HREF="gui_x11.html">gui_x11.txt</A>|	For specific items of the <A HREF="options.html#X11">X11</A> <A HREF="#GUI">GUI</A>.
+|<A HREF="gui_w32.html">gui_w32.txt</A>|	For specific items of the <A HREF="os_win32.html#Win32">Win32</A> <A HREF="#GUI">GUI</A>.
+
+{Vi does not have any of these commands}
+
+==============================================================================
+
+1. Starting the <A HREF="#GUI">GUI</A>				*<A NAME="gui-start"></A><B>gui-start</B>* *<A NAME="E229"></A><B>E229</B>* *<A NAME="E233"></A><B>E233</B>*
+
+First you must make sure you actually have a version of Vim with the <A HREF="#GUI">GUI</A> code
+included.  You can check this with the &quot;<A HREF="various.html#:version">:version</A>&quot; command, <A HREF="motion.html#it">it</A> says &quot;with xxx
+GUI&quot;, where &quot;xxx&quot; is X11-Motif, X11-Athena, Photon, <A HREF="gui_x11.html#GTK">GTK</A>, GTK2, etc., or
+&quot;<A HREF="os_win32.html#MS-Windows">MS-Windows</A> 32 bit <A HREF="#GUI">GUI</A> version&quot;.
+
+How to start the <A HREF="#GUI">GUI</A> depends on the system used.  Mostly you can run the
+<A HREF="#GUI">GUI</A> version of Vim with:
+    <A HREF="starting.html#gvim">gvim</A> [options] [files...]
+
+The <A HREF="options.html#X11">X11</A> version of Vim can run both in <A HREF="#GUI">GUI</A> and in non-GUI mode.  See
+|<A HREF="gui_x11.html#gui-x11-start">gui-x11-start</A>|.
+
+
+			*<A NAME="gui-init"></A><B>gui-init</B>* *<A NAME="gvimrc"></A><B>gvimrc</B>* *<A NAME=".gvimrc"></A><B>.gvimrc</B>* *<A NAME="_gvimrc"></A><B>_gvimrc</B>* *<A NAME="$MYGVIMRC"></A><B>$MYGVIMRC</B>*
+The <A HREF="#gvimrc">gvimrc</A> file is where GUI-specific <A HREF="starting.html#startup">startup</A> commands should be placed.  It
+is always sourced after the |<A HREF="starting.html#vimrc">vimrc</A>| file.  If you have one then the <A HREF="#$MYGVIMRC">$MYGVIMRC</A>
+environment variable has its name.
+
+When the <A HREF="#GUI">GUI</A> starts up initializations are carried out, in this order:
+- The <A HREF="options.html#'term'">'term'</A> option is set to &quot;builtin_gui&quot; and terminal <A HREF="options.html#options">options</A> are reset to
+  their default value for the <A HREF="#GUI">GUI</A> |<A HREF="term.html#terminal-options">terminal-options</A>|.
+- If the system menu file exists, <A HREF="motion.html#it">it</A> is sourced.  The name of this file is
+  normally &quot;$VIMRUNTIME/menu.vim&quot;.  You can check this with &quot;<A HREF="various.html#:version">:version</A>&quot;.  Also
+  see |<A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A>|.  To skip loading the system menu include 'M' in
+
+  <A HREF="options.html#'guioptions'">'guioptions'</A>.				*<A NAME="buffers-menu"></A><B>buffers-menu</B>* *<A NAME="no_buffers_menu"></A><B>no_buffers_menu</B>*
+  The system menu file includes a &quot;Buffers&quot; menu.  If you don't want this, set
+  the &quot;<A HREF="#no_buffers_menu">no_buffers_menu</A>&quot; variable in your <A HREF="starting.html#.vimrc">.vimrc</A> (not .gvimrc!):
+<B>	:let no_buffers_menu = 1</B>
+  NOTE: Switching on <A HREF="syntax.html#syntax">syntax</A> highlighting also loads the menu file, thus
+  disabling the Buffers menu must be done before &quot;<A HREF="syntax.html#:syntax">:syntax</A> on&quot;.
+  The path names are truncated to 35 characters.  You can truncate them at a
+  different length, for example 50, like this:
+<B>	:let bmenu_max_pathlen = 50</B>
+- If the &quot;<A HREF="starting.html#-U">-U</A> {gvimrc}&quot; command-line option has been used when starting Vim,
+  the {gvimrc} file will be read for initializations.  The following
+  initializations are skipped.  When {gvimrc} is &quot;NONE&quot; no file will be read
+  for initializations.
+- For <A HREF="os_unix.html#Unix">Unix</A> and <A HREF="os_win32.html#MS-Windows">MS-Windows</A>, if the system <A HREF="#gvimrc">gvimrc</A> exists, <A HREF="motion.html#it">it</A> is sourced.  The
+  name of this file is normally &quot;$VIM/gvimrc&quot;.  You can check this with
+  &quot;<A HREF="various.html#:version">:version</A>&quot;.  Also see |<A HREF="starting.html#$VIM">$VIM</A>|.
+- The following are tried, and only the first one that exists is used:
+  - If the GVIMINIT environment variable exists and is not empty, <A HREF="motion.html#it">it</A> is
+    executed <A HREF="motion.html#as">as</A> an <A HREF="intro.html#Ex">Ex</A> command.
+  - If the user <A HREF="#gvimrc">gvimrc</A> file exists, <A HREF="motion.html#it">it</A> is sourced.  The name of this file is
+    normally &quot;$HOME/.gvimrc&quot;.  You can check this with &quot;<A HREF="various.html#:version">:version</A>&quot;.
+  - For <A HREF="os_win32.html#Win32">Win32</A>, when <A HREF="options.html#$HOME">$HOME</A> is not set, &quot;$VIM\_gvimrc&quot; is used.
+  - When a &quot;<A HREF="#_gvimrc">_gvimrc</A>&quot; file is not found, &quot;<A HREF="#.gvimrc">.gvimrc</A>&quot; is tried too.  And vice
+    versa.
+  The name of the first file found is stored in <A HREF="#$MYGVIMRC">$MYGVIMRC</A>, unless <A HREF="motion.html#it">it</A> was
+  already set.
+- If the <A HREF="options.html#'exrc'">'exrc'</A> option is set (which is NOT the default) the file ./.gvimrc
+  is sourced, if <A HREF="motion.html#it">it</A> exists and isn't the same file <A HREF="motion.html#as">as</A> the system or user
+  <A HREF="#gvimrc">gvimrc</A> file.  If this file is not owned by you, some security restrictions
+  apply.  When &quot;<A HREF="#.gvimrc">.gvimrc</A>&quot; is not found, &quot;<A HREF="#_gvimrc">_gvimrc</A>&quot; is tried too.  For <A HREF="os_mac.html#Macintosh">Macintosh</A>
+  and DOS/Win32 &quot;<A HREF="#_gvimrc">_gvimrc</A>&quot; is tried first.
+
+NOTE: All but the first one are not carried out if Vim was started with
+&quot;<A HREF="starting.html#-u">-u</A> NONE&quot; and no &quot;<A HREF="starting.html#-U">-U</A>&quot; argument was given, or when started with &quot;<A HREF="starting.html#-U">-U</A> NONE&quot;.
+
+All this happens AFTER the normal Vim initializations, like reading your
+<A HREF="starting.html#.vimrc">.vimrc</A> file.  See |<A HREF="starting.html#initialization">initialization</A>|.
+But the <A HREF="#GUI">GUI</A> <A HREF="windows.html#window">window</A> is only opened after all the initializations have been
+carried out.  If you want some commands to be executed just after opening the
+GUI <A HREF="windows.html#window">window</A>, use the |<A HREF="autocmd.html#GUIEnter">GUIEnter</A>| <A HREF="autocmd.html#autocommand">autocommand</A> event.  Example:
+<B>	:autocmd GUIEnter * winpos 100 50</B>
+
+You can use the <A HREF="#gvimrc">gvimrc</A> files to set up your own customized <A HREF="#menus">menus</A> (see |<A HREF="#:menu">:menu</A>|)
+and initialize other things that you may want to set up differently from the
+terminal version.
+
+Recommended place for your personal <A HREF="#GUI">GUI</A> initializations:
+	<A HREF="os_unix.html#Unix">Unix</A>		    $HOME/.gvimrc or $HOME/.vim/gvimrc
+	<A HREF="os_os2.html#OS/2">OS/2</A>		    $HOME/.gvimrc, $HOME/vimfiles/gvimrc
+			    or $VIM/.gvimrc
+	<A HREF="os_msdos.html#MS-DOS">MS-DOS</A> and <A HREF="os_win32.html#Win32">Win32</A>    $HOME/_gvimrc, $HOME/vimfiles/gvimrc
+			    or $VIM/_gvimrc
+	<A HREF="os_amiga.html#Amiga">Amiga</A>		    s:.gvimrc, home:.gvimrc, home:vimfiles:gvimrc
+			    or $VIM/.gvimrc
+
+The personal <A HREF="starting.html#initialization">initialization</A> files are searched in the order specified above
+and only the first one that is found is read.
+
+There are a number of <A HREF="options.html#options">options</A> which only have meaning in the <A HREF="#GUI">GUI</A> version of
+Vim.  These are <A HREF="options.html#'guicursor'">'guicursor'</A>, <A HREF="options.html#'guifont'">'guifont'</A>, <A HREF="options.html#'guipty'">'guipty'</A> and <A HREF="options.html#'guioptions'">'guioptions'</A>.  They are
+documented in |<A HREF="options.html">options.txt</A>| with all the other options.
+
+If using the <A HREF="gui_x11.html#Motif">Motif</A> or <A HREF="gui_x11.html#Athena">Athena</A> version of the <A HREF="#GUI">GUI</A> (but not for the <A HREF="gui_x11.html#GTK+">GTK+</A> or
+<A HREF="os_win32.html#Win32">Win32</A> version), a number of X resources are available.  See |<A HREF="gui_x11.html#gui-resources">gui-resources</A>|.
+
+Another way to set the colors for different occasions is with highlight
+groups.  The &quot;<A HREF="intro.html#Normal">Normal</A>&quot; group is used to set the background and foreground
+colors.  Example (which looks nice):
+
+<B>	:highlight Normal guibg=grey90</B>
+
+The &quot;guibg&quot; and &quot;guifg&quot; settings override the normal background and
+foreground settings.  The other settings for the <A HREF="intro.html#Normal">Normal</A> highlight group are
+not used.  Use the <A HREF="options.html#'guifont'">'guifont'</A> option to set the font.
+
+Also check out the <A HREF="options.html#'guicursor'">'guicursor'</A> option, to set the colors for the cursor in
+various modes.
+
+Vim tries to make the <A HREF="windows.html#window">window</A> fit on the screen when <A HREF="motion.html#it">it</A> starts up.  This avoids
+that you can't see part of <A HREF="motion.html#it">it</A>.  On the X Window System this requires a bit of
+guesswork.  You can change the height that is used for the <A HREF="windows.html#window">window</A> title and a
+task <A HREF="motion.html#bar">bar</A> with the <A HREF="options.html#'guiheadroom'">'guiheadroom'</A> option.
+
+
+						*<A NAME=":winp"></A><B>:winp</B>* *<A NAME=":winpos"></A><B>:winpos</B>* *<A NAME="E188"></A><B>E188</B>*
+:winp[os]
+		Display current position of the top left corner of the <A HREF="#GUI">GUI</A> vim
+		<A HREF="windows.html#window">window</A> in pixels.  Does not work in all versions.
+
+
+:winp[os] {X} {Y}							*<A NAME="E466"></A><B>E466</B>*
+		Put the <A HREF="#GUI">GUI</A> vim <A HREF="windows.html#window">window</A> at the given {X} and {Y} coordinates.
+		The coordinates should specify the position in pixels of the
+		top left corner of the <A HREF="windows.html#window">window</A>.  Does not work in all versions.
+		Does work in an (new) xterm |<A HREF="syntax.html#xterm-color">xterm-color</A>|.
+		When the <A HREF="#GUI">GUI</A> <A HREF="windows.html#window">window</A> has not been opened yet, the values are
+		remembered until the <A HREF="windows.html#window">window</A> is opened.  The position is
+		adjusted to make the <A HREF="windows.html#window">window</A> fit on the screen (if possible).
+
+
+						    *<A NAME=":win"></A><B>:win</B>* *<A NAME=":winsize"></A><B>:winsize</B>* *<A NAME="E465"></A><B>E465</B>*
+:win[size] {width} {height}
+		Set the <A HREF="windows.html#window">window</A> height to {width} by {height} characters.
+		Obsolete, use &quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'lines'">lines</A>=11 columns=22&quot;.
+		If you get <A HREF="various.html#less">less</A> lines than expected, check the <A HREF="options.html#'guiheadroom'">'guiheadroom'</A>
+		option.
+
+If you are running the X Window System, you can get information about the
+<A HREF="windows.html#window">window</A> Vim is running in with this command:
+<B>	:!xwininfo -id $WINDOWID</B>
+ 
+
+							*<A NAME="gui-IME"></A><B>gui-IME</B>* *<A NAME="iBus"></A><B>iBus</B>*
+Input methods for international characters in X that rely on the <A HREF="mbyte.html#XIM">XIM</A>
+framework, most notably <A HREF="#iBus">iBus</A>, have been known to produce undesirable results
+in gVim. These may include an inability to enter spaces, or long delays
+between typing a character and <A HREF="motion.html#it">it</A> being recognized by the application.
+
+One workaround that has been successful, for unknown reasons, is to prevent
+<A HREF="starting.html#gvim">gvim</A> from forking into the background by starting <A HREF="motion.html#it">it</A> with the |<A HREF="starting.html#-f">-f</A>| argument.
+
+==============================================================================
+
+2. Scrollbars						*<A NAME="gui-scrollbars"></A><B>gui-scrollbars</B>*
+
+There are vertical scrollbars and a horizontal scrollbar.  You may
+configure which ones appear with the <A HREF="options.html#'guioptions'">'guioptions'</A> option.
+
+The interface looks like this (with &quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'guioptions'">guioptions</A>=mlrb&quot;):
+
+		       +------------------------------+ `
+		       &#124; File  Edit		 Help &#124; &lt;- Menu <A HREF="motion.html#bar">bar</A> (m) `
+		       +-+--------------------------+-+ `
+		       |^|			    |^| `
+		       |#| Text area.		    |#| `
+		       &#124; &#124;			    &#124; | `
+		       |v|__________________________|v| `
+ <A HREF="intro.html#Normal">Normal</A> status line -&gt; |-+ File.c	       5,2  +-| `
+ between Vim <A HREF="windows.html#windows">windows</A>   |^|&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;|^| `
+		       &#124; &#124;			    &#124; | `
+		       &#124; | Another file buffer.     &#124; | `
+		       &#124; &#124;			    &#124; | `
+		       |#|			    |#| `
+ Left scrollbar (l) -&gt; |#|			    |#| &lt;- Right `
+		       |#|			    |#|    scrollbar (r) `
+		       &#124; &#124;			    &#124; | `
+		       |v|			    |v| `
+		       +-+--------------------------+-+ `
+		       &#124; |&lt; ####		   &gt;| &#124; &lt;- Bottom `
+		       +-+--------------------------+-+    scrollbar (b) `
+
+Any of the scrollbar or menu components may be turned off by not putting the
+appropriate <A HREF="print.html#letter">letter</A> in the <A HREF="options.html#'guioptions'">'guioptions'</A> string.  The bottom scrollbar is
+only useful when <A HREF="options.html#'nowrap'">'nowrap'</A> is set.
+
+
+
+VERTICAL SCROLLBARS					*<A NAME="gui-vert-scroll"></A><B>gui-vert-scroll</B>*
+
+Each Vim <A HREF="windows.html#window">window</A> has a scrollbar next to <A HREF="motion.html#it">it</A> which may be scrolled up and down
+to move through the text in that buffer.  The size of the scrollbar-thumb
+indicates the fraction of the buffer which can be seen in the <A HREF="windows.html#window">window</A>.
+When the scrollbar is dragged all the way down, the last line of the file
+will appear in the top of the <A HREF="windows.html#window">window</A>.
+
+If a <A HREF="windows.html#window">window</A> is shrunk to zero height (by the growth of another <A HREF="windows.html#window">window</A>) its
+scrollbar disappears.  It reappears when the <A HREF="windows.html#window">window</A> is restored.
+
+If a <A HREF="windows.html#window">window</A> is vertically split, <A HREF="motion.html#it">it</A> will get a scrollbar when <A HREF="motion.html#it">it</A> is the
+current <A HREF="windows.html#window">window</A> and when, taking the middle of the current <A HREF="windows.html#window">window</A> and drawing a
+vertical line, this line goes through the <A HREF="windows.html#window">window</A>.
+When there are scrollbars on both sides, and the middle of the current <A HREF="windows.html#window">window</A>
+is on the left half, the right scrollbar column will contain scrollbars for
+the rightmost <A HREF="windows.html#windows">windows</A>.  The same happens on the other side.
+
+
+
+HORIZONTAL SCROLLBARS					*<A NAME="gui-horiz-scroll"></A><B>gui-horiz-scroll</B>*
+
+The horizontal scrollbar (at the bottom of the Vim <A HREF="#GUI">GUI</A>) may be used to
+scroll text sideways when the <A HREF="options.html#'wrap'">'wrap'</A> option is turned off.  The
+scrollbar-thumb size is such that the text of the longest visible line may be
+scrolled <A HREF="motion.html#as">as</A> far <A HREF="motion.html#as">as</A> possible left and right.  The cursor is moved when
+necessary, <A HREF="motion.html#it">it</A> must remain on a visible character (unless <A HREF="options.html#'virtualedit'">'virtualedit'</A> is
+set).
+
+Computing the length of the longest visible line takes quite a bit of
+computation, and <A HREF="motion.html#it">it</A> has to be done every time something changes.  If this
+takes too much time or you don't like the cursor jumping to another line,
+include the '<A HREF="motion.html#h">h</A>' flag in <A HREF="options.html#'guioptions'">'guioptions'</A>.  Then the <A HREF="scroll.html#scrolling">scrolling</A> is limited by the
+text of the current cursor line.
+
+
+							*<A NAME="athena-intellimouse"></A><B>athena-intellimouse</B>*
+If you have an Intellimouse and an X server that supports using the wheel,
+then you can use the wheel to scroll the text up and down in <A HREF="starting.html#gvim">gvim</A>.  This works
+with XFree86 4.0 and later, and with some older versions when you add patches.
+See |<A HREF="scroll.html#scroll-mouse-wheel">scroll-mouse-wheel</A>|.
+
+For older versions of XFree86 you must patch your X server.  The following
+page has a bit of information about using the Intellimouse on Linux <A HREF="motion.html#as">as</A> well <A HREF="motion.html#as">as</A>
+links to the patches and X server binaries (may not have the one you need
+though):
+	<A HREF="http://www.inria.fr/koala/colas/mouse-wheel-scroll/">http://www.inria.fr/koala/colas/mouse-wheel-scroll/</A>
+
+==============================================================================
+
+3. Mouse Control					*<A NAME="gui-mouse"></A><B>gui-mouse</B>*
+
+The mouse only works if the appropriate flag in the <A HREF="options.html#'mouse'">'mouse'</A> option is set.
+When the <A HREF="#GUI">GUI</A> is switched on, and <A HREF="options.html#'mouse'">'mouse'</A> wasn't set yet, the <A HREF="options.html#'mouse'">'mouse'</A> option is
+automatically set to &quot;<A HREF="insert.html#a">a</A>&quot;, enabling <A HREF="motion.html#it">it</A> for all modes except for the
+|<A HREF="message.html#hit-enter">hit-enter</A>| prompt.  If you don't want this, a good place to change the
+<A HREF="options.html#'mouse'">'mouse'</A> option is the &quot;<A HREF="#gvimrc">gvimrc</A>&quot; file.
+
+Other <A HREF="options.html#options">options</A> that are relevant:
+<A HREF="options.html#'mousefocus'">'mousefocus'</A>	<A HREF="windows.html#window">window</A> focus follows mouse pointer |<A HREF="#gui-mouse-focus">gui-mouse-focus</A>|
+<A HREF="options.html#'mousemodel'">'mousemodel'</A>	what mouse button does which action
+<A HREF="options.html#'mousehide'">'mousehide'</A>	hide mouse pointer while typing text
+<A HREF="options.html#'selectmode'">'selectmode'</A>	whether to start <A HREF="visual.html#Select">Select</A> mode or <A HREF="visual.html#Visual">Visual</A> mode
+
+A quick way to set these is with the &quot;<A HREF="#:behave">:behave</A>&quot; command.
+
+							*<A NAME=":behave"></A><B>:behave</B>* *<A NAME=":be"></A><B>:be</B>*
+:be[have] {model}	Set behavior for mouse and selection.  Valid
+			arguments are:
+			   mswin	<A HREF="os_win32.html#MS-Windows">MS-Windows</A> behavior
+			   xterm	Xterm behavior
+
+			Using &quot;<A HREF="#:behave">:behave</A>&quot; changes these <A HREF="options.html#options">options</A>:
+<B><FONT COLOR="PURPLE">			option		mswin			xterm	</FONT></B>
+			<A HREF="options.html#'selectmode'">'selectmode'</A>	&quot;mouse,key&quot;		&quot;&quot;
+			<A HREF="options.html#'mousemodel'">'mousemodel'</A>	&quot;popup&quot;			&quot;extend&quot;
+			<A HREF="options.html#'keymodel'">'keymodel'</A>	&quot;startsel,stopsel&quot;	&quot;&quot;
+			<A HREF="options.html#'selection'">'selection'</A>	&quot;<A HREF="motion.html#exclusive">exclusive</A>&quot;		&quot;<A HREF="motion.html#inclusive">inclusive</A>&quot;
+
+In the <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> directory, there is a <A HREF="usr_41.html#script">script</A> called |<A HREF="mswin.html">mswin.vim</A>|, which will
+also map a few keys to the <A HREF="os_win32.html#MS-Windows">MS-Windows</A> cut/copy/paste commands.  This is NOT
+compatible, since <A HREF="motion.html#it">it</A> uses the <A HREF="visual.html#CTRL-V">CTRL-V</A>, <A HREF="change.html#CTRL-X">CTRL-X</A> and <A HREF="pattern.html#CTRL-C">CTRL-C</A> keys.  If you don't
+mind, use this command:
+<B>	:so $VIMRUNTIME/mswin.vim</B>
+
+For <A HREF="scroll.html#scrolling">scrolling</A> with a wheel on a mouse, see |<A HREF="scroll.html#scroll-mouse-wheel">scroll-mouse-wheel</A>|.
+
+
+
+3.1 Moving Cursor with Mouse				*<A NAME="gui-mouse-move"></A><B>gui-mouse-move</B>*
+
+Click the left mouse button somewhere in a text buffer where you want the
+cursor to go, and <A HREF="motion.html#it">it</A> does!
+<B><FONT COLOR="PURPLE">This works in	    when 'mouse' contains </FONT></B>
+<A HREF="intro.html#Normal">Normal</A> mode	    '<A HREF="pattern.html#n">n</A>' or '<A HREF="insert.html#a">a</A>'
+<A HREF="visual.html#Visual">Visual</A> mode	    '<A HREF="visual.html#v">v</A>' or '<A HREF="insert.html#a">a</A>'
+<A HREF="insert.html#Insert">Insert</A> mode	    '<A HREF="insert.html#i">i</A>' or '<A HREF="insert.html#a">a</A>'
+
+<A HREF="visual.html#Select">Select</A> mode is handled like <A HREF="visual.html#Visual">Visual</A> mode.
+
+You may use this with an <A HREF="motion.html#operator">operator</A> such <A HREF="motion.html#as">as</A> '<A HREF="change.html#d">d</A>' to delete text from the current
+cursor position to the position you point to with the mouse.  That is, you hit
+'<A HREF="change.html#d">d</A>' and then click the mouse somewhere.
+
+
+							*<A NAME="gui-mouse-focus"></A><B>gui-mouse-focus</B>*
+The <A HREF="options.html#'mousefocus'">'mousefocus'</A> option can be set to make the keyboard focus follow the
+mouse pointer.  This means that the <A HREF="windows.html#window">window</A> where the mouse pointer is, is the
+active <A HREF="windows.html#window">window</A>.  Warning: this doesn't work very well when using a menu,
+because the menu command will always be applied to the top <A HREF="windows.html#window">window</A>.
+
+If you are on the '<A HREF="cmdline.html#:">:</A>' line (or '<A HREF="pattern.html#/">/</A>' or '?'), then clicking the left or right
+mouse button will position the cursor on the '<A HREF="cmdline.html#:">:</A>' line (if <A HREF="options.html#'mouse'">'mouse'</A> contains
+'<A HREF="change.html#c">c</A>', '<A HREF="insert.html#a">a</A>' or 'A').
+
+In any situation the middle mouse button may be clicked to paste the current
+selection.
+
+
+
+3.2 Selection with Mouse				*<A NAME="gui-mouse-select"></A><B>gui-mouse-select</B>*
+
+The mouse can be used to start a selection.  How depends on the <A HREF="options.html#'mousemodel'">'mousemodel'</A>
+option:
+<A HREF="options.html#'mousemodel'">'mousemodel'</A> is &quot;extend&quot;: use the right mouse button
+<A HREF="options.html#'mousemodel'">'mousemodel'</A> is &quot;popup&quot;:  use the left mouse button, while keeping the Shift
+key pressed.
+
+If there was no selection yet, this starts a selection from the old cursor
+position to the position pointed to with the mouse.  If there already is a
+selection then the closest end will be extended.
+
+If <A HREF="options.html#'selectmode'">'selectmode'</A> contains &quot;mouse&quot;, then the selection will be in <A HREF="visual.html#Select">Select</A> mode.
+This means that typing normal text will replace the selection.  See
+|<A HREF="visual.html#Select-mode">Select-mode</A>|.  Otherwise, the selection will be in <A HREF="visual.html#Visual">Visual</A> mode.
+
+Double clicking may be done to make the selection word-wise, triple clicking
+makes <A HREF="motion.html#it">it</A> line-wise, and quadruple clicking makes <A HREF="motion.html#it">it</A> rectangular block-wise.
+
+See |<A HREF="#gui-selections">gui-selections</A>| on how the selection is used.
+
+
+
+3.3 Other Text Selection with Mouse		*<A NAME="gui-mouse-modeless"></A><B>gui-mouse-modeless</B>*
+
+						*<A NAME="modeless-selection"></A><B>modeless-selection</B>*
+A different kind of selection is used when:
+- in <A HREF="cmdline.html#Command-line">Command-line</A> mode
+- in the <A HREF="cmdline.html#Command-line">Command-line</A> <A HREF="windows.html#window">window</A> and pointing in another <A HREF="windows.html#window">window</A>
+- at the |<A HREF="message.html#hit-enter">hit-enter</A>| prompt
+- whenever the current mode is not in the <A HREF="options.html#'mouse'">'mouse'</A> option
+- when holding the CTRL and SHIFT keys in the <A HREF="#GUI">GUI</A>
+
+Since Vim continues like the selection isn't there, and there is no mode
+associated with the selection, this is called modeless selection.  Any text in
+the Vim <A HREF="windows.html#window">window</A> can be selected.  <A HREF="visual.html#Select">Select</A> the text by pressing the left mouse
+button at the start, drag to the end and release.  To extend the selection,
+use the right mouse button when <A HREF="options.html#'mousemodel'">'mousemodel'</A> is &quot;extend&quot;, or the left mouse
+button with the <A HREF="intro.html#shift">shift</A> key pressed when <A HREF="options.html#'mousemodel'">'mousemodel'</A> is &quot;popup&quot;.
+The selection is removed when the selected text is scrolled or changed.
+
+On the command line <A HREF="scroll.html#CTRL-Y">CTRL-Y</A> can be used to copy the selection into the
+<A HREF="#clipboard">clipboard</A>.  To <A HREF="diff.html#do">do</A> this from <A HREF="insert.html#Insert">Insert</A> mode, use <A HREF="motion.html#CTRL-O">CTRL-O</A> : <A HREF="scroll.html#CTRL-Y">CTRL-Y</A> <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>.  When
+<A HREF="options.html#'guioptions'">'guioptions'</A> contains a or A (default on X11), the selection is automatically
+copied to the &quot;* <A HREF="sponsor.html#register">register</A>.
+
+The middle mouse button can then paste the text.  On non-X11 systems, you can
+use <A HREF="undo.html#CTRL-R">CTRL-R</A> +.
+
+
+
+3.4 Using Mouse on Status Lines				*<A NAME="gui-mouse-status"></A><B>gui-mouse-status</B>*
+
+Clicking the left or right mouse button on the status line below a Vim
+<A HREF="windows.html#window">window</A> makes that <A HREF="windows.html#window">window</A> the current <A HREF="windows.html#window">window</A>.  This actually happens on button
+release (to be able to distinguish a click from a drag action).
+
+With the left mouse button a status line can be dragged up and down, thus
+resizing the <A HREF="windows.html#windows">windows</A> above and below <A HREF="motion.html#it">it</A>.  This does not change <A HREF="windows.html#window">window</A> focus.
+
+The same can be used on the vertical separator: click to give the <A HREF="windows.html#window">window</A> left
+of <A HREF="motion.html#it">it</A> focus, drag left and right to make <A HREF="windows.html#windows">windows</A> wider and narrower.
+
+
+
+3.5 Various Mouse Clicks				*<A NAME="gui-mouse-various"></A><B>gui-mouse-various</B>*
+
+    <A HREF="term.html#&lt;S-LeftMouse&gt;">&lt;S-LeftMouse&gt;</A>	Search forward for the <A HREF="motion.html#word">word</A> under the mouse click.
+			When <A HREF="options.html#'mousemodel'">'mousemodel'</A> is &quot;popup&quot; this starts or extends a
+			selection.
+    <A HREF="term.html#&lt;S-RightMouse&gt;">&lt;S-RightMouse&gt;</A>	Search backward for the <A HREF="motion.html#word">word</A> under the mouse click.
+    <A HREF="tagsrch.html#&lt;C-LeftMouse&gt;">&lt;C-LeftMouse&gt;</A>	Jump to the <A HREF="tagsrch.html#tag">tag</A> name under the mouse click.
+    <A HREF="tagsrch.html#&lt;C-RightMouse&gt;">&lt;C-RightMouse&gt;</A>	Jump back to position before the previous <A HREF="tagsrch.html#tag">tag</A> jump
+			(same <A HREF="motion.html#as">as</A> &quot;<A HREF="tagsrch.html#CTRL-T">CTRL-T</A>&quot;)
+
+
+
+3.6 Mouse Mappings					*<A NAME="gui-mouse-mapping"></A><B>gui-mouse-mapping</B>*
+
+The mouse events, complete with modifiers, may be mapped.  Eg:
+<B>   :map &lt;S-LeftMouse&gt;     &lt;RightMouse&gt;</B>
+<B>   :map &lt;S-LeftDrag&gt;      &lt;RightDrag&gt;</B>
+<B>   :map &lt;S-LeftRelease&gt;   &lt;RightRelease&gt;</B>
+<B>   :map &lt;2-S-LeftMouse&gt;   &lt;2-RightMouse&gt;</B>
+<B>   :map &lt;2-S-LeftDrag&gt;    &lt;2-RightDrag&gt;</B>
+<B>   :map &lt;2-S-LeftRelease&gt; &lt;2-RightRelease&gt;</B>
+<B>   :map &lt;3-S-LeftMouse&gt;   &lt;3-RightMouse&gt;</B>
+<B>   :map &lt;3-S-LeftDrag&gt;    &lt;3-RightDrag&gt;</B>
+<B>   :map &lt;3-S-LeftRelease&gt; &lt;3-RightRelease&gt;</B>
+<B>   :map &lt;4-S-LeftMouse&gt;   &lt;4-RightMouse&gt;</B>
+<B>   :map &lt;4-S-LeftDrag&gt;    &lt;4-RightDrag&gt;</B>
+<B>   :map &lt;4-S-LeftRelease&gt; &lt;4-RightRelease&gt;</B>
+These mappings make selection work the way <A HREF="motion.html#it">it</A> probably should in a <A HREF="gui_x11.html#Motif">Motif</A>
+application, with shift-left mouse allowing for extending the visual area
+rather than the right mouse button.
+
+Mouse <A HREF="map.html#mapping">mapping</A> with modifiers does not work for modeless selection.
+
+
+
+3.7 Drag and drop						*<A NAME="drag-n-drop"></A><B>drag-n-drop</B>*
+
+You can drag and drop one or more files into the Vim <A HREF="windows.html#window">window</A>, where they will
+be opened <A HREF="motion.html#as">as</A> if a |<A HREF="windows.html#:drop">:drop</A>| command was used.
+
+If you hold down Shift while doing this, Vim changes to the first dropped
+file's directory.  If you hold Ctrl Vim will always split a new <A HREF="windows.html#window">window</A> for the
+file.  Otherwise it's only done if the current buffer has been changed.
+
+You can also drop a directory on Vim.  This starts the explorer <A HREF="usr_05.html#plugin">plugin</A> for
+that directory (assuming <A HREF="motion.html#it">it</A> was enabled, otherwise you'll get an error
+message).  Keep Shift pressed to change to the directory instead.
+
+If Vim happens to be editing a command line, the names of the dropped files
+and directories will be inserted at the cursor.  This allows you to use these
+names with any <A HREF="intro.html#Ex">Ex</A> command.  Special characters (space, <A HREF="intro.html#tab">tab</A>, double <A HREF="change.html#quote">quote</A> and
+'&#124;'; <A HREF="intro.html#backslash">backslash</A> on non-MS-Windows systems) will be escaped.
+
+==============================================================================
+
+4. Making <A HREF="#GUI">GUI</A> Selections				*<A NAME="gui-selections"></A><B>gui-selections</B>*
+
+
+							*<A NAME="quotestar"></A><B>quotestar</B>*
+You may make selections with the mouse (see |<A HREF="#gui-mouse-select">gui-mouse-select</A>|), or by using
+Vim's <A HREF="visual.html#Visual">Visual</A> mode (see |<A HREF="visual.html#v">v</A>|).  If '<A HREF="insert.html#a">a</A>' is present in <A HREF="options.html#'guioptions'">'guioptions'</A>, then
+whenever a selection is started (Visual or <A HREF="visual.html#Select">Select</A> mode), or when the selection
+is changed, Vim becomes the owner of the windowing system's primary selection
+(on <A HREF="os_win32.html#MS-Windows">MS-Windows</A> the |<A HREF="gui_w32.html#gui-clipboard">gui-clipboard</A>| is used; under <A HREF="options.html#X11">X11</A>, the |<A HREF="gui_x11.html#x11-selection">x11-selection</A>| is
+used - you should read whichever of these is appropriate now).
+
+
+							*<A NAME="clipboard"></A><B>clipboard</B>*
+There is a special <A HREF="sponsor.html#register">register</A> for storing this selection, <A HREF="motion.html#it">it</A> is the &quot;*
+<A HREF="sponsor.html#register">register</A>.  Nothing is put in here unless the information about what text is
+selected is about to change (e.g. with a left mouse click somewhere), or when
+another application wants to paste the selected text.  Then the text is put
+in the &quot;* <A HREF="sponsor.html#register">register</A>.  For example, to cut a line and make <A HREF="motion.html#it">it</A> the current
+selection/put <A HREF="motion.html#it">it</A> on the <A HREF="#clipboard">clipboard</A>:
+
+<B>	"*dd</B>
+
+Similarly, when you want to paste a selection from another application, e.g.,
+by clicking the middle mouse button, the selection is put in the &quot;* <A HREF="sponsor.html#register">register</A>
+first, and then 'put' like any other <A HREF="sponsor.html#register">register</A>.  For example, to put the
+selection (contents of the clipboard):
+
+<B>	"*p</B>
+
+When using this <A HREF="sponsor.html#register">register</A> under <A HREF="options.html#X11">X11</A>, also see |<A HREF="gui_x11.html#x11-selection">x11-selection</A>|.  This also
+explains the related &quot;<A HREF="motion.html#+">+</A> <A HREF="sponsor.html#register">register</A>.
+
+Note that when pasting text from one Vim into another separate Vim, the type
+of selection (character, line, or block) will also be copied.  For other
+applications the type is always character.  However, if the text gets
+transferred via the |<A HREF="gui_x11.html#x11-cut-buffer">x11-cut-buffer</A>|, the selection type is ALWAYS lost.
+
+When the &quot;unnamed&quot; string is included in the <A HREF="options.html#'clipboard'">'clipboard'</A> option, the unnamed
+<A HREF="sponsor.html#register">register</A> is the same <A HREF="motion.html#as">as</A> the &quot;* <A HREF="sponsor.html#register">register</A>.  Thus you can <A HREF="change.html#yank">yank</A> to and paste the
+selection without prepending &quot;* to commands.
+
+==============================================================================
+
+5. Menus						*<A NAME="menus"></A><B>menus</B>*
+
+For an introduction see |<A HREF="usr_42.html">usr_42.txt</A>| in the user manual.
+
+
+
+5.1 Using Menus						*<A NAME="using-menus"></A><B>using-menus</B>*
+
+Basically, <A HREF="#menus">menus</A> can be used just like mappings.  You can define your own
+<A HREF="#menus">menus</A>, <A HREF="motion.html#as">as</A> many <A HREF="motion.html#as">as</A> you like.
+Long-time Vim users won't use <A HREF="#menus">menus</A> much.  But the power is in adding your own
+<A HREF="#menus">menus</A> and menu items.  They are most useful for things that you can't remember
+what the key sequence was.
+
+For creating <A HREF="#menus">menus</A> in a different language, see |<A HREF="mlang.html#:menutrans">:menutrans</A>|.
+
+
+							*<A NAME="menu.vim"></A><B>menu.vim</B>*
+The default <A HREF="#menus">menus</A> are read from the file &quot;$VIMRUNTIME/menu.vim&quot;.  See
+|<A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A>| for where the path comes from.  You can set up your own <A HREF="#menus">menus</A>.
+Starting off with the default set is a good idea.  You can add more items, or,
+if you don't like the defaults at all, start with removing all <A HREF="#menus">menus</A>
+|<A HREF="#:unmenu-all">:unmenu-all</A>|.  You can also avoid the default <A HREF="#menus">menus</A> being loaded by adding
+this line to your <A HREF="starting.html#.vimrc">.vimrc</A> file (NOT your <A HREF="#.gvimrc">.gvimrc</A> file!):
+<B>	:let did_install_default_menus = 1</B>
+If you also want to avoid the <A HREF="autocmd.html#Syntax">Syntax</A> menu:
+<B>	:let did_install_syntax_menu = 1</B>
+The first item in the <A HREF="autocmd.html#Syntax">Syntax</A> menu can be used to show all available <A HREF="filetype.html#filetypes">filetypes</A>
+in the menu (which can take a bit of time to load).  If you want to have all
+<A HREF="filetype.html#filetypes">filetypes</A> already present at <A HREF="starting.html#startup">startup</A>, add:
+<B>	:let do_syntax_sel_menu = 1</B>
+
+ 
+
+							*<A NAME="console-menus"></A><B>console-menus</B>*
+Although this documentation is in the <A HREF="#GUI">GUI</A> section, you can actually use <A HREF="#menus">menus</A>
+in console mode too.  You will have to load |<A HREF="menu.html">menu.vim</A>| explicitly then, <A HREF="motion.html#it">it</A> is
+not done by default.  You can use the |<A HREF="#:emenu">:emenu</A>| command and command-line
+completion with <A HREF="options.html#'wildmenu'">'wildmenu'</A> to access the menu entries almost like a real menu
+system.  To <A HREF="diff.html#do">do</A> this, put these commands in your <A HREF="starting.html#.vimrc">.vimrc</A> file:
+<B>	:source $VIMRUNTIME/menu.vim</B>
+<B>	:set wildmenu</B>
+<B>	:set cpo-=&lt;</B>
+<B>	:set wcm=&lt;C-Z&gt;</B>
+<B>	:map &lt;F4&gt; :emenu &lt;C-Z&gt;</B>
+Pressing <A HREF="term.html#&lt;F4&gt;">&lt;F4&gt;</A> will start the menu.  You can now use the cursor keys to select
+a menu entry.  Hit <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> to execute <A HREF="motion.html#it">it</A>.  Hit <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A> if you want to cancel.
+This does require the |<A HREF="various.html#+menu">+menu</A>| feature enabled at compile time.
+
+
+							*<A NAME="tear-off-menus"></A><B>tear-off-menus</B>*
+<A HREF="gui_x11.html#GTK+">GTK+</A> and <A HREF="gui_x11.html#Motif">Motif</A> support Tear-off <A HREF="#menus">menus</A>.  These are sort of sticky <A HREF="#menus">menus</A> or
+pop-up <A HREF="#menus">menus</A> that are present all the time.  If the resizing does not work
+correctly, this may be caused by using something like &quot;Vim*geometry&quot; in the
+defaults.  Use &quot;Vim.geometry&quot; instead.
+
+The <A HREF="os_win32.html#Win32">Win32</A> <A HREF="#GUI">GUI</A> version emulates Motif's tear-off <A HREF="#menus">menus</A>.  Actually, a <A HREF="gui_x11.html#Motif">Motif</A> user
+will spot the differences easily, but hopefully they're just <A HREF="motion.html#as">as</A> useful.  You
+can also use the |<A HREF="gui_w32.html#:tearoff">:tearoff</A>| command together with |<A HREF="#hidden-menus">hidden-menus</A>| to create
+floating <A HREF="#menus">menus</A> that <A HREF="diff.html#do">do</A> not appear on the main menu <A HREF="motion.html#bar">bar</A>.
+
+
+
+5.2 Creating New Menus					*<A NAME="creating-menus"></A><B>creating-menus</B>*
+
+
+				*<A NAME=":me"></A><B>:me</B>*  *<A NAME=":menu"></A><B>:menu</B>*  *<A NAME=":noreme"></A><B>:noreme</B>*  *<A NAME=":noremenu"></A><B>:noremenu</B>*
+
+				*<A NAME=":am"></A><B>:am</B>*  *<A NAME=":amenu"></A><B>:amenu</B>* *<A NAME=":an"></A><B>:an</B>*      *<A NAME=":anoremenu"></A><B>:anoremenu</B>*
+
+				*<A NAME=":nme"></A><B>:nme</B>* *<A NAME=":nmenu"></A><B>:nmenu</B>* *<A NAME=":nnoreme"></A><B>:nnoreme</B>* *<A NAME=":nnoremenu"></A><B>:nnoremenu</B>*
+
+				*<A NAME=":ome"></A><B>:ome</B>* *<A NAME=":omenu"></A><B>:omenu</B>* *<A NAME=":onoreme"></A><B>:onoreme</B>* *<A NAME=":onoremenu"></A><B>:onoremenu</B>*
+
+				*<A NAME=":vme"></A><B>:vme</B>* *<A NAME=":vmenu"></A><B>:vmenu</B>* *<A NAME=":vnoreme"></A><B>:vnoreme</B>* *<A NAME=":vnoremenu"></A><B>:vnoremenu</B>*
+
+				*<A NAME=":xme"></A><B>:xme</B>* *<A NAME=":xmenu"></A><B>:xmenu</B>* *<A NAME=":xnoreme"></A><B>:xnoreme</B>* *<A NAME=":xnoremenu"></A><B>:xnoremenu</B>*
+
+				*<A NAME=":sme"></A><B>:sme</B>* *<A NAME=":smenu"></A><B>:smenu</B>* *<A NAME=":snoreme"></A><B>:snoreme</B>* *<A NAME=":snoremenu"></A><B>:snoremenu</B>*
+
+				*<A NAME=":ime"></A><B>:ime</B>* *<A NAME=":imenu"></A><B>:imenu</B>* *<A NAME=":inoreme"></A><B>:inoreme</B>* *<A NAME=":inoremenu"></A><B>:inoremenu</B>*
+
+				*<A NAME=":cme"></A><B>:cme</B>* *<A NAME=":cmenu"></A><B>:cmenu</B>* *<A NAME=":cnoreme"></A><B>:cnoreme</B>* *<A NAME=":cnoremenu"></A><B>:cnoremenu</B>*
+
+				*<A NAME="E330"></A><B>E330</B>* *<A NAME="E327"></A><B>E327</B>* *<A NAME="E331"></A><B>E331</B>* *<A NAME="E336"></A><B>E336</B>* *<A NAME="E333"></A><B>E333</B>*
+
+				*<A NAME="E328"></A><B>E328</B>* *<A NAME="E329"></A><B>E329</B>* *<A NAME="E337"></A><B>E337</B>* *<A NAME="E792"></A><B>E792</B>*
+To create a new menu item, use the &quot;<A HREF="#:menu">:menu</A>&quot; commands.  They are mostly like
+the &quot;<A HREF="map.html#:map">:map</A>&quot; set of commands but the first argument is a menu item name, given
+<A HREF="motion.html#as">as</A> a path of <A HREF="#menus">menus</A> and submenus with a '<A HREF="repeat.html#.">.</A>' between them, e.g.:
+
+<B>   :menu File.Save  :w&lt;CR&gt;</B>
+<B>   :inoremenu File.Save  &lt;C-O&gt;:w&lt;CR&gt;</B>
+<B>   :menu Edit.Big\ Changes.Delete\ All\ Spaces  :%s/[ ^I]//g&lt;CR&gt;</B>
+
+This last one will create a new item in the menu <A HREF="motion.html#bar">bar</A> called &quot;Edit&quot;, holding
+the mouse button down on this will pop up a menu containing the item
+&quot;Big Changes&quot;, which is a sub-menu containing the item &quot;Delete All Spaces&quot;,
+which when selected, performs the operation.
+
+Special characters in a menu name:
+
+	<A HREF="change.html#&amp;">&amp;</A>	The next character is the shortcut key.  Make sure each
+		shortcut key is only used once in a (sub)menu.  If you want to
+		insert a literal &quot;<A HREF="change.html#&amp;">&amp;</A>&quot; in the menu name use &quot;&amp;&amp;&quot;.
+	<A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>	Separates the menu name from right-aligned text.  This can be
+		used to show the equivalent typed command.  The text &quot;<A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>&quot;
+		can be used here for convenience.  If you are using a real
+		<A HREF="intro.html#tab">tab</A>, don't forget to put a <A HREF="intro.html#backslash">backslash</A> before <A HREF="motion.html#it">it</A>!
+Example:
+
+<B>   :amenu &amp;File.&amp;Open&lt;Tab&gt;:e  :browse e&lt;CR&gt;</B>
+
+[typed literally]
+With the shortcut &quot;<A HREF="motion.html#F">F</A>&quot; (while keeping the &lt;Alt&gt; key pressed), and then &quot;<A HREF="insert.html#O">O</A>&quot;,
+this menu can be used.  The second part is shown <A HREF="motion.html#as">as</A> &quot;Open     :e&quot;.  The &quot;<A HREF="editing.html#:e">:e</A>&quot;
+is right aligned, and the &quot;<A HREF="insert.html#O">O</A>&quot; is underlined, to indicate <A HREF="motion.html#it">it</A> is the shortcut.
+
+The &quot;<A HREF="#:amenu">:amenu</A>&quot; command can be used to define menu entries for all modes at once.
+To make the command work correctly, a character is automatically inserted for
+some modes:
+<B><FONT COLOR="PURPLE">	mode		inserted	appended	</FONT></B>
+	<A HREF="intro.html#Normal">Normal</A>		nothing		nothing
+	<A HREF="visual.html#Visual">Visual</A>		&lt;C-C&gt;		&lt;C-\&gt;&lt;C-G&gt;
+	<A HREF="insert.html#Insert">Insert</A>		&lt;C-\&gt;&lt;C-O&gt;
+	<A HREF="cmdline.html#Cmdline">Cmdline</A>		&lt;C-C&gt;		&lt;C-\&gt;&lt;C-G&gt;
+	Op-pending	&lt;C-C&gt;		&lt;C-\&gt;&lt;C-G&gt;
+
+Appending CTRL-\ <A HREF="editing.html#CTRL-G">CTRL-G</A> is for going back to insert mode when <A HREF="options.html#'insertmode'">'insertmode'</A> is
+set. |<A HREF="intro.html#CTRL-\_CTRL-G">CTRL-\_CTRL-G</A>|
+
+Example:
+
+<B>   :amenu File.Next	:next^M</B>
+
+is equal to:
+
+<B>   :nmenu File.Next	:next^M</B>
+<B>   :vmenu File.Next	^C:next^M^\^G</B>
+<B>   :imenu File.Next	^\^O:next^M</B>
+<B>   :cmenu File.Next	^C:next^M^\^G</B>
+<B>   :omenu File.Next	^C:next^M^\^G</B>
+
+Careful: In <A HREF="insert.html#Insert">Insert</A> mode this only works for a SINGLE <A HREF="intro.html#Normal">Normal</A> mode command,
+because of the <A HREF="motion.html#CTRL-O">CTRL-O</A>.  If you have two or more commands, you will need to use
+the &quot;<A HREF="#:imenu">:imenu</A>&quot; command.  For <A HREF="insert.html#inserting">inserting</A> text in any mode, you can use the
+<A HREF="eval.html#expression">expression</A> <A HREF="sponsor.html#register">register</A>:
+
+<B>   :amenu Insert.foobar   "='foobar'&lt;CR&gt;P</B>
+
+Note that the '<A HREF="change.html#&lt;">&lt;</A>' and '<A HREF="motion.html#k">k</A>' flags in <A HREF="options.html#'cpoptions'">'cpoptions'</A> also apply here (when
+included they make the <A HREF="intro.html#&lt;&gt;">&lt;&gt;</A> form and raw key codes not being recognized).
+
+Note that <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A> in <A HREF="cmdline.html#Cmdline">Cmdline</A> mode executes the command, like in a <A HREF="map.html#mapping">mapping</A>.  This
+is <A HREF="intro.html#Vi">Vi</A> compatible.  Use <A HREF="pattern.html#CTRL-C">CTRL-C</A> to quit <A HREF="cmdline.html#Cmdline">Cmdline</A> mode.
+
+
+						*<A NAME=":menu-&lt;silent&gt;"></A><B>:menu-&lt;silent&gt;</B>* *<A NAME=":menu-silent"></A><B>:menu-silent</B>*
+To define a menu which will not be echoed on the command line, add
+&quot;&lt;silent&gt;&quot; <A HREF="motion.html#as">as</A> the first argument.  Example:
+<B>	:menu &lt;silent&gt; Settings.Ignore\ case  :set ic&lt;CR&gt;</B>
+The &quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'ic'">ic</A>&quot; will not be echoed when using this menu.  Messages from the
+executed command are still given though.  To shut them up too, add a &quot;<A HREF="various.html#:silent">:silent</A>&quot;
+in the executed command:
+<B>	:menu &lt;silent&gt; Search.Header :exe ":silent normal /Header\r"&lt;CR&gt;</B>
+&quot;&lt;silent&gt;&quot; may also appear just after &quot;&lt;special&gt;&quot; or &quot;&lt;script&gt;&quot;.
+
+
+					*<A NAME=":menu-&lt;special&gt;"></A><B>:menu-&lt;special&gt;</B>* *<A NAME=":menu-special"></A><B>:menu-special</B>*
+Define a menu with <A HREF="intro.html#&lt;&gt;">&lt;&gt;</A> <A HREF="intro.html#notation">notation</A> for special keys, even though the &quot;<A HREF="change.html#&lt;">&lt;</A>&quot; flag
+may appear in <A HREF="options.html#'cpoptions'">'cpoptions'</A>.  This is useful if the side effect of setting
+<A HREF="options.html#'cpoptions'">'cpoptions'</A> is not desired.  Example:
+<B>	:menu &lt;special&gt; Search.Header /Header&lt;CR&gt;</B>
+&quot;&lt;special&gt;&quot; must appear <A HREF="motion.html#as">as</A> the very first argument to the &quot;<A HREF="#:menu">:menu</A>&quot; command or
+just after &quot;&lt;silent&gt;&quot; or &quot;&lt;script&gt;&quot;.
+
+
+						*<A NAME=":menu-&lt;script&gt;"></A><B>:menu-&lt;script&gt;</B>* *<A NAME=":menu-script"></A><B>:menu-script</B>*
+The &quot;to&quot; part of the menu will be inspected for mappings.  If you don't want
+this, use the &quot;<A HREF="#:noremenu">:noremenu</A>&quot; command (or the similar one for a specific mode).
+If you <A HREF="diff.html#do">do</A> want to use <A HREF="map.html#script-local">script-local</A> mappings, add &quot;&lt;script&gt;&quot; <A HREF="motion.html#as">as</A> the very first
+argument to the &quot;<A HREF="#:menu">:menu</A>&quot; command or just after &quot;&lt;silent&gt;&quot; or &quot;&lt;special&gt;&quot;.
+
+
+							*<A NAME="menu-priority"></A><B>menu-priority</B>*
+You can give a priority to a menu.  Menus with a higher priority go more to
+the right.  The priority is given <A HREF="motion.html#as">as</A> a number before the &quot;<A HREF="#:menu">:menu</A>&quot; command.
+Example:
+<B>	:80menu Buffer.next :bn&lt;CR&gt;</B>
+
+The default <A HREF="#menus">menus</A> have these priorities:
+	File		10
+	Edit		20
+	Tools		40
+	<A HREF="autocmd.html#Syntax">Syntax</A>		50
+	Buffers		60
+	Window		70
+	Help		9999
+
+When no or zero priority is given, 500 is used.
+The priority for the PopUp menu is not used.
+
+The Help menu will be placed on the far right side of the menu <A HREF="motion.html#bar">bar</A> on systems
+which support this (Motif and <A HREF="gui_x11.html#GTK+">GTK+</A>).  For <A HREF="gui_x11.html#GTK+">GTK+</A> 2, this is not done anymore
+because right-aligning the Help menu is now discouraged UI design.
+
+You can use a priority higher than 9999, to make <A HREF="motion.html#it">it</A> go after the Help menu,
+but that is non-standard and is discouraged.  The highest possible priority is
+about 32000.  The lowest is 1.
+
+
+							*<A NAME="sub-menu-priority"></A><B>sub-menu-priority</B>*
+The same mechanism can be used to position a sub-menu.  The priority is then
+given <A HREF="motion.html#as">as</A> a dot-separated list of priorities, before the menu name:
+<B>	:menu 80.500 Buffer.next :bn&lt;CR&gt;</B>
+Giving the sub-menu priority is only needed when the item is not to be put
+in a normal position.  For example, to put a sub-menu before the other items:
+<B>	:menu 80.100 Buffer.first :brew&lt;CR&gt;</B>
+Or to put a sub-menu after the other items, and further items with default
+priority will be put before <A HREF="motion.html#it">it</A>:
+<B>	:menu 80.900 Buffer.last :blast&lt;CR&gt;</B>
+When a number is missing, the default value 500 will be used:
+<B>	:menu .900 myMenu.test :echo "text"&lt;CR&gt;</B>
+The menu priority is only used when creating a new menu.  When <A HREF="motion.html#it">it</A> already
+existed, e.g., in another mode, the priority will not change.  Thus, the
+priority only needs to be given the first time a menu is used.
+An exception is the PopUp menu.  There is a separate menu for each mode
+(Normal, Op-pending, <A HREF="visual.html#Visual">Visual</A>, <A HREF="insert.html#Insert">Insert</A>, <A HREF="cmdline.html#Cmdline">Cmdline</A>).  The order in each of these
+<A HREF="#menus">menus</A> can be different.  This is different from menu-bar <A HREF="#menus">menus</A>, which have
+the same order for all modes.
+NOTE: sub-menu priorities currently don't work for all versions of the <A HREF="#GUI">GUI</A>.
+
+
+							*<A NAME="menu-separator"></A><B>menu-separator</B>* *<A NAME="E332"></A><B>E332</B>*
+Menu items can be separated by a special item that inserts some space between
+items.  Depending on the system this is displayed <A HREF="motion.html#as">as</A> a line or a dotted line.
+These items must start with a '<A HREF="motion.html#-">-</A>' and end in a '<A HREF="motion.html#-">-</A>'.  The part in between is
+used to give <A HREF="motion.html#it">it</A> a unique name.  Priorities can be used <A HREF="motion.html#as">as</A> with normal items.
+Example:
+<B>	:menu Example.item1	:do something</B>
+<B>	:menu Example.-Sep-	:</B>
+<B>	:menu Example.item2	:do something different</B>
+Note that the separator also requires a rhs.  It doesn't matter what <A HREF="motion.html#it">it</A> is,
+because the item will never be selected.  Use a single colon to keep <A HREF="motion.html#it">it</A>
+simple.
+
+
+							*<A NAME="gui-toolbar"></A><B>gui-toolbar</B>*
+The toolbar is currently available in the <A HREF="os_win32.html#Win32">Win32</A>, <A HREF="gui_x11.html#Athena">Athena</A>, <A HREF="gui_x11.html#Motif">Motif</A>, <A HREF="gui_x11.html#GTK+">GTK+</A> (X11),
+and Photon <A HREF="#GUI">GUI</A>.  It should turn up in other GUIs in due course.  The
+default toolbar is setup in <A HREF="#menu.vim">menu.vim</A>.
+The display of the toolbar is controlled by the <A HREF="options.html#'guioptions'">'guioptions'</A> <A HREF="print.html#letter">letter</A> '<A HREF="motion.html#T">T</A>'.  You
+can thus have menu <A HREF="change.html#&amp;">&amp;</A> toolbar together, or either on its own, or neither.
+The appearance is controlled by the <A HREF="options.html#'toolbar'">'toolbar'</A> option.  You can choose between
+an image, text or both.
+
+
+							*<A NAME="toolbar-icon"></A><B>toolbar-icon</B>*
+The toolbar is defined <A HREF="motion.html#as">as</A> a special menu called ToolBar, which only has one
+level.  Vim interprets the items in this menu <A HREF="motion.html#as">as</A> follows:
+1)  If an &quot;icon=&quot; argument was specified, the file with this name is used.
+    The file can either be specified with the full path or with the base name.
+    In the last <A HREF="change.html#case">case</A> <A HREF="motion.html#it">it</A> is searched for in the &quot;bitmaps&quot; directory in
+    <A HREF="options.html#'runtimepath'">'runtimepath'</A>, like in point 3.  Examples:
+<B>	:amenu icon=/usr/local/pixmaps/foo_icon.xpm ToolBar.Foo :echo "Foo"&lt;CR&gt;</B>
+<B>	:amenu icon=FooIcon ToolBar.Foo :echo "Foo"&lt;CR&gt;</B>
+    Note that in the first <A HREF="change.html#case">case</A> the extension is included, while in the second
+    <A HREF="change.html#case">case</A> <A HREF="motion.html#it">it</A> is omitted.
+    If the file cannot be opened the next points are tried.
+    A space in the file name must be escaped with a <A HREF="intro.html#backslash">backslash</A>.
+    A menu priority must come _after_ the icon argument:
+<B>	:amenu icon=foo 1.42 ToolBar.Foo :echo "42!"&lt;CR&gt;</B>
+2)  An item called 'BuiltIn##', where ## is a number, is taken <A HREF="motion.html#as">as</A> number ## of
+    the built-in bitmaps available in Vim.  Currently there are 31 numbered
+    from 0 to 30 which cover most common editing operations |<A HREF="#builtin-tools">builtin-tools</A>|.
+<B>	:amenu ToolBar.BuiltIn22 :call SearchNext("back")&lt;CR&gt;</B>
+3)  An item with another name is first searched for in the directory
+    &quot;bitmaps&quot; in <A HREF="options.html#'runtimepath'">'runtimepath'</A>.  If found, the bitmap file is used <A HREF="motion.html#as">as</A> the
+    toolbar button image.  Note that the exact filename is OS-specific: For
+    example, under <A HREF="os_win32.html#Win32">Win32</A> the command
+<B>	:amenu ToolBar.Hello :echo "hello"&lt;CR&gt;</B>
+    would find the file 'hello.bmp'.  Under GTK+/X11 <A HREF="motion.html#it">it</A> is 'Hello.xpm'.  With
+    <A HREF="gui_x11.html#GTK+">GTK+</A> 2 the files 'Hello.png', 'Hello.xpm' and 'Hello.bmp' are checked for
+    existence, and the first one found would be used.
+    For <A HREF="os_win32.html#MS-Windows">MS-Windows</A> and <A HREF="gui_x11.html#GTK+">GTK+</A> 2 the bitmap is scaled to fit the button.  For
+    <A HREF="os_win32.html#MS-Windows">MS-Windows</A> a size of 18 by 18 pixels works best.
+    For <A HREF="os_win32.html#MS-Windows">MS-Windows</A> the bitmap should have 16 colors with the standard palette.
+    The light grey pixels will be changed to the Window frame color and the
+    dark grey pixels to the <A HREF="windows.html#window">window</A> shadow color.  More colors might also work,
+    depending on your system.
+4)  If the bitmap is still not found, Vim checks for a match against its list
+    of built-in names.  Each built-in button image has a name.
+    So the command
+<B>	:amenu ToolBar.Open :e</B>
+    will show the built-in &quot;open a file&quot; button image if no open.bmp exists.
+    All the built-in names can be seen used in <A HREF="#menu.vim">menu.vim</A>.
+5)  If all else fails, a blank, but functioning, button is displayed.
+
+
+							*<A NAME="builtin-tools"></A><B>builtin-tools</B>*
+<B><FONT COLOR="PURPLE">nr  Name		Normal action  </FONT></B>
+00  New			open new <A HREF="windows.html#window">window</A>
+01  Open		browse for file to open in current <A HREF="windows.html#window">window</A>
+02  Save		write buffer to file
+03  Undo		<A HREF="undo.html#undo">undo</A> last change
+04  Redo		<A HREF="undo.html#redo">redo</A> last undone change
+05  Cut			delete selected text to <A HREF="#clipboard">clipboard</A>
+06  Copy		copy selected text to <A HREF="#clipboard">clipboard</A>
+07  Paste		paste text from <A HREF="#clipboard">clipboard</A>
+08  Print		print current buffer
+09  Help		open a buffer on Vim's builtin help
+10  Find		start a search command
+11  SaveAll		write all modified <A HREF="windows.html#buffers">buffers</A> to file
+12  SaveSesn		write session file for current situation
+13  NewSesn		write new session file
+14  LoadSesn		load session file
+15  RunScript		browse for file to run <A HREF="motion.html#as">as</A> a Vim <A HREF="usr_41.html#script">script</A>
+16  <A HREF="insert.html#Replace">Replace</A>		prompt for substitute command
+17  WinClose		close current <A HREF="windows.html#window">window</A>
+18  WinMax		make current <A HREF="windows.html#window">window</A> use many lines
+19  WinMin		make current <A HREF="windows.html#window">window</A> use few lines
+20  WinSplit		split current <A HREF="windows.html#window">window</A>
+21  Shell		start a shell
+22  FindPrev		search again, backward
+23  FindNext		search again, forward
+24  FindHelp		prompt for <A HREF="motion.html#word">word</A> to search help for
+25  Make		run make and jump to first error
+26  TagJump		jump to <A HREF="tagsrch.html#tag">tag</A> under the cursor
+27  RunCtags		build <A HREF="tagsrch.html#tags">tags</A> for files in current directory
+28  WinVSplit		split current <A HREF="windows.html#window">window</A> vertically
+29  WinMaxWidth		make current <A HREF="windows.html#window">window</A> use many columns
+30  WinMinWidth		make current <A HREF="windows.html#window">window</A> use few columns
+
+
+					*<A NAME="hidden-menus"></A><B>hidden-menus</B>* *<A NAME="win32-hidden-menus"></A><B>win32-hidden-menus</B>*
+In the <A HREF="os_win32.html#Win32">Win32</A> and <A HREF="gui_x11.html#GTK+">GTK+</A> <A HREF="#GUI">GUI</A>, starting a menu name with '<A HREF="index.html#]">]</A>' excludes that menu
+from the main menu <A HREF="motion.html#bar">bar</A>.  You must then use the |<A HREF="#:popup">:popup</A>| or |<A HREF="gui_w32.html#:tearoff">:tearoff</A>| command
+to display <A HREF="motion.html#it">it</A>.
+
+
+							*<A NAME="popup-menu"></A><B>popup-menu</B>*
+In the <A HREF="os_win32.html#Win32">Win32</A>, <A HREF="gui_x11.html#GTK+">GTK+</A>, <A HREF="gui_x11.html#Motif">Motif</A>, <A HREF="gui_x11.html#Athena">Athena</A> and Photon <A HREF="#GUI">GUI</A>, you can define the
+special menu &quot;PopUp&quot;.  This is the menu that is displayed when the right mouse
+button is pressed, if <A HREF="options.html#'mousemodel'">'mousemodel'</A> is set to popup or popup_setpos.
+
+
+
+5.3 Showing What Menus Are Mapped To			*<A NAME="showing-menus"></A><B>showing-menus</B>*
+
+To see what an existing menu is mapped to, use just one argument after the
+menu commands (just like you would with the &quot;<A HREF="map.html#:map">:map</A>&quot; commands).  If the menu
+specified is a submenu, then all <A HREF="#menus">menus</A> under that hierarchy will be shown.
+If no argument is given after <A HREF="#:menu">:menu</A> at all, then ALL menu items are shown
+for the appropriate mode (e.g., <A HREF="cmdline.html#Command-line">Command-line</A> mode for <A HREF="#:cmenu">:cmenu</A>).
+
+Special characters in the list, just before the rhs:
+*	The menu was defined with &quot;nore&quot; to disallow remapping.
+<A HREF="change.html#&amp;">&amp;</A>	The menu was defined with &quot;&lt;script&gt;&quot; to allow remapping <A HREF="map.html#script-local">script-local</A>
+	mappings only.
+-	The menu was disabled.
+
+Note that hitting <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> while entering a menu name after a menu command may
+be used to complete the name of the menu item.
+
+
+
+5.4 Executing Menus					*<A NAME="execute-menus"></A><B>execute-menus</B>*
+
+
+						*<A NAME=":em"></A><B>:em</B>*  *<A NAME=":emenu"></A><B>:emenu</B>* *<A NAME="E334"></A><B>E334</B>* *<A NAME="E335"></A><B>E335</B>*
+:[range]em[enu] {menu}		Execute {menu} from the command line.
+				The default is to execute the <A HREF="intro.html#Normal">Normal</A> mode
+				menu.  If a range is specified, <A HREF="motion.html#it">it</A> executes
+				the <A HREF="visual.html#Visual">Visual</A> mode menu.
+				If used from &lt;c-o&gt;, <A HREF="motion.html#it">it</A> executes the
+				insert-mode menu Eg:
+<B>	:emenu File.Exit</B>
+
+If the console-mode vim has been compiled with WANT_MENU defined, you can
+use <A HREF="#:emenu">:emenu</A> to access useful menu items you may have got used to from <A HREF="#GUI">GUI</A>
+mode.  See <A HREF="options.html#'wildmenu'">'wildmenu'</A> for an option that works well with this.  See
+|<A HREF="#console-menus">console-menus</A>| for an example.
+
+When using a range, if the lines match with '&lt;,'&gt;, then the menu is executed
+using the last visual selection.
+
+
+
+5.5 Deleting Menus					*<A NAME="delete-menus"></A><B>delete-menus</B>*
+
+
+						*<A NAME=":unme"></A><B>:unme</B>*  *<A NAME=":unmenu"></A><B>:unmenu</B>*
+
+						*<A NAME=":aun"></A><B>:aun</B>*   *<A NAME=":aunmenu"></A><B>:aunmenu</B>*
+
+						*<A NAME=":nunme"></A><B>:nunme</B>* *<A NAME=":nunmenu"></A><B>:nunmenu</B>*
+
+						*<A NAME=":ounme"></A><B>:ounme</B>* *<A NAME=":ounmenu"></A><B>:ounmenu</B>*
+
+						*<A NAME=":vunme"></A><B>:vunme</B>* *<A NAME=":vunmenu"></A><B>:vunmenu</B>*
+
+						*<A NAME=":xunme"></A><B>:xunme</B>* *<A NAME=":xunmenu"></A><B>:xunmenu</B>*
+
+						*<A NAME=":sunme"></A><B>:sunme</B>* *<A NAME=":sunmenu"></A><B>:sunmenu</B>*
+
+						*<A NAME=":iunme"></A><B>:iunme</B>* *<A NAME=":iunmenu"></A><B>:iunmenu</B>*
+
+						*<A NAME=":cunme"></A><B>:cunme</B>* *<A NAME=":cunmenu"></A><B>:cunmenu</B>*
+To delete a menu item or a whole submenu, use the unmenu commands, which are
+analogous to the unmap commands.  Eg:
+<B>    :unmenu! Edit.Paste</B>
+
+This will remove the Paste item from the Edit menu for <A HREF="insert.html#Insert">Insert</A> and
+<A HREF="cmdline.html#Command-line">Command-line</A> modes.
+
+Note that hitting <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> while entering a menu name after an umenu command
+may be used to complete the name of the menu item for the appropriate mode.
+
+
+To remove all <A HREF="#menus">menus</A> use:			*<A NAME=":unmenu-all"></A><B>:unmenu-all</B>* 
+<B>	:unmenu *	" remove all menus in Normal and visual mode</B>
+<B>	:unmenu! *	" remove all menus in Insert and Command-line mode</B>
+<B>	:aunmenu *	" remove all menus in all modes</B>
+
+If you want to get rid of the menu <A HREF="motion.html#bar">bar</A>:
+<B>	:set guioptions-=m</B>
+
+
+
+5.6 Disabling Menus					*<A NAME="disable-menus"></A><B>disable-menus</B>*
+
+
+						*<A NAME=":menu-disable"></A><B>:menu-disable</B>* *<A NAME=":menu-enable"></A><B>:menu-enable</B>*
+If you <A HREF="diff.html#do">do</A> not want to remove a menu, but disable <A HREF="motion.html#it">it</A> for a moment, this can be
+done by adding the &quot;enable&quot; or &quot;disable&quot; keyword to a &quot;<A HREF="#:menu">:menu</A>&quot; command.
+Examples:
+<B>	:menu disable &amp;File.&amp;Open\.\.\.</B>
+<B>	:amenu enable *</B>
+<B>	:amenu disable &amp;Tools.*</B>
+
+The command applies to the modes <A HREF="motion.html#as">as</A> used with all menu commands.  Note that
+characters like &quot;<A HREF="change.html#&amp;">&amp;</A>&quot; need to be included for translated names to be found.
+When the argument is &quot;*&quot;, all <A HREF="#menus">menus</A> are affected.  Otherwise the given menu
+name and all existing submenus below <A HREF="motion.html#it">it</A> are affected.
+
+
+
+5.7 Examples for Menus					*<A NAME="menu-examples"></A><B>menu-examples</B>*
+
+Here is an example on how to add menu items with menu's!  You can add a menu
+item for the keyword under the cursor.  The <A HREF="sponsor.html#register">register</A> &quot;<A HREF="index.html#z">z</A>&quot; is used.
+
+<B>  :nmenu Words.Add\ Var		wb"zye:menu! Words.&lt;C-R&gt;z &lt;C-R&gt;z&lt;CR&gt;</B>
+<B>  :nmenu Words.Remove\ Var	wb"zye:unmenu! Words.&lt;C-R&gt;z&lt;CR&gt;</B>
+<B>  :vmenu Words.Add\ Var		"zy:menu! Words.&lt;C-R&gt;z &lt;C-R&gt;z &lt;CR&gt;</B>
+<B>  :vmenu Words.Remove\ Var	"zy:unmenu! Words.&lt;C-R&gt;z&lt;CR&gt;</B>
+<B>  :imenu Words.Add\ Var		&lt;Esc&gt;wb"zye:menu! Words.&lt;C-R&gt;z &lt;C-R&gt;z&lt;CR&gt;a</B>
+<B>  :imenu Words.Remove\ Var	&lt;Esc&gt;wb"zye:unmenu! Words.&lt;C-R&gt;z&lt;CR&gt;a</B>
+
+(the rhs is in <A HREF="intro.html#&lt;&gt;">&lt;&gt;</A> <A HREF="intro.html#notation">notation</A>, you can copy/paste this text to try out the
+mappings, or put these lines in your <A HREF="#gvimrc">gvimrc</A>; &quot;&lt;C-R&gt;&quot; is <A HREF="undo.html#CTRL-R">CTRL-R</A>, &quot;<A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>&quot; is
+the <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> key.  |<A HREF="intro.html#&lt;&gt;">&lt;&gt;</A>|)
+
+
+5.8 Tooltips <A HREF="change.html#&amp;">&amp;</A> Menu <A HREF="tips.html#tips">tips</A>
+
+See section |<A HREF="usr_42.html#42.4">42.4</A>| in the user manual.
+
+
+							*<A NAME=":tmenu"></A><B>:tmenu</B>* *<A NAME=":tm"></A><B>:tm</B>*
+:tm[enu] {menupath} <A HREF="map.html#{rhs}">{rhs}</A>	Define a tip for a menu or tool.  {only in
+				<A HREF="options.html#X11">X11</A> and <A HREF="os_win32.html#Win32">Win32</A> GUI}
+
+:tm[enu] [menupath]		<A HREF="eval.html#List">List</A> menu <A HREF="tips.html#tips">tips</A>. {only in <A HREF="options.html#X11">X11</A> and <A HREF="os_win32.html#Win32">Win32</A> GUI}
+
+
+							*<A NAME=":tunmenu"></A><B>:tunmenu</B>* *<A NAME=":tu"></A><B>:tu</B>*
+:tu[nmenu] {menupath}		Remove a tip for a menu or tool.
+				{only in <A HREF="options.html#X11">X11</A> and <A HREF="os_win32.html#Win32">Win32</A> GUI}
+
+When a tip is defined for a menu item, <A HREF="motion.html#it">it</A> appears in the command-line area
+when the mouse is over that item, much like a standard Windows menu hint in
+the status <A HREF="motion.html#bar">bar</A>.  (Except when Vim is in <A HREF="cmdline.html#Command-line">Command-line</A> mode, when of course
+nothing is displayed.)
+When a tip is defined for a ToolBar item, <A HREF="motion.html#it">it</A> appears <A HREF="motion.html#as">as</A> a tooltip when the
+mouse pauses over that button, in the usual fashion.  Use the |<A HREF="syntax.html#hl-Tooltip">hl-Tooltip</A>|
+highlight group to change its colors.
+
+A &quot;tip&quot; can be defined for each menu item.  For example, when defining a menu
+item like this:
+<B>	:amenu MyMenu.Hello :echo "Hello"&lt;CR&gt;</B>
+The tip is defined like this:
+<B>	:tmenu MyMenu.Hello Displays a greeting.</B>
+And delete <A HREF="motion.html#it">it</A> with:
+<B>	:tunmenu MyMenu.Hello</B>
+
+Tooltips are currently only supported for the <A HREF="options.html#X11">X11</A> and <A HREF="os_win32.html#Win32">Win32</A> <A HREF="#GUI">GUI</A>.  However, they
+should appear for the other <A HREF="#gui">gui</A> platforms in the not too distant future.
+
+The &quot;<A HREF="#:tmenu">:tmenu</A>&quot; command works just like other menu commands, <A HREF="motion.html#it">it</A> uses the same
+arguments.  &quot;<A HREF="#:tunmenu">:tunmenu</A>&quot; deletes an existing menu tip, in the same way <A HREF="motion.html#as">as</A> the
+other unmenu commands.
+
+If a menu item becomes invalid (i.e. its actions in all modes are deleted) Vim
+deletes the menu tip (and the item) for you.  This means that <A HREF="#:aunmenu">:aunmenu</A> deletes
+a menu item - you don't need to <A HREF="diff.html#do">do</A> a <A HREF="#:tunmenu">:tunmenu</A> <A HREF="motion.html#as">as</A> well.
+
+
+5.9 Popup Menus
+
+In the <A HREF="os_win32.html#Win32">Win32</A> and <A HREF="gui_x11.html#GTK+">GTK+</A> <A HREF="#GUI">GUI</A>, you can cause a menu to popup at the cursor.
+This behaves similarly to the PopUp <A HREF="#menus">menus</A> except that any menu tree can
+be popped up.
+
+This command is for backwards compatibility, using <A HREF="motion.html#it">it</A> is discouraged, because
+<A HREF="motion.html#it">it</A> behaves in a strange way.
+
+
+							*<A NAME=":popup"></A><B>:popup</B>* *<A NAME=":popu"></A><B>:popu</B>*
+:popu[p] {name}			Popup the menu {name}.  The menu named must
+				have at least one subentry, but need not
+				appear on the menu-bar (see |<A HREF="#hidden-menus">hidden-menus</A>|).
+				{only available for <A HREF="os_win32.html#Win32">Win32</A> and <A HREF="gui_x11.html#GTK">GTK</A> GUI}
+
+:popu[p]! {name}		Like above, but use the position of the mouse
+				pointer instead of the cursor.
+
+Example:
+<B>	:popup File</B>
+will make the &quot;File&quot; menu (if there is one) appear at the text cursor (mouse
+pointer if ! was used).
+
+<B>	:amenu ]Toolbar.Make	:make&lt;CR&gt;</B>
+<B>	:popup ]Toolbar</B>
+This creates a popup menu that doesn't exist on the main menu-bar.
+
+Note that a menu that starts with '<A HREF="index.html#]">]</A>' will not be displayed.
+
+==============================================================================
+
+6. Extras						*<A NAME="gui-extras"></A><B>gui-extras</B>*
+
+This section describes other features which are related to the <A HREF="#GUI">GUI</A>.
+
+- With the <A HREF="#GUI">GUI</A>, there is no wait for one second after hitting <A HREF="intro.html#escape">escape</A>, because
+  the key codes don't start with <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>.
+
+- Typing ^V followed by a special key in the <A HREF="#GUI">GUI</A> will insert &quot;&lt;Key&gt;&quot;, since
+  the internal string used is meaningless.  Modifiers may also be held down to
+  get &quot;&lt;Modifiers-Key&gt;&quot;.
+
+- In the <A HREF="#GUI">GUI</A>, the modifiers SHIFT, CTRL, and ALT (or META) may be used within
+  mappings of special keys and mouse events.  E.g.: <A HREF="map.html#:map">:map</A> &lt;M-LeftDrag&gt; <A HREF="term.html#&lt;LeftDrag&gt;">&lt;LeftDrag&gt;</A>
+
+- In the <A HREF="#GUI">GUI</A>, several normal keys may have modifiers in mappings etc, these
+  are <A HREF="motion.html#&lt;Space&gt;">&lt;Space&gt;</A>, <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>, <A HREF="motion.html#&lt;NL&gt;">&lt;NL&gt;</A>, <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>, <A HREF="intro.html#&lt;Esc&gt;">&lt;Esc&gt;</A>.
+
+- To check in a Vim <A HREF="usr_41.html#script">script</A> if the <A HREF="#GUI">GUI</A> is being used, you can use something
+  like this:
+
+<B>	if has("gui_running")</B>
+<B>	   echo "yes, we have a GUI"</B>
+<B>	else</B>
+<B>	   echo "Boring old console"</B>
+<B>	endif</B>
+
+ 							*<A NAME="setting-guifont"></A><B>setting-guifont</B>*
+- When you use the same <A HREF="starting.html#vimrc">vimrc</A> file on various systems, you can use something
+  like this to set <A HREF="options.html#options">options</A> specifically for each type of <A HREF="#GUI">GUI</A>:
+
+<B>	if has("gui_running")</B>
+<B>	    if has("gui_gtk2")</B>
+<B>		:set guifont=Luxi\ Mono\ 12</B>
+<B>	    elseif has("x11")</B>
+<B>		" Also for GTK 1</B>
+<B>		:set guifont=*-lucidatypewriter-medium-r-normal-*-*-180-*-*-m-*-*</B>
+<B>	    elseif has("gui_win32")</B>
+<B>		:set guifont=Luxi_Mono:h12:cANSI</B>
+<B>	    endif</B>
+<B>	endif</B>
+
+A recommended <A HREF="mbyte.html#Japanese">Japanese</A> font is MS Mincho.  You can find info here:
+	<A HREF="http://www.lexikan.com/mincho.htm">http://www.lexikan.com/mincho.htm</A>
+
+==============================================================================
+
+7. Shell Commands					*<A NAME="gui-shell"></A><B>gui-shell</B>*
+
+For the <A HREF="options.html#X11">X11</A> <A HREF="#GUI">GUI</A> the external commands are executed inside the <A HREF="starting.html#gvim">gvim</A> <A HREF="windows.html#window">window</A>.
+See |<A HREF="gui_x11.html#gui-pty">gui-pty</A>|.
+
+WARNING: Executing an external command from the <A HREF="options.html#X11">X11</A> <A HREF="#GUI">GUI</A> will not always
+work.  &quot;normal&quot; commands like &quot;ls&quot;, &quot;<A HREF="quickfix.html#grep">grep</A>&quot; and &quot;make&quot; mostly work fine.
+Commands that require an intelligent terminal like &quot;<A HREF="various.html#less">less</A>&quot; and &quot;ispell&quot; won't
+work.  Some may even hang and need to be killed from another terminal.  So be
+careful!
+
+For the <A HREF="os_win32.html#Win32">Win32</A> <A HREF="#GUI">GUI</A> the external commands are executed in a separate <A HREF="windows.html#window">window</A>.
+See |<A HREF="gui_w32.html#gui-shell-win32">gui-shell-win32</A>|.
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

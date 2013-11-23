@@ -1,0 +1,1052 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: netbeans</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: netbeans</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="netbeans.txt"></A><B>netbeans.txt</B>*  For Vim version 7.4.  Last change: 2012 Jan 26
+
+
+		  VIM REFERENCE MANUAL    by Gordon Prieur et al.
+
+
+
+			*<A NAME="socket-interface"></A><B>socket-interface</B>* *<A NAME="netbeans"></A><B>netbeans</B>* *<A NAME="netbeans-support"></A><B>netbeans-support</B>*
+
+Vim NetBeans Protocol: a socket interface for Vim integration into an IDE.
+
+1.  Introduction				|<A HREF="#netbeans-intro">netbeans-intro</A>|
+2.  Integration features			|<A HREF="#netbeans-integration">netbeans-integration</A>|
+3.  Configuring Vim for NetBeans		|<A HREF="#netbeans-configure">netbeans-configure</A>|
+4.  Error Messages				|<A HREF="#netbeans-messages">netbeans-messages</A>|
+5.  Running Vim in NetBeans mode		|<A HREF="#netbeans-run">netbeans-run</A>|
+6.  NetBeans protocol				|<A HREF="#netbeans-protocol">netbeans-protocol</A>|
+7.  NetBeans commands				|<A HREF="#netbeans-commands">netbeans-commands</A>|
+8.  Known problems				|<A HREF="#netbeans-problems">netbeans-problems</A>|
+9.  Debugging NetBeans protocol			|<A HREF="#netbeans-debugging">netbeans-debugging</A>|
+10. NetBeans External Editor
+    <A HREF="usr_10.html#10.1">10.1</A>. Downloading NetBeans			|<A HREF="#netbeans-download">netbeans-download</A>|
+    <A HREF="usr_10.html#10.2">10.2</A>. NetBeans Key Bindings			|<A HREF="#netbeans-keybindings">netbeans-keybindings</A>|
+    <A HREF="usr_10.html#10.3">10.3</A>. Preparing NetBeans for Vim		|<A HREF="#netbeans-preparation">netbeans-preparation</A>|
+    <A HREF="usr_10.html#10.4">10.4</A>. Obtaining the External Editor Module	|<A HREF="#obtaining-exted">obtaining-exted</A>|
+    <A HREF="usr_10.html#10.5">10.5</A>. Setting up NetBeans to run with Vim	|<A HREF="#netbeans-setup">netbeans-setup</A>|
+
+{Vi does not have any of these features}
+{only available when compiled with the |<A HREF="various.html#+netbeans_intg">+netbeans_intg</A>| feature}
+
+==============================================================================
+
+1. Introduction						*<A NAME="netbeans-intro"></A><B>netbeans-intro</B>*
+
+The NetBeans interface was initially developed to integrate Vim into the
+NetBeans Java IDE, using the external editor <A HREF="usr_05.html#plugin">plugin</A>.  This NetBeans <A HREF="usr_05.html#plugin">plugin</A> no
+longer exists for recent versions of NetBeans but the protocol was developed
+in such a way that any IDE can use <A HREF="motion.html#it">it</A> to integrate Vim.
+
+The NetBeans protocol of Vim is a text based communication protocol, over a
+classical TCP socket. There is no dependency on Java or NetBeans. Any language
+or environment providing a socket interface can <A HREF="intro.html#control">control</A> Vim using this
+protocol. There are existing implementations in C, C++, <A HREF="if_pyth.html#Python">Python</A> and Java. The
+name NetBeans is kept today for historical reasons.
+
+Current projects using the NetBeans protocol of Vim are:
+- VimIntegration, description of various projects doing Vim Integration:
+	<A HREF="http://www.freehackers.org/VimIntegration">http://www.freehackers.org/VimIntegration</A>
+- Agide, an IDE for the AAP project, written in <A HREF="if_pyth.html#Python">Python</A>:
+	<A HREF="http://www.a-a-p.org">http://www.a-a-p.org</A>
+- Clewn, a <A HREF="debug.html#gdb">gdb</A> integration into Vim, written in C:
+	<A HREF="http://clewn.sourceforge.net/">http://clewn.sourceforge.net/</A>
+- Pyclewn, a <A HREF="debug.html#gdb">gdb</A> integration into Vim, written in <A HREF="if_pyth.html#Python">Python</A>:
+	<A HREF="http://pyclewn.sourceforge.net/">http://pyclewn.sourceforge.net/</A>
+- VimPlugin, integration of Vim inside Eclipse:
+	<A HREF="http://vimplugin.sourceforge.net/wiki/pmwiki.php">http://vimplugin.sourceforge.net/wiki/pmwiki.php</A>
+- PIDA, IDE written in <A HREF="if_pyth.html#Python">Python</A> integrating Vim:
+	<A HREF="http://pida.co.uk/">http://pida.co.uk/</A>
+- VimWrapper, library to <A HREF="starting.html#easy">easy</A> Vim integration into IDE:
+	<A HREF="http://www.freehackers.org/VimWrapper">http://www.freehackers.org/VimWrapper</A>
+
+Check the specific project pages to see how to use Vim with these projects.
+
+In the rest of this help page, we will use the term &quot;Vim Controller&quot; to
+describe the program controlling Vim through the NetBeans socket interface.
+
+
+<B><FONT COLOR="PURPLE">About the NetBeans IDE </FONT></B>
+
+NetBeans is an open source Integrated Development Environment developed
+jointly by Sun Microsystems, Inc. and the netbeans.org developer community.
+Initially just a Java IDE, NetBeans has had C, C++, and Fortran support added
+in recent releases.
+
+ For more information visit the main NetBeans web site	<A HREF="http://www.netbeans.org">http://www.netbeans.org</A>.
+The External Editor is now, unfortunately, declared obsolete.  See
+	<A HREF="http://externaleditor.netbeans.org">http://externaleditor.netbeans.org</A>.
+
+Sun Microsystems, Inc. also ships NetBeans under the name Sun ONE Studio.
+ Visit	<A HREF="http://www.sun.com">http://www.sun.com</A> for more information regarding the Sun ONE Studio
+product line.
+
+Current releases of NetBeans provide full support for Java and limited support
+for C, C++, and Fortran.  Current releases of Sun ONE Studio provide full
+support for Java, C, C++, and Fortran.
+
+==============================================================================
+
+2. Integration features					*<A NAME="netbeans-integration"></A><B>netbeans-integration</B>*
+
+The NetBeans socket interface of Vim allows to get information from Vim or to
+ask Vim to perform specific actions:
+- get information about buffer: buffer name, cursor position, buffer content,
+  etc.
+- be notified when <A HREF="windows.html#buffers">buffers</A> are open or closed
+- be notified of how the buffer content is modified
+- load and save files
+- modify the buffer content
+- installing special key bindings
+- raise the <A HREF="windows.html#window">window</A>, <A HREF="intro.html#control">control</A> the <A HREF="windows.html#window">window</A> geometry
+
+For sending key strokes to Vim or for evaluating <A HREF="eval.html#functions">functions</A> in Vim, you must
+use the |<A HREF="remote.html#clientserver">clientserver</A>| interface.
+
+
+==============================================================================
+
+3. Configuring Vim for NetBeans			*<A NAME="netbeans-configure"></A><B>netbeans-configure</B>*
+
+For more help about installing Vim, please read |<A HREF="usr_90.html">usr_90.txt</A>| in the Vim <A HREF="autocmd.html#User">User</A>
+Manual.
+
+
+On <A HREF="os_unix.html#Unix">Unix</A>:
+
+When running configure without arguments the NetBeans interface should be
+included.  That is, if the configure check to find out if your system supports
+the required features succeeds.
+
+In <A HREF="change.html#case">case</A> you <A HREF="diff.html#do">do</A> not want the NetBeans interface you can disable <A HREF="motion.html#it">it</A> by
+uncommenting a line with &quot;--disable-netbeans&quot; in the Makefile.
+
+Currently the NetBeans interface is supported by Vim running in a terminal and
+by GVim when <A HREF="motion.html#it">it</A> is run with one of the following GUIs: <A HREF="gui_x11.html#GTK">GTK</A>, <A HREF="gui_x11.html#GNOME">GNOME</A>, Windows,
+<A HREF="gui_x11.html#Athena">Athena</A> and <A HREF="gui_x11.html#Motif">Motif</A>.
+
+If <A HREF="gui_x11.html#Motif">Motif</A> support is required the user must supply XPM libraries.  See
+|<A HREF="workshop.html#workshop-xpm">workshop-xpm</A>| for details on obtaining the latest version of XPM.
+
+
+On <A HREF="os_win32.html#MS-Windows">MS-Windows</A>:
+
+The <A HREF="os_win32.html#Win32">Win32</A> support is now in beta stage.
+
+To use XPM <A HREF="sign.html#signs">signs</A> on <A HREF="os_win32.html#Win32">Win32</A> (e.g. when using with NetBeans) you can compile
+ XPM by yourself or use precompiled libraries from	<A HREF="http://iamphet.nm.ru/misc/">http://iamphet.nm.ru/misc/</A>
+ for MS Visual C++ or	<A HREF="http://gnuwin32.sourceforge.net">http://gnuwin32.sourceforge.net</A> for MinGW.
+
+Enable debugging:
+
+To enable debugging of Vim and of the NetBeans protocol, the &quot;NBDEBUG&quot; <A HREF="map.html#macro">macro</A>
+needs to be defined.  Search in the Makefile of the platform you are using for
+&quot;NBDEBUG&quot; to see what line needs to be uncommented.  This effectively adds
+&quot;-DNBDEBUG&quot; to the compile command.  Also see |<A HREF="#netbeans-debugging">netbeans-debugging</A>|
+
+==============================================================================
+
+4. Error Messages					*<A NAME="netbeans-messages"></A><B>netbeans-messages</B>*
+
+These error <A HREF="message.html#messages">messages</A> are specific to NetBeans socket protocol:
+
+
+							*<A NAME="E463"></A><B>E463</B>*
+Region is guarded, cannot modify
+		The Vim Controller has defined guarded areas in the text,
+		which you cannot change.  Also sets the current buffer, if
+		necessary.
+
+
+							*<A NAME="E532"></A><B>E532</B>*
+The defineAnnoType highlighting color name is too long
+		The maximum length of the &quot;fg&quot; or &quot;bg&quot; color argument in the
+		defineAnnoType command is 32 characters.
+		New in version 2.5.
+
+
+							*<A NAME="E656"></A><B>E656</B>*
+Writes of unmodified <A HREF="windows.html#buffers">buffers</A> forbidden
+		Writes of unmodified <A HREF="windows.html#buffers">buffers</A> that were opened from the
+		Vim Controller are not possible.
+
+
+							*<A NAME="E657"></A><B>E657</B>*
+Partial writes disallowed
+		Partial writes for <A HREF="windows.html#buffers">buffers</A> that were opened from the
+		Vim Controller are not allowed.
+
+
+							*<A NAME="E658"></A><B>E658</B>*
+Connection lost for this buffer
+		The Vim Controller has become confused about the state of
+		this file.  Rather than risk data corruption, <A HREF="motion.html#it">it</A> has severed
+		the connection for this file.  Vim will take over
+		responsibility for saving changes to this file and the
+		Vim Controller will no longer know of these changes.
+
+
+							*<A NAME="E744"></A><B>E744</B>*
+Read-only file
+		Vim normally allows changes to a read-only file and only
+		enforces the read-only rule if you try to write the file.
+		However, NetBeans does not let you make changes to a file
+		which is read-only and becomes confused if Vim does this.
+		So Vim does not allow modifications to files when run
+		in NetBeans mode.
+
+==============================================================================
+
+5. Running Vim in NetBeans mode				*<A NAME="netbeans-run"></A><B>netbeans-run</B>*
+
+There are two different ways to run Vim in NetBeans mode:
+
+	+ an IDE may start Vim with the |<A HREF="starting.html#-nb">-nb</A>| command line argument
+	+ NetBeans can be started from within Vim with the |<A HREF="#:nbstart">:nbstart</A>| command
+
+
+							*<A NAME="netbeans-parameters"></A><B>netbeans-parameters</B>*
+Three forms can be used to setup the NetBeans connection parameters.
+When started from the command line, the |<A HREF="starting.html#-nb">-nb</A>| command line argument may be:
+
+	-nb={fname}				from a file
+	-nb:{hostname}:{addr}:{password}	directly
+	<A HREF="starting.html#-nb">-nb</A>					from a file or environment
+
+When started from within Vim, the |<A HREF="#:nbstart">:nbstart</A>| optional argument may be:
+
+	={fname}				from a file
+	:{hostname}:{addr}:{password}	        directly
+	&lt;MISSING ARGUMENT&gt;			from a file or environment
+
+
+							*<A NAME="E660"></A><B>E660</B>* *<A NAME="E668"></A><B>E668</B>*
+When NetBeans is started from the command line, for security reasons, the best
+method is to write the information in a file readable only by the user.  The
+name of the file can be passed with the &quot;-nb={fname}&quot; argument or, when &quot;<A HREF="starting.html#-nb">-nb</A>&quot;
+is used without a parameter, the environment variable &quot;__NETBEANS_CONINFO&quot;.
+The file must contain these three lines, in any order:
+
+	host={hostname}
+	port={addr}
+	auth={password}
+
+Other lines are ignored.  The Vim Controller is responsible for <A HREF="change.html#deleting">deleting</A> the
+file afterwards.
+
+{hostname} is the name of the machine where Vim Controller is running.  When
+omitted the environment variable &quot;__NETBEANS_HOST&quot; is used or the default
+&quot;localhost&quot;.
+
+{addr} is the port number for the NetBeans interface.  When omitted the
+environment variable &quot;__NETBEANS_SOCKET&quot; is used or the default 3219.
+
+{password} is the password for connecting to NetBeans.  When omitted the
+environment variable &quot;__NETBEANS_VIM_PASSWORD&quot; is used or &quot;changeme&quot;.
+
+Vim will initiate a socket connection (client side) to the specified host and
+port upon <A HREF="starting.html#startup">startup</A>. The password will be sent with the AUTH event when the
+connection has been established.
+
+
+==============================================================================
+
+6. NetBeans protocol					*<A NAME="netbeans-protocol"></A><B>netbeans-protocol</B>*
+
+The communication between the Vim Controller and Vim uses plain text
+<A HREF="message.html#messages">messages</A>.  This protocol was first designed to work with the external editor
+module of NetBeans.  Later <A HREF="motion.html#it">it</A> was extended to work with Agide (A-A-P <A HREF="gui.html#GUI">GUI</A> IDE,
+ see	<A HREF="http://www.a-a-p.org">http://www.a-a-p.org</A> and then with other IDE. The extensions are marked
+with &quot;version 2.1&quot;.
+
+Version 2.2 of the protocol has several minor changes which should only affect
+NetBeans users (ie, not Agide users).  However, a bug was fixed which could
+cause confusion.  The netbeans_saved() function sent a &quot;save&quot; protocol
+command.  In protocol version 2.1 and earlier this was incorrectly interpreted
+<A HREF="motion.html#as">as</A> a notification that a write had taken place.  In reality, <A HREF="motion.html#it">it</A> told NetBeans
+to save the file so multiple writes were being done.  This caused various
+problems and has been fixed in 2.2.  To decrease the likelihood of this
+confusion happening again, netbeans_saved() has been renamed to
+netbeans_save_buffer().
+
+We are now at version 2.5.  For the differences between 2.4 and 2.5 search for
+&quot;2.5&quot; below.
+
+The <A HREF="message.html#messages">messages</A> are currently sent over a socket.  Since the <A HREF="message.html#messages">messages</A> are in
+plain <A HREF="mbyte.html#UTF-8">UTF-8</A> text this protocol could also be used with any other communication
+mechanism.
+
+Netbeans <A HREF="message.html#messages">messages</A> are processed when Vim is idle, waiting for user input.
+When Vim is run in non-interactive mode, for example when running an automated
+test <A HREF="change.html#case">case</A> that sources a Vim <A HREF="usr_41.html#script">script</A>, the idle loop may not be called often
+enough. In that <A HREF="change.html#case">case</A>, insert |<A HREF="various.html#:sleep">:sleep</A>| commands in the Vim <A HREF="usr_41.html#script">script</A>. The |<A HREF="various.html#:sleep">:sleep</A>|
+command does invoke Netbeans <A HREF="message.html#messages">messages</A> processing.
+
+6.1 Kinds of messages		|<A HREF="#nb-messages">nb-messages</A>|
+6.2 Terms			|<A HREF="#nb-terms">nb-terms</A>|
+6.3 Commands			|<A HREF="#nb-commands">nb-commands</A>|
+6.4 Functions and Replies	|<A HREF="#nb-functions">nb-functions</A>|
+6.5 Events			|<A HREF="#nb-events">nb-events</A>|
+6.6 Special <A HREF="message.html#messages">messages</A>		|<A HREF="#nb-special">nb-special</A>|
+6.7 Protocol errors		|<A HREF="#nb-protocol_errors">nb-protocol_errors</A>|
+
+
+
+6.1 Kinds of <A HREF="message.html#messages">messages</A>					*<A NAME="nb-messages"></A><B>nb-messages</B>*
+
+There are four kinds of <A HREF="message.html#messages">messages</A>:
+
+<B><FONT COLOR="PURPLE">kind		direction	comment </FONT></B>
+Command		IDE -&gt; editor	no reply necessary
+Function	IDE -&gt; editor	editor must send back a reply
+Reply		editor -&gt; IDE	only in response to a Function
+Event		editor -&gt; IDE	no reply necessary
+
+The <A HREF="message.html#messages">messages</A> are sent <A HREF="motion.html#as">as</A> a single line with a terminating newline character.
+Arguments are separated by a single space.  The first item of the message
+depends on the kind of message:
+
+<B><FONT COLOR="PURPLE">kind		first item		example </FONT></B>
+Command		bufID:name!seqno	11:showBalloon!123 &quot;text&quot;
+Function	bufID:name/seqno	11:getLength/123
+Reply		seqno			123 5000
+Event		bufID:name=seqno	11:keyCommand=123 &quot;S-F2&quot;
+
+
+
+
+6.2 Terms						*<A NAME="nb-terms"></A><B>nb-terms</B>*
+
+bufID		Buffer number.  A message may be either for a specific buffer
+		or generic.  Generic <A HREF="message.html#messages">messages</A> use a bufID of zero.  NOTE: this
+		buffer ID is assigned by the IDE, <A HREF="motion.html#it">it</A> is not Vim's buffer
+		number.  The bufID must be a sequentially rising number,
+		starting at one.
+
+seqno		The IDE uses a sequence number for Commands and Functions.  A
+		Reply must use the sequence number of the Function that <A HREF="motion.html#it">it</A> is
+		associated with.  A zero sequence number can be used for
+		Events (the seqno of the last received Command or Function can
+		also be used).
+
+string		Argument in double <A HREF="quotes.html#quotes">quotes</A>.  Text is in <A HREF="mbyte.html#UTF-8">UTF-8</A> encoding.  This
+		means ASCII is passed as-is.  Special characters are
+		represented with a <A HREF="intro.html#backslash">backslash</A>:
+			\&quot;	double <A HREF="change.html#quote">quote</A>
+			\n	newline
+			\r	<A HREF="intro.html#carriage-return">carriage-return</A>
+			\t	<A HREF="intro.html#tab">tab</A> (optional, also works literally)
+			\\	<A HREF="intro.html#backslash">backslash</A>
+		NUL bytes are not allowed!
+
+<A HREF="options.html#boolean">boolean</A>		Argument with two possible values:
+			<A HREF="motion.html#T">T</A>	true
+			<A HREF="motion.html#F">F</A>	false
+
+number		Argument with a decimal number.
+
+color		Argument with either a decimal number, &quot;none&quot; (without the
+		<A HREF="quotes.html#quotes">quotes</A>) or the name of a color (without the <A HREF="quotes.html#quotes">quotes</A>) defined
+		both in the color list in |<A HREF="syntax.html#highlight-ctermfg">highlight-ctermfg</A>| and in the color
+		list in |<A HREF="syntax.html#gui-colors">gui-colors</A>|.
+		New in version 2.5.
+
+offset		A number argument that indicates a byte position in a buffer.
+		The first byte has offset zero.  Line breaks are counted for
+		how they appear in the file (CR/LF counts for two bytes).
+		Note that a <A HREF="mbyte.html#multi-byte">multi-byte</A> character is counted for the number of
+		bytes <A HREF="motion.html#it">it</A> takes.
+
+lnum/col	Argument with a line number and column number position.  The
+		line number starts with one, the column is the byte position,
+		starting with zero.  Note that a <A HREF="mbyte.html#multi-byte">multi-byte</A> character counts
+		for several columns.
+
+pathname	String argument: file name with full path.
+
+
+
+6.3 Commands						*<A NAME="nb-commands"></A><B>nb-commands</B>*
+
+actionMenuItem	Not implemented.
+
+actionSensitivity
+		Not implemented.
+
+addAnno serNum typeNum off len
+		Place an annotation in this buffer.
+		Arguments:
+		   serNum	number	serial number of this placed
+					annotation, used to be able to remove
+					<A HREF="motion.html#it">it</A>
+		   typeNum	number	sequence number of the annotation
+					defined with defineAnnoType for this
+					buffer
+		   off		number	offset where annotation is to be placed
+		   len		number	not used
+		In version 2.1 &quot;lnum/col&quot; can be used instead of &quot;off&quot;.
+
+balloonResult text
+		Not implemented.
+
+close		Close the buffer.  This leaves us without current buffer, very
+		dangerous to use!
+
+create		Creates a buffer without a name.  Replaces the current buffer
+		(it's hidden when <A HREF="motion.html#it">it</A> was changed).
+		The Vim Controller should use this <A HREF="motion.html#as">as</A> the first command for a
+		file that is being opened.  The sequence of commands could be:
+			create
+			setCaretListener	(ignored)
+			setModified		(no effect)
+			setContentType		(ignored)
+			startDocumentListen
+			setTitle
+			setFullName
+
+defineAnnoType typeNum typeName tooltip glyphFile fg bg
+		Define a type of annotation for this buffer.
+		Arguments:
+		   typeNum	number	sequence number (not really used)
+		   typeName	string	name that identifies this annotation
+		   tooltip	string	not used
+		   glyphFile	string	name of icon file
+		   fg		color	foreground color for line highlighting
+		   bg		color	background color for line highlighting
+		Vim will define a sign for the annotation.
+		When color is a number, this is the &quot;#rrggbb&quot; Red, Green and
+		Blue values of the color (see |<A HREF="syntax.html#gui-colors">gui-colors</A>|) and the
+		highlighting is only defined for GVim.
+		When color is a name, this color is defined both for Vim
+		running in a color terminal and for GVim.
+		When both &quot;fg&quot; and &quot;bg&quot; are &quot;none&quot; no line highlighting is
+		used (new in version 2.1).
+		When &quot;glyphFile&quot; is empty, no text sign is used (new in
+		version 2.1).
+		When &quot;glyphFile&quot; is one or two characters long, a text sign is
+		defined (new in version 2.1).
+		Note: the annotations will be defined in sequence, and the
+		sequence number is later used with addAnno.
+
+editFile pathname
+		Set the name for the buffer and edit the file &quot;pathname&quot;, a
+		string argument.
+		<A HREF="intro.html#Normal">Normal</A> way for the IDE to tell the editor to edit a file.
+
+		You must set a bufId different of 0 with this command to
+		assign a bufId to the buffer. It will trigger an event
+		fileOpened with a bufId of 0 but the buffer has been assigned.
+
+		If the IDE is going to pass the file text to the editor use
+		these commands instead:
+			setFullName
+			insert
+			initDone
+		New in version 2.1.
+
+enableBalloonEval
+		Not implemented.
+
+endAtomic	End an atomic operation.  The changes between &quot;startAtomic&quot;
+		and &quot;endAtomic&quot; can be undone <A HREF="motion.html#as">as</A> one operation.  But it's not
+		implemented yet.  Redraw when necessary.
+
+guard off len
+		<A HREF="motion.html#Mark">Mark</A> an area in the buffer <A HREF="motion.html#as">as</A> guarded.  This means <A HREF="motion.html#it">it</A> cannot
+		be edited.  &quot;off&quot; and &quot;len&quot; are numbers and specify the text
+		to be guarded.
+
+initDone	<A HREF="motion.html#Mark">Mark</A> the buffer <A HREF="motion.html#as">as</A> ready for use.  Implicitly makes the buffer
+		the current buffer.  Fires the <A HREF="autocmd.html#BufReadPost">BufReadPost</A> <A HREF="autocmd.html#autocommand">autocommand</A> event.
+
+insertDone
+		Sent by Vim Controller to tell Vim an initial file insert is
+		done.  This triggers a read message being printed.  Prior to
+		version 2.3, no read <A HREF="message.html#messages">messages</A> were displayed after opening a
+		file.  New in version 2.3.
+
+moveAnnoToFront serNum
+		Not implemented.
+
+netbeansBuffer isNetbeansBuffer
+		If &quot;isNetbeansBuffer&quot; is &quot;<A HREF="motion.html#T">T</A>&quot; then this buffer is &quot;owned&quot; by
+		NetBeans.
+		New in version 2.2.
+
+putBufferNumber pathname
+		Associate a buffer number with the Vim buffer by the name
+		&quot;pathname&quot;, a string argument.  To be used when the editor
+		reported editing another file to the IDE and the IDE needs to
+		tell the editor what buffer number <A HREF="motion.html#it">it</A> will use for this file.
+		Also marks the buffer <A HREF="motion.html#as">as</A> initialized.
+		New in version 2.1.
+
+raise		Bring the editor to the foreground.
+		Only when Vim is run with a <A HREF="gui.html#GUI">GUI</A>.
+		New in version 2.1.
+
+removeAnno serNum
+		Remove a previously place annotation for this buffer.
+		&quot;serNum&quot; is the same number used in addAnno.
+
+save		Save the buffer when <A HREF="motion.html#it">it</A> was modified.  The other side of the
+		interface is expected to write the buffer and invoke
+		&quot;setModified&quot; to reset the &quot;changed&quot; flag of the buffer.
+		The <A HREF="editing.html#writing">writing</A> is skipped when one of these conditions is true:
+		- <A HREF="options.html#'write'">'write'</A> is not set
+		- the buffer is read-only
+		- the buffer does not have a file name
+		- <A HREF="options.html#'buftype'">'buftype'</A> disallows <A HREF="editing.html#writing">writing</A>
+		New in version 2.2.
+
+saveDone
+		Sent by Vim Controller to tell Vim a save is done.  This
+		triggers a save message being printed.  Prior to version 2.3,
+		no save <A HREF="message.html#messages">messages</A> were displayed after a save.
+		New in version 2.3.
+
+setAsUser	Not implemented.
+
+setBufferNumber pathname
+		Associate a buffer number with Vim buffer by the name
+		&quot;pathname&quot;.  To be used when the editor reported editing
+		another file to the IDE and the IDE needs to tell the editor
+		what buffer number <A HREF="motion.html#it">it</A> will use for this file.
+		Has the side effect of making the buffer the current buffer.
+		See &quot;putBufferNumber&quot; for a more useful command.
+
+setContentType
+		Not implemented.
+
+setDot off	Make the buffer the current buffer and set the cursor at the
+		specified position.  If the buffer is open in another <A HREF="windows.html#window">window</A>
+		than make that <A HREF="windows.html#window">window</A> the current <A HREF="windows.html#window">window</A>.
+		If there are <A HREF="fold.html#folds">folds</A> they are opened to make the cursor line
+		visible.
+		In version 2.1 &quot;lnum/col&quot; can be used instead of &quot;off&quot;.
+
+setExitDelay seconds
+		Set the delay for exiting to &quot;seconds&quot;, a number.
+		This delay is used to give the IDE a chance to handle things
+		before really exiting.  The default delay is two seconds.
+		New in version 2.1.
+		Obsolete in version 2.3.
+
+setFullName pathname
+		Set the file name to be used for a buffer to &quot;pathname&quot;, a
+		string argument.
+		Used when the IDE wants to edit a file under <A HREF="intro.html#control">control</A> of the
+		IDE.  This makes the buffer the current buffer, but does not
+		read the file.  &quot;insert&quot; commands will be used next to set the
+		contents.
+
+setLocAndSize	Not implemented.
+
+setMark		Not implemented.
+
+setModified modified
+		When the <A HREF="options.html#boolean">boolean</A> argument &quot;modified&quot; is &quot;<A HREF="motion.html#T">T</A>&quot; <A HREF="motion.html#mark">mark</A> the buffer <A HREF="motion.html#as">as</A>
+		modified, when <A HREF="motion.html#it">it</A> is &quot;<A HREF="motion.html#F">F</A>&quot; <A HREF="motion.html#mark">mark</A> <A HREF="motion.html#it">it</A> <A HREF="motion.html#as">as</A> unmodified.
+
+setModtime time
+		Update a <A HREF="windows.html#buffers">buffers</A> modification time after the file has been
+		saved directly by the Vim Controller.
+		New in version 2.3.
+
+setReadOnly
+		Set a file <A HREF="motion.html#as">as</A> readonly
+		Implemented in version 2.3.
+
+setStyle	Not implemented.
+
+setTitle name
+		Set the title for the buffer to &quot;name&quot;, a string argument.
+		The title is only used for the Vim Controller <A HREF="eval.html#functions">functions</A>, not
+		by Vim.
+
+setVisible visible
+		When the <A HREF="options.html#boolean">boolean</A> argument &quot;visible&quot; is &quot;<A HREF="motion.html#T">T</A>&quot;, goto the buffer.
+		The &quot;<A HREF="motion.html#F">F</A>&quot; argument does nothing.
+
+showBalloon text
+		Show a balloon (popup <A HREF="windows.html#window">window</A>) at the mouse pointer position,
+		containing &quot;text&quot;, a string argument.  The balloon should
+		disappear when the mouse is moved more than a few pixels.
+		Only when Vim is run with a <A HREF="gui.html#GUI">GUI</A>.
+		New in version 2.1.
+
+specialKeys
+		Map a set of keys (mostly function keys) to be passed back
+		to the Vim Controller for processing.  This lets regular IDE
+		hotkeys be used from Vim.
+		Implemented in version 2.3.
+
+startAtomic	Begin an atomic operation.  The screen will not be updated
+		until &quot;endAtomic&quot; is given.
+
+startCaretListen
+		Not implemented.
+
+startDocumentListen
+		<A HREF="motion.html#Mark">Mark</A> the buffer to report changes to the IDE with the
+		&quot;insert&quot; and &quot;remove&quot; events.  The default is to report
+		changes.
+
+stopCaretListen
+		Not implemented.
+
+stopDocumentListen
+		<A HREF="motion.html#Mark">Mark</A> the buffer to stop reporting changes to the IDE.
+		Opposite of startDocumentListen.
+		NOTE: if &quot;netbeansBuffer&quot; was used to <A HREF="motion.html#mark">mark</A> this buffer <A HREF="motion.html#as">as</A> a
+		NetBeans buffer, then the buffer is deleted in Vim.  This is
+		for compatibility with Sun Studio 10.
+
+unguard off len
+		Opposite of &quot;guard&quot;, remove guarding for a text area.
+		Also sets the current buffer, if necessary.
+
+version		Not implemented.
+
+
+
+6.4 Functions and Replies				*<A NAME="nb-functions"></A><B>nb-functions</B>*
+
+getDot		Not implemented.
+
+getCursor	Return the current buffer and cursor position.
+		The reply is:
+			seqno bufID lnum col off
+		seqno = sequence number of the function
+		bufID = buffer ID of the current buffer (if this is unknown -1
+			is used)
+		lnum  = line number of the cursor (first line is one)
+		col   = column number of the cursor (in bytes, zero based)
+		off   = offset of the cursor in the buffer (in bytes)
+		New in version 2.1.
+
+getLength	Return the length of the buffer in bytes.
+		Reply example for a buffer with 5000 bytes:
+			123 5000
+		TODO: explain use of partial line.
+
+getMark		Not implemented.
+
+getAnno serNum
+		Return the line number of the annotation in the buffer.
+		Argument:
+			serNum		serial number of this placed annotation
+		The reply is:
+			123 lnum	line number of the annotation
+			123 0		invalid annotation serial number
+		New in version 2.4.
+
+getModified	When a buffer is specified: Return zero if the buffer does not
+		have changes, one if <A HREF="motion.html#it">it</A> does have changes.
+		When no buffer is specified (buffer number zero): Return the
+		number of <A HREF="windows.html#buffers">buffers</A> with changes.  When the result is zero it's
+		safe to tell Vim to exit.
+		New in version 2.1.
+
+getText		Return the contents of the buffer <A HREF="motion.html#as">as</A> a string.
+		Reply example for a buffer with two lines
+			123 &quot;first line\nsecond line\n&quot;
+		NOTE: docs indicate an offset and length argument, but this is
+		not implemented.
+
+insert off text
+		<A HREF="insert.html#Insert">Insert</A> &quot;text&quot; before position &quot;off&quot;.  &quot;text&quot; is a string
+		argument, &quot;off&quot; a number.
+		&quot;text&quot; should have a &quot;\n&quot; (newline) at the end of each line.
+		Or &quot;\r\n&quot; when <A HREF="options.html#'fileformat'">'fileformat'</A> is &quot;<A HREF="os_dos.html#dos">dos</A>&quot;.  When using &quot;insert&quot; in
+		an empty buffer Vim will set <A HREF="options.html#'fileformat'">'fileformat'</A> accordingly.
+		When &quot;off&quot; points to the start of a line the text is inserted
+		above this line.  Thus when &quot;off&quot; is zero lines are inserted
+		before the first line.
+		When &quot;off&quot; points after the start of a line, possibly on the
+		NUL at the end of a line, the first line of text is appended
+		to this line.  Further lines come below <A HREF="motion.html#it">it</A>.
+		Possible replies:
+			123		no problem
+			123 !message	failed
+		Note that the message in the reply is not quoted.
+		Also sets the current buffer, if necessary.
+		Does not move the cursor to the changed text.
+		Resets <A HREF="undo.html#undo">undo</A> information.
+
+remove off length
+		Delete &quot;length&quot; bytes of text at position &quot;off&quot;.  Both
+		arguments are numbers.
+		Possible replies:
+			123		no problem
+			123 !message	failed
+		Note that the message in the reply is not quoted.
+		Also sets the current buffer, if necessary.
+
+saveAndExit	Perform the equivalent of closing Vim: &quot;<A HREF="editing.html#:confirm">:confirm</A> qall&quot;.
+		If there are no changed files or the user does not cancel the
+		operation Vim exits and no result is sent back.  The IDE can
+		consider closing the connection <A HREF="motion.html#as">as</A> a successful result.
+		If the user cancels the operation the number of modified
+		<A HREF="windows.html#buffers">buffers</A> that remains is returned and Vim does not exit.
+		New in version 2.1.
+
+
+
+6.5 Events						*<A NAME="nb-events"></A><B>nb-events</B>*
+
+balloonEval off len type
+		The mouse pointer rests on text for a short while.  When &quot;len&quot;
+		is zero, there is no selection and the pointer is at position
+		&quot;off&quot;.  When &quot;len&quot; is non-zero the text from position &quot;off&quot; to
+		&quot;off&quot; + &quot;len&quot; is selected.
+		Only sent after &quot;enableBalloonEval&quot; was used for this buffer.
+		&quot;type&quot; is not yet defined.
+		Not implemented yet.
+
+balloonText text
+		Used when <A HREF="options.html#'ballooneval'">'ballooneval'</A> is set and the mouse pointer rests on
+		some text for a moment.  &quot;text&quot; is a string, the text under
+		the mouse pointer.
+		Only when Vim is run with a <A HREF="gui.html#GUI">GUI</A>.
+		New in version 2.1.
+
+buttonRelease button lnum col
+		Report which button was pressed and the location of the cursor
+		at the time of the release.  Only for <A HREF="windows.html#buffers">buffers</A> that are owned
+		by the Vim Controller.  This event is not sent if the button
+		was released while the mouse was in the status line or in a
+		separator line.  If col is <A HREF="various.html#less">less</A> than 1 the button release was
+		in the sign area.
+		New in version 2.2.
+
+disconnect
+		Tell the Vim Controller that Vim is exiting and not to try and
+		read or write more commands.
+		New in version 2.3.
+
+fileClosed	Not implemented.
+
+fileModified	Not implemented.
+
+fileOpened pathname open modified
+		A file was opened by the user.
+		Arguments:
+		   pathname	string	  name of the file
+		   open		<A HREF="options.html#boolean">boolean</A>   always &quot;<A HREF="motion.html#T">T</A>&quot;
+		   modified	<A HREF="options.html#boolean">boolean</A>   always &quot;<A HREF="motion.html#F">F</A>&quot;
+
+geometry cols rows <A HREF="change.html#x">x</A> <A HREF="change.html#y">y</A>
+		Report the size and position of the editor <A HREF="windows.html#window">window</A>.
+		Arguments:
+		   cols		number	  number of text columns
+		   rows		number	  number of text rows
+		   <A HREF="change.html#x">x</A>		number	  pixel position on screen
+		   <A HREF="change.html#y">y</A>		number	  pixel position on screen
+		Only works for <A HREF="gui_x11.html#Motif">Motif</A>.
+
+insert off text
+		Text &quot;text&quot; has been inserted in Vim at position &quot;off&quot;.
+		Only fired when enabled, see &quot;startDocumentListen&quot;.
+
+invokeAction	Not implemented.
+
+keyCommand keyName
+		Reports a special key being pressed with name &quot;keyName&quot;, which
+		is a string.
+		Supported key names:
+			F1		function key 1
+			F2		function key 2
+			<A HREF="eval.html#...">...</A>
+			F12		function key 12
+
+			'' ''		space (without the <A HREF="quotes.html#quotes">quotes</A>)
+			!		exclamation <A HREF="motion.html#mark">mark</A>
+			<A HREF="eval.html#...">...</A>		any other ASCII printable character
+			~		tilde
+
+			X		any unrecognized key
+
+		The key may be prepended by &quot;<A HREF="change.html#C">C</A>&quot;, &quot;<A HREF="change.html#S">S</A>&quot; and/or &quot;<A HREF="motion.html#M">M</A>&quot; for Control,
+		Shift and Meta (Alt) modifiers.  If there is a modifier a dash
+		is used to separate <A HREF="motion.html#it">it</A> from the key name.  For example:
+		&quot;C-F2&quot;.
+		ASCII characters are new in version 2.1.
+
+keyAtPos keyName lnum/col
+		Like &quot;keyCommand&quot; and also report the line number and column
+		of the cursor.
+		New in version 2.1.
+
+killed		A file was deleted or wiped out by the user and the buffer
+		annotations have been removed.  The bufID number for this
+		buffer has become invalid.  Only for files that have been
+		assigned a bufID number by the IDE.
+
+newDotAndMark off off
+		Reports the position of the cursor being at &quot;off&quot; bytes into
+		the buffer.  Only sent just before a &quot;keyCommand&quot; event.
+
+quit		Not implemented.
+
+remove off len
+		Text was deleted in Vim at position &quot;off&quot; with byte length
+		&quot;len&quot;.
+		Only fired when enabled, see &quot;startDocumentListen&quot;.
+
+revert		Not implemented.
+
+save		The buffer has been saved and is now unmodified.
+		Only fired when enabled, see &quot;startDocumentListen&quot;.
+
+startupDone	The editor has finished its <A HREF="starting.html#startup">startup</A> work and is ready for
+		editing files.
+		New in version 2.1.
+
+unmodified	The buffer is now unmodified.
+		Only fired when enabled, see &quot;startDocumentListen&quot;.
+
+version vers	Report the version of the interface implementation.  Vim
+		reports &quot;2.4&quot; (including the <A HREF="quotes.html#quotes">quotes</A>).
+
+
+
+6.6 Special <A HREF="message.html#messages">messages</A>					*<A NAME="nb-special"></A><B>nb-special</B>*
+
+These <A HREF="message.html#messages">messages</A> <A HREF="diff.html#do">do</A> not follow the style of the <A HREF="message.html#messages">messages</A> above.  They are
+terminated by a newline character.
+
+ACCEPT		Not used.
+
+AUTH password	editor -&gt; IDE: First message that the editor sends to the IDE.
+		Must contain the password for the socket server, <A HREF="motion.html#as">as</A> specified
+		with the |<A HREF="starting.html#-nb">-nb</A>| argument.  No <A HREF="quotes.html#quotes">quotes</A> are used!
+
+DISCONNECT	IDE -&gt; editor: break the connection.  The editor will exit.
+		The IDE must only send this message when there are no unsaved
+		changes!
+
+DETACH		IDE -&gt; editor: break the connection without exiting the
+		editor.  Used when the IDE exits without bringing down the
+		editor <A HREF="motion.html#as">as</A> well.
+		New in version 2.1.
+
+REJECT		Not used.
+
+
+
+6.7 Protocol <A HREF="message.html#errors">errors</A>					*<A NAME="nb-protocol_errors"></A><B>nb-protocol_errors</B>*
+
+These <A HREF="message.html#errors">errors</A> occur when a message violates the protocol:
+
+*<A NAME="E627"></A><B>E627</B>* *<A NAME="E628"></A><B>E628</B>* *<A NAME="E629"></A><B>E629</B>* *<A NAME="E630"></A><B>E630</B>* *<A NAME="E631"></A><B>E631</B>* *<A NAME="E632"></A><B>E632</B>* *<A NAME="E633"></A><B>E633</B>* *<A NAME="E634"></A><B>E634</B>* *<A NAME="E635"></A><B>E635</B>* *<A NAME="E636"></A><B>E636</B>*
+
+*<A NAME="E637"></A><B>E637</B>* *<A NAME="E638"></A><B>E638</B>* *<A NAME="E639"></A><B>E639</B>* *<A NAME="E640"></A><B>E640</B>* *<A NAME="E641"></A><B>E641</B>* *<A NAME="E642"></A><B>E642</B>* *<A NAME="E643"></A><B>E643</B>* *<A NAME="E644"></A><B>E644</B>* *<A NAME="E645"></A><B>E645</B>* *<A NAME="E646"></A><B>E646</B>*
+
+*<A NAME="E647"></A><B>E647</B>* *<A NAME="E648"></A><B>E648</B>* *<A NAME="E649"></A><B>E649</B>* *<A NAME="E650"></A><B>E650</B>* *<A NAME="E651"></A><B>E651</B>* *<A NAME="E652"></A><B>E652</B>* *<A NAME="E653"></A><B>E653</B>* *<A NAME="E654"></A><B>E654</B>*
+
+
+==============================================================================
+
+7. NetBeans commands					*<A NAME="netbeans-commands"></A><B>netbeans-commands</B>*
+
+
+							*<A NAME=":nbstart"></A><B>:nbstart</B>* *<A NAME="E511"></A><B>E511</B>* *<A NAME="E838"></A><B>E838</B>*
+:nbs[tart] {connection}	Start a new Netbeans session with {connection} <A HREF="motion.html#as">as</A> the
+			socket connection parameters.  The format of
+			{connection} is described in |<A HREF="#netbeans-parameters">netbeans-parameters</A>|.
+			At any time, one may check if the <A HREF="#netbeans">netbeans</A> socket is
+			connected by running the command:
+			':echo has(&quot;netbeans_enabled&quot;)'
+
+
+							*<A NAME=":nbclose"></A><B>:nbclose</B>*
+:nbc[lose]		Close the current NetBeans session. Remove all placed
+			<A HREF="sign.html#signs">signs</A>.
+
+
+							*<A NAME=":nbkey"></A><B>:nbkey</B>*
+:nb[key] {key}		Pass the {key} to the Vim Controller for processing.
+			When a hot-key has been installed with the specialKeys
+			command, this command can be used to generate a hotkey
+			message to the Vim Controller.
+			This command can also be used to pass any text to the
+			Vim  Controller. It is used by Pyclewn, for example,
+			to build the complete set of <A HREF="debug.html#gdb">gdb</A> commands <A HREF="motion.html#as">as</A> Vim user
+			commands.
+			The events newDotAndMark, keyCommand and keyAtPos are
+			generated (in this order).
+
+
+==============================================================================
+
+8. Known problems					*<A NAME="netbeans-problems"></A><B>netbeans-problems</B>*
+
+NUL bytes are not possible.  For editor -&gt; IDE they will appear <A HREF="motion.html#as">as</A> NL
+characters.  For IDE -&gt; editor they cannot be inserted.
+
+A NetBeans session may be initiated with Vim running in a terminal, and
+continued later in a <A HREF="gui.html#GUI">GUI</A> environment after running the |<A HREF="gui_x11.html#:gui">:gui</A>| command. In this
+<A HREF="change.html#case">case</A>, the highlighting defined for the NetBeans annotations may be cleared
+when the &quot;<A HREF="gui_x11.html#:gui">:gui</A>&quot; command sources <A HREF="gui.html#.gvimrc">.gvimrc</A> and this file loads a colorscheme
+that runs the command &quot;<A HREF="syntax.html#:highlight">:highlight</A> clear&quot;.
+New in version 2.5.
+
+
+==============================================================================
+
+9. Debugging NetBeans protocol				*<A NAME="netbeans-debugging"></A><B>netbeans-debugging</B>*
+
+To debug the Vim protocol, you must first compile Vim with debugging support
+and NetBeans debugging support.  See |<A HREF="#netbeans-configure">netbeans-configure</A>| for instructions
+about Vim compiling and how to enable debug support.
+
+When running Vim, set the following environment <A HREF="eval.html#variables">variables</A>:
+
+    export SPRO_GVIM_DEBUG=netbeans.log
+    export SPRO_GVIM_DLEVEL=0xffffffff
+
+Vim will then log all the incoming and outgoing <A HREF="message.html#messages">messages</A> of the NetBeans
+protocol to the file netbeans.log .
+
+The content of netbeans.log after a session looks like this:
+Tue May 20 17:19:27 2008
+EVT: 0:startupDone=0
+CMD 1: (1) create
+CMD 2: (1) setTitle &quot;testfile1.txt&quot;
+CMD 3: (1) setFullName &quot;testfile1.txt&quot;
+EVT(suppressed): 1:remove=3 0 -1
+EVT: 1:fileOpened=0 &quot;d:\\work\\vimWrapper\\vimWrapper2\\pyvimwrapper\\tests\\testfile1.txt&quot; <A HREF="motion.html#T">T</A> <A HREF="motion.html#F">F</A>
+CMD 4: (1) initDone
+FUN 5: (0) getCursor
+REP 5: 1 1 0 0
+CMD 6: (2) create
+CMD 7: (2) setTitle &quot;testfile2.txt&quot;
+CMD 8: (2) setFullName &quot;testfile2.txt&quot;
+EVT(suppressed): 2:remove=8 0 -1
+EVT: 2:fileOpened=0 &quot;d:\\work\\vimWrapper\\vimWrapper2\\pyvimwrapper\\tests\\testfile2.txt&quot; <A HREF="motion.html#T">T</A> <A HREF="motion.html#F">F</A>
+CMD 9: (2) initDone
+
+
+==============================================================================
+10. NetBeans External Editor
+
+NOTE: This information is obsolete!  Only relevant if you are using an old
+version of NetBeans.
+
+
+
+<A HREF="usr_10.html#10.1">10.1</A>. Downloading NetBeans			*<A NAME="netbeans-download"></A><B>netbeans-download</B>*
+
+The NetBeans IDE is available for <A HREF="intro.html#download">download</A> from netbeans.org.  You can <A HREF="intro.html#download">download</A>
+a released version, <A HREF="intro.html#download">download</A> sources, or use CVS to <A HREF="intro.html#download">download</A> the current
+source tree.  If you choose to <A HREF="intro.html#download">download</A> sources, follow directions from
+netbeans.org on building NetBeans.
+
+Depending on the version of NetBeans you <A HREF="intro.html#download">download</A>, you may need to <A HREF="diff.html#do">do</A> further
+work to get the required External Editor module.  This is the module which lets
+ NetBeans work with gvim or xemacs :-. See	<A HREF="http://externaleditor.netbeans.org">http://externaleditor.netbeans.org</A>
+for details on downloading this module if your NetBeans release does not have
+<A HREF="motion.html#it">it</A>.
+
+For C, C++, and Fortran support you will also need the cpp module.  See
+	<A HREF="http://cpp.netbeans.org">http://cpp.netbeans.org</A> for information regarding this module.
+
+You can also <A HREF="intro.html#download">download</A> Sun ONE Studio from Sun Microsystems, Inc for a 30 day
+ free trial. See	<A HREF="http://www.sun.com">http://www.sun.com</A> for further details.
+
+
+
+<A HREF="usr_10.html#10.2">10.2</A>. NetBeans Key Bindings			*<A NAME="netbeans-keybindings"></A><B>netbeans-keybindings</B>*
+
+Vim understands a number of key bindings that execute NetBeans commands.
+These are typically all the Function key combinations.  To execute a NetBeans
+command, the user must press the Pause key followed by a NetBeans key binding.
+For example, in order to compile a Java file, the NetBeans key binding is
+&quot;F9&quot;.  So, while in vim, press &quot;Pause F9&quot; to compile a java file.  To toggle a
+breakpoint at the current line, press &quot;Pause Shift F8&quot;.
+
+The Pause key is Function key 21.  If you don't have a working Pause key and
+want to use F8 instead, use:
+
+<B>	:map &lt;F8&gt; &lt;F21&gt;</B>
+
+The External Editor module dynamically reads the NetBeans key bindings so vim
+should always have the latest key bindings, even when NetBeans changes them.
+
+
+
+<A HREF="usr_10.html#10.3">10.3</A>. Preparing NetBeans for Vim		*<A NAME="netbeans-preparation"></A><B>netbeans-preparation</B>*
+
+In order for NetBeans to work with vim, the NetBeans External Editor module
+must be loaded and enabled.  If you have a Sun ONE Studio Enterprise Edition
+then this module should be loaded and enabled.  If you have a NetBeans release
+you may need to find another way of obtaining this open source module.
+
+You can check if you have this module by opening the Tools-&gt;Options <A HREF="gui_w32.html#dialog">dialog</A>
+and drilling down to the &quot;Modules&quot; list (IDE Configuration-&gt;System-&gt;Modules).
+If your Modules list has an entry for &quot;External Editor&quot; you must make sure
+<A HREF="motion.html#it">it</A> is enabled (the &quot;Enabled&quot; property should have the value &quot;True&quot;).  If your
+Modules list has no External Editor see the next section on |<A HREF="#obtaining-exted">obtaining-exted</A>|.
+
+
+
+<A HREF="usr_10.html#10.4">10.4</A>. Obtaining the External Editor Module	*<A NAME="obtaining-exted"></A><B>obtaining-exted</B>*
+
+There are 2 ways of obtaining the External Editor module.  The easiest way
+is to use the NetBeans Update Center to <A HREF="intro.html#download">download</A> and <A HREF="usr_90.html#install">install</A> the module.
+Unfortunately, some versions <A HREF="diff.html#do">do</A> not have this module in their update
+center.  If you cannot <A HREF="intro.html#download">download</A> via the update center you will need to
+<A HREF="intro.html#download">download</A> sources and build the module.  I will try and get the module
+available from the NetBeans Update Center so building will be unnecessary.
+ Also check	<A HREF="http://externaleditor.netbeans.org">http://externaleditor.netbeans.org</A> for other availability options.
+
+To <A HREF="intro.html#download">download</A> the External Editor sources via CVS and build your own module,
+ see	<A HREF="http://externaleditor.netbeans.org">http://externaleditor.netbeans.org</A> and	<A HREF="http://www.netbeans.org">http://www.netbeans.org</A>.
+Unfortunately, this is not a trivial procedure.
+
+
+
+<A HREF="usr_10.html#10.5">10.5</A>. Setting up NetBeans to run with Vim	*<A NAME="netbeans-setup"></A><B>netbeans-setup</B>*
+
+Assuming you have loaded and enabled the NetBeans External Editor module
+<A HREF="motion.html#as">as</A> described in |<A HREF="#netbeans-preparation">netbeans-preparation</A>| all you need to <A HREF="diff.html#do">do</A> is verify that
+the <A HREF="starting.html#gvim">gvim</A> command line is properly configured for your environment.
+
+Open the Tools-&gt;Options <A HREF="gui_w32.html#dialog">dialog</A> and open the Editing category.  <A HREF="visual.html#Select">Select</A> the
+External Editor.  The right hand pane should contain a Properties <A HREF="intro.html#tab">tab</A> and
+an Expert <A HREF="intro.html#tab">tab</A>.  In the Properties <A HREF="intro.html#tab">tab</A> make sure the &quot;Editor Type&quot; is set
+to &quot;Vim&quot;.  In the Expert <A HREF="intro.html#tab">tab</A> make sure the &quot;Vim Command&quot; is correct.
+
+You should be careful if you change the &quot;Vim Command&quot;.  There are command
+line <A HREF="options.html#options">options</A> there which must be there for the connection to be properly
+set up.  You can change the command name but that's about <A HREF="motion.html#it">it</A>.  If your <A HREF="starting.html#gvim">gvim</A>
+can be found by your $PATH then the VIM Command can start with &quot;<A HREF="starting.html#gvim">gvim</A>&quot;.  If
+you don't want <A HREF="starting.html#gvim">gvim</A> searched from your $PATH then hard code in the full
+<A HREF="os_unix.html#Unix">Unix</A> path name.  At this point you should get a <A HREF="starting.html#gvim">gvim</A> for any source file
+you open in NetBeans.
+
+If some files come up in <A HREF="starting.html#gvim">gvim</A> and others (with different file <A HREF="cmdline.html#suffixes">suffixes</A>) come
+up in the default NetBeans editor you should verify the MIME type in the
+Expert <A HREF="intro.html#tab">tab</A> MIME Type property.  NetBeans is MIME oriented and the External
+Editor will only open MIME types specified in this property.
+
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

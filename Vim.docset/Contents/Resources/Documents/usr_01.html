@@ -1,0 +1,217 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_01</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_01</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_01.txt"></A><B>usr_01.txt</B>*	For Vim version 7.4.  Last change: 2010 Nov 03
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			      About the manuals
+
+
+This chapter introduces the manuals available with Vim.  Read this to know the
+conditions under which the commands are explained.
+
+|<A HREF="#01.1">01.1</A>|	Two manuals
+|<A HREF="#01.2">01.2</A>|	Vim installed
+|<A HREF="#01.3">01.3</A>|	Using the Vim <A HREF="#tutor">tutor</A>
+|<A HREF="#01.4">01.4</A>|	Copyright
+
+     Next chapter: |<A HREF="usr_02.html">usr_02.txt</A>|  The first steps in Vim
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="01.1"></A><B>01.1</B>*	Two manuals
+
+The Vim documentation consists of two parts:
+
+1. The <A HREF="autocmd.html#User">User</A> manual
+   Task oriented explanations, from simple to complex.  Reads from start to
+   end like a <A HREF="intro.html#book">book</A>.
+
+2. The Reference manual
+   Precise description of how everything in Vim works.
+
+The notation used in these manuals is explained here: |<A HREF="intro.html#notation">notation</A>|
+
+
+JUMPING AROUND
+
+The text contains hyperlinks between the two parts, allowing you to quickly
+jump between the description of an editing task and a precise explanation of
+the commands and <A HREF="options.html#options">options</A> used for <A HREF="motion.html#it">it</A>.  Use these two commands:
+
+	Press  <A HREF="tagsrch.html#CTRL-]">CTRL-]</A>  to jump to a subject under the cursor.
+	Press  <A HREF="motion.html#CTRL-O">CTRL-O</A>  to jump back (repeat to go further back).
+
+Many links are in vertical bars, like this: |<A HREF="help.html#bars">bars</A>|.  The bars themselves may
+be hidden or invisible, see below.  An option name, like <A HREF="options.html#'number'">'number'</A>, a command
+in double <A HREF="quotes.html#quotes">quotes</A> like &quot;<A HREF="editing.html#:write">:write</A>&quot; and any other <A HREF="motion.html#word">word</A> can also be used <A HREF="motion.html#as">as</A> a link.
+Try <A HREF="motion.html#it">it</A> out: Move the cursor to  <A HREF="tagsrch.html#CTRL-]">CTRL-]</A>  and press <A HREF="tagsrch.html#CTRL-]">CTRL-]</A> on <A HREF="motion.html#it">it</A>.
+
+Other subjects can be found with the &quot;<A HREF="helphelp.html#:help">:help</A>&quot; command, see |<A HREF="index.html">help.txt</A>|.
+
+The <A HREF="help.html#bars">bars</A> and stars are usually hidden with the |<A HREF="syntax.html#conceal">conceal</A>| feature.  They also
+use |<A HREF="syntax.html#hl-Ignore">hl-Ignore</A>|, using the same color for the text <A HREF="motion.html#as">as</A> the background.  You can
+make them visible with:
+<B>	:set conceallevel=0</B>
+<B>	:hi link HelpBar Normal</B>
+<B>	:hi link HelpStar Normal</B>
+
+==============================================================================
+
+*<A NAME="01.2"></A><B>01.2</B>*	Vim installed
+
+Most of the manuals assume that Vim has been properly installed.  If you
+didn't <A HREF="diff.html#do">do</A> that yet, or if Vim doesn't run properly (e.g., files can't be found
+or in the <A HREF="gui.html#GUI">GUI</A> the <A HREF="gui.html#menus">menus</A> <A HREF="diff.html#do">do</A> not show up) first read the chapter on
+installation: |<A HREF="usr_90.html">usr_90.txt</A>|.
+
+							*<A NAME="not-compatible"></A><B>not-compatible</B>*
+The manuals often assume you are using Vim with Vi-compatibility switched
+off.  For most commands this doesn't matter, but sometimes <A HREF="motion.html#it">it</A> is important,
+e.g., for multi-level <A HREF="undo.html#undo">undo</A>.  An <A HREF="starting.html#easy">easy</A> way to make sure you are using a <A HREF="todo.html#nice">nice</A>
+setup is to copy the example <A HREF="starting.html#vimrc">vimrc</A> file.  By doing this inside Vim you don't
+have to check out where <A HREF="motion.html#it">it</A> is located.  How to <A HREF="diff.html#do">do</A> this depends on the system
+you are using:
+
+<A HREF="os_unix.html#Unix">Unix</A>:
+<B>	:!cp -i $VIMRUNTIME/vimrc_example.vim ~/.vimrc</B>
+<A HREF="os_msdos.html#MS-DOS">MS-DOS</A>, <A HREF="os_win32.html#MS-Windows">MS-Windows</A>, <A HREF="os_os2.html#OS/2">OS/2</A>:
+<B>	:!copy $VIMRUNTIME/vimrc_example.vim $VIM/_vimrc</B>
+<A HREF="os_amiga.html#Amiga">Amiga</A>:
+<B>	:!copy $VIMRUNTIME/vimrc_example.vim $VIM/.vimrc</B>
+
+If the file already exists you probably want to keep <A HREF="motion.html#it">it</A>.
+
+If you start Vim now, the <A HREF="options.html#'compatible'">'compatible'</A> option should be off.  You can check <A HREF="motion.html#it">it</A>
+with this command:
+
+<B>	:set compatible?</B>
+
+If <A HREF="motion.html#it">it</A> responds with &quot;nocompatible&quot; you are doing well.  If the response is
+&quot;compatible&quot; you are in trouble.  You will have to find out why the option is
+still set.  Perhaps the file you wrote above is not found.  Use this command
+to find out:
+
+<B>	:scriptnames</B>
+
+If your file is not in the list, check its location and name.  If <A HREF="motion.html#it">it</A> is in the
+list, there must be some other place where the <A HREF="options.html#'compatible'">'compatible'</A> option is switched
+back on.
+
+For more info see |<A HREF="starting.html#vimrc">vimrc</A>| and |<A HREF="starting.html#compatible-default">compatible-default</A>|.
+
+	Note:
+	This manual is about using Vim in the normal way.  There is an
+	alternative called &quot;<A HREF="starting.html#evim">evim</A>&quot; (easy Vim).  This is still Vim, but used in
+	a way that resembles a click-and-type editor like Notepad.  It always
+	stays in <A HREF="insert.html#Insert">Insert</A> mode, thus <A HREF="motion.html#it">it</A> feels very different.  It is not
+	explained in the user manual, since <A HREF="motion.html#it">it</A> should be mostly <A HREF="eval.html#self">self</A>
+	explanatory.  See |<A HREF="starting.html#evim-keys">evim-keys</A>| for details.
+
+==============================================================================
+
+*<A NAME="01.3"></A><B>01.3</B>*	Using the Vim <A HREF="#tutor">tutor</A>				*<A NAME="tutor"></A><B>tutor</B>* *<A NAME="vimtutor"></A><B>vimtutor</B>*
+
+Instead of reading the text (boring!) you can use the <A HREF="#vimtutor">vimtutor</A> to learn your
+first Vim commands.  This is a 30 minute tutorial that teaches the most basic
+Vim functionality hands-on.
+
+On <A HREF="os_unix.html#Unix">Unix</A>, if Vim has been properly installed, you can start <A HREF="motion.html#it">it</A> from the shell:
+
+<B>	vimtutor</B>
+
+On <A HREF="os_win32.html#MS-Windows">MS-Windows</A> you can find <A HREF="motion.html#it">it</A> in the Program/Vim menu.  Or execute
+vimtutor.bat in the <A HREF="starting.html#$VIMRUNTIME">$VIMRUNTIME</A> directory.
+
+This will make a copy of the <A HREF="#tutor">tutor</A> file, so that you can edit <A HREF="motion.html#it">it</A> without
+the risk of damaging the original.
+   There are a few translated versions of the <A HREF="#tutor">tutor</A>.  To find out if yours is
+available, use the two-letter language code.  For French:
+
+<B>	vimtutor fr</B>
+
+On <A HREF="os_unix.html#Unix">Unix</A>, if you prefer using the <A HREF="gui.html#GUI">GUI</A> version of Vim, use &quot;gvimtutor&quot; or
+&quot;<A HREF="#vimtutor">vimtutor</A> -g&quot; instead of &quot;<A HREF="#vimtutor">vimtutor</A>&quot;.
+
+For OpenVMS, if Vim has been properly installed, you can start <A HREF="#vimtutor">vimtutor</A> from a
+<A HREF="os_vms.html#VMS">VMS</A> prompt with:
+
+<B>	@VIM:vimtutor</B>
+
+Optionally add the two-letter language code <A HREF="motion.html#as">as</A> above.
+
+
+On other systems, you have to <A HREF="diff.html#do">do</A> a little work:
+
+1. Copy the <A HREF="#tutor">tutor</A> file.  You can <A HREF="diff.html#do">do</A> this with Vim (it knows where to find it):
+
+<B>	vim -u NONE -c 'e $VIMRUNTIME/tutor/tutor' -c 'w! TUTORCOPY' -c 'q'</B>
+ 
+   This will write the file &quot;TUTORCOPY&quot; in the current directory.  To use a
+translated version of the <A HREF="#tutor">tutor</A>, append the two-letter language code to the
+filename.  For French:
+
+<B>	vim -u NONE -c 'e $VIMRUNTIME/tutor/tutor.fr' -c 'w! TUTORCOPY' -c 'q'</B>
+ 
+2. Edit the copied file with Vim:
+
+<B>	vim -u NONE -c "set nocp" TUTORCOPY</B>
+ 
+   The extra arguments make sure Vim is started in a good mood.
+
+3. Delete the copied file when you are finished with <A HREF="motion.html#it">it</A>:
+
+<B>	del TUTORCOPY</B>
+ 
+==============================================================================
+
+*<A NAME="01.4"></A><B>01.4</B>*	Copyright					*<A NAME="manual-copyright"></A><B>manual-copyright</B>*
+
+The Vim user manual and reference manual are Copyright (c) 1988-2003 by <A HREF="intro.html#Bram">Bram</A>
+<A HREF="intro.html#Moolenaar">Moolenaar</A>.  This material may be distributed only subject to the terms and
+conditions set forth in the Open Publication License, v1.0 or later.  The
+latest version is presently available at:
+	<A HREF="http://www.opencontent.org/openpub/">http://www.opencontent.org/openpub/</A>
+
+People who contribute to the manuals must agree with the above <A HREF="uganda.html#copyright">copyright</A>
+notice.
+
+							*<A NAME="frombook"></A><B>frombook</B>*
+Parts of the user manual come from the <A HREF="intro.html#book">book</A> &quot;<A HREF="intro.html#Vi">Vi</A> IMproved - Vim&quot; by Steve
+Oualline (published by New Riders Publishing, ISBN: 0735710015).  The Open
+Publication License applies to this <A HREF="intro.html#book">book</A>.  Only selected parts are included
+and these have been modified (e.g., by removing the pictures, updating the
+text for Vim 6.0 and later, fixing mistakes).  The omission of the |<A HREF="#frombook">frombook</A>|
+<A HREF="tagsrch.html#tag">tag</A> does not mean that the text does not come from the <A HREF="intro.html#book">book</A>.
+
+Many thanks to Steve Oualline and New Riders for creating this <A HREF="intro.html#book">book</A> and
+publishing <A HREF="motion.html#it">it</A> under the OPL!  It has been a great help while <A HREF="editing.html#writing">writing</A> the user
+manual.  Not only by providing literal text, but also by setting the tone and
+style.
+
+If you make money through selling the manuals, you are strongly encouraged to
+<A HREF="uganda.html#donate">donate</A> part of the profit to help AIDS victims in <A HREF="uganda.html#Uganda">Uganda</A>.  See |<A HREF="uganda.html#iccf">iccf</A>|.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_02.html">usr_02.txt</A>|  The first steps in Vim
+
+Copyright: see |<A HREF="#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

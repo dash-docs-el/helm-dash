@@ -1,0 +1,384 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: helphelp</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: helphelp</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="helphelp.txt"></A><B>helphelp.txt</B>*	For Vim version 7.4.  Last change: 2012 Nov 28
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Help on help files					*<A NAME="helphelp"></A><B>helphelp</B>*
+
+1. Help commands		|<A HREF="#online-help">online-help</A>|
+2. Translated help files	|<A HREF="#help-translated">help-translated</A>|
+3. Writing help files		|<A HREF="#help-writing">help-writing</A>|
+
+==============================================================================
+
+1. Help commands					*<A NAME="online-help"></A><B>online-help</B>*
+
+
+			*<A NAME="help"></A><B>help</B>* *<A NAME="&lt;Help&gt;"></A><B>&lt;Help&gt;</B>* *<A NAME=":h"></A><B>:h</B>* *<A NAME=":help"></A><B>:help</B>* *<A NAME="&lt;F1&gt;"></A><B>&lt;F1&gt;</B>* *<A NAME="i_&lt;F1&gt;"></A><B>i_&lt;F1&gt;</B>* *<A NAME="i_&lt;Help&gt;"></A><B>i_&lt;Help&gt;</B>*
+<A HREF="#&lt;Help&gt;">&lt;Help&gt;</A>		or
+:h[elp]			Open a <A HREF="windows.html#window">window</A> and display the help file in read-only
+			mode.  If there is a help <A HREF="windows.html#window">window</A> open already, use
+			that one.  Otherwise, if the current <A HREF="windows.html#window">window</A> uses the
+			full width of the screen or is at least 80 characters
+			wide, the help <A HREF="windows.html#window">window</A> will appear just above the
+			current <A HREF="windows.html#window">window</A>.  Otherwise the new <A HREF="windows.html#window">window</A> is put at
+			the very top.
+			The <A HREF="options.html#'helplang'">'helplang'</A> option is used to select a language, if
+			the main help file is available in several languages.
+			{not in Vi}
+
+
+						*<A NAME="{subject}"></A><B>{subject}</B>* *<A NAME="E149"></A><B>E149</B>* *<A NAME="E661"></A><B>E661</B>*
+:h[elp] <A HREF="#{subject}">{subject}</A>	Like &quot;<A HREF="#:help">:help</A>&quot;, additionally jump to the <A HREF="tagsrch.html#tag">tag</A> <A HREF="#{subject}">{subject}</A>.
+			<A HREF="#{subject}">{subject}</A> can include <A HREF="editing.html#wildcards">wildcards</A> like &quot;*&quot;, &quot;<A HREF="pattern.html#?">?</A>&quot; and
+			&quot;[a-z]&quot;:
+			   <A HREF="#:help">:help</A> <A HREF="index.html#z">z</A>?	jump to help for any &quot;<A HREF="index.html#z">z</A>&quot; command
+			   <A HREF="#:help">:help</A> <A HREF="scroll.html#z.">z.</A>	jump to the help for &quot;<A HREF="scroll.html#z.">z.</A>&quot;
+			If there is no full match for the <A HREF="pattern.html#pattern">pattern</A>, or there
+			are several matches, the &quot;best&quot; match will be used.
+			A sophisticated algorithm is used to decide which
+			match is better than another one.  These items are
+			considered in the computation:
+			- A match with same <A HREF="change.html#case">case</A> is much better than a match
+			  with different <A HREF="change.html#case">case</A>.
+			- A match that starts after a non-alphanumeric
+			  character is better than a match in the middle of a
+			  <A HREF="motion.html#word">word</A>.
+			- A match at or near the beginning of the <A HREF="tagsrch.html#tag">tag</A> is
+			  better than a match further on.
+			- The more alphanumeric characters match, the better.
+			- The shorter the length of the match, the better.
+
+			The <A HREF="options.html#'helplang'">'helplang'</A> option is used to select a language, if
+			the <A HREF="#{subject}">{subject}</A> is available in several languages.
+			To find a <A HREF="tagsrch.html#tag">tag</A> in a specific language, append &quot;@ab&quot;,
+			where &quot;<A HREF="motion.html#ab">ab</A>&quot; is the two-letter language code.  See
+			|<A HREF="#help-translated">help-translated</A>|.
+
+			Note that the longer the <A HREF="#{subject}">{subject}</A> you give, the <A HREF="various.html#less">less</A>
+			matches will be found.  You can get an idea how this
+			all works by using commandline completion (type <A HREF="scroll.html#CTRL-D">CTRL-D</A>
+			after &quot;<A HREF="#:help">:help</A> subject&quot; |<A HREF="cmdline.html#c_CTRL-D">c_CTRL-D</A>|).
+			If there are several matches, you can have them listed
+			by hitting <A HREF="scroll.html#CTRL-D">CTRL-D</A>.  Example:
+<B>				:help cont&lt;Ctrl-D&gt;</B>
+
+ 			Instead of typing &quot;<A HREF="#:help">:help</A> CTRL-V&quot; to search for help
+			for <A HREF="visual.html#CTRL-V">CTRL-V</A> you can type:
+<B>				:help ^V</B>
+ 			This also works together with other characters, for
+			example to find help for <A HREF="visual.html#CTRL-V">CTRL-V</A> in <A HREF="insert.html#Insert">Insert</A> mode:
+<B>				:help i^V</B>
+ 
+			To use a <A HREF="pattern.html#regexp">regexp</A> |<A HREF="pattern.html#pattern">pattern</A>|, first <A HREF="diff.html#do">do</A> &quot;<A HREF="#:help">:help</A>&quot; and then
+			use &quot;<A HREF="tagsrch.html#:tag">:tag</A> {pattern}&quot; in the help <A HREF="windows.html#window">window</A>.  The
+			&quot;<A HREF="tagsrch.html#:tnext">:tnext</A>&quot; command can then be used to jump to other
+			matches, &quot;tselect&quot; to list matches and choose one.
+<B>				:help index| :tse z.</B>
+
+ 			When there is no argument you will see matches for
+			&quot;help&quot;, to avoid listing all possible matches (that
+			would be very slow).
+			The number of matches displayed is limited to 300.
+
+			This command can be followed by '&#124;' and another
+			command, but you don't need to <A HREF="intro.html#escape">escape</A> the '&#124;' inside a
+			help command.  So these both work:
+<B>				:help |</B>
+<B>				:help k| only</B>
+ 			Note that a space before the '&#124;' is seen <A HREF="motion.html#as">as</A> part of
+			the &quot;<A HREF="#:help">:help</A>&quot; argument.
+			You can also use &lt;LF&gt; or <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A> to separate the help
+			command from a following command.  You need to type
+			<A HREF="visual.html#CTRL-V">CTRL-V</A> first to insert the &lt;LF&gt; or <A HREF="motion.html#&lt;CR&gt;">&lt;CR&gt;</A>.  Example:
+<B>				:help so&lt;C-V&gt;&lt;CR&gt;only</B>
+ 			{not in Vi}
+
+:h[elp]! [subject]	Like &quot;<A HREF="#:help">:help</A>&quot;, but in non-English help files prefer to
+			find a <A HREF="tagsrch.html#tag">tag</A> in a file with the same language <A HREF="motion.html#as">as</A> the
+			current file.  See |<A HREF="#help-translated">help-translated</A>|.
+
+
+							*<A NAME=":helpg"></A><B>:helpg</B>* *<A NAME=":helpgrep"></A><B>:helpgrep</B>*
+:helpg[rep] {pattern}[@xx]
+			Search all help text files and make a list of lines
+			in which {pattern} matches.  Jumps to the first match.
+			The optional [@xx] specifies that only matches in the
+			&quot;xx&quot; language are to be found.
+			You can navigate through the matches with the
+			|<A HREF="quickfix.html#quickfix">quickfix</A>| commands, e.g., |<A HREF="quickfix.html#:cnext">:cnext</A>| to jump to the
+			next one.  Or use |<A HREF="quickfix.html#:cwindow">:cwindow</A>| to get the list of
+			matches in the <A HREF="quickfix.html#quickfix">quickfix</A> <A HREF="windows.html#window">window</A>.
+			{pattern} is used <A HREF="motion.html#as">as</A> a Vim <A HREF="pattern.html#regexp">regexp</A> |<A HREF="pattern.html#pattern">pattern</A>|.
+			<A HREF="options.html#'ignorecase'">'ignorecase'</A> is not used, add &quot;\c&quot; to ignore <A HREF="change.html#case">case</A>.
+			Example for <A HREF="change.html#case">case</A> sensitive search:
+<B>				:helpgrep Uganda</B>
+ 			Example for <A HREF="change.html#case">case</A> ignoring search:
+<B>				:helpgrep uganda\c</B>
+ 			Example for searching in French help:
+<B>				:helpgrep backspace@fr</B>
+ 			The <A HREF="pattern.html#pattern">pattern</A> does not support line breaks, <A HREF="motion.html#it">it</A> must
+			match within one line.  You can use |<A HREF="quickfix.html#:grep">:grep</A>| instead,
+			but then you need to get the list of help files in a
+			complicated way.
+			Cannot be followed by another command, everything is
+			used <A HREF="motion.html#as">as</A> part of the <A HREF="pattern.html#pattern">pattern</A>.  But you can use
+			|<A HREF="eval.html#:execute">:execute</A>| when needed.
+			Compressed help files will not be searched (Fedora
+			compresses the help files).
+			{not in Vi}
+
+
+							*<A NAME=":lh"></A><B>:lh</B>* *<A NAME=":lhelpgrep"></A><B>:lhelpgrep</B>*
+:lh[elpgrep] {pattern}[@xx]
+			Same <A HREF="motion.html#as">as</A> &quot;<A HREF="#:helpgrep">:helpgrep</A>&quot;, except the location list is used
+			instead of the <A HREF="quickfix.html#quickfix">quickfix</A> list.  If the help <A HREF="windows.html#window">window</A> is
+			already opened, then the location list for that <A HREF="windows.html#window">window</A>
+			is used.  Otherwise, a new help <A HREF="windows.html#window">window</A> is opened and
+			the location list for that <A HREF="windows.html#window">window</A> is set.  The
+			location list for the current <A HREF="windows.html#window">window</A> is not changed.
+
+
+							*<A NAME=":exu"></A><B>:exu</B>* *<A NAME=":exusage"></A><B>:exusage</B>*
+:exu[sage]		Show help on <A HREF="intro.html#Ex">Ex</A> commands.  Added to simulate the <A HREF="intro.html#Nvi">Nvi</A>
+			command. {not in Vi}
+
+
+							*<A NAME=":viu"></A><B>:viu</B>* *<A NAME=":viusage"></A><B>:viusage</B>*
+:viu[sage]		Show help on <A HREF="intro.html#Normal">Normal</A> mode commands.  Added to simulate
+			the <A HREF="intro.html#Nvi">Nvi</A> command. {not in Vi}
+
+When no argument is given to |<A HREF="#:help">:help</A>| the file given with the <A HREF="options.html#'helpfile'">'helpfile'</A> option
+will be opened.  Otherwise the specified <A HREF="tagsrch.html#tag">tag</A> is searched for in all &quot;doc/tags&quot;
+files in the directories specified in the <A HREF="options.html#'runtimepath'">'runtimepath'</A> option.
+
+The initial height of the help <A HREF="windows.html#window">window</A> can be set with the <A HREF="options.html#'helpheight'">'helpheight'</A> option
+(default 20).
+
+Jump to specific subjects by using <A HREF="tagsrch.html#tags">tags</A>.  This can be done in two ways:
+- Use the &quot;<A HREF="tagsrch.html#CTRL-]">CTRL-]</A>&quot; command while standing on the name of a command or option.
+  This only works when the <A HREF="tagsrch.html#tag">tag</A> is a keyword.  &quot;&lt;C-Leftmouse&gt;&quot; and
+  &quot;<A HREF="tagsrch.html#g&lt;LeftMouse&gt;">g&lt;LeftMouse&gt;</A>&quot; work just like &quot;<A HREF="tagsrch.html#CTRL-]">CTRL-]</A>&quot;.
+- use the &quot;<A HREF="tagsrch.html#:ta">:ta</A> {subject}&quot; command.  This also works with non-keyword
+  characters.
+
+Use <A HREF="tagsrch.html#CTRL-T">CTRL-T</A> or <A HREF="motion.html#CTRL-O">CTRL-O</A> to jump back.
+Use &quot;<A HREF="editing.html#:q">:q</A>&quot; to close the help <A HREF="windows.html#window">window</A>.
+
+If there are several matches for an item you are looking for, this is how you
+can jump to each one of them:
+1. Open a help <A HREF="windows.html#window">window</A>
+2. Use the &quot;<A HREF="tagsrch.html#:tag">:tag</A>&quot; command with a slash prepended to the <A HREF="tagsrch.html#tag">tag</A>.  E.g.:
+<B>	:tag /min</B>
+3. Use &quot;<A HREF="tagsrch.html#:tnext">:tnext</A>&quot; to jump to the next matching <A HREF="tagsrch.html#tag">tag</A>.
+
+It is possible to add help files for plugins and other items.  You don't need
+to change the distributed help files for that.  See |<A HREF="usr_05.html#add-local-help">add-local-help</A>|.
+
+To write a local help file, see |<A HREF="usr_41.html#write-local-help">write-local-help</A>|.
+
+Note that the title lines from the local help files are automagically added to
+the &quot;LOCAL ADDITIONS&quot; section in the &quot;<A HREF="help.html#help.txt">help.txt</A>&quot; help file |<A HREF="help.html#local-additions">local-additions</A>|.
+This is done when viewing the file in Vim, the file itself is not changed.  It
+is done by going through all help files and obtaining the first line of each
+file.  The files in $VIMRUNTIME/doc are skipped.
+
+
+							*<A NAME="help-xterm-window"></A><B>help-xterm-window</B>*
+If you want to have the help in another xterm <A HREF="windows.html#window">window</A>, you could use this
+command:
+<B>	:!xterm -e vim +help &amp;</B>
+ 
+
+
+			*<A NAME=":helpfind"></A><B>:helpfind</B>* *<A NAME=":helpf"></A><B>:helpf</B>*
+:helpf[ind]		Like |<A HREF="#:help">:help</A>|, but use a <A HREF="gui_w32.html#dialog">dialog</A> to enter the argument.
+			Only for backwards compatibility.  It now executes the
+			ToolBar.FindHelp menu entry instead of using a builtin
+			<A HREF="gui_w32.html#dialog">dialog</A>.  {only when compiled with YXXY+GUI_GTK|}
+			{not in Vi}
+
+
+					*<A NAME=":helpt"></A><B>:helpt</B>* *<A NAME=":helptags"></A><B>:helptags</B>*
+
+				*<A NAME="E154"></A><B>E154</B>* *<A NAME="E150"></A><B>E150</B>* *<A NAME="E151"></A><B>E151</B>* *<A NAME="E152"></A><B>E152</B>* *<A NAME="E153"></A><B>E153</B>* *<A NAME="E670"></A><B>E670</B>*
+:helpt[ags] [++t] {dir}
+			Generate the help <A HREF="tagsrch.html#tags">tags</A> file(s) for directory {dir}.
+			All &quot;*.txt&quot; and &quot;*.??x&quot; files in the directory and
+			sub-directories are scanned for a help <A HREF="tagsrch.html#tag">tag</A> definition
+			in between stars.  The &quot;*.??x&quot; files are for
+			translated docs, they generate the &quot;tags-??&quot; file, see
+			|<A HREF="#help-translated">help-translated</A>|.  The generated <A HREF="tagsrch.html#tags">tags</A> files are
+			sorted.
+			When there are duplicates an error message is given.
+			An existing <A HREF="tagsrch.html#tags">tags</A> file is silently overwritten.
+			The optional &quot;++t&quot; argument forces adding the
+			&quot;<A HREF="tags.html#help-tags">help-tags</A>&quot; <A HREF="tagsrch.html#tag">tag</A>.  This is also done when the {dir} is
+			equal to $VIMRUNTIME/doc.
+			To rebuild the help <A HREF="tagsrch.html#tags">tags</A> in the runtime directory
+			(requires write permission there):
+<B>				:helptags $VIMRUNTIME/doc</B>
+ 			{not in Vi}
+
+
+==============================================================================
+
+2. Translated help files				*<A NAME="help-translated"></A><B>help-translated</B>*
+
+It is possible to add translated help files, next to the original English help
+files.  Vim will search for all help in &quot;doc&quot; directories in <A HREF="options.html#'runtimepath'">'runtimepath'</A>.
+This is only available when compiled with the |<A HREF="various.html#+multi_lang">+multi_lang</A>| feature.
+
+At this moment translations are available for:
+	<A HREF="mbyte.html#Chinese">Chinese</A>  - multiple authors
+	French   - translated by David Blanchet
+	Italian  - translated by Antonio Colombo
+	<A HREF="mbyte.html#Japanese">Japanese</A> - multiple authors
+	Polish   - translated by Mikolaj Machowski
+	<A HREF="russian.html#Russian">Russian</A>  - translated by Vassily Ragosin
+ See the Vim website to find them:	<A HREF="http://www.vim.org/translations.php">http://www.vim.org/translations.php</A>
+
+A set of translated help files consists of these files:
+
+	help.abx
+	howto.abx
+	<A HREF="eval.html#...">...</A>
+	tags-ab
+
+&quot;<A HREF="motion.html#ab">ab</A>&quot; is the two-letter language code.  Thus for Italian the names are:
+
+	help.itx
+	howto.itx
+	<A HREF="eval.html#...">...</A>
+	tags-it
+
+The <A HREF="options.html#'helplang'">'helplang'</A> option can be set to the preferred language(s).  The default is
+set according to the environment.  Vim will first try to find a matching <A HREF="tagsrch.html#tag">tag</A>
+in the preferred language(s).  English is used when <A HREF="motion.html#it">it</A> cannot be found.
+
+To find a <A HREF="tagsrch.html#tag">tag</A> in a specific language, append &quot;@ab&quot; to a <A HREF="tagsrch.html#tag">tag</A>, where &quot;<A HREF="motion.html#ab">ab</A>&quot; is the
+two-letter language code.  Example:
+<B>	:he user-manual@it</B>
+<B>	:he user-manual@en</B>
+The first one finds the Italian user manual, even when <A HREF="options.html#'helplang'">'helplang'</A> is empty.
+The second one finds the English user manual, even when <A HREF="options.html#'helplang'">'helplang'</A> is set to
+&quot;<A HREF="motion.html#it">it</A>&quot;.
+
+When using command-line completion for the &quot;<A HREF="#:help">:help</A>&quot; command, the &quot;@en&quot;
+extension is only shown when a <A HREF="tagsrch.html#tag">tag</A> exists for multiple languages.  When the
+<A HREF="tagsrch.html#tag">tag</A> only exists for English &quot;@en&quot; is omitted.
+
+When using |<A HREF="tagsrch.html#CTRL-]">CTRL-]</A>| or &quot;:help!&quot; in a non-English help file Vim will try to
+find the <A HREF="tagsrch.html#tag">tag</A> in the same language.  If not found then <A HREF="options.html#'helplang'">'helplang'</A> will be used
+to select a language.
+
+Help files must use latin1 or <A HREF="mbyte.html#utf-8">utf-8</A> encoding.  Vim assumes the encoding is
+<A HREF="mbyte.html#utf-8">utf-8</A> when finding non-ASCII characters in the first line.  Thus you must
+translate the header with &quot;For Vim version&quot;.
+
+The same encoding must be used for the help files of one language in one
+directory.  You can use a different encoding for different languages and use
+a different encoding for help files of the same language but in a different
+directory.
+
+Hints for translators:
+- Do not translate the <A HREF="tagsrch.html#tags">tags</A>.  This makes <A HREF="motion.html#it">it</A> possible to use <A HREF="options.html#'helplang'">'helplang'</A> to
+  specify the preferred language.  You may add new <A HREF="tagsrch.html#tags">tags</A> in your language.
+- When you <A HREF="diff.html#do">do</A> not translate a part of a file, add <A HREF="tagsrch.html#tags">tags</A> to the English version,
+using the <A HREF="mailto:&quot;tag@en&quot;">&quot;tag@en&quot;</A> notation. 
+- Make a package with all the files and the <A HREF="tagsrch.html#tags">tags</A> file available for <A HREF="intro.html#download">download</A>.
+  Users can drop <A HREF="motion.html#it">it</A> in one of the &quot;doc&quot; directories and start use <A HREF="motion.html#it">it</A>.
+  Report this to <A HREF="intro.html#Bram">Bram</A>, so that he can add a link on www.vim.org.
+- Use the |<A HREF="#:helptags">:helptags</A>| command to generate the tags files.  It will find all
+  languages in the specified directory.
+
+==============================================================================
+
+3. Writing help files					*<A NAME="help-writing"></A><B>help-writing</B>*
+
+For ease of use, a Vim help file for a <A HREF="usr_05.html#plugin">plugin</A> should follow the format of the
+standard Vim help files.  If you are <A HREF="editing.html#writing">writing</A> a new help file it's best to copy
+one of the existing files and use <A HREF="motion.html#it">it</A> <A HREF="motion.html#as">as</A> a <A HREF="autocmd.html#template">template</A>.
+
+The first line in a help file should have the following format:
+
+
+*<A NAME="helpfile_name.txt"></A><B>helpfile_name.txt</B>*	For Vim version 7.3	Last change: 2010 June 4
+
+The first field is a link to the help file name.  The second field describes
+the applicable Vim version.  The last field specifies the last modification
+date of the file.  Each field is separated by a <A HREF="intro.html#tab">tab</A>.
+
+At the bottom of the help file, place a Vim <A HREF="options.html#modeline">modeline</A> to set the <A HREF="options.html#'textwidth'">'textwidth'</A>
+and <A HREF="options.html#'tabstop'">'tabstop'</A> <A HREF="options.html#options">options</A> and the <A HREF="options.html#'filetype'">'filetype'</A> to 'help'.  Never set a global option
+in such a <A HREF="options.html#modeline">modeline</A>, that can have consequences undesired by whoever reads that
+help.
+
+
+TAGS
+
+To define a help <A HREF="tagsrch.html#tag">tag</A>, place the name between asterisks (*tag-name*).  The
+tag-name should be different from all the Vim help <A HREF="tagsrch.html#tag">tag</A> names and ideally
+should begin with the name of the Vim <A HREF="usr_05.html#plugin">plugin</A>.  The <A HREF="tagsrch.html#tag">tag</A> name is usually right
+aligned on a line.
+
+When referring to an existing help <A HREF="tagsrch.html#tag">tag</A> and to create a hot-link, place the
+name between two bars (|) eg. |help-writing|.|||
+
+When referring to a Vim option in the help file, place the option name between
+two single <A HREF="quotes.html#quotes">quotes</A>, eg. <A HREF="options.html#'statusline'">'statusline'</A>
+
+
+HIGHLIGHTING
+
+To define a column heading, use a tilde character at the end of the line.
+This will highlight the column heading in a different color.  E.g.
+
+<B><FONT COLOR="PURPLE">Column heading</FONT></B>
+
+To separate sections in a help file, place a series of '<A HREF="change.html#=">=</A>' characters in a
+line starting from the first column.  The section separator line is highlighted
+differently.
+
+To <A HREF="change.html#quote">quote</A> a block of ex-commands verbatim, place a greater than (&gt;) character
+at the end of the line before the block and a <A HREF="various.html#less">less</A> than (&lt;) character <A HREF="motion.html#as">as</A> the
+first non-blank on a line following the block.  Any line starting in column 1
+also implicitly stops the block of ex-commands before <A HREF="motion.html#it">it</A>.  E.g.
+<B>    function Example_Func()</B>
+<B>	echo "Example"</B>
+<B>    endfunction</B>
+ 
+
+The following are highlighted differently in a Vim help file:
+  - a special key name expressed either in <A HREF="intro.html#&lt;&gt;">&lt;&gt;</A> <A HREF="intro.html#notation">notation</A> <A HREF="motion.html#as">as</A> in <A HREF="scroll.html#&lt;PageDown&gt;">&lt;PageDown&gt;</A>, or
+    <A HREF="motion.html#as">as</A> a Ctrl character <A HREF="motion.html#as">as</A> in <A HREF="change.html#CTRL-X">CTRL-X</A>
+  - anything between {braces}, e.g. <A HREF="map.html#{lhs}">{lhs}</A> and <A HREF="map.html#{rhs}">{rhs}</A>
+
+The <A HREF="motion.html#word">word</A> &quot;Note&quot;, &quot;Notes&quot; and similar automagically receive distinctive
+highlighting.  So <A HREF="diff.html#do">do</A> these:
+	*Todo	something to <A HREF="diff.html#do">do</A>
+	*Error	something wrong
+
+You can find the details in $VIMRUNTIME/syntax/help.vim
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

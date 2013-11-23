@@ -1,0 +1,236 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: if_ole</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: if_ole</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="if_ole.txt"></A><B>if_ole.txt</B>*    For Vim version 7.4.  Last change: 2008 Aug 16
+
+
+		  VIM REFERENCE MANUAL    by Paul Moore
+
+
+
+The OLE Interface to Vim				*<A NAME="ole-interface"></A><B>ole-interface</B>*
+
+1. Activation			|<A HREF="#ole-activation">ole-activation</A>|
+2. Methods			|<A HREF="#ole-methods">ole-methods</A>|
+3. The &quot;normal&quot; command		|<A HREF="#ole-normal">ole-normal</A>|
+4. Registration			|<A HREF="#ole-registration">ole-registration</A>|
+5. MS Visual Studio integration	|<A HREF="#MSVisualStudio">MSVisualStudio</A>|
+
+{Vi does not have any of these commands}
+
+OLE is only available when compiled with the |<A HREF="various.html#+ole">+ole</A>| feature.  See
+src/if_ole.INSTALL.
+An alternative is using the <A HREF="remote.html#client-server">client-server</A> communication |<A HREF="remote.html#clientserver">clientserver</A>|.
+
+==============================================================================
+
+1. Activation						*<A NAME="ole-activation"></A><B>ole-activation</B>*
+
+Vim acts <A HREF="motion.html#as">as</A> an OLE automation server, accessible from any automation client,
+for example, <A HREF="visual.html#Visual">Visual</A> Basic, <A HREF="if_pyth.html#Python">Python</A>, or <A HREF="if_perl.html#Perl">Perl</A>.  The Vim application &quot;name&quot; (its
+&quot;ProgID&quot;, in OLE terminology) is &quot;Vim.Application&quot;.
+
+Hence, in order to start a Vim instance (or connect to an already running
+instance), code similar to the following should be used:
+
+[Visual Basic]
+<B>	Dim Vim As Object</B>
+<B>	Set Vim = CreateObject("Vim.Application")</B>
+
+[Python]
+<B>	from win32com.client.dynamic import Dispatch</B>
+<B>	vim = Dispatch('Vim.Application')</B>
+
+[Perl]
+<B>	use Win32::OLE;</B>
+<B>	$vim = new Win32::OLE 'Vim.Application';</B>
+
+[C#]
+<B>        // Add a reference to VIM in your project. </B>
+<B>        // Choose the COM tab.</B>
+<B>        // Select "VIM Ole Interface 1.1 Type Library"</B>
+<B>	Vim.Vim vimobj = new Vim.Vim();</B>
+
+Vim does not support acting <A HREF="motion.html#as">as</A> a &quot;hidden&quot; OLE server, like some other OLE
+Automation servers.  When a client starts up an instance of Vim, that instance
+is immediately visible.  Simply closing the OLE connection to the Vim instance
+is not enough to shut down the Vim instance - <A HREF="motion.html#it">it</A> is necessary to explicitly
+execute a quit command (for example, :qa!, <A HREF="editing.html#:wqa">:wqa</A>).
+
+==============================================================================
+
+2. Methods						*<A NAME="ole-methods"></A><B>ole-methods</B>*
+
+Vim exposes four methods for use by clients.
+
+
+							*<A NAME="ole-sendkeys"></A><B>ole-sendkeys</B>*
+SendKeys(keys)		Execute a series of keys.
+
+This method takes a single parameter, which is a string of keystrokes.  These
+keystrokes are executed exactly <A HREF="motion.html#as">as</A> if they had been types in at the keyboard.
+Special keys can be given using their &lt;..&gt; names, <A HREF="motion.html#as">as</A> for the right hand side
+of a <A HREF="map.html#mapping">mapping</A>.  Note: Execution of the <A HREF="intro.html#Ex">Ex</A> &quot;normal&quot; command is not supported -
+see below |<A HREF="#ole-normal">ole-normal</A>|.
+
+Examples (Visual Basic <A HREF="syntax.html#syntax">syntax</A>)
+<B>	Vim.SendKeys "ihello&lt;Esc&gt;"</B>
+<B>	Vim.SendKeys "ma1GV4jy`a"</B>
+
+These examples assume that Vim starts in <A HREF="intro.html#Normal">Normal</A> mode.  To force <A HREF="intro.html#Normal">Normal</A> mode,
+start the key sequence with CTRL-\ <A HREF="motion.html#CTRL-N">CTRL-N</A> <A HREF="motion.html#as">as</A> in
+
+<B>	Vim.SendKeys "&lt;C-\&gt;&lt;C-N&gt;ihello&lt;Esc&gt;"</B>
+
+CTRL-\ <A HREF="motion.html#CTRL-N">CTRL-N</A> returns Vim to <A HREF="intro.html#Normal">Normal</A> mode, when in <A HREF="insert.html#Insert">Insert</A> or <A HREF="cmdline.html#Command-line">Command-line</A> mode.
+Note that this doesn't work halfway a Vim command
+
+
+							*<A NAME="ole-eval"></A><B>ole-eval</B>*
+Eval(expr)		Evaluate an <A HREF="eval.html#expression">expression</A>.
+
+This method takes a single parameter, which is an <A HREF="eval.html#expression">expression</A> in Vim's normal
+format (see |<A HREF="eval.html#expression">expression</A>|).  It returns a string, which is the result of
+evaluating the <A HREF="eval.html#expression">expression</A>.  A |<A HREF="eval.html#List">List</A>| is turned into a string by joining the
+items and <A HREF="insert.html#inserting">inserting</A> line breaks.
+
+Examples (Visual Basic <A HREF="syntax.html#syntax">syntax</A>)
+<B>	Line20 = Vim.Eval("getline(20)")</B>
+<B>	Twelve = Vim.Eval("6 + 6")		' Note this is a STRING</B>
+<B>	Font = Vim.Eval("&amp;guifont")</B>
+ 
+
+							*<A NAME="ole-setforeground"></A><B>ole-setforeground</B>*
+SetForeground()		Make the Vim <A HREF="windows.html#window">window</A> come to the foreground
+
+This method takes no arguments.  No value is returned.
+
+Example (Visual Basic <A HREF="syntax.html#syntax">syntax</A>)
+<B>	Vim.SetForeground</B>
+ 
+
+
+							*<A NAME="ole-gethwnd"></A><B>ole-gethwnd</B>*
+GetHwnd()		Return the handle of the Vim <A HREF="windows.html#window">window</A>.
+
+This method takes no arguments.  It returns the hwnd of the main Vimwindow.
+You can use this if you are <A HREF="editing.html#writing">writing</A> something which needs to manipulate the
+Vim <A HREF="windows.html#window">window</A>, or to track <A HREF="motion.html#it">it</A> in the z-order, etc.
+
+Example (Visual Basic <A HREF="syntax.html#syntax">syntax</A>)
+<B>	Vim_Hwnd = Vim.GetHwnd</B>
+ 
+
+==============================================================================
+
+3. The &quot;normal&quot; command					*<A NAME="ole-normal"></A><B>ole-normal</B>*
+
+Due to the way Vim processes OLE Automation commands, combined with the method
+of implementation of the <A HREF="intro.html#Ex">Ex</A> command <A HREF="various.html#:normal">:normal</A>, <A HREF="motion.html#it">it</A> is not possible to execute the
+<A HREF="various.html#:normal">:normal</A> command via OLE automation.  Any attempt to <A HREF="diff.html#do">do</A> so will fail, probably
+harmlessly, although possibly in unpredictable ways.
+
+There is currently no practical way to trap this situation, and users must
+simply be aware of the limitation.
+==============================================================================
+
+4. Registration					*<A NAME="ole-registration"></A><B>ole-registration</B>* *<A NAME="E243"></A><B>E243</B>*
+
+Before Vim will act <A HREF="motion.html#as">as</A> an OLE server, <A HREF="motion.html#it">it</A> must be registered in the system
+registry.  In order to <A HREF="diff.html#do">do</A> this, Vim should be run with a single parameter of
+&quot;<A HREF="#-register">-register</A>&quot;.
+
+							*<A NAME="-register"></A><B>-register</B>* 
+<B>	gvim -register</B>
+
+If <A HREF="starting.html#gvim">gvim</A> with OLE support is run and notices that no Vim OLE server has been
+registered, <A HREF="motion.html#it">it</A> will present a <A HREF="gui_w32.html#dialog">dialog</A> and offers you the choice to <A HREF="sponsor.html#register">register</A> by
+clicking &quot;Yes&quot;.
+
+In some situations registering is not possible.  This happens when the
+registry is not writable.  If you run into this problem you need to run <A HREF="starting.html#gvim">gvim</A>
+<A HREF="motion.html#as">as</A> &quot;Administrator&quot;.
+
+Once vim is registered, the application path is stored in the registry.
+Before moving, <A HREF="change.html#deleting">deleting</A>, or upgrading Vim, the registry entries should be
+removed using the &quot;<A HREF="#-unregister">-unregister</A>&quot; switch.
+
+							*<A NAME="-unregister"></A><B>-unregister</B>* 
+<B>	gvim -unregister</B>
+
+The OLE mechanism will use the first registered Vim <A HREF="motion.html#it">it</A> finds.  If a Vim is
+already running, this one will be used.  If you want to have (several) Vim
+sessions open that should not react to OLE commands, use the non-OLE version,
+and put <A HREF="motion.html#it">it</A> in a different directory.  The OLE version should then be put in a
+directory that is not in your normal path, so that typing &quot;<A HREF="starting.html#gvim">gvim</A>&quot; will start
+the non-OLE version.
+
+
+							*<A NAME="-silent"></A><B>-silent</B>*
+To avoid the message box that pops up to report the result, prepend &quot;<A HREF="#-silent">-silent</A>&quot;:
+
+<B>	gvim -silent -register</B>
+<B>	gvim -silent -unregister</B>
+
+==============================================================================
+
+5. MS <A HREF="visual.html#Visual">Visual</A> Studio integration			*<A NAME="MSVisualStudio"></A><B>MSVisualStudio</B>* *<A NAME="VisVim"></A><B>VisVim</B>*
+
+The OLE version can be used to run Vim <A HREF="motion.html#as">as</A> the editor in Microsoft <A HREF="visual.html#Visual">Visual</A>
+Studio.  This is called &quot;<A HREF="#VisVim">VisVim</A>&quot;.  It is included in the archive that contains
+the OLE version.  The documentation can be found in the runtime directory, the
+README_VisVim.txt file.
+
+
+<B><FONT COLOR="PURPLE">Using Vim with Visual Studio .Net</FONT></B>
+
+With .Net you no longer really need <A HREF="#VisVim">VisVim</A>, since .Net studio has support for
+external editors.  Follow these directions:
+
+In .Net Studio choose from the menu Tools-&gt;External Tools...
+Add
+     Title     - Vim
+     Command   - c:\vim\vim63\gvim.exe
+     Arguments - <A HREF="remote.html#--servername">--servername</A> VS_NET <A HREF="remote.html#--remote-silent">--remote-silent</A> &quot;+call cursor($(CurLine), $(CurCol))&quot; $(ItemPath)
+     Init Dir  - Empty
+
+Now, when you open a file in .Net, you can choose from the .Net menu:
+Tools-&gt;Vim
+
+That will open the file in Vim.
+You can then add this external command <A HREF="motion.html#as">as</A> an icon and place <A HREF="motion.html#it">it</A> anywhere you
+like.  You might also be able to set this <A HREF="motion.html#as">as</A> your default editor.
+
+If you refine this further, please post back to the Vim <A HREF="intro.html#maillist">maillist</A> so we have a
+record of <A HREF="motion.html#it">it</A>.
+
+<A HREF="remote.html#--servername">--servername</A> VS_NET
+This will create a new instance of vim called VS_NET.  So if you open multiple
+files from VS, they will use the same instance of Vim.  This allows you to
+have multiple copies of Vim running, but you can <A HREF="intro.html#control">control</A> which one has VS
+files in <A HREF="motion.html#it">it</A>.
+
+<A HREF="remote.html#--remote-silent">--remote-silent</A> &quot;+call cursor(10, 27)&quot;
+	      - Places the cursor on line 10 column 27
+In Vim
+<B>   :h --remote-silent for mor details</B>
+
+[.Net remarks provided by Dave Fishburn and Brian Sturk]
+
+==============================================================================
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

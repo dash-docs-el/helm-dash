@@ -1,0 +1,1501 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=UTF-8">
+<TITLE>Vim documentation: mbyte</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: mbyte</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="mbyte.txt"></A><B>mbyte.txt</B>*     For Vim version 7.4.  Last change: 2013 May 18
+
+
+		  VIM REFERENCE MANUAL	  by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A> et al.
+
+
+
+Multi-byte support				*<A NAME="multibyte"></A><B>multibyte</B>* *<A NAME="multi-byte"></A><B>multi-byte</B>*
+
+						*<A NAME="Chinese"></A><B>Chinese</B>* *<A NAME="Japanese"></A><B>Japanese</B>* *<A NAME="Korean"></A><B>Korean</B>*
+This is about editing text in languages which have many characters that can
+not be represented using one byte (one octet).  Examples are <A HREF="#Chinese">Chinese</A>, <A HREF="#Japanese">Japanese</A>
+and <A HREF="#Korean">Korean</A>.  <A HREF="#Unicode">Unicode</A> is also covered here.
+
+For an introduction to the most common features, see |<A HREF="usr_45.html">usr_45.txt</A>| in the user
+manual.
+For <A HREF="change.html#changing">changing</A> the language of <A HREF="message.html#messages">messages</A> and <A HREF="gui.html#menus">menus</A> see |<A HREF="mlang.html">mlang.txt</A>|.
+
+{not available when compiled without the |<A HREF="various.html#+multi_byte">+multi_byte</A>| feature}
+
+
+1.  Getting started			|<A HREF="#mbyte-first">mbyte-first</A>|
+2.  Locale				|<A HREF="#mbyte-locale">mbyte-locale</A>|
+3.  Encoding				|<A HREF="#mbyte-encoding">mbyte-encoding</A>|
+4.  Using a terminal			|<A HREF="#mbyte-terminal">mbyte-terminal</A>|
+5.  Fonts on X11			|<A HREF="#mbyte-fonts-X11">mbyte-fonts-X11</A>|
+6.  Fonts on <A HREF="os_win32.html#MS-Windows">MS-Windows</A>			|<A HREF="#mbyte-fonts-MSwin">mbyte-fonts-MSwin</A>|
+7.  Input on <A HREF="options.html#X11">X11</A>			|<A HREF="#mbyte-XIM">mbyte-XIM</A>|
+8.  Input on <A HREF="os_win32.html#MS-Windows">MS-Windows</A>			|<A HREF="#mbyte-IME">mbyte-IME</A>|
+9.  Input with a keymap			|<A HREF="#mbyte-keymap">mbyte-keymap</A>|
+10. Using <A HREF="#UTF-8">UTF-8</A>				|<A HREF="#mbyte-utf8">mbyte-utf8</A>|
+11. Overview of options			|<A HREF="#mbyte-options">mbyte-options</A>|
+
+NOTE: This file contains <A HREF="#UTF-8">UTF-8</A> characters.  These may show up <A HREF="motion.html#as">as</A> strange
+characters or boxes when using another encoding.
+
+==============================================================================
+
+1. Getting started					*<A NAME="mbyte-first"></A><B>mbyte-first</B>*
+
+This is a summary of the <A HREF="#multibyte">multibyte</A> features in Vim.  If you are lucky <A HREF="motion.html#it">it</A> works
+<A HREF="motion.html#as">as</A> described and you can start using Vim without much trouble.  If something
+doesn't work you will have to read the rest.  Don't be surprised if <A HREF="motion.html#it">it</A> takes
+quite a bit of work and experimenting to make Vim use all the <A HREF="#multi-byte">multi-byte</A>
+features.  Unfortunately, every system has its own way to deal with <A HREF="#multibyte">multibyte</A>
+languages and <A HREF="motion.html#it">it</A> is quite complicated.
+
+
+COMPILING
+
+If you already have a compiled Vim program, check if the |<A HREF="various.html#+multi_byte">+multi_byte</A>| feature
+is included.  The |<A HREF="various.html#:version">:version</A>| command can be used for this.
+
+If <A HREF="various.html#+multi_byte">+multi_byte</A> is not included, you should compile Vim with &quot;normal&quot;, &quot;big&quot; or
+&quot;huge&quot; features.  You can further tune what features are included.  See the
+INSTALL files in the source directory.
+
+
+LOCALE
+
+First of all, you must make sure your current <A HREF="#locale">locale</A> is set correctly.  If
+your system has been installed to use the language, <A HREF="motion.html#it">it</A> probably works right
+away.  If not, you can often make <A HREF="motion.html#it">it</A> work by setting the $LANG environment
+variable in your shell:
+
+<B>	setenv LANG ja_JP.EUC</B>
+
+Unfortunately, the name of the <A HREF="#locale">locale</A> depends on your system.  <A HREF="#Japanese">Japanese</A> might
+also be called &quot;ja_JP.EUCjp&quot; or just &quot;ja&quot;.  To see what is currently used:
+
+<B>	:language</B>
+
+To change the <A HREF="#locale">locale</A> inside Vim use:
+
+<B>	:language ja_JP.EUC</B>
+
+Vim will give an error message if this doesn't work.  This is a good way to
+experiment and find the <A HREF="#locale">locale</A> name you want to use.  But it's always better
+to set the <A HREF="#locale">locale</A> in the shell, so that <A HREF="motion.html#it">it</A> is used right from the start.
+
+See |<A HREF="#mbyte-locale">mbyte-locale</A>| for details.
+
+
+ENCODING
+
+If your <A HREF="#locale">locale</A> works properly, Vim will try to set the <A HREF="options.html#'encoding'">'encoding'</A> option
+accordingly.  If this doesn't work you can overrule its value:
+
+<B>	:set encoding=utf-8</B>
+
+See |<A HREF="#encoding-values">encoding-values</A>| for a list of acceptable values.
+
+The result is that all the text that is used inside Vim will be in this
+encoding.  Not only the text in the <A HREF="windows.html#buffers">buffers</A>, but also in <A HREF="change.html#registers">registers</A>, <A HREF="eval.html#variables">variables</A>,
+etc.  This also means that <A HREF="change.html#changing">changing</A> the value of <A HREF="options.html#'encoding'">'encoding'</A> makes the existing
+text invalid!  The text doesn't change, but <A HREF="motion.html#it">it</A> will be displayed wrong.
+
+You can edit files in another encoding than what <A HREF="options.html#'encoding'">'encoding'</A> is set to.  Vim
+will convert the file when you read <A HREF="motion.html#it">it</A> and convert <A HREF="motion.html#it">it</A> back when you write <A HREF="motion.html#it">it</A>.
+See <A HREF="options.html#'fileencoding'">'fileencoding'</A>, <A HREF="options.html#'fileencodings'">'fileencodings'</A> and |<A HREF="editing.html#++enc">++enc</A>|.
+
+
+DISPLAY AND FONTS
+
+If you are working in a terminal (emulator) you must make sure <A HREF="motion.html#it">it</A> accepts the
+same encoding <A HREF="motion.html#as">as</A> which Vim is working with.  If this is not the <A HREF="change.html#case">case</A>, you can
+use the <A HREF="options.html#'termencoding'">'termencoding'</A> option to make Vim convert text automatically.
+
+For the <A HREF="gui.html#GUI">GUI</A> you must select fonts that work with the current <A HREF="options.html#'encoding'">'encoding'</A>.  This
+is the difficult part.  It depends on the system you are using, the <A HREF="#locale">locale</A> and
+a few other things.  See the chapters on fonts: |<A HREF="#mbyte-fonts-X11">mbyte-fonts-X11</A>| for
+X-Windows and |<A HREF="#mbyte-fonts-MSwin">mbyte-fonts-MSwin</A>| for <A HREF="os_win32.html#MS-Windows">MS-Windows</A>.
+
+For <A HREF="gui_x11.html#GTK+">GTK+</A> 2, you can skip most of this section.  The option <A HREF="options.html#'guifontset'">'guifontset'</A> does
+no longer exist.  You only need to set <A HREF="options.html#'guifont'">'guifont'</A> and everything should &quot;just
+work&quot;.  If your system comes with Xft2 and fontconfig and the current font
+does not contain a certain glyph, a different font will be used automatically
+if available.  The <A HREF="options.html#'guifontwide'">'guifontwide'</A> option is still supported but usually you <A HREF="diff.html#do">do</A>
+not need to set <A HREF="motion.html#it">it</A>.  It is only necessary if the automatic font selection does
+not suit your needs.
+
+For <A HREF="options.html#X11">X11</A> you can set the <A HREF="options.html#'guifontset'">'guifontset'</A> option to a list of fonts that together
+cover the characters that are used.  Example for <A HREF="#Korean">Korean</A>:
+
+<B>	:set guifontset=k12,r12</B>
+
+Alternatively, you can set <A HREF="options.html#'guifont'">'guifont'</A> and <A HREF="options.html#'guifontwide'">'guifontwide'</A>.  <A HREF="options.html#'guifont'">'guifont'</A> is used for
+the single-width characters, <A HREF="options.html#'guifontwide'">'guifontwide'</A> for the double-width characters.
+Thus the <A HREF="options.html#'guifontwide'">'guifontwide'</A> font must be exactly <A HREF="if_cscop.html#twice">twice</A> <A HREF="motion.html#as">as</A> wide <A HREF="motion.html#as">as</A> <A HREF="options.html#'guifont'">'guifont'</A>.
+Example for <A HREF="#UTF-8">UTF-8</A>:
+
+<B>	:set guifont=-misc-fixed-medium-r-normal-*-18-120-100-100-c-90-iso10646-1</B>
+<B>	:set guifontwide=-misc-fixed-medium-r-normal-*-18-120-100-100-c-180-iso10646-1</B>
+
+You can also set <A HREF="options.html#'guifont'">'guifont'</A> alone, Vim will try to find a matching
+<A HREF="options.html#'guifontwide'">'guifontwide'</A> for you.
+
+
+INPUT
+
+There are several ways to enter <A HREF="#multi-byte">multi-byte</A> characters:
+- For <A HREF="options.html#X11">X11</A> XIM can be used.  See |<A HREF="#XIM">XIM</A>|.
+- For <A HREF="os_win32.html#MS-Windows">MS-Windows</A> IME can be used.  See |<A HREF="#IME">IME</A>|.
+- For all systems keymaps can be used.  See |<A HREF="#mbyte-keymap">mbyte-keymap</A>|.
+
+The <A HREF="options.html#options">options</A> <A HREF="options.html#'iminsert'">'iminsert'</A>, <A HREF="options.html#'imsearch'">'imsearch'</A> and <A HREF="options.html#'imcmdline'">'imcmdline'</A> can be used to chose
+the different input methods or disable them temporarily.
+
+==============================================================================
+
+2.  Locale						*<A NAME="mbyte-locale"></A><B>mbyte-locale</B>*
+
+The easiest setup is when your whole system uses the <A HREF="#locale">locale</A> you want to work
+in.  But it's also possible to set the <A HREF="#locale">locale</A> for one shell you are working
+in, or just use a certain <A HREF="#locale">locale</A> inside Vim.
+
+
+
+WHAT IS A LOCALE?					*<A NAME="locale"></A><B>locale</B>*
+
+There are many of languages in the world.  And there are different cultures
+and environments at least <A HREF="motion.html#as">as</A> much <A HREF="motion.html#as">as</A> the number of languages.	A linguistic
+environment corresponding to an area is called &quot;<A HREF="#locale">locale</A>&quot;.  This includes
+information about the used language, the <A HREF="#charset">charset</A>, collating order for <A HREF="change.html#sorting">sorting</A>,
+date format, currency format and so on.  For Vim only the language and <A HREF="#charset">charset</A>
+really matter.
+
+You can only use a <A HREF="#locale">locale</A> if your system has support for <A HREF="motion.html#it">it</A>.  Some systems
+have only a few locales, especially in the USA.  The language which you want
+to use may not be on your system.  In that <A HREF="change.html#case">case</A> you might be able to <A HREF="usr_90.html#install">install</A>
+<A HREF="motion.html#it">it</A> <A HREF="motion.html#as">as</A> an extra package.  Check your system documentation for how to <A HREF="diff.html#do">do</A> that.
+
+The location in which the locales are installed varies from system to system.
+For example, &quot;/usr/share/locale&quot; or &quot;/usr/lib/locale&quot;.  See your system's
+setlocale() man page.
+
+Looking in these directories will show you the exact name of each <A HREF="#locale">locale</A>.
+Mostly upper/lowercase matters, thus &quot;ja_JP.EUC&quot; and &quot;ja_jp.euc&quot; are
+different.  Some systems have a locale.alias file, which allows translation
+from a short name like &quot;nl&quot; to the full name &quot;nl_NL.ISO_8859-1&quot;.
+
+Note that X-windows has its own <A HREF="#locale">locale</A> stuff.  And unfortunately uses <A HREF="#locale">locale</A>
+names different from what is used elsewhere.  This is confusing!  For Vim <A HREF="motion.html#it">it</A>
+matters what the setlocale() function uses, which is generally NOT the
+X-windows stuff.  You might have to <A HREF="diff.html#do">do</A> some experiments to find out what
+really works.
+
+
+							*<A NAME="locale-name"></A><B>locale-name</B>*
+The (simplified) format of |<A HREF="#locale">locale</A>| name is:
+
+	language
+or	language_territory
+or	language_territory.codeset
+
+Territory means the country (or part of it), <A HREF="#codeset">codeset</A> means the |<A HREF="#charset">charset</A>|.  For
+example, the <A HREF="#locale">locale</A> name &quot;ja_JP.eucJP&quot; means:
+	ja	the language is <A HREF="#Japanese">Japanese</A>
+	JP	the country is Japan
+	eucJP	the <A HREF="#codeset">codeset</A> is EUC-JP
+But <A HREF="motion.html#it">it</A> also could be &quot;ja&quot;, &quot;ja_JP.EUC&quot;, &quot;ja_JP.ujis&quot;, etc.  And unfortunately,
+the <A HREF="#locale">locale</A> name for a specific language, territory and <A HREF="#codeset">codeset</A> is not unified
+and depends on your system.
+
+Examples of <A HREF="#locale">locale</A> name:
+<B><FONT COLOR="PURPLE">    charset	    language		  locale name </FONT></B>
+    GB2312	    <A HREF="#Chinese">Chinese</A> (simplified)  zh_CN.EUC, zh_CN.GB2312
+    Big5	    <A HREF="#Chinese">Chinese</A> (traditional) zh_TW.BIG5, zh_TW.Big5
+    CNS-11643	    <A HREF="#Chinese">Chinese</A> (traditional) zh_TW
+    EUC-JP	    <A HREF="#Japanese">Japanese</A>		  ja, ja_JP.EUC, ja_JP.ujis, ja_JP.eucJP
+    Shift_JIS	    <A HREF="#Japanese">Japanese</A>		  ja_JP.SJIS, ja_JP.Shift_JIS
+    EUC-KR	    <A HREF="#Korean">Korean</A>		  ko, ko_KR.EUC
+
+
+USING A LOCALE
+
+To start using a <A HREF="#locale">locale</A> for the whole system, see the documentation of your
+system.  Mostly you need to set <A HREF="motion.html#it">it</A> in a configuration file in &quot;/etc&quot;.
+
+To use a <A HREF="#locale">locale</A> in a shell, set the $LANG environment value.  When you want to
+use <A HREF="#Korean">Korean</A> and the |<A HREF="#locale">locale</A>| name is &quot;ko&quot;, <A HREF="diff.html#do">do</A> this:
+
+    sh:    export LANG=ko
+    csh:   setenv LANG ko
+
+You can put this in your ~/.profile or ~/.cshrc file to always use <A HREF="motion.html#it">it</A>.
+
+To use a <A HREF="#locale">locale</A> in Vim only, use the |<A HREF="mlang.html#:language">:language</A>| command:
+
+<B>	:language ko</B>
+
+Put this in your ~/.vimrc file to use <A HREF="motion.html#it">it</A> always.
+
+Or specify $LANG when starting Vim:
+
+   sh:    LANG=ko vim {vim-arguments}
+   csh:	  env LANG=ko vim {vim-arguments}
+
+You could make a small shell <A HREF="usr_41.html#script">script</A> for this.
+
+==============================================================================
+
+3.  Encoding				*<A NAME="mbyte-encoding"></A><B>mbyte-encoding</B>*
+
+Vim uses the <A HREF="options.html#'encoding'">'encoding'</A> option to specify how characters are identified and
+encoded when they are used inside Vim.  This applies to all the places where
+text is used, including <A HREF="windows.html#buffers">buffers</A> (files loaded into memory), <A HREF="change.html#registers">registers</A> and
+<A HREF="eval.html#variables">variables</A>.
+
+
+							*<A NAME="charset"></A><B>charset</B>* *<A NAME="codeset"></A><B>codeset</B>*
+Charset is another name for encoding.  There are subtle differences, but these
+don't matter when using Vim.  &quot;<A HREF="#codeset">codeset</A>&quot; is another similar name.
+
+Each character is encoded <A HREF="motion.html#as">as</A> one or more bytes.  When all characters are
+encoded with one byte, we call this a single-byte encoding.  The most often
+used one is called &quot;latin1&quot;.  This <A HREF="vi_diff.html#limits">limits</A> the number of characters to 256.
+Some of these are <A HREF="intro.html#control">control</A> characters, thus even fewer can be used for text.
+
+When some characters use two or more bytes, we call this a <A HREF="#multi-byte">multi-byte</A>
+encoding.  This allows using much more than 256 characters, which is required
+for most East Asian languages.
+
+Most <A HREF="#multi-byte">multi-byte</A> encodings use one byte for the first 127 characters.  These
+are equal to ASCII, which makes <A HREF="motion.html#it">it</A> <A HREF="starting.html#easy">easy</A> to exchange plain-ASCII text, no
+matter what language is used.  Thus you might see the right text even when the
+encoding was set wrong.
+
+
+							*<A NAME="encoding-names"></A><B>encoding-names</B>*
+Vim can use many different character encodings.  There are three major groups:
+
+1   8bit	Single-byte encodings, 256 different characters.  Mostly used
+		in USA and Europe.  Example: ISO-8859-1 (Latin1).  All
+		characters occupy one screen cell only.
+
+2   2byte	Double-byte encodings, over 10000 different characters.
+		Mostly used in Asian countries.  Example: euc-kr (Korean)
+		The number of screen cells is equal to the number of bytes
+		(except for euc-jp when the first byte is 0x8e).
+
+<A HREF="undo.html#u">u</A>   <A HREF="#Unicode">Unicode</A>	Universal encoding, can replace all others.  ISO 10646.
+		Millions of different characters.  Example: <A HREF="#UTF-8">UTF-8</A>.  The
+		relation between bytes and screen cells is complex.
+
+Other encodings cannot be used by Vim internally.  But files in other
+encodings can be edited by using conversion, see <A HREF="options.html#'fileencoding'">'fileencoding'</A>.
+Note that all encodings must use ASCII for the characters up to 128 (except
+when compiled for EBCDIC).
+
+
+Supported <A HREF="options.html#'encoding'">'encoding'</A> values are:			*<A NAME="encoding-values"></A><B>encoding-values</B>*
+1   latin1	8-bit characters (ISO 8859-1, also used for cp1252)
+1   iso-8859-n	ISO_8859 variant (n = 2 to 15)
+1   koi8-r	<A HREF="russian.html#Russian">Russian</A>
+1   koi8-u	Ukrainian
+1   macroman    MacRoman (Macintosh encoding)
+1   8bit-{name} any 8-bit encoding (Vim specific name)
+1   cp437	similar to iso-8859-1
+1   cp737	similar to iso-8859-7
+1   cp775	Baltic
+1   cp850	similar to iso-8859-4
+1   cp852	similar to iso-8859-1
+1   cp855	similar to iso-8859-2
+1   cp857	similar to iso-8859-5
+1   cp860	similar to iso-8859-9
+1   cp861	similar to iso-8859-1
+1   cp862	similar to iso-8859-1
+1   cp863	similar to iso-8859-8
+1   cp865	similar to iso-8859-1
+1   cp866	similar to iso-8859-5
+1   cp869	similar to iso-8859-7
+1   cp874	Thai
+1   cp1250	Czech, Polish, etc.
+1   cp1251	Cyrillic
+1   cp1253	Greek
+1   cp1254	Turkish
+1   cp1255	Hebrew
+1   cp1256	<A HREF="arabic.html#Arabic">Arabic</A>
+1   cp1257	Baltic
+1   cp1258	Vietnamese
+1   cp{number}	<A HREF="os_win32.html#MS-Windows">MS-Windows</A>: any installed single-byte codepage
+2   cp932	<A HREF="#Japanese">Japanese</A> (Windows only)
+2   euc-jp	<A HREF="#Japanese">Japanese</A> (Unix only)
+2   sjis	<A HREF="#Japanese">Japanese</A> (Unix only)
+2   cp949	<A HREF="#Korean">Korean</A> (Unix and Windows)
+2   euc-kr	<A HREF="#Korean">Korean</A> (Unix only)
+2   cp936	simplified <A HREF="#Chinese">Chinese</A> (Windows only)
+2   euc-cn	simplified <A HREF="#Chinese">Chinese</A> (Unix only)
+2   cp950	traditional <A HREF="#Chinese">Chinese</A> (on <A HREF="os_unix.html#Unix">Unix</A> alias for big5)
+2   big5	traditional <A HREF="#Chinese">Chinese</A> (on Windows alias for cp950)
+2   euc-tw	traditional <A HREF="#Chinese">Chinese</A> (Unix only)
+2   2byte-{name} <A HREF="os_unix.html#Unix">Unix</A>: any double-byte encoding (Vim specific name)
+2   cp{number}	<A HREF="os_win32.html#MS-Windows">MS-Windows</A>: any installed double-byte codepage
+<A HREF="undo.html#u">u</A>   <A HREF="#utf-8">utf-8</A>	32 bit <A HREF="#UTF-8">UTF-8</A> encoded <A HREF="#Unicode">Unicode</A> (ISO/IEC 10646-1)
+<A HREF="undo.html#u">u</A>   ucs-2	16 bit UCS-2 encoded <A HREF="#Unicode">Unicode</A> (ISO/IEC 10646-1)
+<A HREF="undo.html#u">u</A>   ucs-2le	like ucs-2, little endian
+<A HREF="undo.html#u">u</A>   utf-16	ucs-2 extended with double-words for more characters
+<A HREF="undo.html#u">u</A>   utf-16le	like utf-16, little endian
+<A HREF="undo.html#u">u</A>   ucs-4	32 bit UCS-4 encoded <A HREF="#Unicode">Unicode</A> (ISO/IEC 10646-1)
+<A HREF="undo.html#u">u</A>   ucs-4le	like ucs-4, little endian
+
+The {name} can be any encoding name that your system supports.  It is passed
+to <A HREF="eval.html#iconv()">iconv()</A> to convert between the encoding of the file and the current <A HREF="#locale">locale</A>.
+For <A HREF="os_win32.html#MS-Windows">MS-Windows</A> &quot;cp{number}&quot; means using codepage {number}.
+Examples:
+<B>		:set encoding=8bit-cp1252</B>
+<B>		:set encoding=2byte-cp932</B>
+
+The <A HREF="os_win32.html#MS-Windows">MS-Windows</A> codepage 1252 is very similar to latin1.  For practical reasons
+the same encoding is used and it's called latin1.  <A HREF="options.html#'isprint'">'isprint'</A> can be used to
+display the characters 0x80 - 0xA0 or not.
+
+Several aliases can be used, they are translated to one of the names above.
+An incomplete list:
+
+1   ansi	same <A HREF="motion.html#as">as</A> latin1 (obsolete, for backward compatibility)
+2   japan	<A HREF="#Japanese">Japanese</A>: on <A HREF="os_unix.html#Unix">Unix</A> &quot;euc-jp&quot;, on <A HREF="os_win32.html#MS-Windows">MS-Windows</A> cp932
+2   korea	<A HREF="#Korean">Korean</A>: on <A HREF="os_unix.html#Unix">Unix</A> &quot;euc-kr&quot;, on <A HREF="os_win32.html#MS-Windows">MS-Windows</A> cp949
+2   prc		simplified <A HREF="#Chinese">Chinese</A>: on <A HREF="os_unix.html#Unix">Unix</A> &quot;euc-cn&quot;, on <A HREF="os_win32.html#MS-Windows">MS-Windows</A> cp936
+2   chinese     same <A HREF="motion.html#as">as</A> &quot;prc&quot;
+2   taiwan	traditional <A HREF="#Chinese">Chinese</A>: on <A HREF="os_unix.html#Unix">Unix</A> &quot;euc-tw&quot;, on <A HREF="os_win32.html#MS-Windows">MS-Windows</A> cp950
+<A HREF="undo.html#u">u</A>   <A HREF="#utf8">utf8</A>	same <A HREF="motion.html#as">as</A> <A HREF="#utf-8">utf-8</A>
+<A HREF="undo.html#u">u</A>   <A HREF="#unicode">unicode</A>	same <A HREF="motion.html#as">as</A> ucs-2
+<A HREF="undo.html#u">u</A>   ucs2be	same <A HREF="motion.html#as">as</A> ucs-2 (big endian)
+<A HREF="undo.html#u">u</A>   ucs-2be	same <A HREF="motion.html#as">as</A> ucs-2 (big endian)
+<A HREF="undo.html#u">u</A>   ucs-4be	same <A HREF="motion.html#as">as</A> ucs-4 (big endian)
+<A HREF="undo.html#u">u</A>   utf-32	same <A HREF="motion.html#as">as</A> ucs-4
+<A HREF="undo.html#u">u</A>   utf-32le	same <A HREF="motion.html#as">as</A> ucs-4le
+    default     stands for the default value of <A HREF="options.html#'encoding'">'encoding'</A>, depends on the
+		environment
+
+For the UCS codes the byte order matters.  This is tricky, use <A HREF="#UTF-8">UTF-8</A> whenever
+you can.  The default is to use big-endian (most significant byte comes
+first):
+<B><FONT COLOR="PURPLE">	    name	bytes		char </FONT></B>
+	    ucs-2	      11 22	    1122
+	    ucs-2le	      22 11	    1122
+	    ucs-4	11 22 33 44	11223344
+	    ucs-4le	44 33 22 11	11223344
+
+On <A HREF="os_win32.html#MS-Windows">MS-Windows</A> systems you often want to use &quot;ucs-2le&quot;, because <A HREF="motion.html#it">it</A> uses little
+endian UCS-2.
+
+There are a few encodings which are similar, but not exactly the same.  Vim
+treats them <A HREF="motion.html#as">as</A> if they were different encodings, so that conversion will be
+done when needed.  You might want to use the similar name to avoid conversion
+or when conversion is not possible:
+
+	cp932, shift-jis, sjis
+	cp936, euc-cn
+
+
+							*<A NAME="encoding-table"></A><B>encoding-table</B>*
+Normally <A HREF="options.html#'encoding'">'encoding'</A> is equal to your current <A HREF="#locale">locale</A> and <A HREF="options.html#'termencoding'">'termencoding'</A> is
+empty.  This means that your keyboard and display work with characters encoded
+in your current <A HREF="#locale">locale</A>, and Vim uses the same characters internally.
+
+You can make Vim use characters in a different encoding by setting the
+<A HREF="options.html#'encoding'">'encoding'</A> option to a different value.  Since the keyboard and display still
+use the current <A HREF="#locale">locale</A>, conversion needs to be done.  The <A HREF="options.html#'termencoding'">'termencoding'</A> then
+takes over the value of the current <A HREF="#locale">locale</A>, so Vim converts between <A HREF="options.html#'encoding'">'encoding'</A>
+and <A HREF="options.html#'termencoding'">'termencoding'</A>.  Example:
+<B>	:let &amp;termencoding = &amp;encoding</B>
+<B>	:set encoding=utf-8</B>
+
+However, not all combinations of values are possible.  The table below tells
+you how each of the nine combinations works.  This is further restricted by
+not all conversions being possible, <A HREF="eval.html#iconv()">iconv()</A> being present, etc.  Since this
+depends on the system used, no detailed list can be given.
+
+('tenc' is the short name for <A HREF="options.html#'termencoding'">'termencoding'</A> and <A HREF="options.html#'enc'">'enc'</A> short for <A HREF="options.html#'encoding'">'encoding'</A>)
+
+<B><FONT COLOR="PURPLE">'tenc'	    'enc'	remark </FONT></B>
+
+ 8bit	    8bit	Works.  When <A HREF="options.html#'termencoding'">'termencoding'</A> is different from
+			<A HREF="options.html#'encoding'">'encoding'</A> typing and displaying may be wrong for some
+			characters, Vim does NOT perform conversion (set
+			<A HREF="options.html#'encoding'">'encoding'</A> to &quot;<A HREF="#utf-8">utf-8</A>&quot; to get this).
+ 8bit      2byte	<A HREF="os_win32.html#MS-Windows">MS-Windows</A>: works for all codepages installed on your
+			system; you can only type 8bit characters;
+			Other systems: does NOT work.
+ 8bit	   <A HREF="#Unicode">Unicode</A>	Works, but only 8bit characters can be typed directly
+			(others through <A HREF="digraph.html#digraphs">digraphs</A>, keymaps, etc.); in a
+			terminal you can only see 8bit characters; the <A HREF="gui.html#GUI">GUI</A> can
+			show all characters that the <A HREF="options.html#'guifont'">'guifont'</A> supports.
+
+ 2byte	    8bit	Works, but typing non-ASCII characters might
+			be a problem.
+ 2byte	   2byte	<A HREF="os_win32.html#MS-Windows">MS-Windows</A>: works for all codepages installed on your
+			system; typing characters might be a problem when
+			<A HREF="#locale">locale</A> is different from <A HREF="options.html#'encoding'">'encoding'</A>.
+			Other systems: Only works when <A HREF="options.html#'termencoding'">'termencoding'</A> is equal
+			to <A HREF="options.html#'encoding'">'encoding'</A>, you might <A HREF="motion.html#as">as</A> well leave <A HREF="motion.html#it">it</A> empty.
+ 2byte	   <A HREF="#Unicode">Unicode</A>	works, Vim will translate typed characters.
+
+ <A HREF="#Unicode">Unicode</A>    8bit	works (unusual)
+ <A HREF="#Unicode">Unicode</A>    2byte	does NOT work
+ <A HREF="#Unicode">Unicode</A>   <A HREF="#Unicode">Unicode</A>	works very well (leaving <A HREF="options.html#'termencoding'">'termencoding'</A> empty works
+			the same way, because all <A HREF="#Unicode">Unicode</A> is handled
+			internally <A HREF="motion.html#as">as</A> <A HREF="#UTF-8">UTF-8</A>)
+
+
+CONVERSION						*<A NAME="charset-conversion"></A><B>charset-conversion</B>*
+
+Vim will automatically convert from one to another encoding in several places:
+- When reading a file and <A HREF="options.html#'fileencoding'">'fileencoding'</A> is different from <A HREF="options.html#'encoding'">'encoding'</A>
+- When <A HREF="editing.html#writing">writing</A> a file and <A HREF="options.html#'fileencoding'">'fileencoding'</A> is different from <A HREF="options.html#'encoding'">'encoding'</A>
+- When displaying characters and <A HREF="options.html#'termencoding'">'termencoding'</A> is different from <A HREF="options.html#'encoding'">'encoding'</A>
+- When reading input and <A HREF="options.html#'termencoding'">'termencoding'</A> is different from <A HREF="options.html#'encoding'">'encoding'</A>
+- When displaying <A HREF="message.html#messages">messages</A> and the encoding used for LC_MESSAGES differs from
+  <A HREF="options.html#'encoding'">'encoding'</A> (requires a gettext version that supports this).
+- When reading a Vim script where |<A HREF="repeat.html#:scriptencoding">:scriptencoding</A>| is different from
+  <A HREF="options.html#'encoding'">'encoding'</A>.
+- When reading or <A HREF="editing.html#writing">writing</A> a |<A HREF="starting.html#viminfo">viminfo</A>| file.
+Most of these require the |<A HREF="various.html#+iconv">+iconv</A>| feature.  Conversion for reading and
+<A HREF="editing.html#writing">writing</A> files may also be specified with the <A HREF="options.html#'charconvert'">'charconvert'</A> option.
+
+Useful utilities for converting the <A HREF="#charset">charset</A>:
+    All:	    iconv
+	GNU iconv can convert most encodings.  <A HREF="#Unicode">Unicode</A> is used <A HREF="motion.html#as">as</A> the
+	intermediate encoding, which allows conversion from and to all other
+ encodings. See	<A HREF="http://www.gnu.org/directory/libiconv.html">http://www.gnu.org/directory/libiconv.html</A>.
+
+    <A HREF="#Japanese">Japanese</A>:	    nkf
+	Nkf is &quot;Network Kanji code conversion Filter&quot;.  One of the most unique
+	facility of nkf is the guess of the input Kanji code.  So, you don't
+	need to know what the inputting file's |<A HREF="#charset">charset</A>| is.  When convert to
+	EUC-JP from ISO-2022-JP or Shift_JIS, simply <A HREF="diff.html#do">do</A> the following command
+	in Vim:
+	    :&#37;!nkf <A HREF="starting.html#-e">-e</A>
+	Nkf can be found at:
+	<A HREF="http://www.sfc.wide.ad.jp/~max/FreeBSD/ports/distfiles/nkf-1.62.tar.gz">http://www.sfc.wide.ad.jp/~max/FreeBSD/ports/distfiles/nkf-1.62.tar.gz</A>
+
+    <A HREF="#Chinese">Chinese</A>:	    hc
+	Hc is &quot;Hanzi Converter&quot;.  Hc convert a GB file to a Big5 file, or Big5
+	file to GB file.  Hc can be found at:
+	<A HREF="ftp://ftp.cuhk.hk/pub/chinese/ifcss/software/unix/convert/hc-30.tar.gz">ftp://ftp.cuhk.hk/pub/chinese/ifcss/software/unix/convert/hc-30.tar.gz</A>
+
+    <A HREF="#Korean">Korean</A>:	    hmconv
+	Hmconv is <A HREF="#Korean">Korean</A> code conversion utility especially for E-mail.  It can
+	convert between EUC-KR and ISO-2022-KR.  Hmconv can be found at:
+	<A HREF="ftp://ftp.kaist.ac.kr/pub/hangul/code/hmconv/">ftp://ftp.kaist.ac.kr/pub/hangul/code/hmconv/</A>
+
+    Multilingual:   lv
+	Lv is a Powerful Multilingual File Viewer.  And <A HREF="motion.html#it">it</A> can be worked <A HREF="motion.html#as">as</A>
+	|<A HREF="#charset">charset</A>| converter.  Supported |<A HREF="#charset">charset</A>|: ISO-2022-CN, ISO-2022-JP,
+	ISO-2022-KR, EUC-CN, EUC-JP, EUC-KR, EUC-TW, UTF-7, <A HREF="#UTF-8">UTF-8</A>, ISO-8859
+	series, Shift_JIS, Big5 and HZ.  Lv can be found at:
+	<A HREF="http://www.ff.iij4u.or.jp/~nrt/lv/index.html">http://www.ff.iij4u.or.jp/~nrt/lv/index.html</A>
+
+
+
+							*<A NAME="mbyte-conversion"></A><B>mbyte-conversion</B>*
+When reading and <A HREF="editing.html#writing">writing</A> files in an encoding different from <A HREF="options.html#'encoding'">'encoding'</A>,
+conversion needs to be done.  These conversions are supported:
+- All conversions between Latin-1 (ISO-8859-1), <A HREF="#UTF-8">UTF-8</A>, UCS-2 and UCS-4 are
+  handled internally.
+- For <A HREF="os_win32.html#MS-Windows">MS-Windows</A>, when <A HREF="options.html#'encoding'">'encoding'</A> is a <A HREF="#Unicode">Unicode</A> encoding, conversion from and
+  to any codepage should work.
+- Conversion specified with <A HREF="options.html#'charconvert'">'charconvert'</A>
+- Conversion with the iconv library, if <A HREF="motion.html#it">it</A> is available.
+	Old versions of GNU <A HREF="eval.html#iconv()">iconv()</A> may cause the conversion to fail (they
+	request a very large buffer, more than Vim is willing to provide).
+	Try getting another <A HREF="eval.html#iconv()">iconv()</A> implementation.
+
+
+							*<A NAME="iconv-dynamic"></A><B>iconv-dynamic</B>*
+On <A HREF="os_win32.html#MS-Windows">MS-Windows</A> Vim can be compiled with the |<A HREF="various.html#+iconv/dyn">+iconv/dyn</A>| feature.  This means
+Vim will search for the &quot;iconv.dll&quot; and &quot;libiconv.dll&quot; libraries.  When
+neither of them can be found Vim will still work but some conversions won't be
+possible.
+
+==============================================================================
+
+4. Using a terminal					*<A NAME="mbyte-terminal"></A><B>mbyte-terminal</B>*
+
+The <A HREF="gui.html#GUI">GUI</A> fully supports <A HREF="#multi-byte">multi-byte</A> characters.  It is also possible in a
+terminal, if the terminal supports the same encoding that Vim uses.  Thus this
+is <A HREF="various.html#less">less</A> flexible.
+
+For example, you can run Vim in a xterm with added <A HREF="#multi-byte">multi-byte</A> support and/or
+|<A HREF="#XIM">XIM</A>|.  Examples are kterm (Kanji term) and hanterm (for Korean), <A HREF="syntax.html#Eterm">Eterm</A>
+(Enlightened terminal) and <A HREF="syntax.html#rxvt">rxvt</A>.
+
+If your terminal does not support the right encoding, you can set the
+<A HREF="options.html#'termencoding'">'termencoding'</A> option.  Vim will then convert the typed characters from
+<A HREF="options.html#'termencoding'">'termencoding'</A> to <A HREF="options.html#'encoding'">'encoding'</A>.  And displayed text will be converted from
+<A HREF="options.html#'encoding'">'encoding'</A> to <A HREF="options.html#'termencoding'">'termencoding'</A>.  If the encoding supported by the terminal
+doesn't include all the characters that Vim uses, this leads to lost
+characters.  This may mess up the display.  If you use a terminal that
+supports <A HREF="#Unicode">Unicode</A>, such <A HREF="motion.html#as">as</A> the xterm mentioned below, <A HREF="motion.html#it">it</A> should work just fine,
+since nearly every character set can be converted to <A HREF="#Unicode">Unicode</A> without loss of
+information.
+
+
+
+<A HREF="#UTF-8">UTF-8</A> IN XFREE86 XTERM					*<A NAME="UTF8-xterm"></A><B>UTF8-xterm</B>*
+
+This is a short explanation of how to use <A HREF="#UTF-8">UTF-8</A> character encoding in the
+xterm that comes with XFree86 by Thomas Dickey (text by Markus Kuhn).
+
+Get the latest xterm version which has now <A HREF="#UTF-8">UTF-8</A> support:
+
+	<A HREF="http://invisible-island.net/xterm/xterm.html">http://invisible-island.net/xterm/xterm.html</A>
+
+Compile <A HREF="motion.html#it">it</A> with &quot;./configure --enable-wide-chars ; make&quot;
+
+Also get the ISO 10646-1 version of various fonts, which is available on
+
+	<A HREF="http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz">http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz</A>
+
+and <A HREF="usr_90.html#install">install</A> the font <A HREF="motion.html#as">as</A> described in the README file.
+
+Now start xterm with
+
+<B>  xterm -u8 -fn -misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1</B>
+or, for bigger character:
+<B>  xterm -u8 -fn -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso10646-1</B>
+
+and you will have a working <A HREF="#UTF-8">UTF-8</A> terminal emulator.  Try both
+
+<B>   cat utf-8-demo.txt</B>
+<B>   vim utf-8-demo.txt</B>
+
+with the demo text that comes with ucs-fonts.tar.gz in order to see
+whether there are any problems with <A HREF="#UTF-8">UTF-8</A> in your xterm.
+
+For Vim you may need to set <A HREF="options.html#'encoding'">'encoding'</A> to &quot;<A HREF="#utf-8">utf-8</A>&quot;.
+
+==============================================================================
+
+5.  Fonts on <A HREF="options.html#X11">X11</A>					*<A NAME="mbyte-fonts-X11"></A><B>mbyte-fonts-X11</B>*
+
+Unfortunately, using fonts in <A HREF="options.html#X11">X11</A> is complicated.  The name of a single-byte
+font is a long string.  For <A HREF="#multi-byte">multi-byte</A> fonts we need several of these...
+
+Note: Most of this is no longer relevant for <A HREF="gui_x11.html#GTK+">GTK+</A> 2.  Selecting a font via
+its <A HREF="#XLFD">XLFD</A> is not supported; see <A HREF="options.html#'guifont'">'guifont'</A> for an example of how to
+set the font.  Do yourself a favor and ignore the |<A HREF="#XLFD">XLFD</A>| and |<A HREF="#xfontset">xfontset</A>|
+sections below.
+
+First of all, Vim only accepts fixed-width fonts for displaying text.  You
+cannot use proportionally spaced fonts.  This excludes many of the available
+(and nicer looking) fonts.  However, for <A HREF="gui.html#menus">menus</A> and tooltips any font can be
+used.
+
+Note that Display and Input are independent.  It is possible to see your
+language even though you have no input method for <A HREF="motion.html#it">it</A>.
+
+You should get a default font for <A HREF="gui.html#menus">menus</A> and tooltips that works, but <A HREF="motion.html#it">it</A> might
+be ugly.  Read the following to find out how to select a better font.
+
+
+X LOGICAL FONT DESCRIPTION (XLFD)
+
+							*<A NAME="XLFD"></A><B>XLFD</B>*
+<A HREF="#XLFD">XLFD</A> is the X font name and contains the information about the font size,
+<A HREF="#charset">charset</A>, etc.  The name is in this format:
+
+FOUNDRY-FAMILY-WEIGHT-SLANT-WIDTH-STYLE-PIXEL-POINT-X-Y-SPACE-AVE-CR-CE
+
+Each field means:
+
+- FOUNDRY:  FOUNDRY field.  The company that created the font.
+- FAMILY:   FAMILY_NAME field.  Basic font family name.  (helvetica, gothic,
+	    times, etc)
+- WEIGHT:   WEIGHT_NAME field.  How thick the letters are.  (light, medium,
+	    <A HREF="syntax.html#bold">bold</A>, etc)
+- SLANT:    SLANT field.
+		<A HREF="change.html#r">r</A>:  Roman (no slant)
+		<A HREF="insert.html#i">i</A>:  Italic
+		<A HREF="insert.html#o">o</A>:  Oblique
+		ri: Reverse Italic
+		ro: Reverse Oblique
+		ot: Other
+		number:	Scaled font
+- WIDTH:    SETWIDTH_NAME field.  Width of characters.  (normal, condensed,
+	    narrow, double wide)
+- STYLE:    ADD_STYLE_NAME field.  Extra info to describe font.  (Serif, Sans
+	    Serif, Informal, Decorated, etc)
+- PIXEL:    PIXEL_SIZE field.  Height, in pixels, of characters.
+- POINT:    POINT_SIZE field.  Ten times height of characters in points.
+- X:	    RESOLUTION_X field.  X resolution (dots per inch).
+- <A HREF="change.html#Y">Y</A>:	    RESOLUTION_Y field.  <A HREF="change.html#Y">Y</A> resolution (dots per inch).
+- SPACE:    SPACING field.
+		<A HREF="change.html#p">p</A>:  Proportional
+		<A HREF="motion.html#m">m</A>:  Monospaced
+		<A HREF="change.html#c">c</A>:  CharCell
+- AVE:	    AVERAGE_WIDTH field.  Ten times average width in pixels.
+- CR:	    CHARSET_REGISTRY field.  The name of the <A HREF="#charset">charset</A> group.
+- CE:	    CHARSET_ENCODING field.  The rest of the <A HREF="#charset">charset</A> name.  For some
+	    charsets, such <A HREF="motion.html#as">as</A> JIS X 0208, if this field is 0, code points has
+	    the same value <A HREF="motion.html#as">as</A> GL, and GR if 1.
+
+For example, in <A HREF="change.html#case">case</A> of a 16 dots font corresponding to JIS X 0208, <A HREF="motion.html#it">it</A> is
+written like:
+    -misc-fixed-medium-r-normal--16-110-100-100-c-160-jisx0208.1990-0
+
+
+X FONTSET
+
+						*<A NAME="fontset"></A><B>fontset</B>* *<A NAME="xfontset"></A><B>xfontset</B>*
+A single-byte <A HREF="#charset">charset</A> is typically associated with one font.  For <A HREF="#multi-byte">multi-byte</A>
+charsets a combination of fonts is often used.  This means that one group of
+characters are used from one font and another group from another font (which
+might be double wide).  This collection of fonts is called a <A HREF="#fontset">fontset</A>.
+
+Which fonts are required in a <A HREF="#fontset">fontset</A> depends on the current <A HREF="#locale">locale</A>.  X
+<A HREF="windows.html#windows">windows</A> maintains a table of which groups of characters are required for a
+<A HREF="#locale">locale</A>.  You have to specify all the fonts that a <A HREF="#locale">locale</A> requires in the
+<A HREF="options.html#'guifontset'">'guifontset'</A> option.
+
+NOTE: The <A HREF="#fontset">fontset</A> always uses the current <A HREF="#locale">locale</A>, even though <A HREF="options.html#'encoding'">'encoding'</A> may
+be set to use a different <A HREF="#charset">charset</A>.  In that situation you might want to use
+<A HREF="options.html#'guifont'">'guifont'</A> and <A HREF="options.html#'guifontwide'">'guifontwide'</A> instead of <A HREF="options.html#'guifontset'">'guifontset'</A>.
+
+Example:
+<B><FONT COLOR="PURPLE">    |charset| language		    "groups of characters" </FONT></B>
+    GB2312    <A HREF="#Chinese">Chinese</A> (simplified)  ISO-8859-1 and GB 2312
+    Big5      <A HREF="#Chinese">Chinese</A> (traditional) ISO-8859-1 and Big5
+    CNS-11643 <A HREF="#Chinese">Chinese</A> (traditional) ISO-8859-1, CNS 11643-1 and CNS 11643-2
+    EUC-JP    <A HREF="#Japanese">Japanese</A>		    JIS X 0201 and JIS X 0208
+    EUC-KR    <A HREF="#Korean">Korean</A>		    ISO-8859-1 and KS C 5601 (KS X 1001)
+
+You can search for fonts using the xlsfonts command.  For example, when you're
+searching for a font for KS C 5601:
+<B>    xlsfonts | grep ksc5601</B>
+
+This is complicated and confusing.  You might want to consult the X-Windows
+documentation if there is something you don't understand.
+
+
+						*<A NAME="base_font_name_list"></A><B>base_font_name_list</B>*
+When you have found the names of the fonts you want to use, you need to set
+the <A HREF="options.html#'guifontset'">'guifontset'</A> option.  You specify the list by concatenating the font names
+and putting a comma in between them.
+
+For example, when you use the ja_JP.eucJP <A HREF="#locale">locale</A>, this requires JIS X 0201
+and JIS X 0208.  You could supply a list of fonts that explicitly specifies
+the charsets, like:
+
+<B> :set guifontset=-misc-fixed-medium-r-normal--14-130-75-75-c-140-jisx0208.1983-0,</B>
+<B>	\-misc-fixed-medium-r-normal--14-130-75-75-c-70-jisx0201.1976-0</B>
+
+Alternatively, you can supply a base font name list that omits the <A HREF="#charset">charset</A>
+name, letting X-Windows select font characters required for the <A HREF="#locale">locale</A>.  For
+example:
+
+<B> :set guifontset=-misc-fixed-medium-r-normal--14-130-75-75-c-140,</B>
+<B>	\-misc-fixed-medium-r-normal--14-130-75-75-c-70</B>
+
+Alternatively, you can supply a single base font name that allows X-Windows to
+select from all available fonts.  For example:
+
+<B> :set guifontset=-misc-fixed-medium-r-normal--14-*</B>
+
+Alternatively, you can specify alias names.  See the fonts.alias file in the
+fonts directory (e.g., /usr/X11R6/lib/X11/fonts/).  For example:
+
+<B> :set guifontset=k14,r14</B>
+ 
+
+							*<A NAME="E253"></A><B>E253</B>*
+Note that in East Asian fonts, the standard character cell is square.  When
+mixing a Latin font and an East Asian font, the East Asian font width should
+be <A HREF="if_cscop.html#twice">twice</A> the Latin font width.
+
+If <A HREF="options.html#'guifontset'">'guifontset'</A> is not empty, the &quot;font&quot; argument of the |<A HREF="syntax.html#:highlight">:highlight</A>| command
+is also interpreted <A HREF="motion.html#as">as</A> a <A HREF="#fontset">fontset</A>.  For example, you should use for
+highlighting:
+<B>	:hi Comment font=english_font,your_font</B>
+If you use a wrong &quot;font&quot; argument you will get an error message.
+Also make sure that you set <A HREF="options.html#'guifontset'">'guifontset'</A> before setting fonts for highlight
+groups.
+
+
+USING RESOURCE FILES
+
+Instead of specifying <A HREF="options.html#'guifontset'">'guifontset'</A>, you can set <A HREF="options.html#X11">X11</A> resources and Vim will
+pick them up.  This is only for people who know how X resource files work.
+
+For <A HREF="gui_x11.html#Motif">Motif</A> and <A HREF="gui_x11.html#Athena">Athena</A> insert these three lines in your $HOME/.Xdefaults file:
+
+	Vim.font: |<A HREF="#base_font_name_list">base_font_name_list</A>|
+	Vim*fontSet: |<A HREF="#base_font_name_list">base_font_name_list</A>|
+	Vim*fontList: your_language_font
+
+Note: Vim.font is for text area.
+      Vim*fontSet is for menu.
+      Vim*fontList is for menu (for <A HREF="gui_x11.html#Motif">Motif</A> <A HREF="gui.html#GUI">GUI</A>)
+
+For example, when you are using <A HREF="#Japanese">Japanese</A> and a 14 dots font,
+
+<B>	Vim.font: -misc-fixed-medium-r-normal--14-*</B>
+<B>	Vim*fontSet: -misc-fixed-medium-r-normal--14-*</B>
+<B>	Vim*fontList: -misc-fixed-medium-r-normal--14-*</B>
+ 
+or:
+
+<B>	Vim*font: k14,r14</B>
+<B>	Vim*fontSet: k14,r14</B>
+<B>	Vim*fontList: k14,r14</B>
+ 
+To have them take effect immediately you will have to <A HREF="diff.html#do">do</A>
+
+<B>	xrdb -merge ~/.Xdefaults</B>
+
+Otherwise you will have to stop and restart the X server before the changes
+take effect.
+
+
+The <A HREF="gui_x11.html#GTK+">GTK+</A> version of <A HREF="gui.html#GUI">GUI</A> Vim does not use <A HREF="gui_x11.html#.Xdefaults">.Xdefaults</A>, use ~/.gtkrc instead.
+The default mostly works OK.  But for the <A HREF="gui.html#menus">menus</A> you might have to change
+<A HREF="motion.html#it">it</A>.  Example:
+
+<B>	style "default"</B>
+<B>	{</B>
+<B>		fontset="-*-*-medium-r-normal--14-*-*-*-c-*-*-*"</B>
+<B>	}</B>
+<B>	widget_class "*" style "default"</B>
+
+==============================================================================
+
+6.  Fonts on <A HREF="os_win32.html#MS-Windows">MS-Windows</A>				*<A NAME="mbyte-fonts-MSwin"></A><B>mbyte-fonts-MSwin</B>*
+
+The simplest is to use the font <A HREF="gui_w32.html#dialog">dialog</A> to select fonts and try them out.  You
+can find this at the &quot;Edit/Select Font...&quot; menu.  Once you find a font name
+that works well you can use this command to see its name:
+
+<B>	:set guifont</B>
+
+Then add a command to your |<A HREF="gui.html#gvimrc">gvimrc</A>| file to set <A HREF="options.html#'guifont'">'guifont'</A>:
+
+<B>	:set guifont=courier_new:h12</B>
+
+==============================================================================
+
+7.  Input on <A HREF="options.html#X11">X11</A>				*<A NAME="mbyte-XIM"></A><B>mbyte-XIM</B>*
+
+
+X INPUT METHOD (XIM) BACKGROUND			*<A NAME="XIM"></A><B>XIM</B>* *<A NAME="xim"></A><B>xim</B>* *<A NAME="x-input-method"></A><B>x-input-method</B>*
+
+<A HREF="#XIM">XIM</A> is an international input module for X.  There are two kinds of structures,
+Xlib unit type and |<A HREF="#IM-server">IM-server</A>| (Input-Method server) type.  |<A HREF="#IM-server">IM-server</A>| type
+is suitable for complex input, such <A HREF="motion.html#as">as</A> CJK.
+
+- <A HREF="#IM-server">IM-server</A>
+
+							*<A NAME="IM-server"></A><B>IM-server</B>*
+  In |<A HREF="#IM-server">IM-server</A>| type input structures, the input event is handled by either
+  of the two ways: FrontEnd system and BackEnd system.  In the FrontEnd
+  system, input events are snatched by the |<A HREF="#IM-server">IM-server</A>| first, then |<A HREF="#IM-server">IM-server</A>|
+  give the application the result of input.  On the other hand, the BackEnd
+  system works reverse order.  MS Windows adopt BackEnd system.  In X, most of
+  |<A HREF="#IM-server">IM-server</A>|s adopt FrontEnd system.  The demerit of BackEnd system is the
+  large overhead in communication, but <A HREF="motion.html#it">it</A> provides safe synchronization with
+  no restrictions on applications.
+
+  For example, there are xwnmo and kinput2 <A HREF="#Japanese">Japanese</A> |<A HREF="#IM-server">IM-server</A>|, both are
+  FrontEnd system.  Xwnmo is distributed with Wnn (see below), kinput2 can be
+ found at:	<A HREF="ftp://ftp.sra.co.jp/pub/x11/kinput2/">ftp://ftp.sra.co.jp/pub/x11/kinput2/</A>
+
+  For <A HREF="#Chinese">Chinese</A>, there's a great <A HREF="#XIM">XIM</A> server named &quot;xcin&quot;, you can input both
+  Traditional and Simplified <A HREF="#Chinese">Chinese</A> characters.  And <A HREF="motion.html#it">it</A> can accept other
+  <A HREF="#locale">locale</A> if you make a correct input table.  Xcin can be found at:
+	<A HREF="http://cle.linux.org.tw/xcin/">http://cle.linux.org.tw/xcin/</A>
+ Others are scim:	<A HREF="http://scim.freedesktop.org/">http://scim.freedesktop.org/</A> and fcitx:
+	<A HREF="http://www.fcitx.org/">http://www.fcitx.org/</A>
+
+- Conversion Server
+
+							*<A NAME="conversion-server"></A><B>conversion-server</B>*
+  Some system needs additional server: conversion server.  Most of <A HREF="#Japanese">Japanese</A>
+  |<A HREF="#IM-server">IM-server</A>|s need <A HREF="motion.html#it">it</A>, Kana-Kanji conversion server.  For <A HREF="#Chinese">Chinese</A> inputting,
+  <A HREF="motion.html#it">it</A> depends on the method of inputting, in some methods, PinYin or ZhuYin to
+  HanZi conversion server is needed.  For <A HREF="#Korean">Korean</A> inputting, if you want to
+  input Hanja, Hangul-Hanja conversion server is needed.
+
+  For example, the <A HREF="#Japanese">Japanese</A> inputting process is divided into 2 steps.  First
+  we pre-input Hira-gana, second Kana-Kanji conversion.  There are so many
+  Kanji characters (6349 Kanji characters are defined in JIS X 0208) and the
+  number of Hira-gana characters are 76.  So, first, we pre-input text <A HREF="motion.html#as">as</A>
+  pronounced in Hira-gana, second, we convert Hira-gana to Kanji or Kata-Kana,
+  if needed.  There are some Kana-Kanji conversion server: jserver
+  (distributed with Wnn, see below) and canna.  Canna can be found at:
+	<A HREF="http://canna.sourceforge.jp/">http://canna.sourceforge.jp/</A>
+
+There is a good input system: Wnn4.2.  Wnn 4.2 contains,
+    xwnmo (|<A HREF="#IM-server">IM-server</A>|)
+    jserver (Japanese Kana-Kanji conversion server)
+    cserver (Chinese PinYin or ZhuYin to simplified HanZi conversion server)
+    tserver (Chinese PinYin or ZhuYin to traditional HanZi conversion server)
+    kserver (Hangul-Hanja conversion server)
+Wnn 4.2 for several systems can be found at various places on the <A HREF="intro.html#internet">internet</A>.
+Use the RPM or port for your system.
+
+
+- Input Style
+
+							*<A NAME="xim-input-style"></A><B>xim-input-style</B>*
+  When inputting CJK, there are four areas:
+      1. The area to display of the input while <A HREF="motion.html#it">it</A> is being composed
+      2. The area to display the currently active input mode.
+      3. The area to display the next candidate for the selection.
+      4. The area to display other tools.
+
+  The third area is needed when converting.  For example, in <A HREF="#Japanese">Japanese</A>
+  inputting, multiple Kanji characters could have the same pronunciation, so
+  a sequence of Hira-gana characters could map to a distinct sequence of Kanji
+  characters.
+
+  The first and second areas are defined in international input of X with the
+  names of &quot;Preedit Area&quot;, &quot;Status Area&quot; respectively.  The third and fourth
+  areas are not defined and are left to be managed by the |<A HREF="#IM-server">IM-server</A>|.  In the
+  international input, four input styles have been defined using combinations
+  of Preedit Area and Status Area: |<A HREF="#OnTheSpot">OnTheSpot</A>|, |<A HREF="#OffTheSpot">OffTheSpot</A>|, |<A HREF="#OverTheSpot">OverTheSpot</A>|
+  and |<A HREF="#Root">Root</A>|.
+
+  Currently, <A HREF="gui.html#GUI">GUI</A> Vim supports three styles, |<A HREF="#OverTheSpot">OverTheSpot</A>|, |<A HREF="#OffTheSpot">OffTheSpot</A>| and
+  |<A HREF="#Root">Root</A>|.
+
+*.  on-the-spot						*OnTheSpot*
+    Preedit Area and Status Area are performed by the client application in
+    the area of application.  The client application is directed by the
+    |<A HREF="#IM-server">IM-server</A>| to display all pre-edit data at the location of text
+    insertion.  The client <A HREF="change.html#registers">registers</A> callbacks invoked by the input method
+    during pre-editing.
+*.  over-the-spot					*OverTheSpot*
+    Status Area is created in a fixed position within the area of application,
+    in <A HREF="change.html#case">case</A> of Vim, the position is the additional status line.  Preedit Area
+    is made at present input position of application.  The input method
+    displays pre-edit data in a <A HREF="windows.html#window">window</A> which <A HREF="motion.html#it">it</A> brings up directly over the
+    text insertion position.
+*.  off-the-spot					*OffTheSpot*
+    Preedit Area and Status Area are performed in the area of application, in
+    <A HREF="change.html#case">case</A> of Vim, the area is additional status line.  The client application
+    provides display <A HREF="windows.html#windows">windows</A> for the pre-edit data to the input method which
+    displays into them directly.
+*.  root-window						*Root*
+    Preedit Area and Status Area are outside of the application.  The input
+    method displays all pre-edit data in a separate area of the screen in a
+    <A HREF="windows.html#window">window</A> specific to the input method.
+
+
+
+USING <A HREF="#XIM">XIM</A>			*<A NAME="multibyte-input"></A><B>multibyte-input</B>* *<A NAME="E284"></A><B>E284</B>* *<A NAME="E286"></A><B>E286</B>* *<A NAME="E287"></A><B>E287</B>* *<A NAME="E288"></A><B>E288</B>*
+
+				*<A NAME="E285"></A><B>E285</B>* *<A NAME="E289"></A><B>E289</B>*
+
+Note that Display and Input are independent.  It is possible to see your
+language even though you have no input method for <A HREF="motion.html#it">it</A>.  But when your Display
+method doesn't match your Input method, the text will be displayed wrong.
+
+	Note: You can not use IM unless you specify <A HREF="options.html#'guifontset'">'guifontset'</A>.
+	      Therefore, Latin users, you have to also use <A HREF="options.html#'guifontset'">'guifontset'</A>
+	      if you use IM.
+
+To input your language you should run the |<A HREF="#IM-server">IM-server</A>| which supports your
+language and |<A HREF="#conversion-server">conversion-server</A>| if needed.
+
+The next 3 lines should be put in your ~/.Xdefaults file.  They are common for
+all X applications which uses |<A HREF="#XIM">XIM</A>|.  If you already use |<A HREF="#XIM">XIM</A>|, you can skip
+this.
+
+<B>	*international: True</B>
+<B>	*.inputMethod: your_input_server_name</B>
+<B>	*.preeditType: your_input_style</B>
+ 
+input_server_name	is your |<A HREF="#IM-server">IM-server</A>| name (check your |<A HREF="#IM-server">IM-server</A>|
+			manual).
+your_input_style	is one of |<A HREF="#OverTheSpot">OverTheSpot</A>|, |<A HREF="#OffTheSpot">OffTheSpot</A>|, |<A HREF="#Root">Root</A>|.  See
+			also |<A HREF="#xim-input-style">xim-input-style</A>|.
+
+*international may not necessary if you use X11R6.
+*.inputMethod and *.preeditType are optional if you use X11R6.
+
+For example, when you are using kinput2 <A HREF="motion.html#as">as</A> |<A HREF="#IM-server">IM-server</A>|,
+
+<B>	*international: True</B>
+<B>	*.inputMethod: kinput2</B>
+<B>	*.preeditType: OverTheSpot</B>
+ 
+When using |<A HREF="#OverTheSpot">OverTheSpot</A>|, <A HREF="gui.html#GUI">GUI</A> Vim always connects to the IM Server even in
+<A HREF="intro.html#Normal">Normal</A> mode, so you can input your language with commands like &quot;<A HREF="motion.html#f">f</A>&quot; and &quot;<A HREF="change.html#r">r</A>&quot;.
+But when using one of the other two methods, <A HREF="gui.html#GUI">GUI</A> Vim connects to the IM Server
+only if <A HREF="motion.html#it">it</A> is not in <A HREF="intro.html#Normal">Normal</A> mode.
+
+If your IM Server does not support |<A HREF="#OverTheSpot">OverTheSpot</A>|, and if you want to use your
+language with some <A HREF="intro.html#Normal">Normal</A> mode command like &quot;<A HREF="motion.html#f">f</A>&quot; or &quot;<A HREF="change.html#r">r</A>&quot;, then you should use a
+localized xterm  or an xterm which supports |<A HREF="#XIM">XIM</A>|
+
+If needed, you can set the XMODIFIERS environment variable:
+
+	sh:  export XMODIFIERS=&quot;@im=input_server_name&quot;
+	csh: setenv XMODIFIERS &quot;@im=input_server_name&quot;
+
+For example, when you are using kinput2 <A HREF="motion.html#as">as</A> |<A HREF="#IM-server">IM-server</A>| and sh,
+
+<B>	export XMODIFIERS="@im=kinput2"</B>
+ 
+
+FULLY CONTROLLED <A HREF="#XIM">XIM</A>
+
+You can fully <A HREF="intro.html#control">control</A> <A HREF="#XIM">XIM</A>, like with <A HREF="#IME">IME</A> of <A HREF="os_win32.html#MS-Windows">MS-Windows</A> (see |<A HREF="#multibyte-ime">multibyte-ime</A>|).
+This is currently only available for the <A HREF="gui_x11.html#GTK">GTK</A> <A HREF="gui.html#GUI">GUI</A>.
+
+Before using fully controlled <A HREF="#XIM">XIM</A>, one setting is required.  Set the
+<A HREF="options.html#'imactivatekey'">'imactivatekey'</A> option to the key that is used for the activation of the input
+method.  For example, when you are using kinput2 + canna <A HREF="motion.html#as">as</A> IM Server, the
+activation key is probably Shift+Space:
+
+<B>	:set imactivatekey=S-space</B>
+
+See <A HREF="options.html#'imactivatekey'">'imactivatekey'</A> for the format.
+
+==============================================================================
+
+8.  Input on <A HREF="os_win32.html#MS-Windows">MS-Windows</A>					*<A NAME="mbyte-IME"></A><B>mbyte-IME</B>*
+
+
+(Windows <A HREF="#IME">IME</A> support)				*<A NAME="multibyte-ime"></A><B>multibyte-ime</B>* *<A NAME="IME"></A><B>IME</B>*
+
+{only works Windows <A HREF="gui.html#GUI">GUI</A> and compiled with the |<A HREF="various.html#+multi_byte_ime">+multi_byte_ime</A>| feature}
+
+To input <A HREF="#multibyte">multibyte</A> characters on Windows, you can use an Input Method Editor
+(IME).  In process of your editing text, you must switch status (on/off) of
+<A HREF="#IME">IME</A> many many many times.  Because <A HREF="#IME">IME</A> with status on is hooking all of your
+key inputs, you cannot input '<A HREF="motion.html#j">j</A>', '<A HREF="motion.html#k">k</A>', or almost all of keys to Vim directly.
+
+This |<A HREF="various.html#+multi_byte_ime">+multi_byte_ime</A>| feature help this.  It reduce times of switch status of
+<A HREF="#IME">IME</A> manually.  In normal mode, there are almost no need working <A HREF="#IME">IME</A>, even
+editing <A HREF="#multibyte">multibyte</A> text.  So exiting insert mode with ESC, Vim memorize last
+status of <A HREF="#IME">IME</A> and force turn off <A HREF="#IME">IME</A>.  When re-enter insert mode, Vim revert
+<A HREF="#IME">IME</A> status to that memorized automatically.
+
+This works on not only insert-normal mode, but also search-command input and
+replace mode.
+The <A HREF="options.html#options">options</A> <A HREF="options.html#'iminsert'">'iminsert'</A>, <A HREF="options.html#'imsearch'">'imsearch'</A> and <A HREF="options.html#'imcmdline'">'imcmdline'</A> can be used to chose
+the different input methods or disable them temporarily.
+
+WHAT IS <A HREF="#IME">IME</A>
+    <A HREF="#IME">IME</A> is a part of East asian version Windows.  That helps you to input
+    <A HREF="#multibyte">multibyte</A> character.  English and other language version Windows does not
+    have any <A HREF="#IME">IME</A>.  (Also there is no need usually.) But there is one that
+    called Microsoft Global <A HREF="#IME">IME</A>.  Global <A HREF="#IME">IME</A> is a part of Internet Explorer
+    4.0 or above.  You can get more information about Global <A HREF="#IME">IME</A>, at below
+    URL.
+
+
+WHAT IS GLOBAL <A HREF="#IME">IME</A>					*<A NAME="global-ime"></A><B>global-ime</B>*
+    Global <A HREF="#IME">IME</A> makes capability to input <A HREF="#Chinese">Chinese</A>, <A HREF="#Japanese">Japanese</A>, and <A HREF="#Korean">Korean</A> text
+    into Vim buffer on any language version of Windows 98, Windows 95, and
+    Windows NT 4.0.
+    On Windows 2000 and XP <A HREF="motion.html#it">it</A> should work <A HREF="motion.html#as">as</A> well (without downloading).  On
+    Windows 2000 Professional, Global <A HREF="#IME">IME</A> is built in, and the Input Locales
+    can be added through Control Panel/Regional Options/Input Locales.
+    Please see below URL for detail of Global <A HREF="#IME">IME</A>.  You can also find various
+    language version of Global <A HREF="#IME">IME</A> at same place.
+
+    - Global <A HREF="#IME">IME</A> detailed information.
+	<A HREF="http://search.microsoft.com/results.aspx?q=global+ime">http://search.microsoft.com/results.aspx?q=global+ime</A>
+
+    - Active Input Method Manager (Global <A HREF="#IME">IME</A>)
+	<A HREF="http://msdn.microsoft.com/en-us/library/aa741221v=VS.85.aspx">http://msdn.microsoft.com/en-us/library/aa741221v=VS.85.aspx</A>
+
+    Support for Global <A HREF="#IME">IME</A> is an experimental feature.
+
+NOTE: For <A HREF="#IME">IME</A> to work you must make sure the input locales of your language
+are added to your system.  The exact location of this depends on the version
+of Windows you use.  For example, on my Windows 2000 box:
+1. Control Panel
+2. Regional Options
+3. Input Locales <A HREF="intro.html#Tab">Tab</A>
+4. Add Installed input locales -&gt; Chinese(PRC)
+   The default is still English (United Stated)
+
+
+
+Cursor color when <A HREF="#IME">IME</A> or <A HREF="#XIM">XIM</A> is on				*<A NAME="CursorIM"></A><B>CursorIM</B>*
+    There is a little cute feature for <A HREF="#IME">IME</A>.  Cursor can indicate status of <A HREF="#IME">IME</A>
+    by <A HREF="change.html#changing">changing</A> its color.  Usually status of <A HREF="#IME">IME</A> was indicated by little icon
+    at a corner of desktop (or taskbar).  It is not <A HREF="starting.html#easy">easy</A> to verify status of
+    <A HREF="#IME">IME</A>.  But this feature help this.
+    This works in the same way when using <A HREF="#XIM">XIM</A>.
+
+    You can select cursor color when status is on by using highlight group
+    <A HREF="#CursorIM">CursorIM</A>.  For example, add these lines to your YXXYgvimrc|:
+
+<B>	if has('multi_byte_ime')</B>
+<B>	    highlight Cursor guifg=NONE guibg=Green</B>
+<B>	    highlight CursorIM guifg=NONE guibg=Purple</B>
+<B>	endif</B>
+ 
+    Cursor color with off <A HREF="#IME">IME</A> is green.  And purple cursor indicates that
+    status is on.
+
+==============================================================================
+
+9. Input with a keymap					*<A NAME="mbyte-keymap"></A><B>mbyte-keymap</B>*
+
+When the keyboard doesn't produce the characters you want to enter in your
+text, you can use the <A HREF="options.html#'keymap'">'keymap'</A> option.  This will translate one or more
+(English) characters to another (non-English) character.  This only happens
+when typing text, not when typing Vim commands.  This avoids having to switch
+between two keyboard settings.
+
+The value of the <A HREF="options.html#'keymap'">'keymap'</A> option specifies a keymap file to use.  The name of
+this file is one of these two:
+
+	keymap/{keymap}_{encoding}.vim
+	keymap/{keymap}.vim
+
+Here {keymap} is the value of the <A HREF="options.html#'keymap'">'keymap'</A> option and {encoding} of the
+<A HREF="options.html#'encoding'">'encoding'</A> option.  The file name with the {encoding} included is tried first.
+
+<A HREF="options.html#'runtimepath'">'runtimepath'</A> is used to find these files.  To see an overview of all
+available keymap files, use this:
+<B>	:echo globpath(&amp;rtp, "keymap/*.vim")</B>
+
+In <A HREF="insert.html#Insert">Insert</A> and <A HREF="cmdline.html#Command-line">Command-line</A> mode you can use <A HREF="editing.html#CTRL-^">CTRL-^</A> to toggle between using the
+keyboard map or not. |<A HREF="insert.html#i_CTRL-^">i_CTRL-^</A>| |<A HREF="cmdline.html#c_CTRL-^">c_CTRL-^</A>|
+This flag is remembered for <A HREF="insert.html#Insert">Insert</A> mode with the <A HREF="options.html#'iminsert'">'iminsert'</A> option.  When
+leaving and entering <A HREF="insert.html#Insert">Insert</A> mode the previous value is used.  The same value
+is also used for commands that take a single character argument, like |<A HREF="motion.html#f">f</A>| and
+|<A HREF="change.html#r">r</A>|.
+For <A HREF="cmdline.html#Command-line">Command-line</A> mode the flag is NOT remembered.  You are expected to type an
+<A HREF="intro.html#Ex">Ex</A> command first, which is ASCII.
+For typing search patterns the <A HREF="options.html#'imsearch'">'imsearch'</A> option is used.  It can be set to
+use the same value <A HREF="motion.html#as">as</A> for <A HREF="options.html#'iminsert'">'iminsert'</A>.
+
+								*<A NAME="lCursor"></A><B>lCursor</B>*
+It is possible to give the <A HREF="gui.html#GUI">GUI</A> cursor another color when the language mappings
+are being used.  This is disabled by default, to avoid that the cursor becomes
+invisible when you use a non-standard background color.  Here is an example to
+use a brightly colored cursor:
+<B>	:highlight Cursor guifg=NONE guibg=Green</B>
+<B>	:highlight lCursor guifg=NONE guibg=Cyan</B>
+ 
+
+		*<A NAME="keymap-file-format"></A><B>keymap-file-format</B>* *<A NAME=":loadk"></A><B>:loadk</B>* *<A NAME=":loadkeymap"></A><B>:loadkeymap</B>* *<A NAME="E105"></A><B>E105</B>* *<A NAME="E791"></A><B>E791</B>*
+The keymap file looks something like this:
+
+<B>	" Maintainer:	name &lt;email@address&gt;</B>
+<B>	" Last Changed:	2001 Jan 1</B>
+
+<B>	let b:keymap_name = "short"</B>
+
+<B>	loadkeymap</B>
+<B>	a	A</B>
+<B>	b	B	comment</B>
+
+The lines starting with a &quot; are comments and will be ignored.  Blank lines are
+also ignored.  The lines with the mappings may have a comment after the useful
+text.
+
+The &quot;b:keymap_name&quot; can be set to a short name, which will be shown in the
+status line.  The idea is that this takes <A HREF="various.html#less">less</A> room than the value of
+<A HREF="options.html#'keymap'">'keymap'</A>, which might be long to distinguish between different languages,
+keyboards and encodings.
+
+The actual mappings are in the lines below &quot;loadkeymap&quot;.  In the example &quot;<A HREF="insert.html#a">a</A>&quot;
+is mapped to &quot;<A HREF="insert.html#A">A</A>&quot; and &quot;<A HREF="motion.html#b">b</A>&quot; to &quot;<A HREF="motion.html#B">B</A>&quot;.  Thus the first item is mapped to the second
+item.  This is done for each line, until the end of the file.
+These items are exactly the same <A HREF="motion.html#as">as</A> what can be used in a |<A HREF="map.html#:lnoremap">:lnoremap</A>| command,
+using &quot;&lt;buffer&gt;&quot; to make the mappings local to the buffer.
+You can check the result with this command:
+<B>	:lmap</B>
+The two items must be separated by white space.  You cannot include white
+space inside an item, use the special names &quot;<A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>&quot; and &quot;<A HREF="motion.html#&lt;Space&gt;">&lt;Space&gt;</A>&quot; instead.
+The length of the two items together must not exceed 200 bytes.
+
+It's possible to have more than one character in the first column.  This works
+like a dead key.  Example:
+<B>	'a	á</B>
+Since Vim doesn't know if the next character after a <A HREF="change.html#quote">quote</A> is really an &quot;<A HREF="insert.html#a">a</A>&quot;,
+<A HREF="motion.html#it">it</A> will wait for the next character.  To be able to insert a single <A HREF="change.html#quote">quote</A>,
+also add this line:
+<B>	''	'</B>
+Since the <A HREF="map.html#mapping">mapping</A> is defined with |<A HREF="map.html#:lnoremap">:lnoremap</A>| the resulting <A HREF="change.html#quote">quote</A> will not be
+used for the start of another character.
+
+The &quot;accents&quot; keymap uses this.				*<A NAME="keymap-accents"></A><B>keymap-accents</B>*
+
+The first column can also be in |<A HREF="intro.html#&lt;&gt;">&lt;&gt;</A>| form:
+	&lt;C-c&gt;		Ctrl-C
+	&lt;A-c&gt;		Alt-c
+	&lt;A-C&gt;		Alt-C
+Note that the Alt mappings may not work, depending on your keyboard and
+terminal.
+
+Although it's possible to have more than one character in the second column,
+this is unusual.  But you can use various ways to specify the character:
+<B>	A	a		literal character</B>
+<B>	A	&lt;char-97&gt;	decimal value</B>
+<B>	A	&lt;char-0x61&gt;	hexadecimal value</B>
+<B>	A	&lt;char-0141&gt;	octal value</B>
+<B>	x	&lt;Space&gt;		special key name</B>
+
+The characters are assumed to be encoded for the current value of <A HREF="options.html#'encoding'">'encoding'</A>.
+It's possible to use &quot;<A HREF="repeat.html#:scriptencoding">:scriptencoding</A>&quot; when all characters are given
+literally.  That doesn't work when using the &lt;char-&gt; construct, because the
+conversion is done on the keymap file, not on the resulting character.
+
+The lines after &quot;loadkeymap&quot; are interpreted with <A HREF="options.html#'cpoptions'">'cpoptions'</A> set to &quot;<A HREF="change.html#C">C</A>&quot;.
+This means that continuation lines are not used and a <A HREF="intro.html#backslash">backslash</A> has a special
+meaning in the mappings.  Examples:
+
+<B>	" a comment line</B>
+<B>	\"	x	maps " to x</B>
+<B>	\\	y	maps \ to y</B>
+
+If you write a keymap file that will be useful for others, consider submitting
+<A HREF="motion.html#it">it</A> to the Vim maintainer for inclusion in the <A HREF="intro.html#distribution">distribution</A>:
+<A HREF="mailto:maintainer@vim.org">&lt;maintainer@vim.org&gt;</A> 
+
+
+
+HEBREW KEYMAP						*<A NAME="keymap-hebrew"></A><B>keymap-hebrew</B>*
+
+This file explains what characters are available in <A HREF="#UTF-8">UTF-8</A> and CP1255 encodings,
+and what the keymaps are to get those characters:
+
+<B><FONT COLOR="PURPLE">glyph   encoding	   keymap </FONT></B>
+<B><FONT COLOR="PURPLE">Char   utf-8 cp1255  hebrew  hebrewp  name </FONT></B>
+א    0x5d0  0xe0     t	      a     'alef
+ב    0x5d1  0xe1     <A HREF="change.html#c">c</A>	      <A HREF="motion.html#b">b</A>     bet
+ג    0x5d2  0xe2     <A HREF="change.html#d">d</A>	      <A HREF="index.html#g">g</A>     gimel
+ד    0x5d3  0xe3     <A HREF="change.html#s">s</A>	      <A HREF="change.html#d">d</A>     dalet
+ה    0x5d4  0xe4     <A HREF="visual.html#v">v</A>	      <A HREF="motion.html#h">h</A>     he
+ו    0x5d5  0xe5     <A HREF="undo.html#u">u</A>	      <A HREF="visual.html#v">v</A>     vav
+ז    0x5d6  0xe6     <A HREF="index.html#z">z</A>	      <A HREF="index.html#z">z</A>     zayin
+ח    0x5d7  0xe7     <A HREF="motion.html#j">j</A>	      <A HREF="motion.html#j">j</A>     het
+ט    0x5d8  0xe8     <A HREF="change.html#y">y</A>	      <A HREF="motion.html#T">T</A>     tet
+י    0x5d9  0xe9     <A HREF="motion.html#h">h</A>	      <A HREF="change.html#y">y</A>     yod
+ך    0x5da  0xea     <A HREF="motion.html#l">l</A>	      <A HREF="various.html#K">K</A>     kaf sofit
+כ    0x5db  0xeb     <A HREF="motion.html#f">f</A>	      <A HREF="motion.html#k">k</A>     kaf
+ל    0x5dc  0xec     <A HREF="motion.html#k">k</A>	      <A HREF="motion.html#l">l</A>     lamed
+ם    0x5dd  0xed     <A HREF="insert.html#o">o</A>	      <A HREF="motion.html#M">M</A>     mem sofit
+מ    0x5de  0xee     <A HREF="pattern.html#n">n</A>	      <A HREF="motion.html#m">m</A>     mem
+ן    0x5df  0xef     <A HREF="insert.html#i">i</A>	      N     nun sofit
+נ    0x5e0  0xf0     <A HREF="motion.html#b">b</A>	      <A HREF="pattern.html#n">n</A>     nun
+ס    0x5e1  0xf1     <A HREF="change.html#x">x</A>	      <A HREF="change.html#s">s</A>     samech
+ע    0x5e2  0xf2     <A HREF="index.html#g">g</A>	      <A HREF="undo.html#u">u</A>     `ayin
+ף    0x5e3  0xf3     ;	      <A HREF="change.html#P">P</A>     pe sofit
+פ    0x5e4  0xf4     <A HREF="change.html#p">p</A>	      <A HREF="change.html#p">p</A>     pe
+ץ    0x5e5  0xf5     .	      X     tsadi sofit
+צ    0x5e6  0xf6     <A HREF="motion.html#m">m</A>	      <A HREF="change.html#x">x</A>     tsadi
+ק    0x5e7  0xf7     <A HREF="motion.html#e">e</A>	      <A HREF="repeat.html#q">q</A>     qof
+ר    0x5e8  0xf8     <A HREF="change.html#r">r</A>	      <A HREF="change.html#r">r</A>     resh
+ש    0x5e9  0xf9     a	      <A HREF="motion.html#w">w</A>     shin
+ת    0x5ea  0xfa     ,	      t     tav
+
+Vowel marks and special punctuation:
+הְ    0x5b0  0xc0     A:      A:   sheva
+הֱ    0x5b1  0xc1     HE      HE   hataf segol
+הֲ    0x5b2  0xc2     HA      HA   hataf patah
+הֳ    0x5b3  0xc3     HO      HO   hataf qamats
+הִ    0x5b4  0xc4     I       I    hiriq
+הֵ    0x5b5  0xc5     AY      AY   tsere
+הֶ    0x5b6  0xc6     <A HREF="motion.html#E">E</A>       <A HREF="motion.html#E">E</A>    segol
+הַ    0x5b7  0xc7     AA      AA   patah
+הָ    0x5b8  0xc8     AO      AO   qamats
+הֹ    0x5b9  0xc9     <A HREF="insert.html#O">O</A>       <A HREF="insert.html#O">O</A>    holam
+הֻ    0x5bb  0xcb     <A HREF="undo.html#U">U</A>       <A HREF="undo.html#U">U</A>    qubuts
+כּ    0x5bc  0xcc     <A HREF="change.html#D">D</A>       <A HREF="change.html#D">D</A>    dagesh
+הֽ    0x5bd  0xcd     ]T      ]T   meteg
+ה־   0x5be  0xce     ]Q      ]Q   maqaf
+בֿ    0x5bf  0xcf     ]R      ]R   rafe
+ב׀   0x5c0  0xd0     <A HREF="change.html#]p">]p</A>      <A HREF="change.html#]p">]p</A>   paseq
+שׁ    0x5c1  0xd1     SR      SR   shin-dot
+שׂ    0x5c2  0xd2     SL      SL   sin-dot
+׃    0x5c3  0xd3     <A HREF="change.html#]P">]P</A>      <A HREF="change.html#]P">]P</A>   sof-pasuq
+װ    0x5f0  0xd4     VV      VV   double-vav
+ױ    0x5f1  0xd5     VY      VY   vav-yod
+ײ    0x5f2  0xd6     YY      YY   yod-yod
+
+The following are only available in <A HREF="#utf-8">utf-8</A>
+
+Cantillation marks:
+glyph
+Char <A HREF="#utf-8">utf-8</A> <A HREF="hebrew.html#hebrew">hebrew</A> name
+ב֑    0x591   C:   etnahta
+ב֒    0x592   Cs   segol
+ב֓    0x593   CS   shalshelet
+ב֔    0x594   Cz   zaqef qatan
+ב֕    0x595   CZ   zaqef gadol
+ב֖    0x596   Ct   tipeha
+ב֗    0x597   Cr   revia
+ב֘    0x598   Cq   zarqa
+ב֙    0x599   Cp   pashta
+ב֚    0x59a   C!   yetiv
+ב֛    0x59b   Cv   tevir
+ב֜    0x59c   Cg   geresh
+ב֝    0x59d   C*   geresh qadim
+ב֞    0x59e   CG   gershayim
+ב֟    0x59f   CP   qarnei-parah
+ב֪    0x5aa   Cy   yerach-ben-yomo
+ב֫    0x5ab   Co   ole
+ב֬    0x5ac   Ci   iluy
+ב֭    0x5ad   Cd   dehi
+ב֮    0x5ae   Cn   zinor
+ב֯    0x5af   CC   masora circle
+
+Combining forms:
+ﬠ    0xfb20  X`   Alternative `ayin
+ﬡ    0xfb21  X'   Alternative 'alef
+ﬢ    0xfb22  X-d  Alternative dalet
+ﬣ    0xfb23  X-h  Alternative he
+ﬤ    0xfb24  X-k  Alternative kaf
+ﬥ    0xfb25  X-l  Alternative lamed
+ﬦ    0xfb26  X-m  Alternative mem-sofit
+ﬧ    0xfb27  X-r  Alternative resh
+ﬨ    0xfb28  X-t  Alternative tav
+﬩    0xfb29  X-+  Alternative plus
+שׁ    0xfb2a  XW   shin+shin-dot
+שׂ    0xfb2b  Xw   shin+sin-dot
+שּׁ    0xfb2c  X..W  shin+shin-dot+dagesh
+שּׂ    0xfb2d  X..w  shin+sin-dot+dagesh
+אַ    0xfb2e  XA   alef+patah
+אָ    0xfb2f  XO   alef+qamats
+אּ    0xfb30  XI   alef+hiriq (mapiq)
+בּ    0xfb31  X.b  bet+dagesh
+גּ    0xfb32  X.g  gimel+dagesh
+דּ    0xfb33  X.d  dalet+dagesh
+הּ    0xfb34  X.h  he+dagesh
+וּ    0xfb35  Xu  vav+dagesh
+זּ    0xfb36  X.z  zayin+dagesh
+טּ    0xfb38  X.T  tet+dagesh
+יּ    0xfb39  X.y  yud+dagesh
+ךּ    0xfb3a  X.K  kaf sofit+dagesh
+כּ    0xfb3b  X.k  kaf+dagesh
+לּ    0xfb3c  X.l  lamed+dagesh
+מּ    0xfb3e  X.m  mem+dagesh
+נּ    0xfb40  X.n  nun+dagesh
+סּ    0xfb41  X.s  samech+dagesh
+ףּ    0xfb43  X.P  pe sofit+dagesh
+פּ    0xfb44  X.p  pe+dagesh
+צּ    0xfb46  X.x  tsadi+dagesh
+קּ    0xfb47  X.q  qof+dagesh
+רּ    0xfb48  X.r  resh+dagesh
+שּ    0xfb49  X.w  shin+dagesh
+תּ    0xfb4a  X.t  tav+dagesh
+וֹ    0xfb4b  Xo   vav+holam
+בֿ    0xfb4c  XRb  bet+rafe
+כֿ    0xfb4d  XRk  kaf+rafe
+פֿ    0xfb4e  XRp  pe+rafe
+ﭏ    0xfb4f  Xal  alef-lamed
+
+==============================================================================
+
+10. Using <A HREF="#UTF-8">UTF-8</A>				*<A NAME="mbyte-utf8"></A><B>mbyte-utf8</B>* *<A NAME="UTF-8"></A><B>UTF-8</B>* *<A NAME="utf-8"></A><B>utf-8</B>* *<A NAME="utf8"></A><B>utf8</B>*
+
+							*<A NAME="Unicode"></A><B>Unicode</B>* *<A NAME="unicode"></A><B>unicode</B>*
+The <A HREF="#Unicode">Unicode</A> character set was designed to include all characters from other
+character sets.  Therefore <A HREF="motion.html#it">it</A> is possible to write text in any language using
+<A HREF="#Unicode">Unicode</A> (with a few rarely used languages excluded).  And it's mostly possible
+to mix these languages in one file, which is impossible with other encodings.
+
+<A HREF="#Unicode">Unicode</A> can be encoded in several ways.  The most popular one is <A HREF="#UTF-8">UTF-8</A>, which
+uses one or more bytes for each character and is backwards compatible with
+ASCII.   On <A HREF="os_win32.html#MS-Windows">MS-Windows</A> UTF-16 is also used (previously UCS-2), which uses
+16-bit words.  Vim can support all of these encodings, but always uses <A HREF="#UTF-8">UTF-8</A>
+internally.
+
+Vim has comprehensive <A HREF="#UTF-8">UTF-8</A> support.  It works well in:
+- xterm with <A HREF="#utf-8">utf-8</A> support enabled
+- <A HREF="gui_x11.html#Athena">Athena</A>, <A HREF="gui_x11.html#Motif">Motif</A> and <A HREF="gui_x11.html#GTK">GTK</A> <A HREF="gui.html#GUI">GUI</A>
+- <A HREF="os_win32.html#MS-Windows">MS-Windows</A> <A HREF="gui.html#GUI">GUI</A>
+- several other platforms
+
+Double-width characters are supported.  This works best with <A HREF="options.html#'guifontwide'">'guifontwide'</A> or
+<A HREF="options.html#'guifontset'">'guifontset'</A>.  When using only <A HREF="options.html#'guifont'">'guifont'</A> the wide characters are drawn in the
+normal width and a space to fill the gap.  Note that the <A HREF="options.html#'guifontset'">'guifontset'</A> option
+is no longer relevant in the <A HREF="gui_x11.html#GTK+">GTK+</A> 2 <A HREF="gui.html#GUI">GUI</A>.
+
+
+							*<A NAME="bom-bytes"></A><B>bom-bytes</B>*
+When reading a file a BOM (Byte Order <A HREF="motion.html#Mark">Mark</A>) can be used to recognize the
+<A HREF="#Unicode">Unicode</A> encoding:
+	EF BB BF     <A HREF="#utf-8">utf-8</A>
+	FE FF        utf-16 big endian
+	FF FE        utf-16 little endian
+	00 00 FE FF  utf-32 big endian
+	FF FE 00 00  utf-32 little endian
+
+Utf-8 is the recommended encoding.  Note that it's difficult to tell utf-16
+and utf-32 apart.  Utf-16 is often used on <A HREF="os_win32.html#MS-Windows">MS-Windows</A>, utf-32 is not
+widespread <A HREF="motion.html#as">as</A> file format.
+
+
+
+					*<A NAME="mbyte-combining"></A><B>mbyte-combining</B>* *<A NAME="mbyte-composing"></A><B>mbyte-composing</B>*
+A composing or combining character is used to change the meaning of the
+character before <A HREF="motion.html#it">it</A>.  The combining characters are drawn on top of the
+preceding character.
+Up to two combining characters can be used by default.  This can be changed
+with the <A HREF="options.html#'maxcombine'">'maxcombine'</A> option.
+When editing text a composing character is mostly considered part of the
+preceding character.  For example &quot;<A HREF="change.html#x">x</A>&quot; will delete a character and its
+following composing characters by default.
+If the <A HREF="options.html#'delcombine'">'delcombine'</A> option is on, then pressing '<A HREF="change.html#x">x</A>' will delete the combining
+characters, one at a time, then the base character.  But when <A HREF="insert.html#inserting">inserting</A>, you
+type the first character and the following composing characters separately,
+after which they will be joined.  The &quot;<A HREF="change.html#r">r</A>&quot; command will not allow you to type a
+combining character, because <A HREF="motion.html#it">it</A> doesn't know one is coming.  Use &quot;<A HREF="change.html#R">R</A>&quot; instead.
+
+Bytes which are not part of a valid <A HREF="#UTF-8">UTF-8</A> byte sequence are handled like a
+single character and displayed <A HREF="motion.html#as">as</A> &lt;xx&gt;, where &quot;xx&quot; is the hex value of the
+byte.
+
+Overlong sequences are not handled specially and displayed like a valid
+character.  However, search patterns may not match on an overlong sequence.
+(an overlong sequence is where more bytes are used than required for the
+character.)  An exception is NUL (zero) which is displayed <A HREF="motion.html#as">as</A> &quot;&lt;00&gt;&quot;.
+
+In the file and buffer the full range of <A HREF="#Unicode">Unicode</A> characters can be used (31
+bits).  However, displaying only works for the characters present in the
+selected font.
+
+Useful commands:
+- &quot;<A HREF="various.html#ga">ga</A>&quot; shows the decimal, hexadecimal and <A HREF="eval.html#octal">octal</A> value of the character under
+  the cursor.  If there are composing characters these are shown too.  (If the
+  message is truncated, use &quot;:messages&quot;).
+- &quot;<A HREF="various.html#g8">g8</A>&quot; shows the bytes used in a <A HREF="#UTF-8">UTF-8</A> character, also the composing
+  characters, <A HREF="motion.html#as">as</A> hex numbers.
+- &quot;<A HREF="options.html#:set">:set</A> <A HREF="options.html#'encoding'">encoding</A>=utf-8 fileencodings=&quot; forces using <A HREF="#UTF-8">UTF-8</A> for all files.  The
+  default is to use the current <A HREF="#locale">locale</A> for <A HREF="options.html#'encoding'">'encoding'</A> and set <A HREF="options.html#'fileencodings'">'fileencodings'</A>
+  to automatically detect the encoding of a file.
+
+
+STARTING VIM
+
+If your current <A HREF="#locale">locale</A> is in an <A HREF="#utf-8">utf-8</A> encoding, Vim will automatically start
+in <A HREF="#utf-8">utf-8</A> mode.
+
+If you are using another <A HREF="#locale">locale</A>:
+
+<B>	set encoding=utf-8</B>
+
+You might also want to select the font used for the <A HREF="gui.html#menus">menus</A>.  Unfortunately this
+doesn't always work.  See the system specific remarks below, and <A HREF="options.html#'langmenu'">'langmenu'</A>.
+
+
+
+USING <A HREF="#UTF-8">UTF-8</A> IN X-Windows				*<A NAME="utf-8-in-xwindows"></A><B>utf-8-in-xwindows</B>*
+
+Note: This section does not apply to the <A HREF="gui_x11.html#GTK+">GTK+</A> 2 <A HREF="gui.html#GUI">GUI</A>.
+
+You need to specify a font to be used.  For double-wide characters another
+font is required, which is exactly <A HREF="if_cscop.html#twice">twice</A> <A HREF="motion.html#as">as</A> wide.  There are three ways to <A HREF="diff.html#do">do</A>
+this:
+
+1. Set <A HREF="options.html#'guifont'">'guifont'</A> and let Vim find a matching <A HREF="options.html#'guifontwide'">'guifontwide'</A>
+2. Set <A HREF="options.html#'guifont'">'guifont'</A> and <A HREF="options.html#'guifontwide'">'guifontwide'</A>
+3. Set <A HREF="options.html#'guifontset'">'guifontset'</A>
+
+See the documentation for each option for details.  Example:
+
+<B>   :set guifont=-misc-fixed-medium-r-normal--15-140-75-75-c-90-iso10646-1</B>
+
+You might also want to set the font used for the <A HREF="gui.html#menus">menus</A>.  This only works for
+<A HREF="gui_x11.html#Motif">Motif</A>.  Use the &quot;:hi Menu font={fontname}&quot; command for this. |<A HREF="syntax.html#:highlight">:highlight</A>|
+
+
+
+TYPING <A HREF="#UTF-8">UTF-8</A>						*<A NAME="utf-8-typing"></A><B>utf-8-typing</B>*
+
+If you are using X-Windows, you should find an input method that supports
+<A HREF="#utf-8">utf-8</A>.
+
+If your system does not provide support for typing <A HREF="#utf-8">utf-8</A>, you can use the
+<A HREF="options.html#'keymap'">'keymap'</A> feature.  This allows <A HREF="editing.html#writing">writing</A> a keymap file, which defines a <A HREF="#utf-8">utf-8</A>
+character <A HREF="motion.html#as">as</A> a sequence of ASCII characters.  See |<A HREF="#mbyte-keymap">mbyte-keymap</A>|.
+
+Another method is to set the current <A HREF="#locale">locale</A> to the language you want to use
+and for which you have a <A HREF="#XIM">XIM</A> available.  Then set <A HREF="options.html#'termencoding'">'termencoding'</A> to that
+language and Vim will convert the typed characters to <A HREF="options.html#'encoding'">'encoding'</A> for you.
+
+If everything else fails, you can type any character <A HREF="motion.html#as">as</A> four hex bytes:
+
+<B>	CTRL-V u 1234</B>
+
+&quot;1234&quot; is interpreted <A HREF="motion.html#as">as</A> a hex number.  You must type four characters, prepend
+a zero if necessary.
+
+
+
+COMMAND ARGUMENTS					*<A NAME="utf-8-char-arg"></A><B>utf-8-char-arg</B>*
+
+Commands like |<A HREF="motion.html#f">f</A>|, |<A HREF="motion.html#F">F</A>|, |<A HREF="motion.html#t">t</A>| and |<A HREF="change.html#r">r</A>| take an argument of one character.  For
+<A HREF="#UTF-8">UTF-8</A> this argument may include one or two composing characters.  These need
+to be produced together with the base character, Vim doesn't wait for the next
+character to be typed to find out if <A HREF="motion.html#it">it</A> is a composing character or not.
+Using <A HREF="options.html#'keymap'">'keymap'</A> or |<A HREF="map.html#:lmap">:lmap</A>| is a <A HREF="todo.html#nice">nice</A> way to type these characters.
+
+The commands that search for a character in a line handle composing characters
+<A HREF="motion.html#as">as</A> follows.  When searching for a character without a composing character,
+this will find matches in the text with or without composing characters.  When
+searching for a character with a composing character, this will only find
+matches with that composing character.  It was implemented this way, because
+not everybody is able to type a composing character.
+
+
+==============================================================================
+
+11. Overview of <A HREF="options.html#options">options</A>					*<A NAME="mbyte-options"></A><B>mbyte-options</B>*
+
+These <A HREF="options.html#options">options</A> are relevant for editing <A HREF="#multi-byte">multi-byte</A> files.  Check the help in
+<A HREF="options.html#options.txt">options.txt</A> for detailed information.
+
+<A HREF="options.html#'encoding'">'encoding'</A>	Encoding used for the keyboard and display.  It is also the
+		default encoding for files.
+
+<A HREF="options.html#'fileencoding'">'fileencoding'</A>	Encoding of a file.  When it's different from <A HREF="options.html#'encoding'">'encoding'</A>
+		conversion is done when reading or <A HREF="editing.html#writing">writing</A> the file.
+
+<A HREF="options.html#'fileencodings'">'fileencodings'</A>	<A HREF="eval.html#List">List</A> of possible encodings of a file.  When opening a file
+		these will be tried and the first one that doesn't cause an
+		error is used for <A HREF="options.html#'fileencoding'">'fileencoding'</A>.
+
+<A HREF="options.html#'charconvert'">'charconvert'</A>	Expression used to convert files from one encoding to another.
+
+<A HREF="options.html#'formatoptions'">'formatoptions'</A> The '<A HREF="motion.html#m">m</A>' flag can be included to have <A HREF="change.html#formatting">formatting</A> break a line
+		at a <A HREF="#multibyte">multibyte</A> character of 256 or higher.  Thus is useful for
+		languages where a sequence of characters can be broken
+		anywhere.
+
+<A HREF="options.html#'guifontset'">'guifontset'</A>	The list of font names used for a <A HREF="#multi-byte">multi-byte</A> encoding.  When
+		this option is not empty, <A HREF="motion.html#it">it</A> replaces <A HREF="options.html#'guifont'">'guifont'</A>.
+
+<A HREF="options.html#'keymap'">'keymap'</A>	Specify the name of a keyboard <A HREF="map.html#mapping">mapping</A>.
+
+==============================================================================
+
+Contributions specifically for the <A HREF="#multi-byte">multi-byte</A> features by:
+	Chi-Deok Hwang <A HREF="mailto:hwang@mizi.co.kr">&lt;hwang@mizi.co.kr&gt;</A> 
+	SungHyun Nam <A HREF="mailto:goweol@gmail.com">&lt;goweol@gmail.com&gt;</A> 
+	K.Nagano <A HREF="mailto:nagano@atese.advantest.co.jp">&lt;nagano@atese.advantest.co.jp&gt;</A> 
+	Taro Muraoka <A HREF="mailto:koron@tka.att.ne.jp">&lt;koron@tka.att.ne.jp&gt;</A> 
+	Yasuhiro Matsumoto <A HREF="mailto:mattn@mail.goo.ne.jp">&lt;mattn@mail.goo.ne.jp&gt;</A> 
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

@@ -1,0 +1,668 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_30</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_30</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_30.txt"></A><B>usr_30.txt</B>*	For Vim version 7.4.  Last change: 2007 Nov 10
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			      Editing programs
+
+
+Vim has various commands that aid in <A HREF="editing.html#writing">writing</A> computer programs.  Compile a
+program and directly jump to reported <A HREF="message.html#errors">errors</A>.  Automatically set the indent
+for many languages and format comments.
+
+|<A HREF="#30.1">30.1</A>|	Compiling
+|<A HREF="#30.2">30.2</A>|	Indenting C files
+|<A HREF="#30.3">30.3</A>|	Automatic indenting
+|<A HREF="#30.4">30.4</A>|	Other indenting
+|<A HREF="#30.5">30.5</A>|	Tabs and spaces
+|<A HREF="#30.6">30.6</A>|	Formatting comments
+
+     Next chapter: |<A HREF="usr_31.html">usr_31.txt</A>|  Exploiting the <A HREF="gui.html#GUI">GUI</A>
+ Previous chapter: |<A HREF="usr_29.html">usr_29.txt</A>|  Moving through programs
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="30.1"></A><B>30.1</B>*	Compiling
+
+Vim has a set of so called &quot;<A HREF="quickfix.html#quickfix">quickfix</A>&quot; commands.  They enable you to compile a
+program from within Vim and then go through the <A HREF="message.html#errors">errors</A> generated and fix them
+(hopefully).  You can then recompile and fix any new <A HREF="message.html#errors">errors</A> that are found
+until finally your program compiles without any error.
+
+The following command runs the program &quot;make&quot; (supplying <A HREF="motion.html#it">it</A> with any argument
+you give) and captures the results:
+
+<B>	:make {arguments}</B>
+
+If <A HREF="message.html#errors">errors</A> were generated, they are captured and the editor positions you where
+the first error occurred.
+   Take a look at an example &quot;<A HREF="quickfix.html#:make">:make</A>&quot; session.  (Typical <A HREF="quickfix.html#:make">:make</A> sessions generate
+far more <A HREF="message.html#errors">errors</A> and fewer stupid ones.)  After typing &quot;<A HREF="quickfix.html#:make">:make</A>&quot; the screen looks
+like this:
+
+<B><FONT COLOR="PURPLE">	:!make | &amp;tee /tmp/vim215953.err </FONT></B>
+<B><FONT COLOR="PURPLE">	gcc -g -Wall -o prog main.c sub.c </FONT></B>
+<B><FONT COLOR="PURPLE">	main.c: In function 'main': </FONT></B>
+<B><FONT COLOR="PURPLE">	main.c:6: too many arguments to function 'do_sub' </FONT></B>
+<B><FONT COLOR="PURPLE">	main.c: At top level: </FONT></B>
+<B><FONT COLOR="PURPLE">	main.c:10: parse error before '}' </FONT></B>
+<B><FONT COLOR="PURPLE">	make: *** [prog] Error 1 </FONT></B>
+
+<B><FONT COLOR="PURPLE">	2 returned </FONT></B>
+<B><FONT COLOR="PURPLE">	"main.c" 11L, 111C </FONT></B>
+<B><FONT COLOR="PURPLE">	(3 of 6): too many arguments to function 'do_sub' </FONT></B>
+<B><FONT COLOR="PURPLE">	Press ENTER or type command to continue </FONT></B>
+
+From this you can see that you have <A HREF="message.html#errors">errors</A> in the file &quot;main.c&quot;.  When you
+press <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A>, Vim displays the file &quot;main.c&quot;, with the cursor positioned on
+line 6, the first line with an error.  You did not need to specify the file or
+the line number, Vim knew where to go by looking in the error <A HREF="message.html#messages">messages</A>.
+
+		+---------------------------------------------------+
+		|int main()					    |
+		|{						    |
+		&#124;	int i=3;				    |
+      cursor -&gt; &#124;	do_sub(&quot;foo&quot;);				    |
+		&#124;	++i;					    |
+		&#124;	return (0);				    |
+		|}						    |
+		|}						    |
+		&#124; ~						    |
+		|(3 of 12): too many arguments to function 'do_sub' |
+		+---------------------------------------------------+
+
+The following command goes to where the next error occurs:
+
+<B>	:cnext</B>
+
+Vim jumps to line 10, the last line in the file, where there is an extra '<A HREF="motion.html#}">}</A>'.
+   When there is not enough room, Vim will shorten the error message.  To see
+the whole message use:
+
+<B>	:cc</B>
+
+You can get an overview of all the error <A HREF="message.html#messages">messages</A> with the &quot;<A HREF="quickfix.html#:clist">:clist</A>&quot; command.
+The output looks like this:
+
+<B>	:clist</B>
+<B><FONT COLOR="PURPLE"> 	3 main.c: 6:too many arguments to function 'do_sub' </FONT></B>
+<B><FONT COLOR="PURPLE">	5 main.c: 10:parse error before '}' </FONT></B>
+
+Only the lines where Vim recognized a file name and line number are listed
+here.  It assumes those are the interesting lines and the rest is just boring
+<A HREF="message.html#messages">messages</A>.  However, sometimes unrecognized lines <A HREF="diff.html#do">do</A> contain something you want
+to see.  Output from the linker, for example, about an undefined function.
+To see all the <A HREF="message.html#messages">messages</A> add a &quot;<A HREF="change.html#!">!</A>&quot; to the command:
+
+<B>	:clist!</B>
+<B><FONT COLOR="PURPLE"> 	1 gcc -g -Wall -o prog main.c sub.c </FONT></B>
+<B><FONT COLOR="PURPLE">	2 main.c: In function 'main': </FONT></B>
+<B><FONT COLOR="PURPLE">	3 main.c:6: too many arguments to function 'do_sub' </FONT></B>
+<B><FONT COLOR="PURPLE">	4 main.c: At top level: </FONT></B>
+<B><FONT COLOR="PURPLE">	5 main.c:10: parse error before '}' </FONT></B>
+<B><FONT COLOR="PURPLE">	6 make: *** [prog] Error 1 </FONT></B>
+
+Vim will highlight the current error.  To go back to the previous error, use:
+
+<B>	:cprevious</B>
+
+Other commands to move around in the error list:
+
+	<A HREF="quickfix.html#:cfirst">:cfirst</A>		to first error
+	<A HREF="quickfix.html#:clast">:clast</A>		to last error
+	<A HREF="quickfix.html#:cc">:cc</A> 3		to error nr 3
+
+
+USING ANOTHER COMPILER
+
+The name of the program to run when the &quot;<A HREF="quickfix.html#:make">:make</A>&quot; command is executed is defined
+by the <A HREF="options.html#'makeprg'">'makeprg'</A> option.  Usually this is set to &quot;make&quot;, but <A HREF="visual.html#Visual">Visual</A> C++ users
+should set this to &quot;nmake&quot; by executing the following command:
+
+<B>	:set makeprg=nmake</B>
+
+You can also include arguments in this option.  Special characters need to
+be escaped with a <A HREF="intro.html#backslash">backslash</A>.  Example:
+
+<B>	:set makeprg=nmake\ -f\ project.mak</B>
+
+You can include special Vim keywords in the command specification.  The <A HREF="motion.html#&#37;">&#37;</A>
+character expands to the name of the current file.  So if you execute the
+command:
+<B>	:set makeprg=make\ %</B>
+
+When you are editing main.c, then &quot;<A HREF="quickfix.html#:make">:make</A>&quot; executes the following command:
+
+<B>	make main.c</B>
+
+This is not too useful, so you will refine the command a little and use the <A HREF="insert.html#:r">:r</A>
+(root) modifier:
+
+<B>	:set makeprg=make\ %:r.o</B>
+
+Now the command executed is <A HREF="motion.html#as">as</A> follows:
+
+<B>	make main.o</B>
+
+More about these modifiers here: |<A HREF="cmdline.html#filename-modifiers">filename-modifiers</A>|.
+
+
+OLD ERROR LISTS
+
+Suppose you &quot;<A HREF="quickfix.html#:make">:make</A>&quot; a program.  There is a warning message in one file and an
+error message in another.  You fix the error and use &quot;<A HREF="quickfix.html#:make">:make</A>&quot; again to check if
+<A HREF="motion.html#it">it</A> was really fixed.  Now you want to look at the warning message.  It doesn't
+show up in the last error list, since the file with the warning wasn't
+compiled again.  You can go back to the previous error list with:
+
+<B>	:colder</B>
+
+Then use &quot;<A HREF="quickfix.html#:clist">:clist</A>&quot; and &quot;<A HREF="quickfix.html#:cc">:cc</A> {nr}&quot; to jump to the place with the warning.
+   To go forward to the next error list:
+
+<B>	:cnewer</B>
+
+Vim remembers ten error lists.
+
+
+SWITCHING COMPILERS
+
+You have to tell Vim what format the error <A HREF="message.html#messages">messages</A> are that your compiler
+produces.  This is done with the <A HREF="options.html#'errorformat'">'errorformat'</A> option.  The <A HREF="syntax.html#syntax">syntax</A> of this
+option is quite complicated and <A HREF="motion.html#it">it</A> can be made to fit almost any compiler.
+You can find the explanation here: |<A HREF="quickfix.html#errorformat">errorformat</A>|.
+
+You might be using various different compilers.  Setting the <A HREF="options.html#'makeprg'">'makeprg'</A> option,
+and especially the <A HREF="options.html#'errorformat'">'errorformat'</A> each time is not <A HREF="starting.html#easy">easy</A>.  Vim offers a simple
+method for this.  For example, to switch to using the Microsoft <A HREF="visual.html#Visual">Visual</A> C++
+compiler:
+
+<B>	:compiler msvc</B>
+
+This will find the Vim <A HREF="usr_41.html#script">script</A> for the &quot;msvc&quot; compiler and set the appropriate
+<A HREF="options.html#options">options</A>.
+   You can write your own compiler files.  See |<A HREF="usr_41.html#write-compiler-plugin">write-compiler-plugin</A>|.
+
+
+OUTPUT REDIRECTION
+
+The &quot;<A HREF="quickfix.html#:make">:make</A>&quot; command redirects the output of the executed program to an error
+file.  How this works depends on various things, such <A HREF="motion.html#as">as</A> the <A HREF="options.html#'shell'">'shell'</A>.  If your
+&quot;<A HREF="quickfix.html#:make">:make</A>&quot; command doesn't capture the output, check the <A HREF="options.html#'makeef'">'makeef'</A> and
+<A HREF="options.html#'shellpipe'">'shellpipe'</A> <A HREF="options.html#options">options</A>.  The <A HREF="options.html#'shellquote'">'shellquote'</A> and <A HREF="options.html#'shellxquote'">'shellxquote'</A> <A HREF="options.html#options">options</A> might also
+matter.
+
+In <A HREF="change.html#case">case</A> you can't get &quot;<A HREF="quickfix.html#:make">:make</A>&quot; to redirect the file for you, an alternative is
+to compile the program in another <A HREF="windows.html#window">window</A> and redirect the output into a file.
+Then have Vim read this file with:
+
+<B>	:cfile {filename}</B>
+
+Jumping to <A HREF="message.html#errors">errors</A> will work like with the &quot;<A HREF="quickfix.html#:make">:make</A>&quot; command.
+
+==============================================================================
+
+*<A NAME="30.2"></A><B>30.2</B>*	Indenting C style text
+
+A program is much easier to understand when the lines have been properly
+indented.  Vim offers various ways to make this <A HREF="various.html#less">less</A> work.  For C or C style
+programs like Java or C++, set the <A HREF="options.html#'cindent'">'cindent'</A> option.  Vim knows a lot about C
+programs and will try very hard to automatically set the indent for you.  Set
+the <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> option to the amount of spaces you want for a deeper level.
+Four spaces will work fine.  One &quot;<A HREF="options.html#:set">:set</A>&quot; command will <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A>:
+
+<B>	:set cindent shiftwidth=4</B>
+
+With this option enabled, when you type something such <A HREF="motion.html#as">as</A> &quot;if (x)&quot;, the next
+line will automatically be indented an additional level.
+
+				    if (flag)
+	Automatic indent   ---&gt;		do_the_work();
+	Automatic unindent &lt;--	    if (other_flag) {
+	Automatic indent   ---&gt;		do_file();
+	keep indent			do_some_more();
+	Automatic unindent &lt;--	    }
+
+When you type something in curly braces ({}), the text will be indented at the
+start and unindented at the end.  The unindenting will happen after typing the
+'<A HREF="motion.html#}">}</A>', since Vim can't guess what you are going to type.
+
+One side effect of automatic indentation is that <A HREF="motion.html#it">it</A> helps you catch <A HREF="message.html#errors">errors</A> in
+your code early.  When you type a } to finish a function, only to find that
+the automatic indentation gives <A HREF="motion.html#it">it</A> more indent than what you expected, there
+is probably a } missing.  Use the &quot;<A HREF="motion.html#&#37;">&#37;</A>&quot; command to find out which { matches the
+} you typed.
+   A missing ) and ; also cause extra indent.  Thus if you get more white
+space than you would expect, check the preceding lines.
+
+When you have code that is badly formatted, or you inserted and deleted lines,
+you need to re-indent the lines.  The &quot;<A HREF="change.html#=">=</A>&quot; <A HREF="motion.html#operator">operator</A> does this.  The simplest
+form is:
+
+<B>	==</B>
+
+This indents the current line.  Like with all operators, there are three ways
+to use <A HREF="motion.html#it">it</A>.  In <A HREF="visual.html#Visual">Visual</A> mode &quot;<A HREF="change.html#=">=</A>&quot; indents the selected lines.  A useful text
+object is &quot;<A HREF="motion.html#a{">a{</A>&quot;.  This selects the current <A HREF="intro.html#{}">{}</A> block.  Thus, to re-indent the
+code block the cursor is in:
+
+<B>	=a{</B>
+
+I you have really badly indented code, you can re-indent the whole file with:
+
+<B>	gg=G</B>
+
+However, don't <A HREF="diff.html#do">do</A> this in files that have been carefully indented manually.
+The automatic indenting does a good job, but in some situations you might want
+to overrule <A HREF="motion.html#it">it</A>.
+
+
+SETTING INDENT STYLE
+
+Different people have different styles of indentation.  By default Vim does a
+pretty good job of indenting in a way that 90&#37; of programmers <A HREF="diff.html#do">do</A>.  There are
+different styles, however; so if you want to, you can customize the
+indentation style with the <A HREF="options.html#'cinoptions'">'cinoptions'</A> option.
+   By default <A HREF="options.html#'cinoptions'">'cinoptions'</A> is empty and Vim uses the default style.  You can
+add various items where you want something different.  For example, to make
+curly braces be placed like this:
+
+<B><FONT COLOR="PURPLE">	if (flag) </FONT></B>
+<B><FONT COLOR="PURPLE">	  { </FONT></B>
+<B><FONT COLOR="PURPLE">	    i = 8; </FONT></B>
+<B><FONT COLOR="PURPLE">	    j = 0; </FONT></B>
+<B><FONT COLOR="PURPLE">	  } </FONT></B>
+
+Use this command:
+
+<B>	:set cinoptions+={2</B>
+
+There are many of these items.  See |<A HREF="indent.html#cinoptions-values">cinoptions-values</A>|.
+
+==============================================================================
+
+*<A NAME="30.3"></A><B>30.3</B>*	Automatic indenting
+
+You don't want to switch on the <A HREF="options.html#'cindent'">'cindent'</A> option manually every time you edit
+a C file.  This is how you make <A HREF="motion.html#it">it</A> work automatically:
+
+<B>	:filetype indent on</B>
+
+Actually, this does a lot more than switching on <A HREF="options.html#'cindent'">'cindent'</A> for C files.  First
+of all, <A HREF="motion.html#it">it</A> enables detecting the type of a file.  That's the same <A HREF="motion.html#as">as</A> what is
+used for <A HREF="syntax.html#syntax">syntax</A> highlighting.
+   When the <A HREF="filetype.html#filetype">filetype</A> is known, Vim will search for an indent file for this
+type of file.  The Vim <A HREF="intro.html#distribution">distribution</A> includes a number of these for various
+programming languages.  This indent file will then prepare for automatic
+indenting specifically for this file.
+
+If you don't like the automatic indenting, you can switch <A HREF="motion.html#it">it</A> off again:
+
+<B>	:filetype indent off</B>
+
+If you don't like the indenting for one specific type of file, this is how you
+avoid <A HREF="motion.html#it">it</A>.  Create a file with just this one line:
+
+<B>	:let b:did_indent = 1</B>
+
+Now you need to write this in a file with a specific name:
+
+	{directory}/indent/{filetype}.vim
+
+The {filetype} is the name of the file type, such <A HREF="motion.html#as">as</A> &quot;cpp&quot; or &quot;java&quot;.  You can
+see the exact name that Vim detected with this command:
+
+<B>	:set filetype</B>
+
+In this file the output is:
+
+<B><FONT COLOR="PURPLE">	filetype=help </FONT></B>
+
+Thus you would use &quot;help&quot; for {filetype}.
+   For the {directory} part you need to use your runtime directory.  Look at
+the output of this command:
+
+<B>	set runtimepath</B>
+
+Now use the first item, the name before the first comma.  Thus if the output
+looks like this:
+
+<B><FONT COLOR="PURPLE">	runtimepath=~/.vim,/usr/local/share/vim/vim60/runtime,~/.vim/after </FONT></B>
+
+You use &quot;~/.vim&quot; for {directory}.  Then the resulting file name is:
+
+<B><FONT COLOR="PURPLE">	~/.vim/indent/help.vim </FONT></B>
+
+Instead of switching the indenting off, you could write your own indent file.
+How to <A HREF="diff.html#do">do</A> that is explained here: |<A HREF="indent.html#indent-expression">indent-expression</A>|.
+
+==============================================================================
+
+*<A NAME="30.4"></A><B>30.4</B>*	Other indenting
+
+The most simple form of automatic indenting is with the <A HREF="options.html#'autoindent'">'autoindent'</A> option.
+It uses the indent from the previous line.  A bit smarter is the <A HREF="options.html#'smartindent'">'smartindent'</A>
+option.  This is useful for languages where no indent file is available.
+<A HREF="options.html#'smartindent'">'smartindent'</A> is not <A HREF="motion.html#as">as</A> smart <A HREF="motion.html#as">as</A> <A HREF="options.html#'cindent'">'cindent'</A>, but smarter than <A HREF="options.html#'autoindent'">'autoindent'</A>.
+   With <A HREF="options.html#'smartindent'">'smartindent'</A> set, an extra level of indentation is added for each {
+and removed for each }.  An extra level of indentation will also be added for
+any of the words in the <A HREF="options.html#'cinwords'">'cinwords'</A> option.  Lines that begin with # are
+treated specially: all indentation is removed.  This is done so that
+preprocessor directives will all start in column 1.  The indentation is
+restored for the next line.
+
+
+CORRECTING INDENTS
+
+When you are using <A HREF="options.html#'autoindent'">'autoindent'</A> or <A HREF="options.html#'smartindent'">'smartindent'</A> to get the indent of the
+previous line, there will be many times when you need to add or remove one
+<A HREF="options.html#'shiftwidth'">'shiftwidth'</A> worth of indent.  A quick way to <A HREF="diff.html#do">do</A> this is using the <A HREF="scroll.html#CTRL-D">CTRL-D</A> and
+<A HREF="tagsrch.html#CTRL-T">CTRL-T</A> commands in <A HREF="insert.html#Insert">Insert</A> mode.
+   For example, you are typing a shell <A HREF="usr_41.html#script">script</A> that is supposed to look like
+this:
+
+<B><FONT COLOR="PURPLE">	if test -n a; then </FONT></B>
+<B><FONT COLOR="PURPLE">	   echo a </FONT></B>
+<B><FONT COLOR="PURPLE">	   echo "-------" </FONT></B>
+<B><FONT COLOR="PURPLE">	fi </FONT></B>
+
+Start off by setting these <A HREF="options.html#options">options</A>:
+
+<B>	:set autoindent shiftwidth=3</B>
+
+You start by typing the first line, <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> and the start of the second line:
+
+<B><FONT COLOR="PURPLE">	if test -n a; then </FONT></B>
+<B><FONT COLOR="PURPLE">	echo </FONT></B>
+
+Now you see that you need an extra indent.  Type <A HREF="tagsrch.html#CTRL-T">CTRL-T</A>.  The result:
+
+<B><FONT COLOR="PURPLE">	if test -n a; then </FONT></B>
+<B><FONT COLOR="PURPLE">	   echo </FONT></B>
+
+The <A HREF="tagsrch.html#CTRL-T">CTRL-T</A> command, in <A HREF="insert.html#Insert">Insert</A> mode, adds one <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> to the indent, no
+matter where in the line you are.
+   You continue typing the second line, <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> and the third line.  This time
+the indent is OK.  Then <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> and the last line.  Now you have this:
+
+<B><FONT COLOR="PURPLE">	if test -n a; then </FONT></B>
+<B><FONT COLOR="PURPLE">	   echo a </FONT></B>
+<B><FONT COLOR="PURPLE">	   echo "-------" </FONT></B>
+<B><FONT COLOR="PURPLE">	   fi </FONT></B>
+
+To remove the superfluous indent in the last line press <A HREF="scroll.html#CTRL-D">CTRL-D</A>.  This deletes
+one <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> worth of indent, no matter where you are in the line.
+   When you are in <A HREF="intro.html#Normal">Normal</A> mode, you can use the &quot;<A HREF="change.html#&gt;&gt;">&gt;&gt;</A>&quot; and &quot;<A HREF="change.html#&lt;&lt;">&lt;&lt;</A>&quot; commands to
+<A HREF="intro.html#shift">shift</A> lines.  &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; and &quot;<A HREF="change.html#&lt;">&lt;</A>&quot; are operators, thus you have the usual three ways to
+specify the lines you want to indent.  A useful combination is:
+
+<B>	&gt;i{</B>
+
+This adds one indent to the current block of lines, inside <A HREF="intro.html#{}">{}</A>.  The { and }
+lines themselves are left unmodified.  &quot;&gt;a{&quot; includes them.  In this example
+the cursor is on &quot;printf&quot;:
+
+	original text		after &quot;&gt;i{&quot;		after &quot;&gt;a{&quot;
+
+<B><FONT COLOR="PURPLE">	if (flag)		if (flag)		if (flag) </FONT></B>
+<B><FONT COLOR="PURPLE">	{			{			    { </FONT></B>
+<B><FONT COLOR="PURPLE">	printf("yes");		    printf("yes");	    printf("yes"); </FONT></B>
+<B><FONT COLOR="PURPLE">	flag = 0;		    flag = 0;		    flag = 0;  </FONT></B>
+<B><FONT COLOR="PURPLE">	}			}			    } </FONT></B>
+
+==============================================================================
+
+*<A NAME="30.5"></A><B>30.5</B>*	Tabs and spaces
+
+<A HREF="options.html#'tabstop'">'tabstop'</A> is set to eight by default.  Although you can change <A HREF="motion.html#it">it</A>, you quickly
+run into trouble later.  Other programs won't know what tabstop value you
+used.  They probably use the default value of eight, and your text suddenly
+looks very different.  Also, most printers use a fixed tabstop value of eight.
+Thus it's best to keep <A HREF="options.html#'tabstop'">'tabstop'</A> alone.  (If you edit a file which was written
+with a different tabstop setting, see |<A HREF="usr_25.html#25.3">25.3</A>| for how to fix that.)
+   For indenting lines in a program, using a multiple of eight spaces makes
+you quickly run into the right border of the <A HREF="windows.html#window">window</A>.  Using a single space
+doesn't provide enough visual difference.  Many people prefer to use four
+spaces, a good compromise.
+   Since a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> is eight spaces and you want to use an indent of four spaces,
+you can't use a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> character to make your indent.  There are two ways to
+handle this:
+
+1.  Use a mix of <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> and space characters.  Since a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> takes the place of
+    eight spaces, you have fewer characters in your file.  Inserting a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>
+    is quicker than eight spaces.  Backspacing works faster <A HREF="motion.html#as">as</A> well.
+
+2.  Use spaces only.  This avoids the trouble with programs that use a
+    different tabstop value.
+
+Fortunately, Vim supports both methods quite well.
+
+
+SPACES AND TABS
+
+If you are using a combination of tabs and spaces, you just edit normally.
+The Vim defaults <A HREF="diff.html#do">do</A> a fine job of handling things.
+   You can make life a little easier by setting the <A HREF="options.html#'softtabstop'">'softtabstop'</A> option.
+This option tells Vim to make the <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> key look and feel <A HREF="motion.html#as">as</A> if tabs were set
+at the value of <A HREF="options.html#'softtabstop'">'softtabstop'</A>, but actually use a combination of tabs and
+spaces.
+   After you execute the following command, every time you press the <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> key
+the cursor moves to the next 4-column boundary:
+
+<B>	:set softtabstop=4</B>
+
+When you start in the first column and press <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>, you get 4 spaces inserted
+in your text.  The second time, Vim takes out the 4 spaces and puts in a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>
+(thus taking you to column 8).  Thus Vim uses <A HREF="motion.html#as">as</A> many &lt;Tab&gt;s <A HREF="motion.html#as">as</A> possible, and
+then fills up with spaces.
+   When backspacing <A HREF="motion.html#it">it</A> works the other way around.  A <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A> will always delete
+the amount specified with <A HREF="options.html#'softtabstop'">'softtabstop'</A>.  Then &lt;Tab&gt;s are used <A HREF="motion.html#as">as</A> many <A HREF="motion.html#as">as</A>
+possible and spaces to fill the gap.
+   The following shows what happens pressing <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> a few times, and then using
+<A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A>.  A &quot;<A HREF="repeat.html#.">.</A>&quot; stands for a space and &quot;-------&gt;&quot; for a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>.
+
+<B><FONT COLOR="PURPLE">	type			  result </FONT></B>
+	<A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A>			  <A HREF="eval.html#...">...</A>.
+	&lt;Tab&gt;&lt;Tab&gt;		  -------&gt;
+	&lt;Tab&gt;&lt;Tab&gt;&lt;Tab&gt;		  -------&gt;....
+	&lt;Tab&gt;&lt;Tab&gt;&lt;Tab&gt;&lt;BS&gt;	  -------&gt;
+	&lt;Tab&gt;&lt;Tab&gt;&lt;Tab&gt;&lt;BS&gt;&lt;BS&gt;   <A HREF="eval.html#...">...</A>.
+
+An alternative is to use the <A HREF="options.html#'smarttab'">'smarttab'</A> option.  When it's set, Vim uses
+<A HREF="options.html#'shiftwidth'">'shiftwidth'</A> for a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> typed in the indent of a line, and a real <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> when
+typed after the first non-blank character.  However, <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A> doesn't work like
+with <A HREF="options.html#'softtabstop'">'softtabstop'</A>.
+
+
+JUST SPACES
+
+If you want absolutely no tabs in your file, you can set the <A HREF="options.html#'expandtab'">'expandtab'</A>
+option:
+
+<B>	:set expandtab</B>
+
+When this option is set, the <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> key inserts a series of spaces.  Thus you
+get the same amount of white space <A HREF="motion.html#as">as</A> if a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> character was inserted, but
+there isn't a real <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> character in your file.
+   The backspace key will delete each space by itself.  Thus after typing one
+<A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> you have to press the <A HREF="motion.html#&lt;BS&gt;">&lt;BS&gt;</A> key up to eight times to <A HREF="undo.html#undo">undo</A> <A HREF="motion.html#it">it</A>.  If you are
+in the indent, pressing <A HREF="scroll.html#CTRL-D">CTRL-D</A> will be a lot quicker.
+
+
+CHANGING TABS IN SPACES (AND BACK)
+
+Setting <A HREF="options.html#'expandtab'">'expandtab'</A> does not affect any existing tabs.  In other words, any
+tabs in the document remain tabs.  If you want to convert tabs to spaces, use
+the &quot;<A HREF="change.html#:retab">:retab</A>&quot; command.  Use these commands:
+
+<B>	:set expandtab</B>
+<B>	:%retab</B>
+
+Now Vim will have changed all indents to use spaces instead of tabs.  However,
+all tabs that come after a non-blank character are kept.  If you want these to
+be converted <A HREF="motion.html#as">as</A> well, add a !:
+
+<B>	:%retab!</B>
+
+This is a little bit dangerous, because <A HREF="motion.html#it">it</A> can also change tabs inside a
+string.  To check if these exist, you could use this:
+
+<B>	/"[^"\t]*\t[^"]*"</B>
+
+It's recommended not to use hard tabs inside a string.  <A HREF="insert.html#Replace">Replace</A> them with
+&quot;\t&quot; to avoid trouble.
+
+The other way around works just <A HREF="motion.html#as">as</A> well:
+
+<B>	:set noexpandtab</B>
+<B>	:%retab!</B>
+
+==============================================================================
+
+*<A NAME="30.6"></A><B>30.6</B>*	Formatting comments
+
+One of the great things about Vim is that <A HREF="motion.html#it">it</A> understands comments.  You can
+ask Vim to format a comment and <A HREF="motion.html#it">it</A> will <A HREF="diff.html#do">do</A> the right thing.
+   Suppose, for example, that you have the following comment:
+
+<B><FONT COLOR="PURPLE">	/* </FONT></B>
+<B><FONT COLOR="PURPLE">	 * This is a test </FONT></B>
+<B><FONT COLOR="PURPLE">	 * of the text formatting. </FONT></B>
+<B><FONT COLOR="PURPLE">	 */ </FONT></B>
+
+You then ask Vim to format <A HREF="motion.html#it">it</A> by positioning the cursor at the start of the
+comment and type:
+
+<B>	gq]/</B>
+
+&quot;<A HREF="change.html#gq">gq</A>&quot; is the <A HREF="motion.html#operator">operator</A> to format text.  &quot;<A HREF="motion.html#]/">]/</A>&quot; is the motion that takes you to the
+end of a comment.  The result is:
+
+<B><FONT COLOR="PURPLE">	/* </FONT></B>
+<B><FONT COLOR="PURPLE">	 * This is a test of the text formatting. </FONT></B>
+<B><FONT COLOR="PURPLE">	 */ </FONT></B>
+
+Notice that Vim properly handled the beginning of each line.
+  An alternative is to select the text that is to be formatted in <A HREF="visual.html#Visual">Visual</A> mode
+and type &quot;<A HREF="change.html#gq">gq</A>&quot;.
+
+To add a new line to the comment, position the cursor on the middle line and
+press &quot;<A HREF="insert.html#o">o</A>&quot;.  The result looks like this:
+
+<B><FONT COLOR="PURPLE">	/* </FONT></B>
+<B><FONT COLOR="PURPLE">	 * This is a test of the text formatting. </FONT></B>
+<B><FONT COLOR="PURPLE">	 * </FONT></B>
+<B><FONT COLOR="PURPLE">	 */ </FONT></B>
+
+Vim has automatically inserted a <A HREF="pattern.html#star">star</A> and a space for you.  Now you can type
+the comment text.  When <A HREF="motion.html#it">it</A> gets longer than <A HREF="options.html#'textwidth'">'textwidth'</A>, Vim will break the
+line.  Again, the <A HREF="pattern.html#star">star</A> is inserted automatically:
+
+<B><FONT COLOR="PURPLE">	/* </FONT></B>
+<B><FONT COLOR="PURPLE">	 * This is a test of the text formatting. </FONT></B>
+<B><FONT COLOR="PURPLE">	 * Typing a lot of text here will make Vim </FONT></B>
+<B><FONT COLOR="PURPLE">	 * break </FONT></B>
+<B><FONT COLOR="PURPLE">	 */ </FONT></B>
+
+For this to work some flags must be present in <A HREF="options.html#'formatoptions'">'formatoptions'</A>:
+
+	<A HREF="change.html#r">r</A>	insert the <A HREF="pattern.html#star">star</A> when typing <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> in <A HREF="insert.html#Insert">Insert</A> mode
+	<A HREF="insert.html#o">o</A>	insert the <A HREF="pattern.html#star">star</A> when using &quot;<A HREF="insert.html#o">o</A>&quot; or &quot;<A HREF="insert.html#O">O</A>&quot; in <A HREF="intro.html#Normal">Normal</A> mode
+	<A HREF="change.html#c">c</A>	break comment text according to <A HREF="options.html#'textwidth'">'textwidth'</A>
+
+See |<A HREF="change.html#fo-table">fo-table</A>| for more flags.
+
+
+DEFINING A COMMENT
+
+The <A HREF="options.html#'comments'">'comments'</A> option defines what a comment looks like.  Vim distinguishes
+between a single-line comment and a comment that has a different start, end
+and middle part.
+   Many single-line comments start with a specific character.  In C++ <A HREF="version7.html#//">//</A> is
+used, in Makefiles #, in Vim scripts &quot;.  For example, to make Vim understand
+C++ comments:
+
+<B>	:set comments=://</B>
+
+The colon separates the flags of an item from the text by which the comment is
+recognized.  The general form of an item in <A HREF="options.html#'comments'">'comments'</A> is:
+
+	{flags}:{text}
+
+The {flags} part can be empty, <A HREF="motion.html#as">as</A> in this <A HREF="change.html#case">case</A>.
+   Several of these items can be concatenated, separated by commas.  This
+allows recognizing different types of comments at the same time.  For example,
+let's edit an e-mail message.  When replying, the text that others wrote is
+preceded with &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; and &quot;<A HREF="change.html#!">!</A>&quot; characters.  This command would work:
+
+<B>	:set comments=n:&gt;,n:!</B>
+
+There are two items, one for comments starting with &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; and one for comments
+that start with &quot;<A HREF="change.html#!">!</A>&quot;.  Both use the flag &quot;<A HREF="pattern.html#n">n</A>&quot;.  This means that these comments
+nest.  Thus a line starting with &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; may have another comment after the &quot;<A HREF="change.html#&gt;">&gt;</A>&quot;.
+This allows <A HREF="change.html#formatting">formatting</A> a message like this:
+
+<B><FONT COLOR="PURPLE">	&gt; ! Did you see that site? </FONT></B>
+<B><FONT COLOR="PURPLE">	&gt; ! It looks really great. </FONT></B>
+<B><FONT COLOR="PURPLE">	&gt; I don't like it.  The </FONT></B>
+<B><FONT COLOR="PURPLE">	&gt; colors are terrible. </FONT></B>
+<B><FONT COLOR="PURPLE">	What is the URL of that </FONT></B>
+<B><FONT COLOR="PURPLE">	site? </FONT></B>
+
+Try setting <A HREF="options.html#'textwidth'">'textwidth'</A> to a different value, e.g., 80, and format the text by
+Visually selecting <A HREF="motion.html#it">it</A> and typing &quot;<A HREF="change.html#gq">gq</A>&quot;.  The result is:
+
+<B><FONT COLOR="PURPLE">	&gt; ! Did you see that site?  It looks really great. </FONT></B>
+<B><FONT COLOR="PURPLE">	&gt; I don't like it.  The colors are terrible. </FONT></B>
+<B><FONT COLOR="PURPLE">	What is the URL of that site? </FONT></B>
+
+You will notice that Vim did not move text from one type of comment to
+another.  The &quot;<A HREF="insert.html#I">I</A>&quot; in the second line would have fit at the end of the first
+line, but since that line starts with &quot;<A HREF="change.html#&gt;">&gt;</A> !&quot; and the second line with &quot;<A HREF="change.html#&gt;">&gt;</A>&quot;, Vim
+knows that this is a different kind of comment.
+
+
+A THREE PART COMMENT
+
+A C comment starts with &quot;/*&quot;, has &quot;*&quot; in the middle and &quot;*/&quot; at the end.  The
+entry in <A HREF="options.html#'comments'">'comments'</A> for this looks like this:
+
+<B>	:set comments=s1:/*,mb:*,ex:*/</B>
+
+The start is defined with &quot;s1:/*&quot;.  The &quot;<A HREF="change.html#s">s</A>&quot; indicates the start of a
+three-piece comment.  The colon separates the flags from the text by which the
+comment is recognized: &quot;/*&quot;.  There is one flag: &quot;1&quot;.  This tells Vim that the
+middle part has an offset of one space.
+   The middle part &quot;mb:*&quot; starts with &quot;<A HREF="motion.html#m">m</A>&quot;, which indicates <A HREF="motion.html#it">it</A> is a middle
+part.  The &quot;<A HREF="motion.html#b">b</A>&quot; flag means that a blank must follow the text.  Otherwise Vim
+would consider text like &quot;*pointer&quot; also to be the middle of a comment.
+   The end part &quot;ex:*/&quot; has the &quot;<A HREF="motion.html#e">e</A>&quot; for identification.  The &quot;<A HREF="change.html#x">x</A>&quot; flag has a
+special meaning.  It means that after Vim automatically inserted a <A HREF="pattern.html#star">star</A>,
+typing / will remove the extra space.
+
+For more details see |<A HREF="change.html#format-comments">format-comments</A>|.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_31.html">usr_31.txt</A>|  Exploiting the <A HREF="gui.html#GUI">GUI</A>
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

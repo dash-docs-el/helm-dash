@@ -1,0 +1,434 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: tabpage</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: tabpage</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="tabpage.txt"></A><B>tabpage.txt</B>*   For Vim version 7.4.  Last change: 2012 Aug 08
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Editing with <A HREF="windows.html#windows">windows</A> in multiple <A HREF="intro.html#tab">tab</A> pages.		*<A NAME="tab-page"></A><B>tab-page</B>* *<A NAME="tabpage"></A><B>tabpage</B>*
+
+The commands which have been added to use multiple <A HREF="intro.html#tab">tab</A> pages are explained
+here.  Additionally, there are explanations for commands that work differently
+when used in combination with more than one <A HREF="intro.html#tab">tab</A> page.
+
+1. Introduction			|<A HREF="#tab-page-intro">tab-page-intro</A>|
+2. Commands			|<A HREF="#tab-page-commands">tab-page-commands</A>|
+3. Other items			|<A HREF="#tab-page-other">tab-page-other</A>|
+4. Setting <A HREF="options.html#'tabline'">'tabline'</A>		|<A HREF="#setting-tabline">setting-tabline</A>|
+5. Setting <A HREF="options.html#'guitablabel'">'guitablabel'</A>	|<A HREF="#setting-guitablabel">setting-guitablabel</A>|
+
+{Vi does not have any of these commands}
+{not able to use multiple <A HREF="intro.html#tab">tab</A> pages when the |<A HREF="various.html#+windows">+windows</A>| feature was disabled
+at compile time}
+
+==============================================================================
+
+1. Introduction						*<A NAME="tab-page-intro"></A><B>tab-page-intro</B>*
+
+A <A HREF="intro.html#tab">tab</A> page holds one or more <A HREF="windows.html#windows">windows</A>.  You can easily switch between <A HREF="intro.html#tab">tab</A>
+pages, so that you have several collections of <A HREF="windows.html#windows">windows</A> to work on different
+things.
+
+Usually you will see a list of labels at the top of the Vim <A HREF="windows.html#window">window</A>, one for
+each <A HREF="intro.html#tab">tab</A> page.  With the mouse you can click on the label to jump to that <A HREF="intro.html#tab">tab</A>
+page.  There are other ways to move between <A HREF="intro.html#tab">tab</A> pages, see below.
+
+Most commands work only in the current <A HREF="intro.html#tab">tab</A> page.  That includes the |<A HREF="index.html#CTRL-W">CTRL-W</A>|
+commands, |<A HREF="windows.html#:windo">:windo</A>|, |<A HREF="windows.html#:all">:all</A>| and |<A HREF="windows.html#:ball">:ball</A>| (when not using the |<A HREF="#:tab">:tab</A>| modifier).
+The commands that are aware of other <A HREF="intro.html#tab">tab</A> pages than the current one are
+mentioned below.
+
+Tabs are also a <A HREF="todo.html#nice">nice</A> way to edit a buffer temporarily without <A HREF="change.html#changing">changing</A> the
+current <A HREF="windows.html#window">window</A> layout.  Open a new <A HREF="intro.html#tab">tab</A> page, <A HREF="diff.html#do">do</A> whatever you want to <A HREF="diff.html#do">do</A> and
+close the <A HREF="intro.html#tab">tab</A> page.
+
+==============================================================================
+
+2. Commands						*<A NAME="tab-page-commands"></A><B>tab-page-commands</B>*
+
+OPENING A NEW TAB PAGE:
+
+When starting Vim &quot;vim <A HREF="starting.html#-p">-p</A> filename ...&quot; opens each file argument in a separate
+<A HREF="intro.html#tab">tab</A> page (up to <A HREF="options.html#'tabpagemax'">'tabpagemax'</A>).  See |<A HREF="starting.html#-p">-p</A>|
+
+A double click with the mouse in the non-GUI <A HREF="intro.html#tab">tab</A> pages line opens a new, empty
+<A HREF="intro.html#tab">tab</A> page.  It is placed left of the position of the click.  The first click
+may select another <A HREF="intro.html#tab">tab</A> page first, causing an extra screen update.
+
+This also works in a few <A HREF="gui.html#GUI">GUI</A> versions, esp. <A HREF="os_win32.html#Win32">Win32</A> and <A HREF="gui_x11.html#Motif">Motif</A>.  But only when
+clicking right of the labels.
+
+In the <A HREF="gui.html#GUI">GUI</A> <A HREF="intro.html#tab">tab</A> pages line you can use the right mouse button to open menu.
+|<A HREF="#tabline-menu">tabline-menu</A>|.
+
+
+:[count]tabe[dit]				*<A NAME=":tabe"></A><B>:tabe</B>* *<A NAME=":tabedit"></A><B>:tabedit</B>* *<A NAME=":tabnew"></A><B>:tabnew</B>*
+:[count]tabnew
+		Open a new <A HREF="intro.html#tab">tab</A> page with an empty <A HREF="windows.html#window">window</A>, after the current
+		tab page.  For <A HREF="intro.html#[count]">[count]</A> see |<A HREF="#:tab">:tab</A>| below.
+
+:[count]tabe[dit] <A HREF="editing.html#[++opt]">[++opt]</A> <A HREF="editing.html#[+cmd]">[+cmd]</A> <A HREF="editing.html#{file}">{file}</A>
+:[count]tabnew <A HREF="editing.html#[++opt]">[++opt]</A> <A HREF="editing.html#[+cmd]">[+cmd]</A> <A HREF="editing.html#{file}">{file}</A>
+		Open a new <A HREF="intro.html#tab">tab</A> page and edit <A HREF="editing.html#{file}">{file}</A>, like with |<A HREF="editing.html#:edit">:edit</A>|.
+		For <A HREF="intro.html#[count]">[count]</A> see |<A HREF="#:tab">:tab</A>| below.
+
+
+:[count]tabf[ind] <A HREF="editing.html#[++opt]">[++opt]</A> <A HREF="editing.html#[+cmd]">[+cmd]</A> <A HREF="editing.html#{file}">{file}</A>			*<A NAME=":tabf"></A><B>:tabf</B>* *<A NAME=":tabfind"></A><B>:tabfind</B>*
+		Open a new <A HREF="intro.html#tab">tab</A> page and edit <A HREF="editing.html#{file}">{file}</A> in <A HREF="options.html#'path'">'path'</A>, like with
+		|<A HREF="editing.html#:find">:find</A>|.  For <A HREF="intro.html#[count]">[count]</A> see |<A HREF="#:tab">:tab</A>| below.
+		{not available when the |<A HREF="various.html#+file_in_path">+file_in_path</A>| feature was disabled
+		at compile time}
+
+
+:[count]tab {cmd}					*<A NAME=":tab"></A><B>:tab</B>*
+		Execute {cmd} and when <A HREF="motion.html#it">it</A> opens a new <A HREF="windows.html#window">window</A> open a new <A HREF="intro.html#tab">tab</A>
+		page instead.  Doesn't work for |<A HREF="diff.html#:diffsplit">:diffsplit</A>|, |<A HREF="diff.html#:diffpatch">:diffpatch</A>|,
+		|<A HREF="eval.html#:execute">:execute</A>| and |<A HREF="various.html#:normal">:normal</A>|.
+		When <A HREF="intro.html#[count]">[count]</A> is omitted the <A HREF="intro.html#tab">tab</A> page appears after the current
+		one.
+		When <A HREF="intro.html#[count]">[count]</A> is specified the new <A HREF="intro.html#tab">tab</A> page comes after <A HREF="intro.html#tab">tab</A>
+		page <A HREF="intro.html#[count]">[count]</A>.  Use &quot;:0tab cmd&quot; to get the new <A HREF="intro.html#tab">tab</A> page <A HREF="motion.html#as">as</A> the
+		first one.
+		Examples:
+<B>			:tab split	" opens current buffer in new tab page</B>
+<B>			:tab help gt	" opens tab page with help for "gt"</B>
+
+<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="editing.html#gf">gf</A>	Open a new <A HREF="intro.html#tab">tab</A> page and edit the file name under the cursor.
+		See |<A HREF="windows.html#CTRL-W_gf">CTRL-W_gf</A>|.
+
+<A HREF="index.html#CTRL-W">CTRL-W</A> <A HREF="editing.html#gF">gF</A>	Open a new <A HREF="intro.html#tab">tab</A> page and edit the file name under the cursor
+		and jump to the line number following the file name.
+		See |<A HREF="windows.html#CTRL-W_gF">CTRL-W_gF</A>|.
+
+CLOSING A TAB PAGE:
+
+Closing the last <A HREF="windows.html#window">window</A> of a <A HREF="intro.html#tab">tab</A> page closes the <A HREF="intro.html#tab">tab</A> page too, unless there is
+only one <A HREF="intro.html#tab">tab</A> page.
+
+Using the mouse: If the <A HREF="intro.html#tab">tab</A> page line is displayed you can click in the &quot;<A HREF="change.html#X">X</A>&quot; at
+the top right to close the current tab page.  A custom |<A HREF="options.html#'tabline'">'tabline'</A>| may show
+something else.
+
+
+							*<A NAME=":tabc"></A><B>:tabc</B>* *<A NAME=":tabclose"></A><B>:tabclose</B>*
+:tabc[lose][!]	Close current <A HREF="intro.html#tab">tab</A> page.
+		This command fails when:
+
+		- There is only one <A HREF="intro.html#tab">tab</A> page on the screen.		*<A NAME="E784"></A><B>E784</B>*
+		- When <A HREF="options.html#'hidden'">'hidden'</A> is not set, [!] is not used, a buffer has
+		  changes, and there is no other <A HREF="windows.html#window">window</A> on this buffer.
+		Changes to the buffer are not written and won't get lost, so
+		this is a &quot;safe&quot; command.
+
+:tabc[lose][!] {count}
+		Close <A HREF="intro.html#tab">tab</A> page {count}.  Fails in the same way <A HREF="motion.html#as">as</A> `:tabclose`
+		above.
+
+
+							*<A NAME=":tabo"></A><B>:tabo</B>* *<A NAME=":tabonly"></A><B>:tabonly</B>*
+:tabo[nly][!]	Close all other <A HREF="intro.html#tab">tab</A> pages.
+		When the <A HREF="options.html#'hidden'">'hidden'</A> option is set, all <A HREF="windows.html#buffers">buffers</A> in closed <A HREF="windows.html#windows">windows</A>
+		become hidden.
+		When <A HREF="options.html#'hidden'">'hidden'</A> is not set, and the <A HREF="options.html#'autowrite'">'autowrite'</A> option is set,
+		modified <A HREF="windows.html#buffers">buffers</A> are written.  Otherwise, <A HREF="windows.html#windows">windows</A> that have
+		<A HREF="windows.html#buffers">buffers</A> that are modified are not removed, unless the [!] is
+		given, then they become hidden.  But modified <A HREF="windows.html#buffers">buffers</A> are
+		never abandoned, so changes cannot get lost.
+
+
+SWITCHING TO ANOTHER TAB PAGE:
+
+Using the mouse: If the <A HREF="intro.html#tab">tab</A> page line is displayed you can click in a <A HREF="intro.html#tab">tab</A> page
+label to switch to that <A HREF="intro.html#tab">tab</A> page.  Click where there is no label to go to the
+next tab page.  |<A HREF="options.html#'tabline'">'tabline'</A>|
+
+
+:tabn[ext]				*<A NAME=":tabn"></A><B>:tabn</B>* *<A NAME=":tabnext"></A><B>:tabnext</B>* *<A NAME="gt"></A><B>gt</B>*
+
+<A HREF="#&lt;C-PageDown&gt;">&lt;C-PageDown&gt;</A>				*<A NAME="CTRL-&lt;PageDown&gt;"></A><B>CTRL-&lt;PageDown&gt;</B>* *<A NAME="&lt;C-PageDown&gt;"></A><B>&lt;C-PageDown&gt;</B>*
+
+<A HREF="#gt">gt</A>					*<A NAME="i_CTRL-&lt;PageDown&gt;"></A><B>i_CTRL-&lt;PageDown&gt;</B>* *<A NAME="i_&lt;C-PageDown&gt;"></A><B>i_&lt;C-PageDown&gt;</B>*
+		Go to the next <A HREF="intro.html#tab">tab</A> page.  Wraps around from the last to the
+		first one.
+
+:tabn[ext] {count}
+{count}&lt;C-PageDown&gt;
+{count}gt	Go to <A HREF="intro.html#tab">tab</A> page {count}.  The first <A HREF="intro.html#tab">tab</A> page has number one.
+
+
+
+:tabp[revious]				*<A NAME=":tabp"></A><B>:tabp</B>* *<A NAME=":tabprevious"></A><B>:tabprevious</B>* *<A NAME="gT"></A><B>gT</B>* *<A NAME=":tabN"></A><B>:tabN</B>*
+
+:tabN[ext]				*<A NAME=":tabNext"></A><B>:tabNext</B>* *<A NAME="CTRL-&lt;PageUp&gt;"></A><B>CTRL-&lt;PageUp&gt;</B>*
+
+<A HREF="#&lt;C-PageUp&gt;">&lt;C-PageUp&gt;</A>			 *<A NAME="&lt;C-PageUp&gt;"></A><B>&lt;C-PageUp&gt;</B>* *<A NAME="i_CTRL-&lt;PageUp&gt;"></A><B>i_CTRL-&lt;PageUp&gt;</B>* *<A NAME="i_&lt;C-PageUp&gt;"></A><B>i_&lt;C-PageUp&gt;</B>*
+<A HREF="#gT">gT</A>		Go to the previous <A HREF="intro.html#tab">tab</A> page.  Wraps around from the first one
+		to the last one.
+
+:tabp[revious] {count}
+:tabN[ext] {count}
+{count}&lt;C-PageUp&gt;
+{count}gT	Go {count} <A HREF="intro.html#tab">tab</A> pages back.  Wraps around from the first one
+		to the last one.
+
+
+:tabr[ewind]			*<A NAME=":tabfir"></A><B>:tabfir</B>* *<A NAME=":tabfirst"></A><B>:tabfirst</B>* *<A NAME=":tabr"></A><B>:tabr</B>* *<A NAME=":tabrewind"></A><B>:tabrewind</B>*
+:tabfir[st]	Go to the first <A HREF="intro.html#tab">tab</A> page.
+
+
+							*<A NAME=":tabl"></A><B>:tabl</B>* *<A NAME=":tablast"></A><B>:tablast</B>*
+:tabl[ast]	Go to the last <A HREF="intro.html#tab">tab</A> page.
+
+
+Other commands:
+
+							*<A NAME=":tabs"></A><B>:tabs</B>*
+<A HREF="#:tabs">:tabs</A>		<A HREF="eval.html#List">List</A> the <A HREF="intro.html#tab">tab</A> pages and the <A HREF="windows.html#windows">windows</A> they contain.
+		Shows a &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; for the current <A HREF="windows.html#window">window</A>.
+		Shows a &quot;<A HREF="motion.html#+">+</A>&quot; for modified <A HREF="windows.html#buffers">buffers</A>.
+
+
+REORDERING TAB PAGES:
+
+
+:tabm[ove] [N]						*<A NAME=":tabm"></A><B>:tabm</B>* *<A NAME=":tabmove"></A><B>:tabmove</B>*
+:[N]tabm[ove]
+		Move the current <A HREF="intro.html#tab">tab</A> page to after <A HREF="intro.html#tab">tab</A> page N.  Use zero to
+		make the current <A HREF="intro.html#tab">tab</A> page the first one.  Without N the <A HREF="intro.html#tab">tab</A>
+		page is made the last one.
+
+:tabm[ove] +[N]
+:tabm[ove] -[N]
+		Move the current <A HREF="intro.html#tab">tab</A> page N places to the right (with +) or to
+		the left (with -).
+
+Note that although <A HREF="motion.html#it">it</A> is possible to move a <A HREF="intro.html#tab">tab</A> behind the N-th one by using
+:Ntabmove, <A HREF="motion.html#it">it</A> is impossible to move <A HREF="motion.html#it">it</A> by N places by using :+Ntabmove. For
+clarification what +N means in this context see |<A HREF="cmdline.html#[range]">[range]</A>|.
+
+
+LOOPING OVER TAB PAGES:
+
+
+							*<A NAME=":tabd"></A><B>:tabd</B>* *<A NAME=":tabdo"></A><B>:tabdo</B>*
+:tabd[o] {cmd}	Execute {cmd} in each <A HREF="intro.html#tab">tab</A> page.
+		It works like doing this:
+<B>			:tabfirst</B>
+<B>			:{cmd}</B>
+<B>			:tabnext</B>
+<B>			:{cmd}</B>
+<B>			etc.</B>
+ 		This only operates in the current <A HREF="windows.html#window">window</A> of each <A HREF="intro.html#tab">tab</A> page.
+		When an error is detected on one <A HREF="intro.html#tab">tab</A> page, further <A HREF="intro.html#tab">tab</A> pages
+		will not be visited.
+		The last <A HREF="intro.html#tab">tab</A> page (or where an error occurred) becomes the
+		current <A HREF="intro.html#tab">tab</A> page.
+		{cmd} can contain '&#124;' to concatenate several commands.
+		{cmd} must not open or close <A HREF="intro.html#tab">tab</A> pages or reorder them.
+		{not in Vi} {not available when compiled without the
+		|<A HREF="various.html#+listcmds">+listcmds</A>| feature}
+		Also see |<A HREF="windows.html#:windo">:windo</A>|, |<A HREF="editing.html#:argdo">:argdo</A>| and |<A HREF="windows.html#:bufdo">:bufdo</A>|.
+
+==============================================================================
+
+3. Other items						*<A NAME="tab-page-other"></A><B>tab-page-other</B>*
+
+
+							*<A NAME="tabline-menu"></A><B>tabline-menu</B>*
+The <A HREF="gui.html#GUI">GUI</A> <A HREF="intro.html#tab">tab</A> pages line has a popup menu.  It is accessed with a right click.
+The entries are:
+	Close		Close the <A HREF="intro.html#tab">tab</A> page under the mouse pointer.  The
+			current one if there is no label under the mouse
+			pointer.
+	New <A HREF="intro.html#Tab">Tab</A>		Open a <A HREF="intro.html#tab">tab</A> page, editing an empty buffer.  It appears
+			to the left of the mouse pointer.
+	Open Tab...	Like &quot;New Tab&quot; and additionally use a file selector to
+			select a file to edit.
+
+Diff mode works per <A HREF="intro.html#tab">tab</A> page.  You can see the diffs between several files
+within one <A HREF="intro.html#tab">tab</A> page.  Other <A HREF="intro.html#tab">tab</A> pages can show differences between other
+files.
+
+Variables local to a tab page start with &quot;<A HREF="eval.html#t:">t:</A>&quot;. |<A HREF="eval.html#tabpage-variable">tabpage-variable</A>|
+
+Currently there is only one option local to a <A HREF="intro.html#tab">tab</A> page: <A HREF="options.html#'cmdheight'">'cmdheight'</A>.
+
+The <A HREF="autocmd.html#TabLeave">TabLeave</A> and <A HREF="autocmd.html#TabEnter">TabEnter</A> <A HREF="autocmd.html#autocommand">autocommand</A> events can be used to <A HREF="diff.html#do">do</A> something when
+switching from one <A HREF="intro.html#tab">tab</A> page to another.  The exact order depends on what you
+are doing.  When creating a new <A HREF="intro.html#tab">tab</A> page this works <A HREF="motion.html#as">as</A> if you create a new
+<A HREF="windows.html#window">window</A> on the same buffer and then edit another buffer.  Thus &quot;<A HREF="#:tabnew">:tabnew</A>&quot;
+triggers:
+	<A HREF="autocmd.html#WinLeave">WinLeave</A>		leave current <A HREF="windows.html#window">window</A>
+	<A HREF="autocmd.html#TabLeave">TabLeave</A>		leave current <A HREF="intro.html#tab">tab</A> page
+	<A HREF="autocmd.html#TabEnter">TabEnter</A>		enter new <A HREF="intro.html#tab">tab</A> page
+	<A HREF="autocmd.html#WinEnter">WinEnter</A>		enter <A HREF="windows.html#window">window</A> in new <A HREF="intro.html#tab">tab</A> page
+	<A HREF="autocmd.html#BufLeave">BufLeave</A>		leave current buffer
+	<A HREF="autocmd.html#BufEnter">BufEnter</A>		enter new empty buffer
+
+When switching to another <A HREF="intro.html#tab">tab</A> page the order is:
+	<A HREF="autocmd.html#BufLeave">BufLeave</A>
+	<A HREF="autocmd.html#WinLeave">WinLeave</A>
+	<A HREF="autocmd.html#TabLeave">TabLeave</A>
+	<A HREF="autocmd.html#TabEnter">TabEnter</A>
+	<A HREF="autocmd.html#WinEnter">WinEnter</A>
+	<A HREF="autocmd.html#BufEnter">BufEnter</A>
+
+==============================================================================
+
+4. Setting <A HREF="options.html#'tabline'">'tabline'</A>					*<A NAME="setting-tabline"></A><B>setting-tabline</B>*
+
+The <A HREF="options.html#'tabline'">'tabline'</A> option specifies what the line with <A HREF="intro.html#tab">tab</A> pages labels looks like.
+It is only used when there is no <A HREF="gui.html#GUI">GUI</A> <A HREF="intro.html#tab">tab</A> line.
+
+You can use the <A HREF="options.html#'showtabline'">'showtabline'</A> option to specify when you want the line with
+<A HREF="intro.html#tab">tab</A> page labels to appear: never, when there is more than one <A HREF="intro.html#tab">tab</A> page or
+always.
+
+The highlighting of the <A HREF="intro.html#tab">tab</A> pages line is set with the groups TabLine
+TabLineSel and TabLineFill.  |<A HREF="syntax.html#hl-TabLine">hl-TabLine</A>| |<A HREF="syntax.html#hl-TabLineSel">hl-TabLineSel</A>| |<A HREF="syntax.html#hl-TabLineFill">hl-TabLineFill</A>|
+
+A &quot;<A HREF="motion.html#+">+</A>&quot; will be shown for a <A HREF="intro.html#tab">tab</A> page that has a modified <A HREF="windows.html#window">window</A>.  The number of
+<A HREF="windows.html#windows">windows</A> in a <A HREF="#tabpage">tabpage</A> is also shown.  Thus &quot;3+&quot; means three <A HREF="windows.html#windows">windows</A> and one of
+them has a modified buffer.
+
+The <A HREF="options.html#'tabline'">'tabline'</A> option allows you to define your preferred way to <A HREF="intro.html#tab">tab</A> pages
+labels.  This isn't <A HREF="starting.html#easy">easy</A>, thus an example will be given here.
+
+For basics see the <A HREF="options.html#'statusline'">'statusline'</A> option.  The same items can be used in the
+<A HREF="options.html#'tabline'">'tabline'</A> option.  Additionally, the |<A HREF="eval.html#tabpagebuflist()">tabpagebuflist()</A>|, |<A HREF="eval.html#tabpagenr()">tabpagenr()</A>| and
+|<A HREF="eval.html#tabpagewinnr()">tabpagewinnr()</A>| <A HREF="eval.html#functions">functions</A> are useful.
+
+Since the number of <A HREF="intro.html#tab">tab</A> labels will vary, you need to use an <A HREF="eval.html#expression">expression</A> for
+the whole option.  Something like:
+<B>	:set tabline=%!MyTabLine()</B>
+
+Then define the MyTabLine() function to list all the <A HREF="intro.html#tab">tab</A> pages labels.  A
+convenient method is to split <A HREF="motion.html#it">it</A> in two parts:  First go over all the <A HREF="intro.html#tab">tab</A>
+pages and define labels for them.  Then get the label for each <A HREF="intro.html#tab">tab</A> page.
+
+<B>	function MyTabLine()</B>
+<B>	  let s = ''</B>
+<B>	  for i in range(tabpagenr('$'))</B>
+<B>	    " select the highlighting</B>
+<B>	    if i + 1 == tabpagenr()</B>
+<B>	      let s .= '%#TabLineSel#'</B>
+<B>	    else</B>
+<B>	      let s .= '%#TabLine#'</B>
+<B>	    endif</B>
+
+<B>	    " set the tab page number (for mouse clicks)</B>
+<B>	    let s .= '%' . (i + 1) . 'T'</B>
+
+<B>	    " the label is made by MyTabLabel()</B>
+<B>	    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '</B>
+<B>	  endfor</B>
+
+<B>	  " after the last tab fill with TabLineFill and reset tab page nr</B>
+<B>	  let s .= '%#TabLineFill#%T'</B>
+
+<B>	  " right-align the label to close the current tab page</B>
+<B>	  if tabpagenr('$') &gt; 1</B>
+<B>	    let s .= '%=%#TabLine#%999Xclose'</B>
+<B>	  endif</B>
+
+<B>	  return s</B>
+<B>	endfunction</B>
+
+Now the MyTabLabel() function is called for each <A HREF="intro.html#tab">tab</A> page to get its label.
+
+<B>	function MyTabLabel(n)</B>
+<B>	  let buflist = tabpagebuflist(a:n)</B>
+<B>	  let winnr = tabpagewinnr(a:n)</B>
+<B>	  return bufname(buflist[winnr - 1])</B>
+<B>	endfunction</B>
+
+This is just a simplistic example that results in a <A HREF="intro.html#tab">tab</A> pages line that
+resembles the default, but without adding a + for a modified buffer or
+truncating the names.  You will want to reduce the width of labels in a
+clever way when there is not enough room.  Check the <A HREF="options.html#'columns'">'columns'</A> option for the
+space available.
+
+==============================================================================
+
+5. Setting <A HREF="options.html#'guitablabel'">'guitablabel'</A>				*<A NAME="setting-guitablabel"></A><B>setting-guitablabel</B>*
+
+When the <A HREF="gui.html#GUI">GUI</A> <A HREF="intro.html#tab">tab</A> pages line is displayed, <A HREF="options.html#'guitablabel'">'guitablabel'</A> can be used to
+specify the label to display for each <A HREF="intro.html#tab">tab</A> page.  Unlike <A HREF="options.html#'tabline'">'tabline'</A>, which
+specifies the whole <A HREF="intro.html#tab">tab</A> pages line at once, <A HREF="options.html#'guitablabel'">'guitablabel'</A> is used for each
+label separately.
+
+<A HREF="options.html#'guitabtooltip'">'guitabtooltip'</A> is very similar and is used for the tooltip of the same label.
+This only appears when the mouse pointer hovers over the label, thus <A HREF="motion.html#it">it</A>
+usually is longer.  Only supported on some systems though.
+
+See the <A HREF="options.html#'statusline'">'statusline'</A> option for the format of the value.
+
+The &quot;&#37;N&quot; item can be used for the current <A HREF="intro.html#tab">tab</A> page number.  The |<A HREF="eval.html#v:lnum">v:lnum</A>|
+variable is also set to this number when the option is evaluated.
+The items that use a file name refer to the current <A HREF="windows.html#window">window</A> of the <A HREF="intro.html#tab">tab</A> page.
+
+Note that <A HREF="syntax.html#syntax">syntax</A> highlighting is not used for the option.  The &#37;T and &#37;X
+items are also ignored.
+
+A simple example that puts the <A HREF="intro.html#tab">tab</A> page number and the buffer name in the
+label:
+<B>	:set guitablabel=%N\ %f</B>
+
+An example that resembles the default <A HREF="options.html#'guitablabel'">'guitablabel'</A>: Show the number of
+<A HREF="windows.html#windows">windows</A> in the <A HREF="intro.html#tab">tab</A> page and a '<A HREF="motion.html#+">+</A>' if there is a modified buffer:
+
+<B>	function GuiTabLabel()</B>
+<B>	  let label = ''</B>
+<B>	  let bufnrlist = tabpagebuflist(v:lnum)</B>
+
+<B>	  " Add '+' if one of the buffers in the tab page is modified</B>
+<B>	  for bufnr in bufnrlist</B>
+<B>	    if getbufvar(bufnr, "&amp;modified")</B>
+<B>	      let label = '+'</B>
+<B>	      break</B>
+<B>	    endif</B>
+<B>	  endfor</B>
+
+<B>	  " Append the number of windows in the tab page if more than one</B>
+<B>	  let wincount = tabpagewinnr(v:lnum, '$')</B>
+<B>	  if wincount &gt; 1</B>
+<B>	    let label .= wincount</B>
+<B>	  endif</B>
+<B>	  if label != ''</B>
+<B>	    let label .= ' '</B>
+<B>	  endif</B>
+
+<B>	  " Append the buffer name</B>
+<B>	  return label . bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])</B>
+<B>	endfunction</B>
+
+<B>	set guitablabel=%{GuiTabLabel()}</B>
+
+Note that the function must be defined before setting the option, otherwise
+you get an error message for the function not being known.
+
+If you want to fall back to the default label, return an empty string.
+
+If you want to show something specific for a <A HREF="intro.html#tab">tab</A> page, you might want to use a
+<A HREF="intro.html#tab">tab</A> page local variable. |<A HREF="eval.html#t:var">t:var</A>|
+
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

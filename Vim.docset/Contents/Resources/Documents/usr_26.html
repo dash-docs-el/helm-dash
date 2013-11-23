@@ -1,0 +1,244 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_26</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_26</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_26.txt"></A><B>usr_26.txt</B>*	For Vim version 7.4.  Last change: 2006 Apr 24
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+				  Repeating
+
+
+An editing task is hardly ever unstructured.  A change often needs to be made
+several times.  In this chapter a number of useful ways to repeat a change
+will be explained.
+
+|<A HREF="#26.1">26.1</A>|	Repeating with <A HREF="visual.html#Visual">Visual</A> mode
+|<A HREF="#26.2">26.2</A>|	Add and subtract
+|<A HREF="#26.3">26.3</A>|	Making a change in many files
+|<A HREF="#26.4">26.4</A>|	Using Vim from a shell <A HREF="usr_41.html#script">script</A>
+
+     Next chapter: |<A HREF="usr_27.html">usr_27.txt</A>|  Search commands and patterns
+ Previous chapter: |<A HREF="usr_25.html">usr_25.txt</A>|  Editing formatted text
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="26.1"></A><B>26.1</B>*	Repeating with <A HREF="visual.html#Visual">Visual</A> mode
+
+<A HREF="visual.html#Visual">Visual</A> mode is very handy for making a change in any sequence of lines.  You
+can see the highlighted text, thus you can check if the correct lines are
+changed.  But making the selection takes some typing.  The &quot;<A HREF="visual.html#gv">gv</A>&quot; command
+selects the same area again.  This allows you to <A HREF="diff.html#do">do</A> another operation on the
+same text.
+   Suppose you have some lines where you want to change &quot;2001&quot; to &quot;2002&quot; and
+&quot;2000&quot; to &quot;2001&quot;:
+
+<B><FONT COLOR="PURPLE">	The financial results for 2001 are better </FONT></B>
+<B><FONT COLOR="PURPLE">	than for 2000.  The income increased by 50%, </FONT></B>
+<B><FONT COLOR="PURPLE">	even though 2001 had more rain than 2000. </FONT></B>
+<B><FONT COLOR="PURPLE">			2000		2001 </FONT></B>
+<B><FONT COLOR="PURPLE">	income		45,403		66,234 </FONT></B>
+
+First change &quot;2001&quot; to &quot;2002&quot;.  <A HREF="visual.html#Select">Select</A> the lines in <A HREF="visual.html#Visual">Visual</A> mode, and use:
+
+<B>	:s/2001/2002/g</B>
+
+Now use &quot;<A HREF="visual.html#gv">gv</A>&quot; to reselect the same text.  It doesn't matter where the cursor
+is.  Then use &quot;:s/2000/2001/g&quot; to make the second change.
+   Obviously, you can repeat these changes several times.
+
+==============================================================================
+
+*<A NAME="26.2"></A><B>26.2</B>*	Add and subtract
+
+When <A HREF="repeat.html#repeating">repeating</A> the change of one number into another, you often have a fixed
+offset.  In the example above, one was added to each year.  Instead of typing
+a substitute command for each year that appears, the <A HREF="change.html#CTRL-A">CTRL-A</A> command can be
+used.
+   Using the same text <A HREF="motion.html#as">as</A> above, search for a year:
+
+<B>	/19[0-9][0-9]\|20[0-9][0-9]</B>
+
+Now press <A HREF="change.html#CTRL-A">CTRL-A</A>.  The year will be increased by one:
+
+<B><FONT COLOR="PURPLE">	The financial results for 2002 are better </FONT></B>
+<B><FONT COLOR="PURPLE">	than for 2000.  The income increased by 50%, </FONT></B>
+<B><FONT COLOR="PURPLE">	even though 2001 had more rain than 2000. </FONT></B>
+<B><FONT COLOR="PURPLE">			2000		2001 </FONT></B>
+<B><FONT COLOR="PURPLE">	income		45,403		66,234 </FONT></B>
+
+Use &quot;<A HREF="pattern.html#n">n</A>&quot; to find the next year, and press &quot;<A HREF="repeat.html#.">.</A>&quot; to repeat the <A HREF="change.html#CTRL-A">CTRL-A</A> (&quot;.&quot; is a
+bit quicker to type).  Repeat &quot;<A HREF="pattern.html#n">n</A>&quot; and &quot;<A HREF="repeat.html#.">.</A>&quot; for all years that appear.
+   Hint: set the <A HREF="options.html#'hlsearch'">'hlsearch'</A> option to see the matches you are going to change,
+then you can look ahead and <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A> faster.
+
+Adding more than one can be done by prepending the number to <A HREF="change.html#CTRL-A">CTRL-A</A>.  Suppose
+you have this list:
+
+<B><FONT COLOR="PURPLE">	1.  item four </FONT></B>
+<B><FONT COLOR="PURPLE">	2.  item five </FONT></B>
+<B><FONT COLOR="PURPLE">	3.  item six </FONT></B>
+
+Move the cursor to &quot;1.&quot; and type:
+
+<B>	3 CTRL-A</B>
+
+The &quot;1.&quot; will change to &quot;4.&quot;.  Again, you can use &quot;<A HREF="repeat.html#.">.</A>&quot; to repeat this on the
+other numbers.
+
+Another example:
+
+<B><FONT COLOR="PURPLE">	006	foo bar </FONT></B>
+<B><FONT COLOR="PURPLE">	007	foo bar </FONT></B>
+
+Using <A HREF="change.html#CTRL-A">CTRL-A</A> on these numbers results in:
+
+<B><FONT COLOR="PURPLE">	007	foo bar </FONT></B>
+<B><FONT COLOR="PURPLE">	010	foo bar </FONT></B>
+
+7 plus one is 10?  What happened here is that Vim recognized &quot;007&quot; <A HREF="motion.html#as">as</A> an <A HREF="eval.html#octal">octal</A>
+number, because there is a leading zero.  This <A HREF="intro.html#notation">notation</A> is often used in C
+programs.  If you <A HREF="diff.html#do">do</A> not want a number with leading zeros to be handled <A HREF="motion.html#as">as</A>
+<A HREF="eval.html#octal">octal</A>, use this:
+
+<B>	:set nrformats-=octal</B>
+
+The <A HREF="change.html#CTRL-X">CTRL-X</A> command does subtraction in a similar way.
+
+==============================================================================
+
+*<A NAME="26.3"></A><B>26.3</B>*	Making a change in many files
+
+Suppose you have a variable called &quot;x_cnt&quot; and you want to change <A HREF="motion.html#it">it</A> to
+&quot;x_counter&quot;.  This variable is used in several of your C files.  You need to
+change <A HREF="motion.html#it">it</A> in all files.  This is how you <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A>.
+   Put all the relevant files in the argument list:
+
+<B>	:args *.c</B>
+ 
+This finds all C files and edits the first one.  Now you can perform a
+substitution command on all these files:
+
+<B>	:argdo %s/\&lt;x_cnt\&gt;/x_counter/ge | update</B>
+
+The &quot;<A HREF="editing.html#:argdo">:argdo</A>&quot; command takes an argument that is another command.  That command
+will be executed on all files in the argument list.
+   The &quot;&#37;s&quot; substitute command that follows works on all lines.  It finds the
+<A HREF="motion.html#word">word</A> &quot;x_cnt&quot; with &quot;\&lt;x_cnt\&gt;&quot;.  The &quot;\&lt;&quot; and &quot;\&gt;&quot; are used to match the whole
+<A HREF="motion.html#word">word</A> only, and not &quot;px_cnt&quot; or &quot;x_cnt2&quot;.
+   The flags for the substitute command include &quot;<A HREF="index.html#g">g</A>&quot; to replace all occurrences
+of &quot;x_cnt&quot; in the same line.  The &quot;<A HREF="motion.html#e">e</A>&quot; flag is used to avoid an error message
+when &quot;x_cnt&quot; does not appear in the file.  Otherwise &quot;<A HREF="editing.html#:argdo">:argdo</A>&quot; would abort on
+the first file where &quot;x_cnt&quot; was not found.
+   The &quot;|&quot; separates two commands.  The following &quot;update&quot; command writes the
+file only if <A HREF="motion.html#it">it</A> was changed.  If no &quot;x_cnt&quot; was changed to &quot;x_counter&quot; nothing
+happens.
+
+There is also the &quot;<A HREF="windows.html#:windo">:windo</A>&quot; command, which executes its argument in all
+<A HREF="windows.html#windows">windows</A>.  And &quot;<A HREF="windows.html#:bufdo">:bufdo</A>&quot; executes its argument on all <A HREF="windows.html#buffers">buffers</A>.  Be careful with
+this, because you might have more files in the buffer list than you think.
+Check this with the &quot;<A HREF="windows.html#:buffers">:buffers</A>&quot; command (or &quot;:ls&quot;).
+
+==============================================================================
+
+*<A NAME="26.4"></A><B>26.4</B>*	Using Vim from a shell <A HREF="usr_41.html#script">script</A>
+
+Suppose you have a lot of files in which you need to change the string
+&quot;-person-&quot; to &quot;Jones&quot; and then print <A HREF="motion.html#it">it</A>.  How <A HREF="diff.html#do">do</A> you <A HREF="diff.html#do">do</A> that?  One way is to
+<A HREF="diff.html#do">do</A> a lot of typing.  The other is to write a shell <A HREF="usr_41.html#script">script</A> to <A HREF="diff.html#do">do</A> the work.
+   The Vim editor does a superb job <A HREF="motion.html#as">as</A> a screen-oriented editor when using
+<A HREF="intro.html#Normal">Normal</A> mode commands.  For batch processing, however, <A HREF="intro.html#Normal">Normal</A> mode commands <A HREF="diff.html#do">do</A>
+not result in clear, commented command files; so here you will use <A HREF="intro.html#Ex">Ex</A> mode
+instead.  This mode gives you a <A HREF="todo.html#nice">nice</A> command-line interface that makes <A HREF="motion.html#it">it</A> <A HREF="starting.html#easy">easy</A>
+to put into a batch file.  (&quot;Ex command&quot; is just another name for a
+command-line (:) command.)
+   The <A HREF="intro.html#Ex">Ex</A> mode commands you need are <A HREF="motion.html#as">as</A> follows:
+
+<B>	%s/-person-/Jones/g</B>
+<B>	write tempfile</B>
+<B>	quit</B>
+
+You put these commands in the file &quot;change.vim&quot;.  Now to run the editor in
+batch mode, use this shell <A HREF="usr_41.html#script">script</A>:
+
+<B>	for file in *.txt; do</B>
+<B>	  vim -e -s $file &lt; change.vim</B>
+<B>	  lpr -r tempfile</B>
+<B>	done</B>
+
+The for-done loop is a shell construct to repeat the two lines in between,
+while the $file variable is set to a different file name each time.
+   The second line runs the Vim editor in <A HREF="intro.html#Ex">Ex</A> mode (-e argument) on the file
+$file and reads commands from the file &quot;change.vim&quot;.  The <A HREF="starting.html#-s">-s</A> argument tells
+Vim to operate in silent mode.  In other words, <A HREF="diff.html#do">do</A> not keep outputting the
+:prompt, or any other prompt for that matter.
+   The &quot;lpr <A HREF="starting.html#-r">-r</A> tempfile&quot; command prints the resulting &quot;<A HREF="change.html#tempfile">tempfile</A>&quot; and deletes
+<A HREF="motion.html#it">it</A> (that's what the <A HREF="starting.html#-r">-r</A> argument does).
+
+
+READING FROM STDIN
+
+Vim can read text on standard input.  Since the normal way is to read commands
+there, you must tell Vim to read text instead.  This is done by passing the
+&quot;<A HREF="motion.html#-">-</A>&quot; argument in place of a file.  Example:
+
+<B>	ls | vim -</B>
+
+This allows you to edit the output of the &quot;ls&quot; command, without first saving
+the text in a file.
+   If you use the standard input to read text from, you can use the &quot;<A HREF="starting.html#-S">-S</A>&quot;
+argument to read a <A HREF="usr_41.html#script">script</A>:
+
+<B>	producer | vim -S change.vim -</B>
+
+
+NORMAL MODE SCRIPTS
+
+If you really want to use <A HREF="intro.html#Normal">Normal</A> mode commands in a <A HREF="usr_41.html#script">script</A>, you can use <A HREF="motion.html#it">it</A>
+like this:
+
+<B>	vim -s script file.txt ...</B>
+ 
+	Note:
+	&quot;<A HREF="starting.html#-s">-s</A>&quot; has a different meaning when <A HREF="motion.html#it">it</A> is used without &quot;<A HREF="starting.html#-e">-e</A>&quot;.  Here <A HREF="motion.html#it">it</A>
+	means to source the &quot;<A HREF="usr_41.html#script">script</A>&quot; <A HREF="motion.html#as">as</A> <A HREF="intro.html#Normal">Normal</A> mode commands.  When used with
+	&quot;<A HREF="starting.html#-e">-e</A>&quot; <A HREF="motion.html#it">it</A> means to be silent, and doesn't use the next argument <A HREF="motion.html#as">as</A> a
+	file name.
+
+The commands in &quot;<A HREF="usr_41.html#script">script</A>&quot; are executed like you typed them.  Don't forget that
+a line break is interpreted <A HREF="motion.html#as">as</A> pressing <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A>.  In <A HREF="intro.html#Normal">Normal</A> mode that moves
+the cursor to the next line.
+   To create the <A HREF="usr_41.html#script">script</A> you can edit the <A HREF="usr_41.html#script">script</A> file and type the commands.
+You need to imagine what the result would be, which can be a bit difficult.
+Another way is to record the commands while you perform them manually.  This
+is how you <A HREF="diff.html#do">do</A> that:
+
+<B>	vim -w script file.txt ...</B>
+
+All typed keys will be written to &quot;<A HREF="usr_41.html#script">script</A>&quot;.  If you make a small mistake you
+can just continue and remember to edit the <A HREF="usr_41.html#script">script</A> later.
+   The &quot;<A HREF="starting.html#-w">-w</A>&quot; argument appends to an existing <A HREF="usr_41.html#script">script</A>.  That is good when you
+want to record the <A HREF="usr_41.html#script">script</A> bit by bit.  If you want to start from scratch and
+start all over, use the &quot;<A HREF="starting.html#-W">-W</A>&quot; argument.  It overwrites any existing file.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_27.html">usr_27.txt</A>|  Search commands and patterns
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

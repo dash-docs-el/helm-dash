@@ -1,0 +1,80 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: pi_paren</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: pi_paren</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="pi_paren.txt"></A><B>pi_paren.txt</B>*  For Vim version 7.4.  Last change: 2013 May 08
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Highlighting matching parens			*<A NAME="matchparen"></A><B>matchparen</B>*
+
+The functionality mentioned here is a |<A HREF="usr_05.html#standard-plugin">standard-plugin</A>|.
+This <A HREF="usr_05.html#plugin">plugin</A> is only available if <A HREF="options.html#'compatible'">'compatible'</A> is not set.
+
+You can avoid loading this <A HREF="usr_05.html#plugin">plugin</A> by setting the &quot;loaded_matchparen&quot; variable:
+<B>	:let loaded_matchparen = 1</B>
+
+The <A HREF="usr_05.html#plugin">plugin</A> installs <A HREF="autocmd.html#CursorMoved">CursorMoved</A>, <A HREF="autocmd.html#CursorMovedI">CursorMovedI</A> and <A HREF="autocmd.html#WinEnter">WinEnter</A> autocommands to
+redefine the match highlighting.
+
+
+					*<A NAME=":NoMatchParen"></A><B>:NoMatchParen</B>* *<A NAME=":DoMatchParen"></A><B>:DoMatchParen</B>*
+To disable the <A HREF="usr_05.html#plugin">plugin</A> after <A HREF="motion.html#it">it</A> was loaded use this command:
+
+<B>	:NoMatchParen</B>
+
+And to enable <A HREF="motion.html#it">it</A> again:
+
+<B>	:DoMatchParen</B>
+
+The highlighting used is MatchParen.  You can specify different colors with
+the &quot;<A HREF="syntax.html#:highlight">:highlight</A>&quot; command.  Example:
+
+<B>	:hi MatchParen ctermbg=blue guibg=lightblue</B>
+
+The characters to be matched come from the <A HREF="options.html#'matchpairs'">'matchpairs'</A> option.  You can
+change the value to highlight different matches.  Note that not everything is
+possible.  For example, you can't highlight single or double <A HREF="quotes.html#quotes">quotes</A>, because
+the start and end are equal.
+
+The <A HREF="syntax.html#syntax">syntax</A> highlighting attributes are used.  When the cursor currently is not
+in a string or comment <A HREF="syntax.html#syntax">syntax</A> item, then matches inside string and comment
+<A HREF="syntax.html#syntax">syntax</A> items are ignored.  Any <A HREF="syntax.html#syntax">syntax</A> items with &quot;string&quot; or &quot;comment&quot;
+somewhere in their name are considered string or comment items.
+
+The search is limited to avoid a delay when moving the cursor.  The <A HREF="vi_diff.html#limits">limits</A>
+are:
+- What is visible in the <A HREF="windows.html#window">window</A>.
+- 100 lines above or below the cursor to avoid a long delay when there are
+  closed <A HREF="fold.html#folds">folds</A>.
+- <A HREF="options.html#'synmaxcol'">'synmaxcol'</A> times 2 bytes before or after the cursor to avoid a delay
+  in a long line with <A HREF="syntax.html#syntax">syntax</A> highlighting.
+- A timeout of 300 msec (60 msec in <A HREF="insert.html#Insert">Insert</A> mode). This can be changed with the
+  g:matchparen_timeout and g:matchparen_insert_timeout <A HREF="eval.html#variables">variables</A> and their
+  buffer-local equivalents b:matchparen_timeout and
+  b:matchparen_insert_timeout.
+
+If you would like the |<A HREF="motion.html#&#37;">&#37;</A>| command to work better, the matchit <A HREF="usr_05.html#plugin">plugin</A> can be
+used, see |<A HREF="usr_05.html#matchit-install">matchit-install</A>|.  This <A HREF="usr_05.html#plugin">plugin</A> also helps to skip matches in
+comments.  This is unrelated to the <A HREF="#matchparen">matchparen</A> highlighting, they use a
+different mechanism.
+
+==============================================================================
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

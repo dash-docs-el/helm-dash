@@ -1,0 +1,603 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_25</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_25</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_25.txt"></A><B>usr_25.txt</B>*	For Vim version 7.4.  Last change: 2007 May 11
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			     Editing formatted text
+
+
+Text hardly ever comes in one <A HREF="motion.html#sentence">sentence</A> per line.  This chapter is about
+breaking sentences to make them fit on a page and other <A HREF="change.html#formatting">formatting</A>.
+Vim also has useful features for editing single-line paragraphs and tables.
+
+|<A HREF="#25.1">25.1</A>|	Breaking lines
+|<A HREF="#25.2">25.2</A>|	Aligning text
+|<A HREF="#25.3">25.3</A>|	Indents and tabs
+|<A HREF="#25.4">25.4</A>|	Dealing with long lines
+|<A HREF="#25.5">25.5</A>|	Editing tables
+
+     Next chapter: |<A HREF="usr_26.html">usr_26.txt</A>|  Repeating
+ Previous chapter: |<A HREF="usr_24.html">usr_24.txt</A>|  Inserting quickly
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="25.1"></A><B>25.1</B>*	Breaking lines
+
+Vim has a number of <A HREF="eval.html#functions">functions</A> that make dealing with text easier.  By default,
+the editor does not perform automatic line breaks.  In other words, you have
+to press <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> yourself.  This is useful when you are <A HREF="editing.html#writing">writing</A> programs where
+you want to decide where the line ends.  It is not so good when you are
+creating documentation and want the text to be at most 70 character wide.
+   If you set the <A HREF="options.html#'textwidth'">'textwidth'</A> option, Vim automatically inserts line breaks.
+Suppose, for example, that you want a very narrow column of only 30
+characters.  You need to execute the following command:
+
+<B>	:set textwidth=30</B>
+
+Now you start typing (ruler added):
+
+		 1	   2	     3
+	12345678901234567890123456789012345
+<B><FONT COLOR="PURPLE">	I taught programming for a whi </FONT></B>
+
+If you type &quot;<A HREF="motion.html#l">l</A>&quot; next, this makes the line longer than the 30-character limit.
+When Vim sees this, <A HREF="motion.html#it">it</A> inserts a line break and you get the following:
+
+		 1	   2	     3
+	12345678901234567890123456789012345
+<B><FONT COLOR="PURPLE">	I taught programming for a </FONT></B>
+<B><FONT COLOR="PURPLE">	whil </FONT></B>
+
+Continuing on, you can type in the rest of the <A HREF="motion.html#paragraph">paragraph</A>:
+
+		 1	   2	     3
+	12345678901234567890123456789012345
+<B><FONT COLOR="PURPLE">	I taught programming for a </FONT></B>
+<B><FONT COLOR="PURPLE">	while. One time, I was stopped </FONT></B>
+<B><FONT COLOR="PURPLE">	by the Fort Worth police, </FONT></B>
+<B><FONT COLOR="PURPLE">	because my homework was too </FONT></B>
+<B><FONT COLOR="PURPLE">	hard. True story. </FONT></B>
+
+You <A HREF="diff.html#do">do</A> not have to type newlines; Vim puts them in automatically.
+
+	Note:
+	The <A HREF="options.html#'wrap'">'wrap'</A> option makes Vim display lines with a line break, but this
+	doesn't insert a line break in the file.
+
+
+REFORMATTING
+
+The Vim editor is not a <A HREF="motion.html#word">word</A> processor.  In a <A HREF="motion.html#word">word</A> processor, if you delete
+something at the beginning of the <A HREF="motion.html#paragraph">paragraph</A>, the line breaks are reworked.  In
+Vim they are not; so if you delete the <A HREF="motion.html#word">word</A> &quot;programming&quot; from the first line,
+all you get is a short line:
+
+		 1	   2	     3
+	12345678901234567890123456789012345
+<B><FONT COLOR="PURPLE">	I taught for a </FONT></B>
+<B><FONT COLOR="PURPLE">	while. One time, I was stopped </FONT></B>
+<B><FONT COLOR="PURPLE">	by the Fort Worth police, </FONT></B>
+<B><FONT COLOR="PURPLE">	because my homework was too </FONT></B>
+<B><FONT COLOR="PURPLE">	hard. True story. </FONT></B>
+
+This does not look good.  To get the <A HREF="motion.html#paragraph">paragraph</A> into shape you use the &quot;<A HREF="change.html#gq">gq</A>&quot;
+<A HREF="motion.html#operator">operator</A>.
+   Let's first use this with a <A HREF="visual.html#Visual">Visual</A> selection.  Starting from the first
+line, type:
+
+<B>	v4jgq</B>
+
+&quot;<A HREF="visual.html#v">v</A>&quot; to start <A HREF="visual.html#Visual">Visual</A> mode, &quot;4j' to move to the end of the <A HREF="motion.html#paragraph">paragraph</A> and then
+the &quot;<A HREF="change.html#gq">gq</A>&quot; <A HREF="motion.html#operator">operator</A>.  The result is:
+
+		 1	   2	     3
+	12345678901234567890123456789012345
+<B><FONT COLOR="PURPLE">	I taught for a while. One </FONT></B>
+<B><FONT COLOR="PURPLE">	time, I was stopped by the </FONT></B>
+<B><FONT COLOR="PURPLE">	Fort Worth police, because my </FONT></B>
+<B><FONT COLOR="PURPLE">	homework was too hard. True </FONT></B>
+<B><FONT COLOR="PURPLE">	story. </FONT></B>
+
+Note: there is a way to <A HREF="diff.html#do">do</A> automatic <A HREF="change.html#formatting">formatting</A> for specific types of text
+layouts, see |<A HREF="change.html#auto-format">auto-format</A>|.
+
+Since &quot;<A HREF="change.html#gq">gq</A>&quot; is an <A HREF="motion.html#operator">operator</A>, you can use one of the three ways to select the
+text <A HREF="motion.html#it">it</A> works on: With <A HREF="visual.html#Visual">Visual</A> mode, with a <A HREF="intro.html#movement">movement</A> and with a text object.
+   The example above could also be done with &quot;gq4j&quot;.  That's <A HREF="various.html#less">less</A> typing, but
+you have to know the line <A HREF="intro.html#count">count</A>.  A more useful motion command is &quot;<A HREF="motion.html#}">}</A>&quot;.  This
+moves to the end of a <A HREF="motion.html#paragraph">paragraph</A>.  Thus &quot;gq}&quot; formats from the cursor to the
+end of the current <A HREF="motion.html#paragraph">paragraph</A>.
+   A very useful text object to use with &quot;<A HREF="change.html#gq">gq</A>&quot; is the <A HREF="motion.html#paragraph">paragraph</A>.  Try this:
+
+<B>	gqap</B>
+
+&quot;<A HREF="motion.html#ap">ap</A>&quot; stands for &quot;a-paragraph&quot;.  This formats the text of one <A HREF="motion.html#paragraph">paragraph</A>
+(separated by empty lines).  Also the part before the cursor.
+   If you have your paragraphs separated by empty lines, you can format the
+whole file by typing this:
+
+<B>	gggqG</B>
+
+&quot;<A HREF="motion.html#gg">gg</A>&quot; to move to the first line, &quot;gqG&quot; to format until the last line.
+   Warning: If your paragraphs are not properly separated, they will be joined
+together.  A common mistake is to have a line with a space or <A HREF="intro.html#tab">tab</A>.  That's a
+blank line, but not an empty line.
+
+Vim is able to format more than just plain text.  See |<A HREF="change.html#fo-table">fo-table</A>| for how to
+change this.  See the <A HREF="options.html#'joinspaces'">'joinspaces'</A> option to change the number of spaces used
+after a full stop.
+   It is possible to use an external program for <A HREF="change.html#formatting">formatting</A>.  This is useful
+if your text can't be properly formatted with Vim's builtin command.  See the
+<A HREF="options.html#'formatprg'">'formatprg'</A> option.
+
+==============================================================================
+
+*<A NAME="25.2"></A><B>25.2</B>*	Aligning text
+
+To center a range of lines, use the following command:
+
+<B>	:{range}center [width]</B>
+
+{range} is the usual command-line range.  [width] is an optional line width to
+use for centering.  If [width] is not specified, <A HREF="motion.html#it">it</A> defaults to the value of
+<A HREF="options.html#'textwidth'">'textwidth'</A>.  (If <A HREF="options.html#'textwidth'">'textwidth'</A> is 0, the default is 80.)
+   For example:
+
+<B>	:1,5center 40</B>
+
+results in the following:
+
+<B><FONT COLOR="PURPLE">       I taught for a while. One </FONT></B>
+<B><FONT COLOR="PURPLE">       time, I was stopped by the </FONT></B>
+<B><FONT COLOR="PURPLE">     Fort Worth police, because my </FONT></B>
+<B><FONT COLOR="PURPLE">      homework was too hard. True </FONT></B>
+<B><FONT COLOR="PURPLE">		 story. </FONT></B>
+
+
+RIGHT ALIGNMENT
+
+Similarly, the &quot;<A HREF="change.html#:right">:right</A>&quot; command right-justifies the text:
+
+<B>	:1,5right 37</B>
+
+gives this result:
+
+<B><FONT COLOR="PURPLE">	    I taught for a while. One </FONT></B>
+<B><FONT COLOR="PURPLE">	   time, I was stopped by the </FONT></B>
+<B><FONT COLOR="PURPLE">	Fort Worth police, because my </FONT></B>
+<B><FONT COLOR="PURPLE">	  homework was too hard. True </FONT></B>
+<B><FONT COLOR="PURPLE">			       story. </FONT></B>
+
+LEFT ALIGNMENT
+
+Finally there is this command:
+
+<B>	:{range}left [margin]</B>
+
+Unlike &quot;<A HREF="change.html#:center">:center</A>&quot; and &quot;<A HREF="change.html#:right">:right</A>&quot;, however, the argument to &quot;<A HREF="change.html#:left">:left</A>&quot; is not the
+length of the line.  Instead <A HREF="motion.html#it">it</A> is the left margin.  If <A HREF="motion.html#it">it</A> is omitted, the
+text will be put against the left side of the screen (using a zero margin
+would <A HREF="diff.html#do">do</A> the same).  If <A HREF="motion.html#it">it</A> is 5, the text will be indented 5 spaces.  For
+example, use these commands:
+
+<B>	:1left 5</B>
+<B>	:2,5left</B>
+
+This results in the following:
+
+<B><FONT COLOR="PURPLE">	     I taught for a while. One </FONT></B>
+<B><FONT COLOR="PURPLE">	time, I was stopped by the </FONT></B>
+<B><FONT COLOR="PURPLE">	Fort Worth police, because my </FONT></B>
+<B><FONT COLOR="PURPLE">	homework was too hard. True </FONT></B>
+<B><FONT COLOR="PURPLE">	story. </FONT></B>
+
+
+JUSTIFYING TEXT
+
+Vim has no built-in way of justifying text.  However, there is a neat <A HREF="map.html#macro">macro</A>
+package that does the job.  To use this package, execute the following
+command:
+
+<B>	:runtime macros/justify.vim</B>
+
+This Vim <A HREF="usr_41.html#script">script</A> file defines a new visual command &quot;_j&quot;.  To justify a block of
+text, highlight the text in <A HREF="visual.html#Visual">Visual</A> mode and then execute &quot;_j&quot;.
+   Look in the file for more explanations.  To go there, <A HREF="diff.html#do">do</A> &quot;<A HREF="editing.html#gf">gf</A>&quot; on this name:
+$VIMRUNTIME/macros/justify.vim.
+
+An alternative is to <A HREF="change.html#filter">filter</A> the text through an external program.  Example:
+
+<B>	:%!fmt</B>
+
+==============================================================================
+
+*<A NAME="25.3"></A><B>25.3</B>*	Indents and tabs
+
+Indents can be used to make text stand out from the rest.  The example texts
+in this manual, for example, are indented by eight spaces or a <A HREF="intro.html#tab">tab</A>.  You would
+normally enter this by typing a <A HREF="intro.html#tab">tab</A> at the start of each line.  Take this
+text:
+<B><FONT COLOR="PURPLE">	the first line </FONT></B>
+<B><FONT COLOR="PURPLE">	the second line </FONT></B>
+
+This is entered by typing a <A HREF="intro.html#tab">tab</A>, some text, <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A>, <A HREF="intro.html#tab">tab</A> and more text.
+   The <A HREF="options.html#'autoindent'">'autoindent'</A> option inserts indents automatically:
+
+<B>	:set autoindent</B>
+
+When a new line is started <A HREF="motion.html#it">it</A> gets the same indent <A HREF="motion.html#as">as</A> the previous line.  In
+the above example, the <A HREF="intro.html#tab">tab</A> after the <A HREF="intro.html#&lt;Enter&gt;">&lt;Enter&gt;</A> is not needed anymore.
+
+
+INCREASING INDENT
+
+To increase the amount of indent in a line, use the &quot;<A HREF="change.html#&gt;">&gt;</A>&quot; <A HREF="motion.html#operator">operator</A>.  Often this
+is used <A HREF="motion.html#as">as</A> &quot;<A HREF="change.html#&gt;&gt;">&gt;&gt;</A>&quot;, which adds indent to the current line.
+   The amount of indent added is specified with the <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> option.  The
+default value is 8.  To make &quot;<A HREF="change.html#&gt;&gt;">&gt;&gt;</A>&quot; insert four spaces worth of indent, for
+example, type this:
+
+<B>	:set shiftwidth=4</B>
+
+When used on the second line of the example text, this is what you get:
+
+<B><FONT COLOR="PURPLE">	the first line </FONT></B>
+<B><FONT COLOR="PURPLE">	    the second line </FONT></B>
+
+&quot;4&gt;&gt;&quot; will increase the indent of four lines.
+
+
+TABSTOP
+
+If you want to make indents a multiple of 4, you set <A HREF="options.html#'shiftwidth'">'shiftwidth'</A> to 4.  But
+when pressing a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> you still get 8 spaces worth of indent.  To change this,
+set the <A HREF="options.html#'softtabstop'">'softtabstop'</A> option:
+
+<B>	:set softtabstop=4</B>
+
+This will make the <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> key insert 4 spaces worth of indent.  If there are
+already four spaces, a <A HREF="motion.html#&lt;Tab&gt;">&lt;Tab&gt;</A> character is used (saving seven characters in the
+file).  (If you always want spaces and no <A HREF="intro.html#tab">tab</A> characters, set the <A HREF="options.html#'expandtab'">'expandtab'</A>
+option.)
+
+	Note:
+	You could set the <A HREF="options.html#'tabstop'">'tabstop'</A> option to 4.  However, if you edit the
+	file another time, with <A HREF="options.html#'tabstop'">'tabstop'</A> set to the default value of 8, <A HREF="motion.html#it">it</A>
+	will look wrong.  In other programs and when <A HREF="print.html#printing">printing</A> the indent will
+	also be wrong.  Therefore <A HREF="motion.html#it">it</A> is recommended to keep <A HREF="options.html#'tabstop'">'tabstop'</A> at eight
+	all the time.  That's the standard value everywhere.
+
+
+CHANGING TABS
+
+You edit a file which was written with a tabstop of 3.  In Vim <A HREF="motion.html#it">it</A> looks ugly,
+because <A HREF="motion.html#it">it</A> uses the normal tabstop value of 8.  You can fix this by setting
+<A HREF="options.html#'tabstop'">'tabstop'</A> to 3.  But you have to <A HREF="diff.html#do">do</A> this every time you edit this file.
+   Vim can change the use of tabstops in your file.  First, set <A HREF="options.html#'tabstop'">'tabstop'</A> to
+make the indents look good, then use the &quot;<A HREF="change.html#:retab">:retab</A>&quot; command:
+
+<B>	:set tabstop=3</B>
+<B>	:retab 8</B>
+
+The &quot;<A HREF="change.html#:retab">:retab</A>&quot; command will change <A HREF="options.html#'tabstop'">'tabstop'</A> to 8, while <A HREF="change.html#changing">changing</A> the text such
+that <A HREF="motion.html#it">it</A> looks the same.  It changes spans of white space into tabs and spaces
+for this.  You can now write the file.  Next time you edit <A HREF="motion.html#it">it</A> the indents will
+be right without setting an option.
+   Warning: When using &quot;<A HREF="change.html#:retab">:retab</A>&quot; on a program, <A HREF="motion.html#it">it</A> may change white space inside
+a string constant.  Therefore it's a good habit to use &quot;\t&quot; instead of a
+real <A HREF="intro.html#tab">tab</A>.
+
+==============================================================================
+
+*<A NAME="25.4"></A><B>25.4</B>*	Dealing with long lines
+
+Sometimes you will be editing a file that is wider than the number of columns
+in the <A HREF="windows.html#window">window</A>.  When that occurs, Vim wraps the lines so that everything fits
+on the screen.
+   If you switch the <A HREF="options.html#'wrap'">'wrap'</A> option off, each line in the file shows up <A HREF="motion.html#as">as</A> one
+line on the screen.  Then the ends of the long lines disappear off the screen
+to the right.
+   When you move the cursor to a character that can't be seen, Vim will scroll
+the text to show <A HREF="motion.html#it">it</A>.  This is like moving a viewport over the text in the
+horizontal direction.
+   By default, Vim does not display a horizontal scrollbar in the <A HREF="gui.html#GUI">GUI</A>.  If you
+want to enable one, use the following command:
+
+<B>	:set guioptions+=b</B>
+
+One horizontal scrollbar will appear at the bottom of the Vim <A HREF="windows.html#window">window</A>.
+
+If you don't have a scrollbar or don't want to use <A HREF="motion.html#it">it</A>, use these commands to
+scroll the text.  The cursor will stay in the same place, but it's moved back
+into the visible text if necessary.
+
+	<A HREF="scroll.html#zh">zh</A>		scroll right
+	4zh		scroll four characters right
+	<A HREF="scroll.html#zH">zH</A>		scroll half a <A HREF="windows.html#window">window</A> width right
+	<A HREF="scroll.html#ze">ze</A>		scroll right to put the cursor at the end
+	<A HREF="scroll.html#zl">zl</A>		scroll left
+	4zl		scroll four characters left
+	<A HREF="scroll.html#zL">zL</A>		scroll half a <A HREF="windows.html#window">window</A> width left
+	<A HREF="scroll.html#zs">zs</A>		scroll left to put the cursor at the start
+
+Let's attempt to show this with one line of text.  The cursor is on the &quot;<A HREF="motion.html#w">w</A>&quot; of
+&quot;which&quot;.  The &quot;current window&quot; above the line indicates the text that is
+currently visible.  The &quot;<A HREF="windows.html#window">window</A>&quot;s below the text indicate the text that is
+visible after the command left of <A HREF="motion.html#it">it</A>.
+
+			      |&lt;-- current <A HREF="windows.html#window">window</A> --&gt;|
+<B><FONT COLOR="PURPLE">		some long text, part of which is visible in the window </FONT></B>
+	<A HREF="scroll.html#ze">ze</A>	  |&lt;--	   <A HREF="windows.html#window">window</A>     --&gt;|
+	<A HREF="scroll.html#zH">zH</A>	   |&lt;--     <A HREF="windows.html#window">window</A>     --&gt;|
+	4zh		  |&lt;--	   <A HREF="windows.html#window">window</A>     --&gt;|
+	<A HREF="scroll.html#zh">zh</A>		     |&lt;--     <A HREF="windows.html#window">window</A>	 --&gt;|
+	<A HREF="scroll.html#zl">zl</A>		       |&lt;--	<A HREF="windows.html#window">window</A>	   --&gt;|
+	4zl			  |&lt;--	   <A HREF="windows.html#window">window</A>     --&gt;|
+	<A HREF="scroll.html#zL">zL</A>				|&lt;--	 <A HREF="windows.html#window">window</A>     --&gt;|
+	<A HREF="scroll.html#zs">zs</A>			       |&lt;--	<A HREF="windows.html#window">window</A>	   --&gt;|
+
+
+MOVING WITH WRAP OFF
+
+When <A HREF="options.html#'wrap'">'wrap'</A> is off and the text has scrolled horizontally, you can use the
+following commands to move the cursor to a character you can see.  Thus text
+left and right of the <A HREF="windows.html#window">window</A> is ignored.  These never cause the text to
+scroll:
+
+	<A HREF="motion.html#g0">g0</A>		to first visible character in this line
+	<A HREF="motion.html#g^">g^</A>		to first non-blank visible character in this line
+	<A HREF="motion.html#gm">gm</A>		to middle of this line
+	<A HREF="motion.html#g$">g$</A>		to last visible character in this line
+
+		|&lt;--	 <A HREF="windows.html#window">window</A>    --&gt;|
+<B><FONT COLOR="PURPLE">	some long    text, part of which is visible </FONT></B>
+		 <A HREF="motion.html#g0">g0</A>  <A HREF="motion.html#g^">g^</A>    <A HREF="motion.html#gm">gm</A>	     <A HREF="motion.html#g$">g$</A>
+
+
+
+BREAKING AT WORDS				*<A NAME="edit-no-break"></A><B>edit-no-break</B>*
+
+When preparing text for use by another program, you might have to make
+paragraphs without a line break.  A disadvantage of using <A HREF="options.html#'nowrap'">'nowrap'</A> is that you
+can't see the whole <A HREF="motion.html#sentence">sentence</A> you are working on.  When <A HREF="options.html#'wrap'">'wrap'</A> is on, words are
+broken halfway, which makes them hard to read.
+   A good solution for editing this kind of <A HREF="motion.html#paragraph">paragraph</A> is setting the
+<A HREF="options.html#'linebreak'">'linebreak'</A> option.  Vim then breaks lines at an appropriate place when
+displaying the line.  The text in the file remains unchanged.
+   Without <A HREF="options.html#'linebreak'">'linebreak'</A> text might look like this:
+
+	+---------------------------------+
+	|letter generation program for a b|
+	|ank.  They wanted to send out a s|
+	|pecial, personalized <A HREF="print.html#letter">letter</A> to th|
+	|eir richest 1000 customers.  Unfo|
+	|rtunately for the programmer, he |
+	+---------------------------------+
+After:
+
+<B>	:set linebreak</B>
+
+<A HREF="motion.html#it">it</A> looks like this:
+
+	+---------------------------------+
+	|letter generation program for a  |
+	|bank.  They wanted to send out a |
+	|special, personalized <A HREF="print.html#letter">letter</A> to  |
+	|their richest 1000 customers.    |
+	|Unfortunately for the programmer,|
+	+---------------------------------+
+
+Related <A HREF="options.html#options">options</A>:
+<A HREF="options.html#'breakat'">'breakat'</A> specifies the characters where a break can be inserted.
+<A HREF="options.html#'showbreak'">'showbreak'</A> specifies a string to show at the start of broken line.
+Set <A HREF="options.html#'textwidth'">'textwidth'</A> to zero to avoid a <A HREF="motion.html#paragraph">paragraph</A> to be split.
+
+
+MOVING BY VISIBLE LINES
+
+The &quot;<A HREF="motion.html#j">j</A>&quot; and &quot;<A HREF="motion.html#k">k</A>&quot; commands move to the next and previous lines.  When used on
+a long line, this means moving a lot of screen lines at once.
+   To move only one screen line, use the &quot;<A HREF="motion.html#gj">gj</A>&quot; and &quot;<A HREF="motion.html#gk">gk</A>&quot; commands.  When a line
+doesn't wrap they <A HREF="diff.html#do">do</A> the same <A HREF="motion.html#as">as</A> &quot;<A HREF="motion.html#j">j</A>&quot; and &quot;<A HREF="motion.html#k">k</A>&quot;.  When the line does wrap, they
+move to a character displayed one line below or above.
+   You might like to use these mappings, which bind these <A HREF="intro.html#movement">movement</A> commands to
+the cursor keys:
+
+<B>	:map &lt;Up&gt; gk</B>
+<B>	:map &lt;Down&gt; gj</B>
+
+
+TURNING A PARAGRAPH INTO ONE LINE
+
+If you want to import text into a program like MS-Word, each <A HREF="motion.html#paragraph">paragraph</A> should
+be a single line.  If your paragraphs are currently separated with empty
+lines, this is how you turn each <A HREF="motion.html#paragraph">paragraph</A> into a single line:
+
+<B>	:g/./,/^$/join</B>
+
+That looks complicated.  Let's break <A HREF="motion.html#it">it</A> up in pieces:
+
+	:g/./		A &quot;<A HREF="repeat.html#:global">:global</A>&quot; command that finds all lines that contain
+			at least one character.
+	     ,/^$/	A range, starting from the current line (the non-empty
+			line) until an empty line.
+		  join	The &quot;<A HREF="change.html#:join">:join</A>&quot; command joins the range of lines together
+			into one line.
+
+Starting with this text, containing eight lines broken at column 30:
+
+	+----------------------------------+
+	|A <A HREF="print.html#letter">letter</A> generation program	   |
+	|for a bank.  They wanted to	   |
+	|send out a special,		   |
+	|personalized <A HREF="print.html#letter">letter</A>.		   |
+	&#124;				   |
+	|To their richest 1000		   |
+	|customers.  Unfortunately for	   |
+	|the programmer,		   |
+	+----------------------------------+
+
+You end up with two lines:
+
+	+----------------------------------+
+	|A <A HREF="print.html#letter">letter</A> generation program for a |
+	|bank.	They wanted to send out a s|
+	|pecial, personalized <A HREF="print.html#letter">letter</A>.	   |
+	|To their richest 1000 customers.  |
+	|Unfortunately for the programmer, |
+	+----------------------------------+
+
+Note that this doesn't work when the separating line is blank but not empty;
+when <A HREF="motion.html#it">it</A> contains spaces and/or tabs.  This command does work with blank lines:
+
+<B>	:g/\S/,/^\s*$/join</B>
+
+This still requires a blank or empty line at the end of the file for the last
+<A HREF="motion.html#paragraph">paragraph</A> to be joined.
+
+==============================================================================
+
+*<A NAME="25.5"></A><B>25.5</B>*	Editing tables
+
+Suppose you are editing a table with four columns:
+
+<B><FONT COLOR="PURPLE">	nice table	  test 1	test 2	    test 3 </FONT></B>
+<B><FONT COLOR="PURPLE">	input A		  0.534 </FONT></B>
+<B><FONT COLOR="PURPLE">	input B		  0.913 </FONT></B>
+
+You need to enter numbers in the third column.  You could move to the second
+line, use &quot;<A HREF="insert.html#A">A</A>&quot;, enter a lot of spaces and type the text.
+   For this kind of editing there is a special option:
+
+<B>	set virtualedit=all</B>
+
+Now you can move the cursor to positions where there isn't any text.  This is
+called &quot;virtual space&quot;.  Editing a table is a lot easier this way.
+   Move the cursor by searching for the header of the last column:
+
+<B>	/test 3</B>
+
+Now press &quot;<A HREF="motion.html#j">j</A>&quot; and you are right where you can enter the value for &quot;input A&quot;.
+Typing &quot;0.693&quot; results in:
+
+<B><FONT COLOR="PURPLE">	nice table	  test 1     test 2	 test 3 </FONT></B>
+<B><FONT COLOR="PURPLE">	input A		  0.534			 0.693 </FONT></B>
+<B><FONT COLOR="PURPLE">	input B		  0.913 </FONT></B>
+
+Vim has automatically filled the gap in front of the new text for you.  Now,
+to enter the next field in this column use &quot;Bj&quot;.  &quot;<A HREF="motion.html#B">B</A>&quot; moves back to the start
+of a white space separated <A HREF="motion.html#word">word</A>.  Then &quot;<A HREF="motion.html#j">j</A>&quot; moves to the place where the next
+field can be entered.
+
+	Note:
+	You can move the cursor anywhere in the display, also beyond the end
+	of a line.  But Vim will not insert spaces there, until you insert a
+	character in that position.
+
+
+COPYING A COLUMN
+
+You want to add a column, which should be a copy of the third column and
+placed before the &quot;test 1&quot; column.  Do this in seven steps:
+1.  Move the cursor to the left upper corner of this column, e.g., with
+    &quot;/test 3&quot;.
+2.  Press <A HREF="visual.html#CTRL-V">CTRL-V</A> to start blockwise <A HREF="visual.html#Visual">Visual</A> mode.
+3.  Move the cursor down two lines with &quot;2j&quot;.  You are now in &quot;virtual space&quot;:
+    the &quot;input B&quot; line of the &quot;test 3&quot; column.
+4.  Move the cursor right, to include the whole column in the selection, plus
+    the space that you want between the columns.  &quot;9l&quot; should <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A>.
+5.  Yank the selected rectangle with &quot;<A HREF="change.html#y">y</A>&quot;.
+6.  Move the cursor to &quot;test 1&quot;, where the new column must be placed.
+7.  Press &quot;<A HREF="change.html#P">P</A>&quot;.
+
+The result should be:
+
+<B><FONT COLOR="PURPLE">	nice table	  test 3    test 1     test 2	   test 3 </FONT></B>
+<B><FONT COLOR="PURPLE">	input A		  0.693     0.534		   0.693 </FONT></B>
+<B><FONT COLOR="PURPLE">	input B			    0.913 </FONT></B>
+
+Notice that the whole &quot;test 1&quot; column was shifted right, also the line where
+the &quot;test 3&quot; column didn't have text.
+
+Go back to non-virtual cursor movements with:
+
+<B>	:set virtualedit=</B>
+
+
+VIRTUAL REPLACE MODE
+
+The disadvantage of using <A HREF="options.html#'virtualedit'">'virtualedit'</A> is that <A HREF="motion.html#it">it</A> &quot;feels&quot; different.  You
+can't recognize tabs or spaces beyond the end of line when moving the cursor
+around.  Another method can be used: Virtual <A HREF="insert.html#Replace">Replace</A> mode.
+   Suppose you have a line in a table that contains both tabs and other
+characters.  Use &quot;rx&quot; on the first <A HREF="intro.html#tab">tab</A>:
+
+<B><FONT COLOR="PURPLE">	inp	0.693   0.534	0.693 </FONT></B>
+
+	       |
+	   rx  |
+	       <A HREF="visual.html#V">V</A>
+
+<B><FONT COLOR="PURPLE">	inpx0.693   0.534	0.693 </FONT></B>
+
+The layout is messed up.  To avoid that, use the &quot;<A HREF="change.html#gr">gr</A>&quot; command:
+
+<B><FONT COLOR="PURPLE">	inp	0.693   0.534	0.693 </FONT></B>
+
+	       |
+	  grx  |
+	       <A HREF="visual.html#V">V</A>
+
+<B><FONT COLOR="PURPLE">	inpx	0.693   0.534	0.693 </FONT></B>
+
+What happens is that the &quot;<A HREF="change.html#gr">gr</A>&quot; command makes sure the new character takes the
+right amount of screen space.  Extra spaces or tabs are inserted to fill the
+gap.  Thus what actually happens is that a <A HREF="intro.html#tab">tab</A> is replaced by &quot;<A HREF="change.html#x">x</A>&quot; and then
+blanks added to make the text after <A HREF="motion.html#it">it</A> keep its place.  In this <A HREF="change.html#case">case</A> a
+<A HREF="intro.html#tab">tab</A> is inserted.
+   When you need to replace more than one character, you use the &quot;<A HREF="change.html#R">R</A>&quot; command
+to go to <A HREF="insert.html#Replace">Replace</A> mode (see |<A HREF="usr_04.html#04.9">04.9</A>|).  This messes up the layout and replaces
+the wrong characters:
+
+<B><FONT COLOR="PURPLE">	inp	0	0.534	0.693 </FONT></B>
+
+		|
+	 R0.786 |
+		<A HREF="visual.html#V">V</A>
+
+<B><FONT COLOR="PURPLE">	inp	0.78634	0.693 </FONT></B>
+
+The &quot;<A HREF="change.html#gR">gR</A>&quot; command uses Virtual <A HREF="insert.html#Replace">Replace</A> mode.  This preserves the layout:
+
+<B><FONT COLOR="PURPLE">	inp	0	0.534	0.693 </FONT></B>
+
+		|
+	gR0.786 |
+		<A HREF="visual.html#V">V</A>
+
+<B><FONT COLOR="PURPLE">	inp	0.786	0.534	0.693 </FONT></B>
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_26.html">usr_26.txt</A>|  Repeating
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

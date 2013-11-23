@@ -1,0 +1,162 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: os_qnx</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: os_qnx</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="os_qnx.txt"></A><B>os_qnx.txt</B>*    For Vim version 7.4.  Last change: 2005 Mar 29
+
+
+		  VIM REFERENCE MANUAL    by Julian Kinraid
+
+
+
+							*<A NAME="QNX"></A><B>QNX</B>* *<A NAME="qnx"></A><B>qnx</B>*
+
+1. General			|<A HREF="#qnx-general">qnx-general</A>|
+2. Compiling Vim		|<A HREF="#qnx-compiling">qnx-compiling</A>|
+3. Terminal support		|<A HREF="#qnx-terminal">qnx-terminal</A>|
+4. Photon <A HREF="gui.html#GUI">GUI</A>			|<A HREF="#photon-gui">photon-gui</A>|
+5. Photon fonts			|<A HREF="#photon-fonts">photon-fonts</A>|
+6. Bugs <A HREF="change.html#&amp;">&amp;</A> things To Do
+
+==============================================================================
+
+
+1. General						*<A NAME="qnx-general"></A><B>qnx-general</B>*
+
+Vim on <A HREF="#QNX">QNX</A> behaves much like other unix versions. |<A HREF="os_unix.html">os_unix.txt</A>|
+
+
+
+2. Compiling Vim					*<A NAME="qnx-compiling"></A><B>qnx-compiling</B>*
+
+Vim can be compiled using the standard configure/make approach.  If you want to
+compile for <A HREF="options.html#X11">X11</A>, pass the --with-x option to configure.  Otherwise, running
+./configure without any arguments or passing --enable-gui=photon, will compile
+vim with the Photon <A HREF="gui.html#gui">gui</A> support.  Run ./configure <A HREF="starting.html#--help">--help</A> , to find out other
+features you can enable/disable.
+
+
+
+3. Terminal support					*<A NAME="qnx-terminal"></A><B>qnx-terminal</B>*
+
+Vim has support for the mouse and <A HREF="gui.html#clipboard">clipboard</A> in a pterm, if those <A HREF="options.html#options">options</A>
+are compiled in, which they are normally.
+
+The <A HREF="options.html#options">options</A> that affect mouse support are |<A HREF="options.html#'mouse'">'mouse'</A>| and |<A HREF="options.html#'ttymouse'">'ttymouse'</A>|.  When
+using the mouse, only simple left and right mouse clicking/dragging is
+supported.  If you hold down <A HREF="intro.html#shift">shift</A>, <A HREF="intro.html#ctrl">ctrl</A>, or <A HREF="intro.html#alt">alt</A> while using the mouse, pterm
+will handle the mouse itself.  It will make a selection, separate from what
+vim's doing.
+
+When the mouse is in use, you can press Alt-RightMouse to open the pterm menu.
+To turn the mouse off in vim, set the mouse option to nothing, set mouse=
+
+
+
+4. Photon <A HREF="gui.html#GUI">GUI</A>						*<A NAME="photon-gui"></A><B>photon-gui</B>*
+
+To start the <A HREF="gui.html#gui">gui</A> for vim, you need to run either <A HREF="starting.html#gvim">gvim</A> or vim <A HREF="starting.html#-g">-g</A>, otherwise
+the terminal version will run.  For more info - |<A HREF="gui_x11.html#gui-x11-start">gui-x11-start</A>|
+
+Supported features:
+	:browse command					|<A HREF="editing.html#:browse">:browse</A>|
+	:confirm command				|<A HREF="editing.html#:confirm">:confirm</A>|
+	Cursor blinking					|<A HREF="options.html#'guicursor'">'guicursor'</A>|
+	Menus, popup <A HREF="gui.html#menus">menus</A> and menu priorities		|<A HREF="gui.html#:menu">:menu</A>|
+							|<A HREF="gui.html#popup-menu">popup-menu</A>|
+							|<A HREF="gui.html#menu-priority">menu-priority</A>|
+	Toolbar						|<A HREF="gui.html#gui-toolbar">gui-toolbar</A>|
+							|<A HREF="options.html#'toolbar'">'toolbar'</A>|
+	Font selector (:set guifont=*)			|<A HREF="#photon-fonts">photon-fonts</A>|
+	Mouse focus					|<A HREF="options.html#'mousefocus'">'mousefocus'</A>|
+	Mouse hide					|<A HREF="options.html#'mousehide'">'mousehide'</A>|
+	Mouse cursor shapes				|<A HREF="options.html#'mouseshape'">'mouseshape'</A>|
+	Clipboard					|<A HREF="gui_w32.html#gui-clipboard">gui-clipboard</A>|
+
+Unfinished features:
+	Various international support, such <A HREF="motion.html#as">as</A> <A HREF="farsi.html#Farsi">Farsi</A> <A HREF="change.html#&amp;">&amp;</A> Hebrew support,
+	different encodings, etc.
+
+	This help file
+
+Unsupported features:
+	Find <A HREF="change.html#&amp;">&amp;</A> <A HREF="insert.html#Replace">Replace</A> <A HREF="windows.html#window">window</A>				|<A HREF="change.html#:promptfind">:promptfind</A>|
+	Tearoff <A HREF="gui.html#menus">menus</A>
+
+	Other things which I can't think of so I can't list them
+
+
+
+5. Fonts						*<A NAME="photon-fonts"></A><B>photon-fonts</B>*
+
+You set fonts in the <A HREF="gui.html#gui">gui</A> with the guifont option
+<B>	:set guifont=Lucida\ Terminal</B>
+ 
+The font must be a monospace font, and any spaces in the font name must be
+escaped with a '\'.  The default font used is PC Terminal, size 8.  Using
+'*' <A HREF="motion.html#as">as</A> the font name will open a standard Photon font selector where you can
+select a font.
+
+Following the name, you can include optional settings to <A HREF="intro.html#control">control</A> the size and
+style of the font, each setting separated by a '<A HREF="cmdline.html#:">:</A>'.  Not all fonts support the
+various styles.
+
+The <A HREF="options.html#options">options</A> are,
+    s{size}	Set the size of the font to {size}
+    <A HREF="motion.html#b">b</A>		Bold style
+    a		Use antialiasing
+    <A HREF="insert.html#i">i</A>		Italic style
+
+Examples:
+
+Set the font to monospace size 10 with antialiasing
+<B>	:set guifont=monospace:s10:a</B>
+ 
+Set the font to Courier size 12, with <A HREF="syntax.html#bold">bold</A> and italics
+<B>	:set guifont=Courier:s12:b:i</B>
+ 
+<A HREF="visual.html#Select">Select</A> a font with the requester
+<B>	:set guifont=*</B>
+ 
+
+
+6. Bugs <A HREF="change.html#&amp;">&amp;</A> things To Do
+
+Known problems:
+	- Vim hangs sometimes when running an external program.  Workaround:
+	  put this line in your |<A HREF="starting.html#vimrc">vimrc</A>| file:
+<B>		set noguipty</B>
+
+Bugs:
+	- Still a slight problem with menu highlighting.
+	- When using phditto/phinows/etc., if you are using a font that
+	  doesn't support the <A HREF="syntax.html#bold">bold</A> attribute, when vim attempts to draw
+	  <A HREF="syntax.html#bold">bold</A> text <A HREF="motion.html#it">it</A> will be all messed up.
+	- The cursor can sometimes be hard to see.
+	- A number of minor problems that can fixed. :)
+
+Todo:
+	- Improve multi-language support.
+	- Options for setting the fonts used in the menu and toolbar.
+	- Find <A HREF="change.html#&amp;">&amp;</A> <A HREF="insert.html#Replace">Replace</A> <A HREF="gui_w32.html#dialog">dialog</A>.
+	- The <A HREF="remote.html#clientserver">clientserver</A> features.
+	- Maybe tearoff <A HREF="gui.html#menus">menus</A>.
+
+	- <A HREF="insert.html#Replace">Replace</A> usage of fork() with spawn() when launching external
+	  programs.
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

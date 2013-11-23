@@ -1,0 +1,203 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_32</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_32</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_32.txt"></A><B>usr_32.txt</B>*	For Vim version 7.4.  Last change: 2010 Jul 20
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			      The <A HREF="undo.html#undo">undo</A> tree
+
+
+Vim provides multi-level <A HREF="undo.html#undo">undo</A>.  If you <A HREF="undo.html#undo">undo</A> a few changes and then make a new
+change you create a branch in the <A HREF="undo.html#undo">undo</A> tree.  This text is about moving
+through the branches.
+
+|<A HREF="#32.1">32.1</A>|	Undo up to a file write
+|<A HREF="#32.2">32.2</A>|	Numbering changes
+|<A HREF="#32.3">32.3</A>|	Jumping around the tree
+|<A HREF="#32.4">32.4</A>|	Time travelling
+
+     Next chapter: |<A HREF="usr_40.html">usr_40.txt</A>|  Make new commands
+ Previous chapter: |<A HREF="usr_31.html">usr_31.txt</A>|  Exploiting the <A HREF="gui.html#GUI">GUI</A>
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="32.1"></A><B>32.1</B>*	Undo up to a file write
+
+Sometimes you make several changes, and then discover you want to go back to
+when you have last written the file.  You can <A HREF="diff.html#do">do</A> that with this command:
+
+<B>	:earlier 1f</B>
+
+The &quot;<A HREF="motion.html#f">f</A>&quot; stands for &quot;file&quot; here.
+
+You can repeat this command to go further back in the past.  Or use a <A HREF="intro.html#count">count</A>
+different from 1 to go back faster.
+
+If you go back too far, go forward again with:
+
+<B>	:later 1f</B>
+
+Note that these commands really work in time sequence.  This matters if you
+made changes after undoing some changes.  It's explained in the next section.
+
+Also note that we are talking about text writes here.  For <A HREF="editing.html#writing">writing</A> the <A HREF="undo.html#undo">undo</A>
+information in a file see |<A HREF="undo.html#undo-persistence">undo-persistence</A>|.
+
+==============================================================================
+
+*<A NAME="32.2"></A><B>32.2</B>*	Numbering changes
+
+In section |<A HREF="usr_02.html#02.5">02.5</A>| we only discussed one line of undo/redo.  But <A HREF="motion.html#it">it</A> is also
+possible to branch off.  This happens when you <A HREF="undo.html#undo">undo</A> a few changes and then
+make a new change.  The new changes become a branch in the <A HREF="undo.html#undo">undo</A> tree.
+
+Let's start with the text &quot;one&quot;.  The first change to make is to append
+&quot; too&quot;.  And then move to the first '<A HREF="insert.html#o">o</A>' and change <A HREF="motion.html#it">it</A> into '<A HREF="motion.html#w">w</A>'.  We then have
+two changes, numbered 1 and 2, and three states of the text:
+
+<B><FONT COLOR="PURPLE">		one </FONT></B>
+		 |
+	      change 1
+		 |
+<B><FONT COLOR="PURPLE">	      one too </FONT></B>
+		 |
+	      change 2
+		 |
+<B><FONT COLOR="PURPLE">	      one two </FONT></B>
+
+If we now <A HREF="undo.html#undo">undo</A> one change, back to &quot;one too&quot;, and change &quot;one&quot; to &quot;me&quot; we
+create a branch in the <A HREF="undo.html#undo">undo</A> tree:
+
+<B><FONT COLOR="PURPLE">		one </FONT></B>
+		 |
+	      change 1
+		 |
+<B><FONT COLOR="PURPLE">	      one too </FONT></B>
+	      /     \
+	 change 2  change 3
+	    &#124;	      |
+<B><FONT COLOR="PURPLE">	 one two    me too </FONT></B>
+
+You can now use the |<A HREF="undo.html#u">u</A>| command to <A HREF="undo.html#undo">undo</A>.  If you <A HREF="diff.html#do">do</A> this <A HREF="if_cscop.html#twice">twice</A> you get to
+&quot;one&quot;.  Use |<A HREF="undo.html#CTRL-R">CTRL-R</A>| to <A HREF="undo.html#redo">redo</A>, and you will go to &quot;one too&quot;.  One more |<A HREF="undo.html#CTRL-R">CTRL-R</A>|
+takes you to &quot;me too&quot;.  Thus <A HREF="undo.html#undo">undo</A> and <A HREF="undo.html#redo">redo</A> go up and down in the tree, using
+the branch that was last used.
+
+What matters here is the order in which the changes are made.  Undo and <A HREF="undo.html#redo">redo</A>
+are not considered changes in this context.  After each change you have a new
+state of the text.
+
+Note that only the changes are numbered, the text shown in the tree above has
+no identifier.  They are mostly referred to by the number of the change above
+<A HREF="motion.html#it">it</A>.  But sometimes by the number of one of the changes below <A HREF="motion.html#it">it</A>, especially
+when moving up in the tree, so that you know which change was just undone.
+
+==============================================================================
+
+*<A NAME="32.3"></A><B>32.3</B>*	Jumping around the tree
+
+So how <A HREF="diff.html#do">do</A> you get to &quot;one two&quot; now?  You can use this command:
+
+<B>	:undo 2</B>
+
+The text is now &quot;one two&quot;, you are below change 2.  You can use the |<A HREF="undo.html#:undo">:undo</A>|
+command to jump to below any change in the tree.
+
+Now make another change: change &quot;one&quot; to &quot;not&quot;:
+
+<B><FONT COLOR="PURPLE">		one </FONT></B>
+		 |
+	      change 1
+		 |
+<B><FONT COLOR="PURPLE">	      one too </FONT></B>
+	      /     \
+	 change 2  change 3
+	    &#124;	      |
+<B><FONT COLOR="PURPLE">	 one two    me too </FONT></B>
+	    |
+	 change 4
+	    |
+<B><FONT COLOR="PURPLE">	 not two </FONT></B>
+
+Now you change your mind and want to go back to &quot;me too&quot;.  Use the |<A HREF="undo.html#g-">g-</A>|
+command.  This moves back in time.  Thus <A HREF="motion.html#it">it</A> doesn't walk the tree upwards or
+downwards, but goes to the change made before.
+
+You can repeat |<A HREF="undo.html#g-">g-</A>| and you will see the text change:
+<B><FONT COLOR="PURPLE">	me too </FONT></B>
+<B><FONT COLOR="PURPLE">	one two </FONT></B>
+<B><FONT COLOR="PURPLE">	one too </FONT></B>
+<B><FONT COLOR="PURPLE">	one </FONT></B>
+
+Use |<A HREF="undo.html#g+">g+</A>| to move forward in time:
+<B><FONT COLOR="PURPLE">	one </FONT></B>
+<B><FONT COLOR="PURPLE">	one too </FONT></B>
+<B><FONT COLOR="PURPLE">	one two </FONT></B>
+<B><FONT COLOR="PURPLE">	me too </FONT></B>
+<B><FONT COLOR="PURPLE">	not two </FONT></B>
+
+Using |<A HREF="undo.html#:undo">:undo</A>| is useful if you know what change you want to jump to.  |<A HREF="undo.html#g-">g-</A>| and
+|<A HREF="undo.html#g+">g+</A>| are useful if you don't know exactly what the change number is.
+
+You can type a <A HREF="intro.html#count">count</A> before |<A HREF="undo.html#g-">g-</A>| and |<A HREF="undo.html#g+">g+</A>| to repeat them.
+
+==============================================================================
+
+*<A NAME="32.4"></A><B>32.4</B>*	Time travelling
+
+When you have been working on text for a while the tree grows to become big.
+Then you may want to go to the text of some minutes ago.
+
+To see what branches there are in the <A HREF="undo.html#undo">undo</A> tree use this command:
+
+<B>	:undolist</B>
+<B><FONT COLOR="PURPLE"> 	number changes  time </FONT></B>
+	     3       2  16 seconds ago
+	     4       3  5 seconds ago
+
+Here you can see the number of the leaves in each branch and when the change
+was made.  Assuming we are below change 4, at &quot;not two&quot;, you can go back ten
+seconds with this command:
+
+<B>	:earlier 10s</B>
+
+Depending on how much time you took for the changes you end up at a certain
+position in the tree.  The |<A HREF="undo.html#:earlier">:earlier</A>| command argument can be &quot;<A HREF="motion.html#m">m</A>&quot; for minutes,
+&quot;<A HREF="motion.html#h">h</A>&quot; for hours and &quot;<A HREF="change.html#d">d</A>&quot; for days.  To go all the way back use a big number:
+
+<B>	:earlier 100d</B>
+
+To travel forward in time again use the |<A HREF="undo.html#:later">:later</A>| command:
+
+<B>	:later 1m</B>
+
+The arguments are &quot;<A HREF="change.html#s">s</A>&quot;, &quot;<A HREF="motion.html#m">m</A>&quot; and &quot;<A HREF="motion.html#h">h</A>&quot;, just like with |<A HREF="undo.html#:earlier">:earlier</A>|.
+
+If you want even more details, or want to manipulate the information, you can
+use the |<A HREF="eval.html#undotree()">undotree()</A>| function.  To see what <A HREF="motion.html#it">it</A> returns:
+
+<B>	:echo undotree()</B>
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_40.html">usr_40.txt</A>|  Make new commands
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

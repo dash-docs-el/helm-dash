@@ -1,0 +1,506 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: usr_07</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: usr_07</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="usr_07.txt"></A><B>usr_07.txt</B>*	For Vim version 7.4.  Last change: 2006 Apr 24
+
+		     VIM USER MANUAL - by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+			  Editing more than one file
+
+
+No matter how many files you have, you can edit them without leaving Vim.
+Define a list of files to work on and jump from one to the other.  Copy text
+from one file and put <A HREF="motion.html#it">it</A> in another one.
+
+|<A HREF="#07.1">07.1</A>|	Edit another file
+|<A HREF="#07.2">07.2</A>|	A list of files
+|<A HREF="#07.3">07.3</A>|	Jumping from file to file
+|<A HREF="#07.4">07.4</A>|	Backup files
+|<A HREF="#07.5">07.5</A>|	Copy text between files
+|<A HREF="#07.6">07.6</A>|	Viewing a file
+|<A HREF="#07.7">07.7</A>|	Changing the file name
+
+     Next chapter: |<A HREF="usr_08.html">usr_08.txt</A>|  Splitting <A HREF="windows.html#windows">windows</A>
+ Previous chapter: |<A HREF="usr_06.html">usr_06.txt</A>|  Using <A HREF="syntax.html#syntax">syntax</A> highlighting
+Table of contents: |<A HREF="usr_toc.html">usr_toc.txt</A>|
+
+==============================================================================
+
+*<A NAME="07.1"></A><B>07.1</B>*	Edit another file
+
+So far you had to start Vim for every file you wanted to edit.  There is a
+simpler way.  To start editing another file, use this command:
+
+<B>	:edit foo.txt</B>
+
+You can use any file name instead of &quot;foo.txt&quot;.  Vim will close the current
+file and open the new one.  If the current file has unsaved changes, however,
+Vim displays an error message and does not open the new file:
+
+<B><FONT COLOR="PURPLE">	E37: No write since last change (use ! to override) </FONT></B>
+
+	Note:
+	Vim puts an error ID at the start of each error message.  If you <A HREF="diff.html#do">do</A>
+	not understand the message or what caused <A HREF="motion.html#it">it</A>, look in the help system
+	for this ID.  In this <A HREF="change.html#case">case</A>:
+
+<B>		:help E37</B>
+
+At this point, you have a number of alternatives.  You can write the file
+using this command:
+
+<B>	:write</B>
+
+Or you can force Vim to <A HREF="editing.html#discard">discard</A> your changes and edit the new file, using the
+force (!) character:
+
+<B>	:edit! foo.txt</B>
+
+If you want to edit another file, but not write the changes in the current
+file yet, you can make <A HREF="motion.html#it">it</A> hidden:
+
+<B>	:hide edit foo.txt</B>
+
+The text with changes is still there, but you can't see <A HREF="motion.html#it">it</A>.  This is further
+explained in section |22.4|: The buffer list.
+
+==============================================================================
+
+*<A NAME="07.2"></A><B>07.2</B>*	A list of files
+
+You can start Vim to edit a sequence of files.  For example:
+
+<B>	vim one.c two.c three.c</B>
+
+This command starts Vim and tells <A HREF="motion.html#it">it</A> that you will be editing three files.
+Vim displays just the first file.  After you have done your thing in this
+file, to edit the next file you use this command:
+
+<B>	:next</B>
+
+If you have unsaved changes in the current file, you will get an error
+message and the &quot;<A HREF="editing.html#:next">:next</A>&quot; will not work.  This is the same problem <A HREF="motion.html#as">as</A> with
+&quot;<A HREF="editing.html#:edit">:edit</A>&quot; mentioned in the previous section.  To <A HREF="editing.html#abandon">abandon</A> the changes:
+
+<B>	:next!</B>
+
+But mostly you want to save the changes and move on to the next file.  There
+is a special command for this:
+
+<B>	:wnext</B>
+
+This does the same <A HREF="motion.html#as">as</A> using two separate commands:
+
+<B>	:write</B>
+<B>	:next</B>
+
+
+WHERE AM I?
+
+To see which file in the argument list you are editing, look in the <A HREF="windows.html#window">window</A>
+title.  It should show something like &quot;(2 of 3)&quot;.  This means you are editing
+the second file out of three files.
+   If you want to see the list of files, use this command:
+
+<B>	:args</B>
+
+This is short for &quot;arguments&quot;.  The output might look like this:
+
+<B><FONT COLOR="PURPLE">	one.c [two.c] three.c </FONT></B>
+
+These are the files you started Vim with.  The one you are currently editing,
+&quot;two.c&quot;, is in square brackets.
+
+
+MOVING TO OTHER ARGUMENTS
+
+To go back one file:
+
+<B>	:previous</B>
+
+This is just like the &quot;<A HREF="editing.html#:next">:next</A>&quot; command, except that <A HREF="motion.html#it">it</A> moves in the other
+direction.  Again, there is a shortcut command for when you want to write the
+file first:
+
+<B>	:wprevious</B>
+
+To move to the very last file in the list:
+
+<B>	:last</B>
+
+And to move back to the first one again:
+
+<B>	:first</B>
+
+There is no &quot;:wlast&quot; or &quot;:wfirst&quot; command though!
+
+You can use a <A HREF="intro.html#count">count</A> for &quot;<A HREF="editing.html#:next">:next</A>&quot; and &quot;<A HREF="editing.html#:previous">:previous</A>&quot;.  To skip two files forward:
+
+<B>	:2next</B>
+
+
+AUTOMATIC WRITING
+
+When moving around the files and making changes, you have to remember to use
+&quot;<A HREF="editing.html#:write">:write</A>&quot;.  Otherwise you will get an error message.  If you are sure you
+always want to write modified files, you can tell Vim to automatically write
+them:
+
+<B>	:set autowrite</B>
+
+When you are editing a file which you may not want to write, switch <A HREF="motion.html#it">it</A> off
+again:
+
+<B>	:set noautowrite</B>
+
+
+EDITING ANOTHER LIST OF FILES
+
+You can redefine the list of files without the need to exit Vim and start <A HREF="motion.html#it">it</A>
+again.  Use this command to edit three other files:
+
+<B>	:args five.c six.c seven.h</B>
+
+Or use a <A HREF="editing.html#wildcard">wildcard</A>, like it's used in the shell:
+
+<B>	:args *.txt</B>
+
+Vim will take you to the first file in the list.  Again, if the current file
+has changes, you can either write the file first, or use &quot;:args!&quot; (with !
+added) to <A HREF="editing.html#abandon">abandon</A> the changes.
+
+
+DID YOU EDIT THE LAST FILE?
+
+							*<A NAME="arglist-quit"></A><B>arglist-quit</B>*
+When you use a list of files, Vim assumes you want to edit them all.  To
+protect you from exiting too early, you will get this error when you didn't
+edit the last file in the list yet:
+
+<B><FONT COLOR="PURPLE">	E173: 46 more files to edit </FONT></B>
+
+If you really want to exit, just <A HREF="diff.html#do">do</A> <A HREF="motion.html#it">it</A> again.  Then <A HREF="motion.html#it">it</A> will work (but not when
+you did other commands in between).
+
+==============================================================================
+
+*<A NAME="07.3"></A><B>07.3</B>*	Jumping from file to file
+
+To quickly jump between two files, press <A HREF="editing.html#CTRL-^">CTRL-^</A> (on English-US keyboards the ^
+is above the 6 key).  Example:
+
+<B>	:args one.c two.c three.c</B>
+
+You are now in one.c.
+
+<B>	:next</B>
+
+Now you are in two.c.  Now use <A HREF="editing.html#CTRL-^">CTRL-^</A> to go back to one.c.  Another <A HREF="editing.html#CTRL-^">CTRL-^</A> and
+you are back in two.c.  Another <A HREF="editing.html#CTRL-^">CTRL-^</A> and you are in one.c again.  If you now
+<A HREF="diff.html#do">do</A>:
+
+<B>	:next</B>
+
+You are in three.c.  Notice that the <A HREF="editing.html#CTRL-^">CTRL-^</A> command does not change the idea
+of where you are in the list of files.  Only commands like &quot;<A HREF="editing.html#:next">:next</A>&quot; and
+&quot;<A HREF="editing.html#:previous">:previous</A>&quot; <A HREF="diff.html#do">do</A> that.
+
+The file you were previously editing is called the &quot;alternate&quot; file.  When you
+just started Vim <A HREF="editing.html#CTRL-^">CTRL-^</A> will not work, since there isn't a previous file.
+
+
+PREDEFINED MARKS
+
+After jumping to another file, you can use two predefined marks which are very
+useful:
+
+<B>	`"</B>
+
+This takes you to the position where the cursor was when you left the file.
+Another <A HREF="motion.html#mark">mark</A> that is remembered is the position where you made the last
+change:
+
+<B>	`.</B>
+
+Suppose you are editing the file &quot;one.txt&quot;.  Somewhere halfway the file you
+use &quot;<A HREF="change.html#x">x</A>&quot; to delete a character.  Then you go to the last line with &quot;<A HREF="motion.html#G">G</A>&quot; and
+write the file with &quot;<A HREF="editing.html#:w">:w</A>&quot;.  You edit several other files, and then use &quot;<A HREF="editing.html#:edit">:edit</A>
+one.txt&quot; to come back to &quot;one.txt&quot;.  If you now use `&quot; Vim jumps to the last
+line of the file.  Using <A HREF="motion.html#`.">`.</A> takes you to the position where you deleted the
+character.  Even when you move around in the file `&quot; and <A HREF="motion.html#`.">`.</A> will take you to
+the remembered position.  At least until you make another change or leave the
+file.
+
+
+FILE MARKS
+
+In chapter 4 was explained how you can place a <A HREF="motion.html#mark">mark</A> in a file with &quot;mx&quot; and
+jump to that position with &quot;`x&quot;.  That works within one file.  If you edit
+another file and place marks there, these are specific for that file.  Thus
+each file has its own set of marks, they are local to the file.
+   So far we were using marks with a <A HREF="change.html#lowercase">lowercase</A> <A HREF="print.html#letter">letter</A>.  There are also marks
+with an <A HREF="change.html#uppercase">uppercase</A> <A HREF="print.html#letter">letter</A>.  These are global, they can be used from any file.
+For example suppose that we are editing the file &quot;foo.txt&quot;.  Go to halfway the
+file (&quot;50&#37;&quot;) and place the <A HREF="motion.html#F">F</A> <A HREF="motion.html#mark">mark</A> there (F for foo):
+
+<B>	50%mF</B>
+
+Now edit the file &quot;bar.txt&quot; and place the <A HREF="motion.html#B">B</A> <A HREF="motion.html#mark">mark</A> (B for <A HREF="motion.html#bar">bar</A>) at its last line:
+
+<B>	GmB</B>
+
+Now you can use the &quot;'F&quot; command to jump back to halfway foo.txt.  Or edit yet
+another file, type &quot;'B&quot; and you are at the end of bar.txt again.
+
+The file marks are remembered until they are placed somewhere else.  Thus you
+can place the <A HREF="motion.html#mark">mark</A>, <A HREF="diff.html#do">do</A> hours of editing and still be able to jump back to that
+<A HREF="motion.html#mark">mark</A>.
+   It's often useful to think of a simple connection between the <A HREF="motion.html#mark">mark</A> <A HREF="print.html#letter">letter</A>
+and where <A HREF="motion.html#it">it</A> is placed.  For example, use the <A HREF="motion.html#H">H</A> <A HREF="motion.html#mark">mark</A> in a header file, <A HREF="motion.html#M">M</A> in
+a Makefile and C in a C code file.
+
+To see where a specific <A HREF="motion.html#mark">mark</A> is, give an argument to the &quot;<A HREF="motion.html#:marks">:marks</A>&quot; command:
+
+<B>	:marks M</B>
+
+You can also give several arguments:
+
+<B>	:marks MCP</B>
+
+Don't forget that you can use <A HREF="motion.html#CTRL-O">CTRL-O</A> and <A HREF="motion.html#CTRL-I">CTRL-I</A> to jump to older and newer
+positions without placing marks there.
+
+==============================================================================
+
+*<A NAME="07.4"></A><B>07.4</B>*	Backup files
+
+Usually Vim does not produce a <A HREF="editing.html#backup">backup</A> file.  If you want to have one, all you
+need to <A HREF="diff.html#do">do</A> is execute the following command:
+
+<B>	:set backup</B>
+
+The name of the <A HREF="editing.html#backup">backup</A> file is the original file with a  ~  added to the end.
+If your file is named data.txt, for example, the <A HREF="editing.html#backup">backup</A> file name is
+data.txt~.
+   If you <A HREF="diff.html#do">do</A> not like the fact that the <A HREF="editing.html#backup">backup</A> files end with ~, you can
+change the extension:
+
+<B>	:set backupext=.bak</B>
+
+This will use data.txt.bak instead of data.txt~.
+   Another option that matters here is <A HREF="options.html#'backupdir'">'backupdir'</A>.  It specifies where the
+<A HREF="editing.html#backup">backup</A> file is written.  The default, to write the <A HREF="editing.html#backup">backup</A> in the same
+directory <A HREF="motion.html#as">as</A> the original file, will mostly be the right thing.
+
+	Note:
+	When the <A HREF="options.html#'backup'">'backup'</A> option isn't set but the <A HREF="options.html#'writebackup'">'writebackup'</A> is, Vim will
+	still create a <A HREF="editing.html#backup">backup</A> file.  However, <A HREF="motion.html#it">it</A> is deleted <A HREF="motion.html#as">as</A> soon <A HREF="motion.html#as">as</A> <A HREF="editing.html#writing">writing</A>
+	the file was completed successfully.  This <A HREF="eval.html#functions">functions</A> <A HREF="motion.html#as">as</A> a safety
+	against losing your original file when <A HREF="editing.html#writing">writing</A> fails in some way (disk
+	full is the most common cause; being hit by lightning might be
+	another, although <A HREF="various.html#less">less</A> common).
+
+
+KEEPING THE ORIGINAL FILE
+
+If you are editing source files, you might want to keep the file before you
+make any changes.  But the <A HREF="editing.html#backup">backup</A> file will be overwritten each time you write
+the file.  Thus <A HREF="motion.html#it">it</A> only contains the previous version, not the first one.
+   To make Vim keep the original file, set the <A HREF="options.html#'patchmode'">'patchmode'</A> option.  This
+specifies the extension used for the first <A HREF="editing.html#backup">backup</A> of a changed file.  Usually
+you would <A HREF="diff.html#do">do</A> this:
+
+<B>	:set patchmode=.orig</B>
+
+When you now edit the file data.txt for the first time, make changes and write
+the file, Vim will keep a copy of the unchanged file under the name
+&quot;data.txt.orig&quot;.
+   If you make further changes to the file, Vim will notice that
+&quot;data.txt.orig&quot; already exists and leave <A HREF="motion.html#it">it</A> alone.  Further <A HREF="editing.html#backup">backup</A> files will
+then be called &quot;data.txt~&quot; (or whatever you specified with <A HREF="options.html#'backupext'">'backupext'</A>).
+   If you leave <A HREF="options.html#'patchmode'">'patchmode'</A> empty (that is the default), the original file
+will not be kept.
+
+==============================================================================
+
+*<A NAME="07.5"></A><B>07.5</B>*	Copy text between files
+
+This explains how to copy text from one file to another.  Let's start with a
+simple example.  Edit the file that contains the text you want to copy.  Move
+the cursor to the start of the text and press &quot;<A HREF="visual.html#v">v</A>&quot;.  This starts <A HREF="visual.html#Visual">Visual</A> mode.
+Now move the cursor to the end of the text and press &quot;<A HREF="change.html#y">y</A>&quot;.  This yanks (copies)
+the selected text.
+   To copy the above <A HREF="motion.html#paragraph">paragraph</A>, you would <A HREF="diff.html#do">do</A>:
+
+<B>	:edit thisfile</B>
+<B>	/This</B>
+<B>	vjjjj$y</B>
+
+Now edit the file you want to put the text in.  Move the cursor to the
+character where you want the text to appear after.  Use &quot;<A HREF="change.html#p">p</A>&quot; to put the text
+there.
+<B>	:edit otherfile</B>
+<B>	/There</B>
+<B>	p</B>
+
+Of course you can use many other commands to <A HREF="change.html#yank">yank</A> the text.  For example, to
+select whole lines start <A HREF="visual.html#Visual">Visual</A> mode with &quot;<A HREF="visual.html#V">V</A>&quot;.  Or use <A HREF="visual.html#CTRL-V">CTRL-V</A> to select a
+rectangular block.  Or use &quot;<A HREF="change.html#Y">Y</A>&quot; to <A HREF="change.html#yank">yank</A> a single line, &quot;yaw&quot; to yank-a-word,
+etc.
+   The &quot;<A HREF="change.html#p">p</A>&quot; command puts the text after the cursor.  Use &quot;<A HREF="change.html#P">P</A>&quot; to put the text
+before the cursor.  Notice that Vim remembers if you yanked a whole line or a
+block, and puts <A HREF="motion.html#it">it</A> back that way.
+
+
+USING REGISTERS
+
+When you want to copy several pieces of text from one file to another, having
+to switch between the files and <A HREF="editing.html#writing">writing</A> the target file takes a lot of time.
+To avoid this, copy each piece of text to its own <A HREF="sponsor.html#register">register</A>.
+   A <A HREF="sponsor.html#register">register</A> is a place where Vim stores text.  Here we will use the
+<A HREF="change.html#registers">registers</A> named a to <A HREF="index.html#z">z</A> (later you will find out there are others).  Let's copy
+a <A HREF="motion.html#sentence">sentence</A> to the <A HREF="motion.html#f">f</A> <A HREF="sponsor.html#register">register</A> (f for First):
+
+<B>	"fyas</B>
+
+The &quot;yas&quot; command yanks a <A HREF="motion.html#sentence">sentence</A> like before.  It's the &quot;<A HREF="motion.html#f">f</A> that tells Vim
+the text should be place in the <A HREF="motion.html#f">f</A> <A HREF="sponsor.html#register">register</A>.  This must come just before the
+<A HREF="change.html#yank">yank</A> command.
+   Now <A HREF="change.html#yank">yank</A> three whole lines to the <A HREF="motion.html#l">l</A> <A HREF="sponsor.html#register">register</A> (l for line):
+
+<B>	"l3Y</B>
+
+The <A HREF="intro.html#count">count</A> could be before the &quot;<A HREF="motion.html#l">l</A> just <A HREF="motion.html#as">as</A> well.  To <A HREF="change.html#yank">yank</A> a block of text to the
+<A HREF="motion.html#b">b</A> (for block) <A HREF="sponsor.html#register">register</A>:
+
+<B>	CTRL-Vjjww"by</B>
+
+Notice that the <A HREF="sponsor.html#register">register</A> specification &quot;<A HREF="motion.html#b">b</A> is just before the &quot;<A HREF="change.html#y">y</A>&quot; command.
+This is required.  If you would have put <A HREF="motion.html#it">it</A> before the &quot;<A HREF="motion.html#w">w</A>&quot; command, <A HREF="motion.html#it">it</A> would
+not have worked.
+   Now you have three pieces of text in the <A HREF="motion.html#f">f</A>, <A HREF="motion.html#l">l</A> and <A HREF="motion.html#b">b</A> <A HREF="change.html#registers">registers</A>.  Edit
+another file, move around and place the text where you want <A HREF="motion.html#it">it</A>:
+
+<B>	"fp</B>
+
+Again, the <A HREF="sponsor.html#register">register</A> specification &quot;<A HREF="motion.html#f">f</A> comes before the &quot;<A HREF="change.html#p">p</A>&quot; command.
+   You can put the <A HREF="change.html#registers">registers</A> in any order.  And the text stays in the <A HREF="sponsor.html#register">register</A>
+until you <A HREF="change.html#yank">yank</A> something else into <A HREF="motion.html#it">it</A>.  Thus you can put <A HREF="motion.html#it">it</A> <A HREF="motion.html#as">as</A> many times <A HREF="motion.html#as">as</A>
+you like.
+
+When you delete text, you can also specify a <A HREF="sponsor.html#register">register</A>.  Use this to move
+several pieces of text around.  For example, to delete-a-word and write <A HREF="motion.html#it">it</A> in
+the <A HREF="motion.html#w">w</A> <A HREF="sponsor.html#register">register</A>:
+
+<B>	"wdaw</B>
+
+Again, the <A HREF="sponsor.html#register">register</A> specification comes before the delete command &quot;<A HREF="change.html#d">d</A>&quot;.
+
+
+APPENDING TO A FILE
+
+When collecting lines of text into one file, you can use this command:
+
+<B>	:write &gt;&gt; logfile</B>
+
+This will write the text of the current file to the end of &quot;logfile&quot;.  Thus <A HREF="motion.html#it">it</A>
+is appended.  This avoids that you have to copy the lines, edit the log file
+and put them there.  Thus you save two steps.  But you can only append to the
+end of a file.
+   To append only a few lines, select them in <A HREF="visual.html#Visual">Visual</A> mode before typing
+&quot;<A HREF="editing.html#:write">:write</A>&quot;.  In chapter 10 you will learn other ways to select a range of lines.
+
+==============================================================================
+
+*<A NAME="07.6"></A><B>07.6</B>*	Viewing a file
+
+Sometimes you only want to see what a file contains, without the intention to
+ever write <A HREF="motion.html#it">it</A> back.  There is the risk that you type &quot;<A HREF="editing.html#:w">:w</A>&quot; without thinking and
+overwrite the original file anyway.  To avoid this, edit the file read-only.
+   To start Vim in readonly mode, use this command:
+
+<B>	vim -R file</B>
+
+On <A HREF="os_unix.html#Unix">Unix</A> this command should <A HREF="diff.html#do">do</A> the same thing:
+
+<B>	view file</B>
+
+You are now editing &quot;file&quot; in read-only mode.  When you try using &quot;<A HREF="editing.html#:w">:w</A>&quot; you
+will get an error message and the file won't be written.
+   When you try to make a change to the file Vim will give you a warning:
+
+<B><FONT COLOR="PURPLE">	W10: Warning: Changing a readonly file </FONT></B>
+
+The change will be done though.  This allows for <A HREF="change.html#formatting">formatting</A> the file, for
+example, to be able to read <A HREF="motion.html#it">it</A> easily.
+   If you make changes to a file and forgot that <A HREF="motion.html#it">it</A> was read-only, you can
+still write <A HREF="motion.html#it">it</A>.  Add the ! to the write command to force <A HREF="editing.html#writing">writing</A>.
+
+If you really want to forbid making changes in a file, <A HREF="diff.html#do">do</A> this:
+
+<B>	vim -M file</B>
+
+Now every attempt to change the text will fail.  The help files are like this,
+for example.  If you try to make a change you get this error message:
+
+<B><FONT COLOR="PURPLE">	E21: Cannot make changes, 'modifiable' is off </FONT></B>
+
+You could use the <A HREF="starting.html#-M">-M</A> argument to setup Vim to work in a viewer mode.  This is
+only voluntary though, since these commands will remove the protection:
+
+<B>	:set modifiable</B>
+<B>	:set write</B>
+
+==============================================================================
+
+*<A NAME="07.7"></A><B>07.7</B>*	Changing the file name
+
+A clever way to start editing a new file is by using an existing file that
+contains most of what you need.  For example, you start <A HREF="editing.html#writing">writing</A> a new program
+to move a file.  You know that you already have a program that copies a file,
+thus you start with:
+
+<B>	:edit copy.c</B>
+
+You can delete the stuff you don't need.  Now you need to save the file under
+a new name.  The &quot;<A HREF="editing.html#:saveas">:saveas</A>&quot; command can be used for this:
+
+<B>	:saveas move.c</B>
+
+Vim will write the file under the given name, and edit that file.  Thus the
+next time you <A HREF="diff.html#do">do</A> &quot;<A HREF="editing.html#:write">:write</A>&quot;, <A HREF="motion.html#it">it</A> will write &quot;move.c&quot;.  &quot;copy.c&quot; remains
+unmodified.
+   When you want to change the name of the file you are editing, but don't
+want to write the file, you can use this command:
+
+<B>	:file move.c</B>
+
+Vim will <A HREF="motion.html#mark">mark</A> the file <A HREF="motion.html#as">as</A> &quot;not edited&quot;.  This means that Vim knows this is not
+the file you started editing.  When you try to write the file, you might get
+this message:
+
+<B><FONT COLOR="PURPLE">	E13: File exists (use ! to override) </FONT></B>
+
+This protects you from accidentally overwriting another file.
+
+==============================================================================
+
+Next chapter: |<A HREF="usr_08.html">usr_08.txt</A>|  Splitting <A HREF="windows.html#windows">windows</A>
+
+Copyright: see |<A HREF="usr_01.html#manual-copyright">manual-copyright</A>|  vim:tw=78:ts=8:ft=help:norl:
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>

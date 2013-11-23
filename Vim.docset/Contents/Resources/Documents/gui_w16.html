@@ -1,0 +1,217 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-type" content="text/html; charset=ISO-8859-1">
+<TITLE>Vim documentation: gui_w16</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim documentation: gui_w16</H1>
+<A NAME="top"></A>
+<A HREF="index.html">main help file</A>
+
+<HR>
+<PRE>
+
+*<A NAME="gui_w16.txt"></A><B>gui_w16.txt</B>*   For Vim version 7.4.  Last change: 2005 Mar 29
+
+
+		  VIM REFERENCE MANUAL    by <A HREF="intro.html#Bram">Bram</A> <A HREF="intro.html#Moolenaar">Moolenaar</A>
+
+
+
+Vim's Graphical <A HREF="autocmd.html#User">User</A> Interface				*<A NAME="gui-w16"></A><B>gui-w16</B>* *<A NAME="win16-gui"></A><B>win16-gui</B>*
+
+1. Starting the <A HREF="gui.html#GUI">GUI</A>		|<A HREF="#win16-start">win16-start</A>|
+2. Vim <A HREF="motion.html#as">as</A> default editor	|<A HREF="#win16-default-editor">win16-default-editor</A>|
+3. Using the clipboard		|<A HREF="#win16-clipboard">win16-clipboard</A>|
+4. Shell Commands		|<A HREF="#win16-shell">win16-shell</A>|
+5. Special colors		|<A HREF="#win16-colors">win16-colors</A>|
+6. Windows dialogs <A HREF="change.html#&amp;">&amp;</A> browsers	|<A HREF="#win16-dialogs">win16-dialogs</A>|
+7. Various			|<A HREF="#win16-various">win16-various</A>|
+
+Other relevant documentation:
+|<A HREF="gui.html">gui.txt</A>|	For generic items of the <A HREF="gui.html#GUI">GUI</A>.
+|<A HREF="os_msdos.html">os_msdos.txt</A>|	For items common to <A HREF="os_dos.html#DOS">DOS</A> and Windows.
+|<A HREF="gui_w32.html">gui_w32.txt</A>|	Some items here are also applicable to the Win16 version.
+
+{Vi does not have a Windows GUI}
+
+The Win16 version of Vim will run on Windows 3.1 or later.  It has not been
+tested on 3.0, <A HREF="motion.html#it">it</A> probably won't work without being recompiled and
+modified.  (But you really should upgrade to 3.11 anyway. :)
+
+In most respects <A HREF="motion.html#it">it</A> behaves identically to the <A HREF="os_win32.html#Win32">Win32</A> <A HREF="gui.html#GUI">GUI</A> version, including
+having a flat-style toolbar(!).  The chief differences:
+
+1) Bold/Italic text is not available, to speed up repaint/reduce resource
+   usage.  (You can re-instate this by undefining MSWIN16_FASTTEXT.)
+2) No tearoff menu emulation.
+3) No OLE interface.
+4) No long filename support (of course).
+5) No tooltips on toolbar buttons - instead they produce command-line <A HREF="tips.html#tips">tips</A>
+   like menu items <A HREF="diff.html#do">do</A>.
+6) Line length limited to 32767 characters (like 16-bit <A HREF="os_dos.html#DOS">DOS</A> version).
+
+
+==============================================================================
+
+1. Starting the <A HREF="gui.html#GUI">GUI</A>					*<A NAME="win16-start"></A><B>win16-start</B>*
+
+The Win16 <A HREF="gui.html#GUI">GUI</A> version of Vim will always start the <A HREF="gui.html#GUI">GUI</A>, no matter how you
+start <A HREF="motion.html#it">it</A> or what it's called.  There is no 'console' version <A HREF="motion.html#as">as</A> such, but you
+can use one of the <A HREF="os_dos.html#DOS">DOS</A> versions in a <A HREF="os_dos.html#DOS">DOS</A> box.
+
+The Win16 <A HREF="gui.html#GUI">GUI</A> has an extra menu item:  &quot;Window/Select Font&quot;.  It brings up the
+standard Windows font selector.  Note that <A HREF="syntax.html#bold">bold</A> and <A HREF="syntax.html#italic">italic</A> fonts are not
+supported in an attempt to maximize GDI drawing speed.
+
+Setting the menu height doesn't work for the Win16 <A HREF="gui.html#GUI">GUI</A>.
+
+
+							*<A NAME="win16-maximized"></A><B>win16-maximized</B>*
+If you want Vim to start with a maximized <A HREF="windows.html#window">window</A>, add this command to your
+<A HREF="starting.html#vimrc">vimrc</A> or <A HREF="gui.html#gvimrc">gvimrc</A> file:
+<B>	au GUIEnter * simalt ~x</B>
+ 
+
+There is a specific version of gvim.exe that runs under the Win32s subsystem
+of Windows 3.1 or 3.11.  See |<A HREF="os_win32.html#win32s">win32s</A>|.
+
+==============================================================================
+
+2. Vim <A HREF="motion.html#as">as</A> default editor				*<A NAME="win16-default-editor"></A><B>win16-default-editor</B>*
+
+To set Vim <A HREF="motion.html#as">as</A> the default editor for a file type you can use File Manager's
+&quot;Associate&quot; feature.
+
+When you open a file in Vim by double clicking <A HREF="motion.html#it">it</A>, Vim changes to that
+file's directory.
+
+See also |<A HREF="gui_w32.html#notepad">notepad</A>|.
+
+==============================================================================
+
+3. Using the <A HREF="gui.html#clipboard">clipboard</A>					*<A NAME="win16-clipboard"></A><B>win16-clipboard</B>*
+
+Windows has a <A HREF="gui.html#clipboard">clipboard</A>, where you can copy text to, and paste text from.  Vim
+supports this in several ways.
+The clipboard works in the same way <A HREF="motion.html#as">as</A> the <A HREF="os_win32.html#Win32">Win32</A> version: see |<A HREF="gui_w32.html#gui-clipboard">gui-clipboard</A>|.
+
+==============================================================================
+
+4. Shell Commands					*<A NAME="win16-shell"></A><B>win16-shell</B>*
+
+Vim spawns a <A HREF="os_dos.html#DOS">DOS</A> <A HREF="windows.html#window">window</A> for external commands, to make <A HREF="motion.html#it">it</A> possible to run any
+<A HREF="os_dos.html#DOS">DOS</A> command.  The <A HREF="windows.html#window">window</A> uses the _default.pif settings.
+
+
+							*<A NAME="win16-!start"></A><B>win16-!start</B>*
+Normally, Vim waits for a command to complete before continuing (this makes
+sense for most shell commands which produce output for Vim to use).  If you
+want Vim to start a program and return immediately, you can use the following
+<A HREF="syntax.html#syntax">syntax</A>:
+	<A HREF="os_win32.html#:!start">:!start</A> {command}
+This may only work for a Windows program though.
+Don't forget that you must tell Windows 3.1x to keep executing a <A HREF="os_dos.html#DOS">DOS</A> command
+in the background while you switch back to Vim.
+
+==============================================================================
+
+5. Special colors					*<A NAME="win16-colors"></A><B>win16-colors</B>*
+
+On Win16, the normal <A HREF="os_dos.html#DOS">DOS</A> colors can be used.  See |<A HREF="os_dos.html#dos-colors">dos-colors</A>|.
+
+Additionally the system configured colors can also be used.  These are known
+by the names Sys_XXX, where XXX is the appropriate system color name, from the
+following list (see the <A HREF="os_win32.html#Win32">Win32</A> documentation for full descriptions).  Case is
+ignored.
+
+Sys_BTNFace		Sys_BTNShadow			Sys_ActiveBorder
+Sys_ActiveCaption	Sys_AppWorkspace		Sys_Background
+Sys_BTNText		Sys_CaptionText			Sys_GrayText
+Sys_Highlight		Sys_HighlightText		Sys_InactiveBorder
+Sys_InactiveCaption	Sys_InactiveCaptionText		Sys_Menu
+Sys_MenuText		Sys_ScrollBar			Sys_Window
+Sys_WindowFrame		Sys_WindowText
+
+Probably the most useful values are
+	Sys_Window	    <A HREF="intro.html#Normal">Normal</A> <A HREF="windows.html#window">window</A> background
+	Sys_WindowText      <A HREF="intro.html#Normal">Normal</A> <A HREF="windows.html#window">window</A> text
+	Sys_Highlight       Highlighted background
+	Sys_HighlightText   Highlighted text
+
+These extra colors are also available:
+Gray, Grey, LightYellow, SeaGreen, Orange, Purple, SlateBlue, Violet,
+
+
+See also |<A HREF="rgb.html">rgb.txt</A>|.
+
+==============================================================================
+
+						*<A NAME="win16-dialogs"></A><B>win16-dialogs</B>*
+6. Windows dialogs <A HREF="change.html#&amp;">&amp;</A> browsers
+
+The Win16 <A HREF="gui.html#GUI">GUI</A> can use familiar Windows components for some operations, <A HREF="motion.html#as">as</A> well
+<A HREF="motion.html#as">as</A> the traditional interface shared with the console version.
+
+
+6.1 Dialogs
+
+The dialogs displayed by the &quot;confirm&quot; family (i.e. the <A HREF="options.html#'confirm'">'confirm'</A> option,
+|<A HREF="editing.html#:confirm">:confirm</A>| command and |<A HREF="eval.html#confirm()">confirm()</A>| function) are GUI-based rather than the
+console-based ones used by other versions.  There is no option to change this.
+
+
+6.2 File Browsers
+
+When prepending &quot;<A HREF="editing.html#:browse">:browse</A>&quot; before file editing commands, a file requester is
+used to allow you to select an existing file.  See |<A HREF="editing.html#:browse">:browse</A>|.
+
+
+==============================================================================
+
+7. Various						*<A NAME="win16-various"></A><B>win16-various</B>*
+
+
+							*<A NAME="win16-printing"></A><B>win16-printing</B>*
+The &quot;File/Print&quot; menu uses Notepad to print the current buffer.  This is a bit
+clumsy, but it's portable.  If you want something else, you can define your
+own print command.  For example, you could look for the 16-bit version of
+PrintFile.  See $VIMRUNTIME/menu.vim for how <A HREF="motion.html#it">it</A> works by default.
+
+Using this should also work:
+<B>	:w &gt;&gt;prn</B>
+
+Vim supports a number of standard MS Windows features.  Some of these are
+detailed elsewhere: see |<A HREF="options.html#'mouse'">'mouse'</A>|, |<A HREF="gui.html#win32-hidden-menus">win32-hidden-menus</A>|.
+Also see |<A HREF="gui_w32.html#:simalt">:simalt</A>|
+
+
+							*<A NAME="win16-drag-n-drop"></A><B>win16-drag-n-drop</B>*
+You can drag and drop one or more files into the vim <A HREF="windows.html#window">window</A>, where they will
+be opened <A HREF="motion.html#as">as</A> normal.  If you hold down Shift while doing this, Vim changes to
+the (first) dropped file's directory.  If you hold Ctrl, Vim will always split
+a new <A HREF="windows.html#window">window</A> for the file.  Otherwise it's only done if the current buffer has
+been changed.
+You can also drop a directory's icon, but rather than open all files in the
+directory (which wouldn't usually be what you want) Vim instead changes to
+that directory and begins a new file.
+If Vim happens to be editing a command line, the names of the dropped files
+and directories will be inserted at the cursor.  This allows you to use these
+names with any <A HREF="intro.html#Ex">Ex</A> command.
+
+
+							*<A NAME="win16-truetype"></A><B>win16-truetype</B>*
+It is recommended that you use a raster font and not a TrueType
+fixed-pitch font.  E.g. use Courier, not Courier New.  This is not just
+to use <A HREF="various.html#less">less</A> resources but because there are subtle bugs in the
+handling of fixed-pitch TrueType in Win3.1x.  In particular, when you move
+a block cursor over a pipe character '&#124;', the cursor is drawn in the wrong
+size and bits get left behind.  This is a bug in the Win3.1x GDI, <A HREF="motion.html#it">it</A> doesn't
+happen if you run the exe under 95/NT.
+
+<A HREF="#top">top</A> - <A HREF="index.html">main help file</A>
+</PRE>
+</BODY>
+
+
+</HTML>
