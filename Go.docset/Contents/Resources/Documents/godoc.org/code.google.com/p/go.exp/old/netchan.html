@@ -1,0 +1,376 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.exp/old/netchan by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:41 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>netchan</title>
+  
+    <meta name="twitter:title" content="Package netchan">
+    <meta property="og:title" content="Package netchan">
+    <meta name="description" content="Package netchan implements type-safe networked channels: it allows the two ends of a channel to appear on different computers connected by a network.">
+    <meta name="twitter:description" content="Package netchan implements type-safe networked channels: it allows the two ends of a channel to appear on different computers connected by a network.">
+    <meta property="og:description" content="Package netchan implements type-safe networked channels: it allows the two ends of a channel to appear on different computers connected by a network.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=exp"><strong>go.exp:</strong></a>
+  <a href="../index.html">code.google.com/p/go.exp</a><span class="text-muted">/</span><a href="index.html">old</a><span class="text-muted">/</span><span class="text-muted">netchan</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package netchan</h2>
+    <p><code>import "code.google.com/p/go.exp/old/netchan"</code>
+    </p><p>
+Package netchan implements type-safe networked channels:
+it allows the two ends of a channel to appear on different
+computers connected by a network.  It does this by transporting
+data sent to a channel on one machine so it can be recovered
+by a receive of a channel of the same type on the other.
+</p>
+<p>
+An exporter publishes a set of channels by name.  An importer
+connects to the exporting machine and imports the channels
+by name. After importing the channels, the two machines can
+use the channels in the usual way.
+</p>
+<p>
+Networked channels are not synchronized; they always behave
+as if they are buffered channels of at least one element.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    
+    
+    
+      <li><a href="#Dir">type Dir</a>
+        <ul>
+        
+        <li><a href="#Dir.String">func (dir Dir) String() string</a>
+        </li></ul>
+    
+      </li><li><a href="#Exporter">type Exporter</a>
+        <ul>
+        <li><a href="#NewExporter">func NewExporter() *Exporter</a>
+        </li><li><a href="#Exporter.Drain">func (exp *Exporter) Drain(timeout time.Duration) error</a></li><li><a href="#Exporter.Export">func (exp *Exporter) Export(name string, chT interface{}, dir Dir) error</a></li><li><a href="#Exporter.Hangup">func (exp *Exporter) Hangup(name string) error</a></li><li><a href="#Exporter.ListenAndServe">func (exp *Exporter) ListenAndServe(network, localaddr string) error</a></li><li><a href="#Exporter.Serve">func (exp *Exporter) Serve(listener net.Listener)</a></li><li><a href="#Exporter.ServeConn">func (exp *Exporter) ServeConn(conn io.ReadWriter)</a></li><li><a href="#Exporter.Sync">func (exp *Exporter) Sync(timeout time.Duration) error</a>
+        </li></ul>
+    
+      </li><li><a href="#Importer">type Importer</a>
+        <ul>
+        <li><a href="#Import">func Import(network, remoteaddr string) (*Importer, error)</a></li><li><a href="#NewImporter">func NewImporter(conn io.ReadWriter) *Importer</a>
+        </li><li><a href="#Importer.Drain">func (imp *Importer) Drain(timeout int64) error</a></li><li><a href="#Importer.Errors">func (imp *Importer) Errors() chan error</a></li><li><a href="#Importer.Hangup">func (imp *Importer) Hangup(name string) error</a></li><li><a href="#Importer.Import">func (imp *Importer) Import(name string, chT interface{}, dir Dir, size int) error</a></li><li><a href="#Importer.ImportNValues">func (imp *Importer) ImportNValues(name string, chT interface{}, dir Dir, size, n int) error</a>
+        </li></ul>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/old/netchan/?repo=exp">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/old/netchan/common.go?repo=exp">common.go</a> <a href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp">export.go</a> <a href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp">import.go</a> </p>
+
+    
+
+    
+
+    
+
+   <h3 id="Dir">type <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/common.go?repo=exp#17">Dir</a> <a class="permalink" href="#Dir">¶</a></h3>
+      <pre>type Dir <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+The direction of a connection from the client's perspective.
+</p>
+
+      <pre>const (
+    <span id="Recv">Recv</span> <a href="#Dir">Dir</a> = <a href="http://godoc.org/builtin/#iota">iota</a>
+    <span id="Send">Send</span>
+)</pre>
+      
+      
+
+        
+
+        <h4 id="Dir.String">func (Dir) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/common.go?repo=exp#24">String</a> <a class="permalink" href="#Dir.String">¶</a></h4>
+        <pre class="funcdecl">func (dir <a href="#Dir">Dir</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre>
+        
+        
+
+    <h3 id="Exporter">type <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#46">Exporter</a> <a class="permalink" href="#Exporter">¶</a></h3>
+      <pre>type Exporter struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+An Exporter allows a set of channels to be published on a single
+network port.  A single machine may have multiple Exporters
+but they must use different ports.
+</p>
+
+      
+      
+      
+
+        <h4 id="NewExporter">func <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#285">NewExporter</a> <a class="permalink" href="#NewExporter">¶</a></h4>
+        <pre class="funcdecl">func NewExporter() *<a href="#Exporter">Exporter</a></pre><p>
+NewExporter creates a new Exporter that exports a set of channels.
+</p>
+
+        
+        
+
+        <h4 id="Exporter.Drain">func (*Exporter) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#328">Drain</a> <a class="permalink" href="#Exporter.Drain">¶</a></h4>
+        <pre class="funcdecl">func (exp *<a href="#Exporter">Exporter</a>) Drain(timeout <a href="http://godoc.org/time/#Duration">time.Duration</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Drain waits until all messages sent from this exporter/importer, including
+those not yet sent to any client and possibly including those sent while
+Drain was executing, have been received by the importer.  In short, it
+waits until all the exporter's messages have been received by a client.
+If the timeout is positive and Drain takes longer than that to complete,
+an error is returned.
+</p>
+
+        
+        <h4 id="Exporter.Export">func (*Exporter) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#370">Export</a> <a class="permalink" href="#Exporter.Export">¶</a></h4>
+        <pre class="funcdecl">func (exp *<a href="#Exporter">Exporter</a>) Export(name <a href="http://godoc.org/builtin/#string">string</a>, chT interface{}, dir <a href="#Dir">Dir</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Export exports a channel of a given type and specified direction.  The
+channel to be exported is provided in the call and may be of arbitrary
+channel type.
+Despite the literal signature, the effective signature is
+</p>
+<pre>Export(name string, chT chan T, dir Dir)
+</pre>
+
+        
+        <h4 id="Exporter.Hangup">func (*Exporter) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#387">Hangup</a> <a class="permalink" href="#Exporter.Hangup">¶</a></h4>
+        <pre class="funcdecl">func (exp *<a href="#Exporter">Exporter</a>) Hangup(name <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Hangup disassociates the named channel from the Exporter and closes
+the channel.  Messages in flight for the channel may be dropped.
+</p>
+
+        
+        <h4 id="Exporter.ListenAndServe">func (*Exporter) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#297">ListenAndServe</a> <a class="permalink" href="#Exporter.ListenAndServe">¶</a></h4>
+        <pre class="funcdecl">func (exp *<a href="#Exporter">Exporter</a>) ListenAndServe(network, localaddr <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+ListenAndServe exports the exporter's channels through the
+given network and local address defined as in net.Listen.
+</p>
+
+        
+        <h4 id="Exporter.Serve">func (*Exporter) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#267">Serve</a> <a class="permalink" href="#Exporter.Serve">¶</a></h4>
+        <pre class="funcdecl">func (exp *<a href="#Exporter">Exporter</a>) Serve(listener <a href="http://godoc.org/net/#Listener">net.Listener</a>)</pre><p>
+Serve waits for incoming connections on the listener
+and serves the Exporter's channels on each.
+It blocks until the listener is closed.
+</p>
+
+        
+        <h4 id="Exporter.ServeConn">func (*Exporter) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#280">ServeConn</a> <a class="permalink" href="#Exporter.ServeConn">¶</a></h4>
+        <pre class="funcdecl">func (exp *<a href="#Exporter">Exporter</a>) ServeConn(conn <a href="http://godoc.org/io/#ReadWriter">io.ReadWriter</a>)</pre><p>
+ServeConn exports the Exporter's channels on conn.
+It blocks until the connection is terminated.
+</p>
+
+        
+        <h4 id="Exporter.Sync">func (*Exporter) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/export.go?repo=exp#338">Sync</a> <a class="permalink" href="#Exporter.Sync">¶</a></h4>
+        <pre class="funcdecl">func (exp *<a href="#Exporter">Exporter</a>) Sync(timeout <a href="http://godoc.org/time/#Duration">time.Duration</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Sync waits until all clients of the exporter have received the messages
+that were sent at the time Sync was invoked.  Unlike Drain, it does not
+wait for messages sent while it is running or messages that have not been
+dispatched to any client.  If the timeout is positive and Sync takes longer
+than that to complete, an error is returned.
+</p>
+
+        
+        
+
+    <h3 id="Importer">type <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp#28">Importer</a> <a class="permalink" href="#Importer">¶</a></h3>
+      <pre>type Importer struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+An Importer allows a set of channels to be imported from a single
+remote machine/network port.  A machine may have multiple
+importers, even from the same machine/network port.
+</p>
+
+      
+      
+      
+
+        <h4 id="Import">func <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp#55">Import</a> <a class="permalink" href="#Import">¶</a></h4>
+        <pre class="funcdecl">func Import(network, remoteaddr <a href="http://godoc.org/builtin/#string">string</a>) (*<a href="#Importer">Importer</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Import imports a set of channels from the given network and address.
+</p>
+
+        
+        <h4 id="NewImporter">func <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp#43">NewImporter</a> <a class="permalink" href="#NewImporter">¶</a></h4>
+        <pre class="funcdecl">func NewImporter(conn <a href="http://godoc.org/io/#ReadWriter">io.ReadWriter</a>) *<a href="#Importer">Importer</a></pre><p>
+NewImporter creates a new Importer object to import a set of channels
+from the given connection. The Exporter must be available and serving when
+the Importer is created.
+</p>
+
+        
+        
+
+        <h4 id="Importer.Drain">func (*Importer) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp#278">Drain</a> <a class="permalink" href="#Importer.Drain">¶</a></h4>
+        <pre class="funcdecl">func (imp *<a href="#Importer">Importer</a>) Drain(timeout <a href="http://godoc.org/builtin/#int64">int64</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Drain waits until all messages sent from this exporter/importer, including
+those not yet sent to any server and possibly including those sent while
+Drain was executing, have been received by the exporter.  In short, it
+waits until all the importer's messages have been received.
+If the timeout (measured in nanoseconds) is positive and Drain takes
+longer than that to complete, an error is returned.
+</p>
+
+        
+        <h4 id="Importer.Errors">func (*Importer) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp#172">Errors</a> <a class="permalink" href="#Importer.Errors">¶</a></h4>
+        <pre class="funcdecl">func (imp *<a href="#Importer">Importer</a>) Errors() chan <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Errors returns a channel from which transmission and protocol errors
+can be read. Clients of the importer are not required to read the error
+channel for correct execution. However, if too many errors occur
+without being read from the error channel, the importer will shut down.
+</p>
+
+        
+        <h4 id="Importer.Hangup">func (*Importer) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp#252">Hangup</a> <a class="permalink" href="#Importer.Hangup">¶</a></h4>
+        <pre class="funcdecl">func (imp *<a href="#Importer">Importer</a>) Hangup(name <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Hangup disassociates the named channel from the Importer and closes
+the channel.  Messages in flight for the channel may be dropped.
+</p>
+
+        
+        <h4 id="Importer.Import">func (*Importer) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp#178">Import</a> <a class="permalink" href="#Importer.Import">¶</a></h4>
+        <pre class="funcdecl">func (imp *<a href="#Importer">Importer</a>) Import(name <a href="http://godoc.org/builtin/#string">string</a>, chT interface{}, dir <a href="#Dir">Dir</a>, size <a href="http://godoc.org/builtin/#int">int</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Import imports a channel of the given type, size and specified direction.
+It is equivalent to ImportNValues with a count of -1, meaning unbounded.
+</p>
+
+        
+        <h4 id="Importer.ImportNValues">func (*Importer) <a title="View Source" href="http://code.google.com/p/go/source/browse/old/netchan/import.go?repo=exp#197">ImportNValues</a> <a class="permalink" href="#Importer.ImportNValues">¶</a></h4>
+        <pre class="funcdecl">func (imp *<a href="#Importer">Importer</a>) ImportNValues(name <a href="http://godoc.org/builtin/#string">string</a>, chT interface{}, dir <a href="#Dir">Dir</a>, size, n <a href="http://godoc.org/builtin/#int">int</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+ImportNValues imports a channel of the given type and specified
+direction and then receives or transmits up to n values on that
+channel.  A value of n==-1 implies an unbounded number of values.  The
+channel will have buffer space for size values, or 1 value if size &lt; 1.
+The channel to be bound to the remote site's channel is provided
+in the call and may be of arbitrary channel type.
+Despite the literal signature, the effective signature is
+</p>
+<pre>ImportNValues(name string, chT chan T, dir Dir, size, n int) error
+</pre>
+<p>
+Example usage:
+</p>
+<pre>imp, err := NewImporter("tcp", "netchanserver.mydomain.com:1234")
+if err != nil { log.Fatal(err) }
+ch := make(chan myType)
+err = imp.ImportNValues("name", ch, Recv, 1, 1)
+if err != nil { log.Fatal(err) }
+fmt.Printf("%+v\n", &lt;-ch)
+</pre>
+
+        
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.exp/old/netchan"></form>
+  <p>Package netchan imports <a href="netchana687.html?imports">9 packages</a> (<a href="netchan75f0.html?import-graph">graph</a>).
+  Updated <span class="timeago" title="2013-09-11T12:48:59Z">2013-09-11</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.exp/old/netchan by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:42 GMT -->
+
+</body>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/testing/quick/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:48 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>quick</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package quick</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "testing/quick"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package quick implements utility functions to help with black box testing.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Check">func Check(function interface{}, config *Config) (err error)</a></dd>
+			
+				
+				<dd><a href="#CheckEqual">func CheckEqual(f, g interface{}, config *Config) (err error)</a></dd>
+			
+				
+				<dd><a href="#Value">func Value(t reflect.Type, rand *rand.Rand) (value reflect.Value, ok bool)</a></dd>
+			
+			
+				
+				<dd><a href="#CheckEqualError">type CheckEqualError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CheckEqualError.Error">func (s *CheckEqualError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#CheckError">type CheckError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CheckError.Error">func (s *CheckError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Config">type Config</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Generator">type Generator</a></dd>
+				
+				
+			
+				
+				<dd><a href="#SetupError">type SetupError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SetupError.Error">func (s SetupError) Error() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/testing/quick/quick.go">quick.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="Check">func <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=6848:6908#L220">Check</a></h2>
+			<pre>func Check(function interface{}, config *<a href="#Config">Config</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+Check looks for an input to f, any function that returns bool,
+such that f returns false.  It calls f repeatedly, with arbitrary
+values for each argument.  If f returns false on a given input,
+Check returns that input as a *CheckError.
+For example:
+</p>
+<pre>func TestOddMultipleOfThree(t *testing.T) {
+	f := func(x int) bool {
+		y := OddMultipleOfThree(x)
+		return y%2 == 1 &amp;&amp; y%3 == 0
+	}
+	if err := quick.Check(f, nil); err != nil {
+		t.Error(err)
+	}
+}
+</pre>
+
+			
+		
+			
+			
+			<h2 id="CheckEqual">func <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=7902:7963#L263">CheckEqual</a></h2>
+			<pre>func CheckEqual(f, g interface{}, config *<a href="#Config">Config</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+CheckEqual looks for an input on which f and g return different results.
+It calls f and g repeatedly with arbitrary values for each argument.
+If f and g return different answers, CheckEqual returns a *CheckEqualError
+describing the input and the outputs.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Value">func <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=1550:1624#L44">Value</a></h2>
+			<pre>func Value(t <a href="../../reflect/index.html">reflect</a>.<a href="../../reflect/index.html#Type">Type</a>, rand *<a href="../../math/rand/index.html">rand</a>.<a href="../../math/rand/index.html#Rand">Rand</a>) (value <a href="../../reflect/index.html">reflect</a>.<a href="../../reflect/index.html#Value">Value</a>, ok <a href="../../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+Value returns an arbitrary value of the given type.
+If the type implements the Generator interface, that will be used.
+Note: To create arbitrary values for structs, all the fields must be exported.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="CheckEqualError">type <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=6082:6165#L195">CheckEqualError</a></h2>
+			<pre>type CheckEqualError struct {
+        <a href="#CheckError">CheckError</a>
+        Out1 []interface{}
+        Out2 []interface{}
+}</pre>
+			<p>
+A CheckEqualError is the result CheckEqual finding an error.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CheckEqualError.Error">func (*CheckEqualError) <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=6167:6207#L201">Error</a></h3>
+				<pre>func (s *<a href="#CheckEqualError">CheckEqualError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="CheckError">type <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=5845:5903#L185">CheckError</a></h2>
+			<pre>type CheckError struct {
+        Count <a href="../../builtin/index.html#int">int</a>
+        In    []interface{}
+}</pre>
+			<p>
+A CheckError is the result of Check finding an error.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CheckError.Error">func (*CheckError) <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=5905:5940#L190">Error</a></h3>
+				<pre>func (s *<a href="#CheckError">CheckError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Config">type <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=4380:5046#L136">Config</a></h2>
+			<pre>type Config struct {
+        <span class="comment">// MaxCount sets the maximum number of iterations. If zero,</span>
+        <span class="comment">// MaxCountScale is used.</span>
+        MaxCount <a href="../../builtin/index.html#int">int</a>
+        <span class="comment">// MaxCountScale is a non-negative scale factor applied to the default</span>
+        <span class="comment">// maximum. If zero, the default is unchanged.</span>
+        MaxCountScale <a href="../../builtin/index.html#float64">float64</a>
+        <span class="comment">// If non-nil, rand is a source of random numbers. Otherwise a default</span>
+        <span class="comment">// pseudo-random source will be used.</span>
+        Rand *<a href="../../math/rand/index.html">rand</a>.<a href="../../math/rand/index.html#Rand">Rand</a>
+        <span class="comment">// If non-nil, the Values function generates a slice of arbitrary</span>
+        <span class="comment">// reflect.Values that are congruent with the arguments to the function</span>
+        <span class="comment">// being tested. Otherwise, the top-level Values function is used</span>
+        <span class="comment">// to generate them.</span>
+        Values func([]<a href="../../reflect/index.html">reflect</a>.<a href="../../reflect/index.html#Value">Value</a>, *<a href="../../math/rand/index.html">rand</a>.<a href="../../math/rand/index.html#Rand">Rand</a>)
+}</pre>
+			<p>
+A Config structure contains options for running a test.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Generator">type <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=490:679#L10">Generator</a></h2>
+			<pre>type Generator interface {
+        <span class="comment">// Generate returns a random instance of the type on which it is a</span>
+        <span class="comment">// method using the size as a size hint.</span>
+        Generate(rand *<a href="../../math/rand/index.html">rand</a>.<a href="../../math/rand/index.html#Rand">Rand</a>, size <a href="../../builtin/index.html#int">int</a>) <a href="../../reflect/index.html">reflect</a>.<a href="../../reflect/index.html#Value">Value</a>
+}</pre>
+			<p>
+A Generator can generate random values of its own type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="SetupError">type <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=5707:5729#L180">SetupError</a></h2>
+			<pre>type SetupError <a href="../../builtin/index.html#string">string</a></pre>
+			<p>
+A SetupError is the result of an error in the way that check is being
+used, independent of the functions being tested.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="SetupError.Error">func (SetupError) <a href="http://golang.org/src/pkg/testing/quick/quick.go?s=5731:5765#L182">Error</a></h3>
+				<pre>func (s <a href="#SetupError">SetupError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=137&id=1380993866965953', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/testing/quick/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:48 GMT -->
+</html>
+

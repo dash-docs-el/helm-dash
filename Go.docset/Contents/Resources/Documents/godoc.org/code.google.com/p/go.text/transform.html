@@ -1,0 +1,293 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/transform by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:33 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>transform</title>
+  
+    <meta name="twitter:title" content="Package transform">
+    <meta property="og:title" content="Package transform">
+    <meta name="description" content="Package transform provides reader and writer wrappers that transform the bytes passing through.">
+    <meta name="twitter:description" content="Package transform provides reader and writer wrappers that transform the bytes passing through.">
+    <meta property="og:description" content="Package transform provides reader and writer wrappers that transform the bytes passing through.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=text"><strong>go.text:</strong></a>
+  <a href="index.html">code.google.com/p/go.text</a><span class="text-muted">/</span><span class="text-muted">transform</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package transform</h2>
+    <p><code>import "code.google.com/p/go.text/transform"</code>
+    </p><p>
+Package transform provides reader and writer wrappers that transform the
+bytes passing through. Example transformations, provided by other packages,
+include text collation, normalization and conversion between character sets.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    <li><a href="#pkg-variables">Variables</a>
+    
+    
+      </li><li><a href="#Reader">type Reader</a>
+        <ul>
+        <li><a href="#NewReader">func NewReader(r io.Reader, t Transformer) *Reader</a>
+        </li><li><a href="#Reader.Read">func (r *Reader) Read(p []byte) (int, error)</a>
+        </li></ul>
+    
+      </li><li><a href="#Transformer">type Transformer</a>
+        <ul>
+        <li><a href="#Chain">func Chain(t ...Transformer) Transformer</a>
+        
+        </li></ul>
+    
+      </li><li><a href="#Writer">type Writer</a>
+        <ul>
+        <li><a href="#NewWriter">func NewWriter(w io.Writer, t Transformer) *Writer</a>
+        </li><li><a href="#Writer.Close">func (w *Writer) Close() error</a></li><li><a href="#Writer.Write">func (w *Writer) Write(data []byte) (n int, err error)</a>
+        </li></ul>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/transform/?repo=text">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text">transform.go</a> </p>
+
+    
+
+    <h3 id="pkg-variables">Variables <a class="permalink" href="#pkg-variables">¶</a></h3><pre>var (
+    <span class="com">// ErrShortDst means that the destination buffer was too short to</span>
+    <span class="com">// receive all of the transformed bytes.</span>
+    <span id="ErrShortDst">ErrShortDst</span> = <a href="http://godoc.org/errors/#New">errors.New</a>("transform: short destination buffer")
+
+    <span class="com">// ErrShortSrc means that the source buffer has insufficient data to</span>
+    <span class="com">// complete the transformation.</span>
+    <span id="ErrShortSrc">ErrShortSrc</span> = <a href="http://godoc.org/errors/#New">errors.New</a>("transform: short source buffer")
+)</pre>
+
+    
+
+   <h3 id="Reader">type <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#61">Reader</a> <a class="permalink" href="#Reader">¶</a></h3>
+      <pre>type Reader struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Reader wraps another io.Reader by transforming the bytes read.
+</p>
+
+      
+      
+      
+
+        <h4 id="NewReader">func <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#85">NewReader</a> <a class="permalink" href="#NewReader">¶</a></h4>
+        <pre class="funcdecl">func NewReader(r <a href="http://godoc.org/io/#Reader">io.Reader</a>, t <a href="#Transformer">Transformer</a>) *<a href="#Reader">Reader</a></pre><p>
+NewReader returns a new Reader that wraps r by transforming the bytes read
+via t.
+</p>
+
+        
+        
+
+        <h4 id="Reader.Read">func (*Reader) <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#95">Read</a> <a class="permalink" href="#Reader.Read">¶</a></h4>
+        <pre class="funcdecl">func (r *<a href="#Reader">Reader</a>) Read(p []<a href="http://godoc.org/builtin/#byte">byte</a>) (<a href="http://godoc.org/builtin/#int">int</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Read implements the io.Reader interface.
+</p>
+
+        
+        
+
+    <h3 id="Transformer">type <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#34">Transformer</a> <a class="permalink" href="#Transformer">¶</a></h3>
+      <pre>type Transformer interface {
+    <span class="com">// Transform writes to dst the transformed bytes read from src, and</span>
+    <span class="com">// returns the number of dst bytes written and src bytes read. The</span>
+    <span class="com">// atEOF argument tells whether src represents the last bytes of the</span>
+    <span class="com">// input.</span>
+    <span class="com">//</span>
+    <span class="com">// Callers should always process the nDst bytes produced and account</span>
+    <span class="com">// for the nSrc bytes consumed before considering the error err.</span>
+    <span class="com">//</span>
+    <span class="com">// A nil error means that all of the transformed bytes (whether freshly</span>
+    <span class="com">// transformed from src or left over from previous Transform calls)</span>
+    <span class="com">// were written to dst. A nil error can be returned regardless of</span>
+    <span class="com">// whether atEOF is true. If err is nil then nSrc must equal len(src);</span>
+    <span class="com">// the converse is not necessarily true.</span>
+    <span class="com">//</span>
+    <span class="com">// ErrShortDst means that dst was too short to receive all of the</span>
+    <span class="com">// transformed bytes. ErrShortSrc means that src had insufficient data</span>
+    <span class="com">// to complete the transformation. If both conditions apply, then</span>
+    <span class="com">// either error may be returned. Other than the error conditions listed</span>
+    <span class="com">// here, implementations are free to report other errors that arise.</span>
+    <span id="Transformer.Transform">Transform</span>(dst, src []<a href="http://godoc.org/builtin/#byte">byte</a>, atEOF <a href="http://godoc.org/builtin/#bool">bool</a>) (nDst, nSrc <a href="http://godoc.org/builtin/#int">int</a>, err <a href="http://godoc.org/builtin/#error">error</a>)
+}</pre><p>
+Transformer transforms bytes.
+</p>
+
+      
+      <pre>var (
+    <span class="com">// Discard is a Transformer for which all Transform calls succeed</span>
+    <span class="com">// by consuming all bytes and writing nothing.</span>
+    <span id="Discard">Discard</span> <a href="#Transformer">Transformer</a> = discard{}
+
+    <span class="com">// Nop is a Transformer that copies src to dst.</span>
+    <span id="Nop">Nop</span> <a href="#Transformer">Transformer</a> = nop{}
+)</pre>
+      
+
+        <h4 id="Chain">func <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#311">Chain</a> <a class="permalink" href="#Chain">¶</a></h4>
+        <pre class="funcdecl">func Chain(t ...<a href="#Transformer">Transformer</a>) <a href="#Transformer">Transformer</a></pre><p>
+Chain returns a Transformer that applies t in sequence.
+</p>
+
+        
+        
+
+        
+
+    <h3 id="Writer">type <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#159">Writer</a> <a class="permalink" href="#Writer">¶</a></h3>
+      <pre>type Writer struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Writer wraps another io.Writer by transforming the bytes read.
+The user needs to call Close to flush unwritten bytes that may
+be buffered.
+</p>
+
+      
+      
+      
+
+        <h4 id="NewWriter">func <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#171">NewWriter</a> <a class="permalink" href="#NewWriter">¶</a></h4>
+        <pre class="funcdecl">func NewWriter(w <a href="http://godoc.org/io/#Writer">io.Writer</a>, t <a href="#Transformer">Transformer</a>) *<a href="#Writer">Writer</a></pre><p>
+NewWriter returns a new Writer that wraps w by transforming the bytes written
+via t.
+</p>
+
+        
+        
+
+        <h4 id="Writer.Close">func (*Writer) <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#230">Close</a> <a class="permalink" href="#Writer.Close">¶</a></h4>
+        <pre class="funcdecl">func (w *<a href="#Writer">Writer</a>) Close() <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Close implements the io.Closer interface.
+</p>
+
+        
+        <h4 id="Writer.Write">func (*Writer) <a title="View Source" href="http://code.google.com/p/go/source/browse/transform/transform.go?repo=text#183">Write</a> <a class="permalink" href="#Writer.Write">¶</a></h4>
+        <pre class="funcdecl">func (w *<a href="#Writer">Writer</a>) Write(data []<a href="http://godoc.org/builtin/#byte">byte</a>) (n <a href="http://godoc.org/builtin/#int">int</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Write implements the io.Writer interface. If there are not enough
+bytes available to complete a Transform, the bytes will be buffered
+for the next write. Call Close to convert the remaining bytes.
+</p>
+
+        
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.text/transform"></form>
+  <p>Package transform imports <a href="transforma687.html?imports">2 packages</a> (<a href="transform75f0.html?import-graph">graph</a>) and is imported by <a href="transformefa9.html?importers">8 packages</a>.
+  Updated <span class="timeago" title="2013-10-05T07:41:39Z">2013-10-05</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/transform by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:34 GMT -->
+
+</body>

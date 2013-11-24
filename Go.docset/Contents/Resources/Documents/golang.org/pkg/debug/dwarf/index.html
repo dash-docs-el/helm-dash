@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/debug/dwarf/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>dwarf</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package dwarf</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "debug/dwarf"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package dwarf provides access to DWARF debugging information loaded from
+executable files, as defined in the DWARF 2.0 Standard at
+<a href="http://dwarfstd.org/doc/dwarf-2.0.0.pdf">http://dwarfstd.org/doc/dwarf-2.0.0.pdf</a>
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="#AddrType">type AddrType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ArrayType">type ArrayType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ArrayType.Size">func (t *ArrayType) Size() int64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ArrayType.String">func (t *ArrayType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Attr">type Attr</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Attr.GoString">func (a Attr) GoString() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Attr.String">func (a Attr) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#BasicType">type BasicType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BasicType.Basic">func (b *BasicType) Basic() *BasicType</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BasicType.String">func (t *BasicType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#BoolType">type BoolType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#CharType">type CharType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#CommonType">type CommonType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CommonType.Common">func (c *CommonType) Common() *CommonType</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CommonType.Size">func (c *CommonType) Size() int64</a></dd>
+				
+			
+				
+				<dd><a href="#ComplexType">type ComplexType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Data">type Data</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#New">func New(abbrev, aranges, frame, info, line, pubnames, ranges, str []byte) (*Data, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Data.Reader">func (d *Data) Reader() *Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Data.Type">func (d *Data) Type(off Offset) (Type, error)</a></dd>
+				
+			
+				
+				<dd><a href="#DecodeError">type DecodeError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DecodeError.Error">func (e DecodeError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#DotDotDotType">type DotDotDotType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DotDotDotType.String">func (t *DotDotDotType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Entry">type Entry</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Entry.Val">func (e *Entry) Val(a Attr) interface{}</a></dd>
+				
+			
+				
+				<dd><a href="#EnumType">type EnumType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#EnumType.String">func (t *EnumType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#EnumValue">type EnumValue</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Field">type Field</a></dd>
+				
+				
+			
+				
+				<dd><a href="#FloatType">type FloatType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#FuncType">type FuncType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FuncType.String">func (t *FuncType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#IntType">type IntType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Offset">type Offset</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PtrType">type PtrType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PtrType.String">func (t *PtrType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#QualType">type QualType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#QualType.Size">func (t *QualType) Size() int64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#QualType.String">func (t *QualType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Next">func (r *Reader) Next() (*Entry, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Seek">func (r *Reader) Seek(off Offset)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.SkipChildren">func (r *Reader) SkipChildren()</a></dd>
+				
+			
+				
+				<dd><a href="#StructField">type StructField</a></dd>
+				
+				
+			
+				
+				<dd><a href="#StructType">type StructType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StructType.Defn">func (t *StructType) Defn() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StructType.String">func (t *StructType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Tag">type Tag</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tag.GoString">func (t Tag) GoString() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tag.String">func (t Tag) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Type">type Type</a></dd>
+				
+				
+			
+				
+				<dd><a href="#TypedefType">type TypedefType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TypedefType.Size">func (t *TypedefType) Size() int64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TypedefType.String">func (t *TypedefType) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#UcharType">type UcharType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#UintType">type UintType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#VoidType">type VoidType</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#VoidType.String">func (t *VoidType) String() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/debug/dwarf/buf.go">buf.go</a>
+			
+				<a href="http://golang.org/src/pkg/debug/dwarf/const.go">const.go</a>
+			
+				<a href="http://golang.org/src/pkg/debug/dwarf/entry.go">entry.go</a>
+			
+				<a href="http://golang.org/src/pkg/debug/dwarf/open.go">open.go</a>
+			
+				<a href="http://golang.org/src/pkg/debug/dwarf/type.go">type.go</a>
+			
+				<a href="http://golang.org/src/pkg/debug/dwarf/unit.go">unit.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+		
+			
+			
+			<h2 id="AddrType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1891:1926#L77">AddrType</a></h2>
+			<pre>type AddrType struct {
+        <a href="#BasicType">BasicType</a>
+}</pre>
+			<p>
+An AddrType represents a machine address type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ArrayType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2290:2485#L95">ArrayType</a></h2>
+			<pre>type ArrayType struct {
+        <a href="#CommonType">CommonType</a>
+        Type          <a href="#Type">Type</a>
+        StrideBitSize <a href="../../builtin/index.html#int64">int64</a> <span class="comment">// if &gt; 0, number of bits to hold each element</span>
+        Count         <a href="../../builtin/index.html#int64">int64</a> <span class="comment">// if == -1, an incomplete array, like char x[].</span>
+}</pre>
+			<p>
+An ArrayType represents a fixed size array type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ArrayType.Size">func (*ArrayType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2597:2629#L106">Size</a></h3>
+				<pre>func (t *<a href="#ArrayType">ArrayType</a>) Size() <a href="../../builtin/index.html#int64">int64</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="ArrayType.String">func (*ArrayType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2487:2522#L102">String</a></h3>
+				<pre>func (t *<a href="#ArrayType">ArrayType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Attr">type <a href="http://golang.org/src/pkg/debug/dwarf/const.go?s=275:291#L2">Attr</a></h2>
+			<pre>type Attr <a href="../../builtin/index.html#uint32">uint32</a></pre>
+			<p>
+An Attr identifies the attribute type in a DWARF Entry&#39;s Field.
+</p>
+
+
+			
+				<pre>const (
+        <span id="AttrSibling">AttrSibling</span>        <a href="#Attr">Attr</a> = 0x01
+        <span id="AttrLocation">AttrLocation</span>       <a href="#Attr">Attr</a> = 0x02
+        <span id="AttrName">AttrName</span>           <a href="#Attr">Attr</a> = 0x03
+        <span id="AttrOrdering">AttrOrdering</span>       <a href="#Attr">Attr</a> = 0x09
+        <span id="AttrByteSize">AttrByteSize</span>       <a href="#Attr">Attr</a> = 0x0B
+        <span id="AttrBitOffset">AttrBitOffset</span>      <a href="#Attr">Attr</a> = 0x0C
+        <span id="AttrBitSize">AttrBitSize</span>        <a href="#Attr">Attr</a> = 0x0D
+        <span id="AttrStmtList">AttrStmtList</span>       <a href="#Attr">Attr</a> = 0x10
+        <span id="AttrLowpc">AttrLowpc</span>          <a href="#Attr">Attr</a> = 0x11
+        <span id="AttrHighpc">AttrHighpc</span>         <a href="#Attr">Attr</a> = 0x12
+        <span id="AttrLanguage">AttrLanguage</span>       <a href="#Attr">Attr</a> = 0x13
+        <span id="AttrDiscr">AttrDiscr</span>          <a href="#Attr">Attr</a> = 0x15
+        <span id="AttrDiscrValue">AttrDiscrValue</span>     <a href="#Attr">Attr</a> = 0x16
+        <span id="AttrVisibility">AttrVisibility</span>     <a href="#Attr">Attr</a> = 0x17
+        <span id="AttrImport">AttrImport</span>         <a href="#Attr">Attr</a> = 0x18
+        <span id="AttrStringLength">AttrStringLength</span>   <a href="#Attr">Attr</a> = 0x19
+        <span id="AttrCommonRef">AttrCommonRef</span>      <a href="#Attr">Attr</a> = 0x1A
+        <span id="AttrCompDir">AttrCompDir</span>        <a href="#Attr">Attr</a> = 0x1B
+        <span id="AttrConstValue">AttrConstValue</span>     <a href="#Attr">Attr</a> = 0x1C
+        <span id="AttrContainingType">AttrContainingType</span> <a href="#Attr">Attr</a> = 0x1D
+        <span id="AttrDefaultValue">AttrDefaultValue</span>   <a href="#Attr">Attr</a> = 0x1E
+        <span id="AttrInline">AttrInline</span>         <a href="#Attr">Attr</a> = 0x20
+        <span id="AttrIsOptional">AttrIsOptional</span>     <a href="#Attr">Attr</a> = 0x21
+        <span id="AttrLowerBound">AttrLowerBound</span>     <a href="#Attr">Attr</a> = 0x22
+        <span id="AttrProducer">AttrProducer</span>       <a href="#Attr">Attr</a> = 0x25
+        <span id="AttrPrototyped">AttrPrototyped</span>     <a href="#Attr">Attr</a> = 0x27
+        <span id="AttrReturnAddr">AttrReturnAddr</span>     <a href="#Attr">Attr</a> = 0x2A
+        <span id="AttrStartScope">AttrStartScope</span>     <a href="#Attr">Attr</a> = 0x2C
+        <span id="AttrStrideSize">AttrStrideSize</span>     <a href="#Attr">Attr</a> = 0x2E
+        <span id="AttrUpperBound">AttrUpperBound</span>     <a href="#Attr">Attr</a> = 0x2F
+        <span id="AttrAbstractOrigin">AttrAbstractOrigin</span> <a href="#Attr">Attr</a> = 0x31
+        <span id="AttrAccessibility">AttrAccessibility</span>  <a href="#Attr">Attr</a> = 0x32
+        <span id="AttrAddrClass">AttrAddrClass</span>      <a href="#Attr">Attr</a> = 0x33
+        <span id="AttrArtificial">AttrArtificial</span>     <a href="#Attr">Attr</a> = 0x34
+        <span id="AttrBaseTypes">AttrBaseTypes</span>      <a href="#Attr">Attr</a> = 0x35
+        <span id="AttrCalling">AttrCalling</span>        <a href="#Attr">Attr</a> = 0x36
+        <span id="AttrCount">AttrCount</span>          <a href="#Attr">Attr</a> = 0x37
+        <span id="AttrDataMemberLoc">AttrDataMemberLoc</span>  <a href="#Attr">Attr</a> = 0x38
+        <span id="AttrDeclColumn">AttrDeclColumn</span>     <a href="#Attr">Attr</a> = 0x39
+        <span id="AttrDeclFile">AttrDeclFile</span>       <a href="#Attr">Attr</a> = 0x3A
+        <span id="AttrDeclLine">AttrDeclLine</span>       <a href="#Attr">Attr</a> = 0x3B
+        <span id="AttrDeclaration">AttrDeclaration</span>    <a href="#Attr">Attr</a> = 0x3C
+        <span id="AttrDiscrList">AttrDiscrList</span>      <a href="#Attr">Attr</a> = 0x3D
+        <span id="AttrEncoding">AttrEncoding</span>       <a href="#Attr">Attr</a> = 0x3E
+        <span id="AttrExternal">AttrExternal</span>       <a href="#Attr">Attr</a> = 0x3F
+        <span id="AttrFrameBase">AttrFrameBase</span>      <a href="#Attr">Attr</a> = 0x40
+        <span id="AttrFriend">AttrFriend</span>         <a href="#Attr">Attr</a> = 0x41
+        <span id="AttrIdentifierCase">AttrIdentifierCase</span> <a href="#Attr">Attr</a> = 0x42
+        <span id="AttrMacroInfo">AttrMacroInfo</span>      <a href="#Attr">Attr</a> = 0x43
+        <span id="AttrNamelistItem">AttrNamelistItem</span>   <a href="#Attr">Attr</a> = 0x44
+        <span id="AttrPriority">AttrPriority</span>       <a href="#Attr">Attr</a> = 0x45
+        <span id="AttrSegment">AttrSegment</span>        <a href="#Attr">Attr</a> = 0x46
+        <span id="AttrSpecification">AttrSpecification</span>  <a href="#Attr">Attr</a> = 0x47
+        <span id="AttrStaticLink">AttrStaticLink</span>     <a href="#Attr">Attr</a> = 0x48
+        <span id="AttrType">AttrType</span>           <a href="#Attr">Attr</a> = 0x49
+        <span id="AttrUseLocation">AttrUseLocation</span>    <a href="#Attr">Attr</a> = 0x4A
+        <span id="AttrVarParam">AttrVarParam</span>       <a href="#Attr">Attr</a> = 0x4B
+        <span id="AttrVirtuality">AttrVirtuality</span>     <a href="#Attr">Attr</a> = 0x4C
+        <span id="AttrVtableElemLoc">AttrVtableElemLoc</span>  <a href="#Attr">Attr</a> = 0x4D
+        <span id="AttrAllocated">AttrAllocated</span>      <a href="#Attr">Attr</a> = 0x4E
+        <span id="AttrAssociated">AttrAssociated</span>     <a href="#Attr">Attr</a> = 0x4F
+        <span id="AttrDataLocation">AttrDataLocation</span>   <a href="#Attr">Attr</a> = 0x50
+        <span id="AttrStride">AttrStride</span>         <a href="#Attr">Attr</a> = 0x51
+        <span id="AttrEntrypc">AttrEntrypc</span>        <a href="#Attr">Attr</a> = 0x52
+        <span id="AttrUseUTF8">AttrUseUTF8</span>        <a href="#Attr">Attr</a> = 0x53
+        <span id="AttrExtension">AttrExtension</span>      <a href="#Attr">Attr</a> = 0x54
+        <span id="AttrRanges">AttrRanges</span>         <a href="#Attr">Attr</a> = 0x55
+        <span id="AttrTrampoline">AttrTrampoline</span>     <a href="#Attr">Attr</a> = 0x56
+        <span id="AttrCallColumn">AttrCallColumn</span>     <a href="#Attr">Attr</a> = 0x57
+        <span id="AttrCallFile">AttrCallFile</span>       <a href="#Attr">Attr</a> = 0x58
+        <span id="AttrCallLine">AttrCallLine</span>       <a href="#Attr">Attr</a> = 0x59
+        <span id="AttrDescription">AttrDescription</span>    <a href="#Attr">Attr</a> = 0x5A
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Attr.GoString">func (Attr) <a href="http://golang.org/src/pkg/debug/dwarf/const.go?s=5234:5265#L164">GoString</a></h3>
+				<pre>func (a <a href="#Attr">Attr</a>) GoString() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Attr.String">func (Attr) <a href="http://golang.org/src/pkg/debug/dwarf/const.go?s=5086:5115#L154">String</a></h3>
+				<pre>func (a <a href="#Attr">Attr</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="BasicType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1009:1080#L26">BasicType</a></h2>
+			<pre>type BasicType struct {
+        <a href="#CommonType">CommonType</a>
+        BitSize   <a href="../../builtin/index.html#int64">int64</a>
+        BitOffset <a href="../../builtin/index.html#int64">int64</a>
+}</pre>
+			<p>
+A BasicType holds fields common to all basic types.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="BasicType.Basic">func (*BasicType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1082:1120#L32">Basic</a></h3>
+				<pre>func (b *<a href="#BasicType">BasicType</a>) Basic() *<a href="#BasicType">BasicType</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="BasicType.String">func (*BasicType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1135:1170#L34">String</a></h3>
+				<pre>func (t *<a href="#BasicType">BasicType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="BoolType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1804:1839#L72">BoolType</a></h2>
+			<pre>type BoolType struct {
+        <a href="#BasicType">BasicType</a>
+}</pre>
+			<p>
+A BoolType represents a boolean type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="CharType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1276:1311#L42">CharType</a></h2>
+			<pre>type CharType struct {
+        <a href="#BasicType">BasicType</a>
+}</pre>
+			<p>
+A CharType represents a signed character type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="CommonType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=681:823#L14">CommonType</a></h2>
+			<pre>type CommonType struct {
+        ByteSize <a href="../../builtin/index.html#int64">int64</a>  <span class="comment">// size of value of this type, in bytes</span>
+        Name     <a href="../../builtin/index.html#string">string</a> <span class="comment">// name that can be used to refer to type</span>
+}</pre>
+			<p>
+A CommonType holds fields common to multiple types.
+If a field is not known or not applicable for a given type,
+the zero value is used.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CommonType.Common">func (*CommonType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=825:866#L19">Common</a></h3>
+				<pre>func (c *<a href="#CommonType">CommonType</a>) Common() *<a href="#CommonType">CommonType</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="CommonType.Size">func (*CommonType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=881:914#L21">Size</a></h3>
+				<pre>func (c *<a href="#CommonType">CommonType</a>) Size() <a href="../../builtin/index.html#int64">int64</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ComplexType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1723:1761#L67">ComplexType</a></h2>
+			<pre>type ComplexType struct {
+        <a href="#BasicType">BasicType</a>
+}</pre>
+			<p>
+A ComplexType represents a complex floating point type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Data">type <a href="http://golang.org/src/pkg/debug/dwarf/open.go?s=511:829#L4">Data</a></h2>
+			<pre>type Data struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Data represents the DWARF debugging information
+loaded from an executable file (for example, an ELF or Mach-O executable).
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="New">func <a href="http://golang.org/src/pkg/debug/dwarf/open.go?s=1273:1362#L31">New</a></h3>
+				<pre>func New(abbrev, aranges, frame, info, line, pubnames, ranges, str []<a href="../../builtin/index.html#byte">byte</a>) (*<a href="#Data">Data</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+New returns a new Data object initialized from the given parameters.
+Rather than calling this function directly, clients should typically use
+the DWARF method of the File type of the appropriate package debug/elf,
+debug/macho, or debug/pe.
+</p>
+<p>
+The []byte arguments are the data from the corresponding debug section
+in the object file; for example, for an ELF object, abbrev is the contents of
+the &#34;.debug_abbrev&#34; section.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Data.Reader">func (*Data) <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=6118:6149#L251">Reader</a></h3>
+				<pre>func (d *<a href="#Data">Data</a>) Reader() *<a href="#Reader">Reader</a></pre>
+				<p>
+Reader returns a new Reader for Data.
+The reader is positioned at byte offset 0 in the DWARF &ldquo;info&rdquo; section.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Data.Type">func (*Data) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=5394:5439#L244">Type</a></h3>
+				<pre>func (d *<a href="#Data">Data</a>) Type(off <a href="#Offset">Offset</a>) (<a href="#Type">Type</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DecodeError">type <a href="http://golang.org/src/pkg/debug/dwarf/buf.go?s=3110:3182#L163">DecodeError</a></h2>
+			<pre>type DecodeError struct {
+        Name   <a href="../../builtin/index.html#string">string</a>
+        Offset <a href="#Offset">Offset</a>
+        Err    <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DecodeError.Error">func (DecodeError) <a href="http://golang.org/src/pkg/debug/dwarf/buf.go?s=3184:3219#L169">Error</a></h3>
+				<pre>func (e <a href="#DecodeError">DecodeError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DotDotDotType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=5081:5122#L228">DotDotDotType</a></h2>
+			<pre>type DotDotDotType struct {
+        <a href="#CommonType">CommonType</a>
+}</pre>
+			<p>
+A DotDotDotType represents the variadic ... function parameter.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DotDotDotType.String">func (*DotDotDotType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=5124:5163#L232">String</a></h3>
+				<pre>func (t *<a href="#DotDotDotType">DotDotDotType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Entry">type <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=2049:2236#L84">Entry</a></h2>
+			<pre>type Entry struct {
+        Offset   <a href="#Offset">Offset</a> <span class="comment">// offset of Entry in DWARF info</span>
+        Tag      <a href="#Tag">Tag</a>    <span class="comment">// tag (kind of Entry)</span>
+        Children <a href="../../builtin/index.html#bool">bool</a>   <span class="comment">// whether Entry is followed by children</span>
+        Field    []<a href="#Field">Field</a>
+}</pre>
+			<p>
+An entry is a sequence of attribute/value pairs.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Entry.Val">func (*Entry) <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=2626:2665#L104">Val</a></h3>
+				<pre>func (e *<a href="#Entry">Entry</a>) Val(a <a href="#Attr">Attr</a>) interface{}</pre>
+				<p>
+Val returns the value associated with attribute Attr in Entry,
+or nil if there is no such attribute.
+</p>
+<p>
+A common idiom is to merge the check for nil return with
+the check that the value has the expected dynamic type, as in:
+</p>
+<pre>v, ok := e.Val(AttrSibling).(int64);
+</pre>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="EnumType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=4246:4322#L177">EnumType</a></h2>
+			<pre>type EnumType struct {
+        <a href="#CommonType">CommonType</a>
+        EnumName <a href="../../builtin/index.html#string">string</a>
+        Val      []*<a href="#EnumValue">EnumValue</a>
+}</pre>
+			<p>
+An EnumType represents an enumerated type.
+The only indication of its native integer type is its ByteSize
+(inside CommonType).
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="EnumType.String">func (*EnumType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=4431:4465#L189">String</a></h3>
+				<pre>func (t *<a href="#EnumType">EnumType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="EnumValue">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=4379:4429#L184">EnumValue</a></h2>
+			<pre>type EnumValue struct {
+        Name <a href="../../builtin/index.html#string">string</a>
+        Val  <a href="../../builtin/index.html#int64">int64</a>
+}</pre>
+			<p>
+An EnumValue represents a single enumeration value.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Field">type <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=2295:2345#L92">Field</a></h2>
+			<pre>type Field struct {
+        Attr <a href="#Attr">Attr</a>
+        Val  interface{}
+}</pre>
+			<p>
+A Field is a single attribute/value pair in an Entry.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="FloatType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1626:1662#L62">FloatType</a></h2>
+			<pre>type FloatType struct {
+        <a href="#BasicType">BasicType</a>
+}</pre>
+			<p>
+A FloatType represents a floating point type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="FuncType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=4718:4790#L206">FuncType</a></h2>
+			<pre>type FuncType struct {
+        <a href="#CommonType">CommonType</a>
+        ReturnType <a href="#Type">Type</a>
+        ParamType  []<a href="#Type">Type</a>
+}</pre>
+			<p>
+A FuncType represents a function type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="FuncType.String">func (*FuncType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=4792:4826#L212">String</a></h3>
+				<pre>func (t *<a href="#FuncType">FuncType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="IntType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1453:1487#L52">IntType</a></h2>
+			<pre>type IntType struct {
+        <a href="#BasicType">BasicType</a>
+}</pre>
+			<p>
+An IntType represents a signed integer type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Offset">type <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=2848:2866#L115">Offset</a></h2>
+			<pre>type Offset <a href="../../builtin/index.html#uint32">uint32</a></pre>
+			<p>
+An Offset represents the location of an Entry within the DWARF info.
+(See Reader.Seek.)
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PtrType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2840:2886#L116">PtrType</a></h2>
+			<pre>type PtrType struct {
+        <a href="#CommonType">CommonType</a>
+        Type <a href="#Type">Type</a>
+}</pre>
+			<p>
+A PtrType represents a pointer type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="PtrType.String">func (*PtrType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2888:2921#L121">String</a></h3>
+				<pre>func (t *<a href="#PtrType">PtrType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="QualType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2040:2100#L84">QualType</a></h2>
+			<pre>type QualType struct {
+        <a href="#CommonType">CommonType</a>
+        Qual <a href="../../builtin/index.html#string">string</a>
+        Type <a href="#Type">Type</a>
+}</pre>
+			<p>
+A QualType represents a type that has the C/C++ &#34;const&#34;, &#34;restrict&#34;, or &#34;volatile&#34; qualifier.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="QualType.Size">func (*QualType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2180:2211#L92">Size</a></h3>
+				<pre>func (t *<a href="#QualType">QualType</a>) Size() <a href="../../builtin/index.html#int64">int64</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="QualType.String">func (*QualType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2102:2136#L90">String</a></h3>
+				<pre>func (t *<a href="#QualType">QualType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=5763:5999#L240">Reader</a></h2>
+			<pre>type Reader struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Reader allows reading Entry structures from a DWARF &ldquo;info&rdquo; section.
+The Entry structures are arranged in a tree.  The Reader&#39;s Next function
+return successive entries from a pre-order traversal of the tree.
+If an entry has children, its Children field will be true, and the children
+follow, terminated by an Entry with Tag 0.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Reader.Next">func (*Reader) <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=7342:7381#L300">Next</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Next() (*<a href="#Entry">Entry</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Next reads the next entry from the encoded entry stream.
+It returns nil, nil when it reaches the end of the section.
+It returns an error if the current offset is invalid or the data at the
+offset cannot be decoded as a valid Entry.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Reader.Seek">func (*Reader) <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=6319:6352#L259">Seek</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Seek(off <a href="#Offset">Offset</a>)</pre>
+				<p>
+Seek positions the Reader at offset off in the encoded entry stream.
+Offset 0 can be used to denote the first entry.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Reader.SkipChildren">func (*Reader) <a href="http://golang.org/src/pkg/debug/dwarf/entry.go?s=7979:8010#L328">SkipChildren</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) SkipChildren()</pre>
+				<p>
+SkipChildren skips over the child entries associated with
+the last Entry returned by Next.  If that Entry did not have
+children or Next has not been called, SkipChildren is a no-op.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="StructField">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=3311:3516#L133">StructField</a></h2>
+			<pre>type StructField struct {
+        Name       <a href="../../builtin/index.html#string">string</a>
+        Type       <a href="#Type">Type</a>
+        ByteOffset <a href="../../builtin/index.html#int64">int64</a>
+        ByteSize   <a href="../../builtin/index.html#int64">int64</a>
+        BitOffset  <a href="../../builtin/index.html#int64">int64</a> <span class="comment">// within the ByteSize bytes at ByteOffset</span>
+        BitSize    <a href="../../builtin/index.html#int64">int64</a> <span class="comment">// zero if not a bit field</span>
+}</pre>
+			<p>
+A StructField represents a field in a struct, union, or C++ class type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="StructType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=3019:3234#L124">StructType</a></h2>
+			<pre>type StructType struct {
+        <a href="#CommonType">CommonType</a>
+        StructName <a href="../../builtin/index.html#string">string</a>
+        Kind       <a href="../../builtin/index.html#string">string</a> <span class="comment">// &#34;struct&#34;, &#34;union&#34;, or &#34;class&#34;.</span>
+        Field      []*<a href="#StructField">StructField</a>
+        Incomplete <a href="../../builtin/index.html#bool">bool</a> <span class="comment">// if true, struct, union, class is declared but not defined</span>
+}</pre>
+			<p>
+A StructType represents a struct, union, or C++ class type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="StructType.Defn">func (*StructType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=3642:3676#L149">Defn</a></h3>
+				<pre>func (t *<a href="#StructType">StructType</a>) Defn() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="StructType.String">func (*StructType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=3518:3554#L142">String</a></h3>
+				<pre>func (t *<a href="#StructType">StructType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Tag">type <a href="http://golang.org/src/pkg/debug/dwarf/const.go?s=6263:6278#L204">Tag</a></h2>
+			<pre>type Tag <a href="../../builtin/index.html#uint32">uint32</a></pre>
+			<p>
+A Tag is the classification (the type) of an Entry.
+</p>
+
+
+			
+				<pre>const (
+        <span id="TagArrayType">TagArrayType</span>              <a href="#Tag">Tag</a> = 0x01
+        <span id="TagClassType">TagClassType</span>              <a href="#Tag">Tag</a> = 0x02
+        <span id="TagEntryPoint">TagEntryPoint</span>             <a href="#Tag">Tag</a> = 0x03
+        <span id="TagEnumerationType">TagEnumerationType</span>        <a href="#Tag">Tag</a> = 0x04
+        <span id="TagFormalParameter">TagFormalParameter</span>        <a href="#Tag">Tag</a> = 0x05
+        <span id="TagImportedDeclaration">TagImportedDeclaration</span>    <a href="#Tag">Tag</a> = 0x08
+        <span id="TagLabel">TagLabel</span>                  <a href="#Tag">Tag</a> = 0x0A
+        <span id="TagLexDwarfBlock">TagLexDwarfBlock</span>          <a href="#Tag">Tag</a> = 0x0B
+        <span id="TagMember">TagMember</span>                 <a href="#Tag">Tag</a> = 0x0D
+        <span id="TagPointerType">TagPointerType</span>            <a href="#Tag">Tag</a> = 0x0F
+        <span id="TagReferenceType">TagReferenceType</span>          <a href="#Tag">Tag</a> = 0x10
+        <span id="TagCompileUnit">TagCompileUnit</span>            <a href="#Tag">Tag</a> = 0x11
+        <span id="TagStringType">TagStringType</span>             <a href="#Tag">Tag</a> = 0x12
+        <span id="TagStructType">TagStructType</span>             <a href="#Tag">Tag</a> = 0x13
+        <span id="TagSubroutineType">TagSubroutineType</span>         <a href="#Tag">Tag</a> = 0x15
+        <span id="TagTypedef">TagTypedef</span>                <a href="#Tag">Tag</a> = 0x16
+        <span id="TagUnionType">TagUnionType</span>              <a href="#Tag">Tag</a> = 0x17
+        <span id="TagUnspecifiedParameters">TagUnspecifiedParameters</span>  <a href="#Tag">Tag</a> = 0x18
+        <span id="TagVariant">TagVariant</span>                <a href="#Tag">Tag</a> = 0x19
+        <span id="TagCommonDwarfBlock">TagCommonDwarfBlock</span>       <a href="#Tag">Tag</a> = 0x1A
+        <span id="TagCommonInclusion">TagCommonInclusion</span>        <a href="#Tag">Tag</a> = 0x1B
+        <span id="TagInheritance">TagInheritance</span>            <a href="#Tag">Tag</a> = 0x1C
+        <span id="TagInlinedSubroutine">TagInlinedSubroutine</span>      <a href="#Tag">Tag</a> = 0x1D
+        <span id="TagModule">TagModule</span>                 <a href="#Tag">Tag</a> = 0x1E
+        <span id="TagPtrToMemberType">TagPtrToMemberType</span>        <a href="#Tag">Tag</a> = 0x1F
+        <span id="TagSetType">TagSetType</span>                <a href="#Tag">Tag</a> = 0x20
+        <span id="TagSubrangeType">TagSubrangeType</span>           <a href="#Tag">Tag</a> = 0x21
+        <span id="TagWithStmt">TagWithStmt</span>               <a href="#Tag">Tag</a> = 0x22
+        <span id="TagAccessDeclaration">TagAccessDeclaration</span>      <a href="#Tag">Tag</a> = 0x23
+        <span id="TagBaseType">TagBaseType</span>               <a href="#Tag">Tag</a> = 0x24
+        <span id="TagCatchDwarfBlock">TagCatchDwarfBlock</span>        <a href="#Tag">Tag</a> = 0x25
+        <span id="TagConstType">TagConstType</span>              <a href="#Tag">Tag</a> = 0x26
+        <span id="TagConstant">TagConstant</span>               <a href="#Tag">Tag</a> = 0x27
+        <span id="TagEnumerator">TagEnumerator</span>             <a href="#Tag">Tag</a> = 0x28
+        <span id="TagFileType">TagFileType</span>               <a href="#Tag">Tag</a> = 0x29
+        <span id="TagFriend">TagFriend</span>                 <a href="#Tag">Tag</a> = 0x2A
+        <span id="TagNamelist">TagNamelist</span>               <a href="#Tag">Tag</a> = 0x2B
+        <span id="TagNamelistItem">TagNamelistItem</span>           <a href="#Tag">Tag</a> = 0x2C
+        <span id="TagPackedType">TagPackedType</span>             <a href="#Tag">Tag</a> = 0x2D
+        <span id="TagSubprogram">TagSubprogram</span>             <a href="#Tag">Tag</a> = 0x2E
+        <span id="TagTemplateTypeParameter">TagTemplateTypeParameter</span>  <a href="#Tag">Tag</a> = 0x2F
+        <span id="TagTemplateValueParameter">TagTemplateValueParameter</span> <a href="#Tag">Tag</a> = 0x30
+        <span id="TagThrownType">TagThrownType</span>             <a href="#Tag">Tag</a> = 0x31
+        <span id="TagTryDwarfBlock">TagTryDwarfBlock</span>          <a href="#Tag">Tag</a> = 0x32
+        <span id="TagVariantPart">TagVariantPart</span>            <a href="#Tag">Tag</a> = 0x33
+        <span id="TagVariable">TagVariable</span>               <a href="#Tag">Tag</a> = 0x34
+        <span id="TagVolatileType">TagVolatileType</span>           <a href="#Tag">Tag</a> = 0x35
+        <span id="TagDwarfProcedure">TagDwarfProcedure</span>         <a href="#Tag">Tag</a> = 0x36
+        <span id="TagRestrictType">TagRestrictType</span>           <a href="#Tag">Tag</a> = 0x37
+        <span id="TagInterfaceType">TagInterfaceType</span>          <a href="#Tag">Tag</a> = 0x38
+        <span id="TagNamespace">TagNamespace</span>              <a href="#Tag">Tag</a> = 0x39
+        <span id="TagImportedModule">TagImportedModule</span>         <a href="#Tag">Tag</a> = 0x3A
+        <span id="TagUnspecifiedType">TagUnspecifiedType</span>        <a href="#Tag">Tag</a> = 0x3B
+        <span id="TagPartialUnit">TagPartialUnit</span>            <a href="#Tag">Tag</a> = 0x3C
+        <span id="TagImportedUnit">TagImportedUnit</span>           <a href="#Tag">Tag</a> = 0x3D
+        <span id="TagMutableType">TagMutableType</span>            <a href="#Tag">Tag</a> = 0x3E
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Tag.GoString">func (Tag) <a href="http://golang.org/src/pkg/debug/dwarf/const.go?s=11037:11067#L334">GoString</a></h3>
+				<pre>func (t <a href="#Tag">Tag</a>) GoString() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Tag.String">func (Tag) <a href="http://golang.org/src/pkg/debug/dwarf/const.go?s=10892:10920#L324">String</a></h3>
+				<pre>func (t <a href="#Tag">Tag</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Type">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=458:534#L5">Type</a></h2>
+			<pre>type Type interface {
+        Common() *<a href="#CommonType">CommonType</a>
+        String() <a href="../../builtin/index.html#string">string</a>
+        Size() <a href="../../builtin/index.html#int64">int64</a>
+}</pre>
+			<p>
+A Type conventionally represents a pointer to any of the
+specific Type structures (CharType, StructType, etc.).
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="TypedefType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=5224:5274#L235">TypedefType</a></h2>
+			<pre>type TypedefType struct {
+        <a href="#CommonType">CommonType</a>
+        Type <a href="#Type">Type</a>
+}</pre>
+			<p>
+A TypedefType represents a named type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="TypedefType.Size">func (*TypedefType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=5333:5367#L242">Size</a></h3>
+				<pre>func (t *<a href="#TypedefType">TypedefType</a>) Size() <a href="../../builtin/index.html#int64">int64</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="TypedefType.String">func (*TypedefType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=5276:5313#L240">String</a></h3>
+				<pre>func (t *<a href="#TypedefType">TypedefType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="UcharType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1367:1403#L47">UcharType</a></h2>
+			<pre>type UcharType struct {
+        <a href="#BasicType">BasicType</a>
+}</pre>
+			<p>
+A UcharType represents an unsigned character type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="UintType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=1540:1575#L57">UintType</a></h2>
+			<pre>type UintType struct {
+        <a href="#BasicType">BasicType</a>
+}</pre>
+			<p>
+A UintType represents an unsigned integer type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="VoidType">type <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2708:2744#L109">VoidType</a></h2>
+			<pre>type VoidType struct {
+        <a href="#CommonType">CommonType</a>
+}</pre>
+			<p>
+A VoidType represents the C void type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="VoidType.String">func (*VoidType) <a href="http://golang.org/src/pkg/debug/dwarf/type.go?s=2746:2780#L113">String</a></h3>
+				<pre>func (t *<a href="#VoidType">VoidType</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=427&s_ttfb=434&id=1380993862062127', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/debug/dwarf/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

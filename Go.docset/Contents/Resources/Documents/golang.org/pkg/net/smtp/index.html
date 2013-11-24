@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/net/smtp/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>smtp</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package smtp</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "net/smtp"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package smtp implements the Simple Mail Transfer Protocol as defined in RFC 5321.
+It also implements the following extensions:
+</p>
+<pre>8BITMIME  RFC 1652
+AUTH      RFC 2554
+STARTTLS  RFC 3207
+</pre>
+<p>
+Additional extensions may be handled by clients.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#SendMail">func SendMail(addr string, a Auth, from string, to []string, msg []byte) error</a></dd>
+			
+			
+				
+				<dd><a href="#Auth">type Auth</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CRAMMD5Auth">func CRAMMD5Auth(username, secret string) Auth</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PlainAuth">func PlainAuth(identity, username, password, host string) Auth</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Client">type Client</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Dial">func Dial(addr string) (*Client, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewClient">func NewClient(conn net.Conn, host string) (*Client, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Auth">func (c *Client) Auth(a Auth) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Data">func (c *Client) Data() (io.WriteCloser, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Extension">func (c *Client) Extension(ext string) (bool, string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Hello">func (c *Client) Hello(localName string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Mail">func (c *Client) Mail(from string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Quit">func (c *Client) Quit() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Rcpt">func (c *Client) Rcpt(to string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Reset">func (c *Client) Reset() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.StartTLS">func (c *Client) StartTLS(config *tls.Config) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Verify">func (c *Client) Verify(addr string) error</a></dd>
+				
+			
+				
+				<dd><a href="#ServerInfo">type ServerInfo</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/net/smtp/auth.go">auth.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/smtp/smtp.go">smtp.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="SendMail">func <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=7377:7455#L252">SendMail</a></h2>
+			<pre>func SendMail(addr <a href="../../builtin/index.html#string">string</a>, a <a href="#Auth">Auth</a>, from <a href="../../builtin/index.html#string">string</a>, to []<a href="../../builtin/index.html#string">string</a>, msg []<a href="../../builtin/index.html#byte">byte</a>) <a href="../../builtin/index.html#error">error</a></pre>
+			<p>
+SendMail connects to the server at addr, switches to TLS if possible,
+authenticates with mechanism a if possible, and then sends an email from
+address from, to addresses to, with message msg.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Auth">type <a href="http://golang.org/src/pkg/net/smtp/auth.go?s=292:1191#L5">Auth</a></h2>
+			<pre>type Auth interface {
+        <span class="comment">// Start begins an authentication with a server.</span>
+        <span class="comment">// It returns the name of the authentication protocol</span>
+        <span class="comment">// and optionally data to include in the initial AUTH message</span>
+        <span class="comment">// sent to the server. It can return proto == &#34;&#34; to indicate</span>
+        <span class="comment">// that the authentication should be skipped.</span>
+        <span class="comment">// If it returns a non-nil error, the SMTP client aborts</span>
+        <span class="comment">// the authentication attempt and closes the connection.</span>
+        Start(server *<a href="#ServerInfo">ServerInfo</a>) (proto <a href="../../builtin/index.html#string">string</a>, toServer []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)
+
+        <span class="comment">// Next continues the authentication. The server has just sent</span>
+        <span class="comment">// the fromServer data. If more is true, the server expects a</span>
+        <span class="comment">// response, which Next should return as toServer; otherwise</span>
+        <span class="comment">// Next should return toServer == nil.</span>
+        <span class="comment">// If Next returns a non-nil error, the SMTP client aborts</span>
+        <span class="comment">// the authentication attempt and closes the connection.</span>
+        Next(fromServer []<a href="../../builtin/index.html#byte">byte</a>, more <a href="../../builtin/index.html#bool">bool</a>) (toServer []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+Auth is implemented by an SMTP authentication mechanism.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CRAMMD5Auth">func <a href="http://golang.org/src/pkg/net/smtp/auth.go?s=2924:2970#L81">CRAMMD5Auth</a></h3>
+				<pre>func CRAMMD5Auth(username, secret <a href="../../builtin/index.html#string">string</a>) <a href="#Auth">Auth</a></pre>
+				<p>
+CRAMMD5Auth returns an Auth that implements the CRAM-MD5 authentication
+mechanism as defined in RFC 2195.
+The returned Auth uses the given username and secret to authenticate
+to the server using the challenge-response mechanism.
+</p>
+
+				
+			
+				
+				<h3 id="PlainAuth">func <a href="http://golang.org/src/pkg/net/smtp/auth.go?s=1820:1882#L41">PlainAuth</a></h3>
+				<pre>func PlainAuth(identity, username, password, host <a href="../../builtin/index.html#string">string</a>) <a href="#Auth">Auth</a></pre>
+				<p>
+PlainAuth returns an Auth that implements the PLAIN authentication
+mechanism as defined in RFC 4616.
+The returned Auth uses the given username and password to authenticate
+on TLS connections to host and act as identity. Usually identity will be
+left blank to act as username.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Client">type <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=583:1173#L14">Client</a></h2>
+			<pre>type Client struct {
+        <span class="comment">// Text is the textproto.Conn used by the Client. It is exported to allow for</span>
+        <span class="comment">// clients to add extensions.</span>
+        Text *<a href="../textproto/index.html">textproto</a>.<a href="../textproto/index.html#Conn">Conn</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Client represents a client connection to an SMTP server.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Dial">func <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=1241:1280#L34">Dial</a></h3>
+				<pre>func Dial(addr <a href="../../builtin/index.html#string">string</a>) (*<a href="#Client">Client</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Dial returns a new Client connected to an SMTP server at addr.
+</p>
+
+				
+			
+				
+				<h3 id="NewClient">func <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=1555:1614#L45">NewClient</a></h3>
+				<pre>func NewClient(conn <a href="../index.html">net</a>.<a href="../index.html#Conn">Conn</a>, host <a href="../../builtin/index.html#string">string</a>) (*<a href="#Client">Client</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+NewClient returns a new Client using an existing connection and host as a
+server name to be used when authenticating.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Client.Auth">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=4820:4855#L159">Auth</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Auth(a <a href="#Auth">Auth</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Auth authenticates a client using the provided authentication mechanism.
+A failed authentication closes the connection.
+Only servers that advertise the AUTH extension support this function.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Data">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=7004:7051#L241">Data</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Data() (<a href="../../io/index.html">io</a>.<a href="../../io/index.html#WriteCloser">WriteCloser</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Data issues a DATA command to the server and returns a writer that
+can be used to write the data. The caller should close the writer
+before calling any more methods on c.
+A call to Data must be preceded by one or more calls to Rcpt.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Extension">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=8364:8417#L299">Extension</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Extension(ext <a href="../../builtin/index.html#string">string</a>) (<a href="../../builtin/index.html#bool">bool</a>, <a href="../../builtin/index.html#string">string</a>)</pre>
+				<p>
+Extension reports whether an extension is support by the server.
+The extension name is case-insensitive. If the extension is supported,
+Extension also returns a string that contains any parameters the
+server specifies for the extension.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Hello">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=2362:2408#L73">Hello</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Hello(localName <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Hello sends a HELO or EHLO to the server as the given host name.
+Calling this method is only necessary if the client needs control
+over the host name used.  The client will introduce itself as &#34;localhost&#34;
+automatically otherwise.  If Hello is called, it must be called before
+any of the other methods.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Mail">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=6027:6067#L204">Mail</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Mail(from <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Mail issues a MAIL command to the server using the provided email address.
+If the server supports the 8BITMIME extension, Mail adds the BODY=8BITMIME
+parameter.
+This initiates a mail transaction and is followed by one or more Rcpt calls.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Quit">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=8885:8914#L322">Quit</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Quit() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Quit sends the QUIT command and closes the connection to the server.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Rcpt">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=6488:6526#L221">Rcpt</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Rcpt(to <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Rcpt issues a RCPT command to the server using the provided email address.
+A call to Rcpt must be preceded by a call to Mail and may be followed by
+a Data call or another Rcpt call.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Reset">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=8681:8711#L313">Reset</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Reset() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Reset sends the RSET command to the server, aborting the current mail
+transaction.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.StartTLS">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=3939:3990#L130">StartTLS</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) StartTLS(config *<a href="../../crypto/tls/index.html">tls</a>.<a href="../../crypto/tls/index.html#Config">Config</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+StartTLS sends the STARTTLS command and encrypts all further communication.
+Only servers that advertise the STARTTLS extension support this function.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Verify">func (*Client) <a href="http://golang.org/src/pkg/net/smtp/smtp.go?s=4468:4510#L148">Verify</a></h3>
+				<pre>func (c *<a href="#Client">Client</a>) Verify(addr <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Verify checks the validity of an email address on the server.
+If Verify returns nil, the address is valid. A non-nil return
+does not necessarily indicate an invalid address. Many servers
+will not verify addresses for security reasons.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="ServerInfo">type <a href="http://golang.org/src/pkg/net/smtp/auth.go?s=1249:1426#L25">ServerInfo</a></h2>
+			<pre>type ServerInfo struct {
+        Name <a href="../../builtin/index.html#string">string</a>   <span class="comment">// SMTP server name</span>
+        TLS  <a href="../../builtin/index.html#bool">bool</a>     <span class="comment">// using TLS, with valid certificate for Name</span>
+        Auth []<a href="../../builtin/index.html#string">string</a> <span class="comment">// advertised authentication mechanisms</span>
+}</pre>
+			<p>
+ServerInfo records information about an SMTP server.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=379&id=1380993865381265', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/net/smtp/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

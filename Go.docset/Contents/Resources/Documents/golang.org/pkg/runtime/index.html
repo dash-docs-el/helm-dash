@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/runtime/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>runtime</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package runtime</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "runtime"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package runtime contains operations that interact with Go&#39;s runtime system,
+such as functions to control goroutines. It also includes the low-level type information
+used by the reflect package; see reflect&#39;s documentation for the programmable
+interface to the run-time type system.
+</p>
+<h3 id="hdr-Environment_Variables">Environment Variables</h3>
+<p>
+The following environment variables ($name or %name%, depending on the host
+operating system) control the run-time behavior of Go programs. The meanings
+and use may change from release to release.
+</p>
+<p>
+The GOGC variable sets the initial garbage collection target percentage.
+A collection is triggered when the ratio of freshly allocated data to live data
+remaining after the previous collection reaches this percentage. The default
+is GOGC=100. Setting GOGC=off disables the garbage collector entirely.
+The runtime/debug package&#39;s SetGCPercent function allows changing this
+percentage at run time. See <a href="debug/index.html#SetGCPercent">http://golang.org/pkg/runtime/debug/#SetGCPercent</a>.
+</p>
+<p>
+The GOGCTRACE variable controls debug output from the garbage collector.
+Setting GOGCTRACE=1 causes the garbage collector to emit a single line to standard
+error at each collection, summarizing the amount of memory collected and the
+length of the pause. Setting GOGCTRACE=2 emits the same summary but also
+repeats each collection.
+</p>
+<p>
+The GOMAXPROCS variable limits the number of operating system threads that
+can execute user-level Go code simultaneously. There is no limit to the number of threads
+that can be blocked in system calls on behalf of Go code; those do not count against
+the GOMAXPROCS limit. This package&#39;s GOMAXPROCS function queries and changes
+the limit.
+</p>
+<p>
+The GOTRACEBACK variable controls the amount of output generated when a Go
+program fails due to an unrecovered panic or an unexpected runtime condition.
+By default, a failure prints a stack trace for every extant goroutine, eliding functions
+internal to the run-time system, and then exits with exit code 2.
+If GOTRACEBACK=0, the per-goroutine stack traces are omitted entirely.
+If GOTRACEBACK=1, the default behavior is used.
+If GOTRACEBACK=2, the per-goroutine stack traces include run-time functions.
+If GOTRACEBACK=crash, the per-goroutine stack traces include run-time functions,
+and if possible the program crashes in an operating-specific manner instead of
+exiting. For example, on Unix systems, the program raises SIGABRT to trigger a
+core dump.
+</p>
+<p>
+The GOARCH, GOOS, GOPATH, and GOROOT environment variables complete
+the set of Go environment variables. They influence the building of Go programs
+(see <a href="http://golang.org/cmd/go">http://golang.org/cmd/go</a> and <a href="../go/build/index.html">http://golang.org/pkg/go/build</a>).
+GOARCH, GOOS, and GOROOT are recorded at compile time and made available by
+constants or functions in this package, but they do not influence the execution
+of the run-time system.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#BlockProfile">func BlockProfile(p []BlockProfileRecord) (n int, ok bool)</a></dd>
+			
+				
+				<dd><a href="#Breakpoint">func Breakpoint()</a></dd>
+			
+				
+				<dd><a href="#CPUProfile">func CPUProfile() []byte</a></dd>
+			
+				
+				<dd><a href="#Caller">func Caller(skip int) (pc uintptr, file string, line int, ok bool)</a></dd>
+			
+				
+				<dd><a href="#Callers">func Callers(skip int, pc []uintptr) int</a></dd>
+			
+				
+				<dd><a href="#GC">func GC()</a></dd>
+			
+				
+				<dd><a href="#GOMAXPROCS">func GOMAXPROCS(n int) int</a></dd>
+			
+				
+				<dd><a href="#GOROOT">func GOROOT() string</a></dd>
+			
+				
+				<dd><a href="#Goexit">func Goexit()</a></dd>
+			
+				
+				<dd><a href="#GoroutineProfile">func GoroutineProfile(p []StackRecord) (n int, ok bool)</a></dd>
+			
+				
+				<dd><a href="#Gosched">func Gosched()</a></dd>
+			
+				
+				<dd><a href="#LockOSThread">func LockOSThread()</a></dd>
+			
+				
+				<dd><a href="#MemProfile">func MemProfile(p []MemProfileRecord, inuseZero bool) (n int, ok bool)</a></dd>
+			
+				
+				<dd><a href="#NumCPU">func NumCPU() int</a></dd>
+			
+				
+				<dd><a href="#NumCgoCall">func NumCgoCall() int64</a></dd>
+			
+				
+				<dd><a href="#NumGoroutine">func NumGoroutine() int</a></dd>
+			
+				
+				<dd><a href="#ReadMemStats">func ReadMemStats(m *MemStats)</a></dd>
+			
+				
+				<dd><a href="#SetBlockProfileRate">func SetBlockProfileRate(rate int)</a></dd>
+			
+				
+				<dd><a href="#SetCPUProfileRate">func SetCPUProfileRate(hz int)</a></dd>
+			
+				
+				<dd><a href="#SetFinalizer">func SetFinalizer(x, f interface{})</a></dd>
+			
+				
+				<dd><a href="#Stack">func Stack(buf []byte, all bool) int</a></dd>
+			
+				
+				<dd><a href="#ThreadCreateProfile">func ThreadCreateProfile(p []StackRecord) (n int, ok bool)</a></dd>
+			
+				
+				<dd><a href="#UnlockOSThread">func UnlockOSThread()</a></dd>
+			
+				
+				<dd><a href="#Version">func Version() string</a></dd>
+			
+			
+				
+				<dd><a href="#BlockProfileRecord">type BlockProfileRecord</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Error">type Error</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Func">type Func</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FuncForPC">func FuncForPC(pc uintptr) *Func</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Func.Entry">func (f *Func) Entry() uintptr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Func.FileLine">func (f *Func) FileLine(pc uintptr) (file string, line int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Func.Name">func (f *Func) Name() string</a></dd>
+				
+			
+				
+				<dd><a href="#MemProfileRecord">type MemProfileRecord</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MemProfileRecord.InUseBytes">func (r *MemProfileRecord) InUseBytes() int64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MemProfileRecord.InUseObjects">func (r *MemProfileRecord) InUseObjects() int64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#MemProfileRecord.Stack">func (r *MemProfileRecord) Stack() []uintptr</a></dd>
+				
+			
+				
+				<dd><a href="#MemStats">type MemStats</a></dd>
+				
+				
+			
+				
+				<dd><a href="#StackRecord">type StackRecord</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StackRecord.Stack">func (r *StackRecord) Stack() []uintptr</a></dd>
+				
+			
+				
+				<dd><a href="#TypeAssertionError">type TypeAssertionError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TypeAssertionError.Error">func (e *TypeAssertionError) Error() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TypeAssertionError.RuntimeError">func (*TypeAssertionError) RuntimeError()</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/runtime/compiler.go">compiler.go</a>
+			
+				<a href="http://golang.org/src/pkg/runtime/debug.go">debug.go</a>
+			
+				<a href="http://golang.org/src/pkg/runtime/error.go">error.go</a>
+			
+				<a href="http://golang.org/src/pkg/runtime/extern.go">extern.go</a>
+			
+				<a href="http://golang.org/src/pkg/runtime/mem.go">mem.go</a>
+			
+				<a href="http://golang.org/src/pkg/runtime/mgc0.go">mgc0.go</a>
+			
+				<a href="http://golang.org/src/pkg/runtime/softfloat64.go">softfloat64.go</a>
+			
+				<a href="http://golang.org/src/pkg/runtime/type.go">type.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const <span id="Compiler">Compiler</span> = &#34;gc&#34;</pre>
+				<p>
+Compiler is the name of the compiler toolchain that built the
+running binary.  Known toolchains are:
+</p>
+<pre>gc      The 5g/6g/8g compiler suite at code.google.com/p/go.
+gccgo   The gccgo front end, part of the GCC compiler suite.
+</pre>
+
+			
+				<pre>const <span id="GOARCH">GOARCH</span> <a href="../builtin/index.html#string">string</a> = theGoarch</pre>
+				<p>
+GOARCH is the running program&#39;s architecture target:
+386, amd64, or arm.
+</p>
+
+			
+				<pre>const <span id="GOOS">GOOS</span> <a href="../builtin/index.html#string">string</a> = theGoos</pre>
+				<p>
+GOOS is the running program&#39;s operating system target:
+one of darwin, freebsd, linux, and so on.
+</p>
+
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="MemProfileRate">MemProfileRate</span> <a href="../builtin/index.html#int">int</a> = 512 * 1024</pre>
+				<p>
+MemProfileRate controls the fraction of memory allocations
+that are recorded and reported in the memory profile.
+The profiler aims to sample an average of
+one allocation per MemProfileRate bytes allocated.
+</p>
+<p>
+To include every allocated block in the profile, set MemProfileRate to 1.
+To turn off profiling entirely, set MemProfileRate to 0.
+</p>
+<p>
+The tools that process the memory profiles assume that the
+profile rate is constant across the lifetime of the program
+and equal to the current value.  Programs that change the
+memory profiling rate should do so just once, as early as
+possible in the execution of the program (for example,
+at the beginning of main).
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="BlockProfile">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=6700:6758#L156">BlockProfile</a></h2>
+			<pre>func BlockProfile(p []<a href="#BlockProfileRecord">BlockProfileRecord</a>) (n <a href="../builtin/index.html#int">int</a>, ok <a href="../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+BlockProfile returns n, the number of records in the current blocking profile.
+If len(p) &gt;= n, BlockProfile copies the profile into p and returns n, true.
+If len(p) &lt; n, BlockProfile does not change p and returns n, false.
+</p>
+<p>
+Most clients should use the runtime/pprof package or
+the testing package&#39;s -test.blockprofile flag instead
+of calling BlockProfile directly.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Breakpoint">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=219:236#L1">Breakpoint</a></h2>
+			<pre>func Breakpoint()</pre>
+			<p>
+Breakpoint executes a breakpoint trap.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CPUProfile">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=5328:5352#L122">CPUProfile</a></h2>
+			<pre>func CPUProfile() []<a href="../builtin/index.html#byte">byte</a></pre>
+			<p>
+CPUProfile returns the next chunk of binary CPU profiling stack trace data,
+blocking until data is available.  If profiling is turned off and all the profile
+data accumulated while it was on has been returned, CPUProfile returns nil.
+The caller must save the returned data before calling CPUProfile again.
+</p>
+<p>
+Most clients should use the runtime/pprof package or
+the testing package&#39;s -test.cpuprofile flag instead of calling
+CPUProfile directly.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Caller">func <a href="http://golang.org/src/pkg/runtime/extern.go?s=3794:3860#L61">Caller</a></h2>
+			<pre>func Caller(skip <a href="../builtin/index.html#int">int</a>) (pc <a href="../builtin/index.html#uintptr">uintptr</a>, file <a href="../builtin/index.html#string">string</a>, line <a href="../builtin/index.html#int">int</a>, ok <a href="../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+Caller reports file and line number information about function invocations on
+the calling goroutine&#39;s stack.  The argument skip is the number of stack frames
+to ascend, with 0 identifying the caller of Caller.  (For historical reasons the
+meaning of skip differs between Caller and Callers.) The return values report the
+program counter, file name, and line number within the file of the corresponding
+call.  The boolean ok is false if it was not possible to recover the information.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Callers">func <a href="http://golang.org/src/pkg/runtime/extern.go?s=4206:4246#L68">Callers</a></h2>
+			<pre>func Callers(skip <a href="../builtin/index.html#int">int</a>, pc []<a href="../builtin/index.html#uintptr">uintptr</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+Callers fills the slice pc with the program counters of function invocations
+on the calling goroutine&#39;s stack.  The argument skip is the number of stack frames
+to skip before recording in pc, with 0 identifying the frame for Callers itself and
+1 identifying the caller of Callers.
+It returns the number of entries written to pc.
+</p>
+
+			
+		
+			
+			
+			<h2 id="GC">func <a href="http://golang.org/src/pkg/runtime/mem.go?s=2270:2279#L64">GC</a></h2>
+			<pre>func GC()</pre>
+			<p>
+GC runs a garbage collection.
+</p>
+
+			
+		
+			
+			
+			<h2 id="GOMAXPROCS">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=978:1004#L14">GOMAXPROCS</a></h2>
+			<pre>func GOMAXPROCS(n <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+GOMAXPROCS sets the maximum number of CPUs that can be executing
+simultaneously and returns the previous setting.  If n &lt; 1, it does not
+change the current setting.
+The number of logical CPUs on the local machine can be queried with NumCPU.
+This call will go away when the scheduler improves.
+</p>
+
+			
+		
+			
+			
+			<h2 id="GOROOT">func <a href="http://golang.org/src/pkg/runtime/extern.go?s=7664:7684#L152">GOROOT</a></h2>
+			<pre>func GOROOT() <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+GOROOT returns the root of the Go tree.
+It uses the GOROOT environment variable, if set,
+or else the root used during the Go build.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Goexit">func <a href="http://golang.org/src/pkg/runtime/extern.go?s=3277:3290#L53">Goexit</a></h2>
+			<pre>func Goexit()</pre>
+			<p>
+Goexit terminates the goroutine that calls it.  No other goroutine is affected.
+Goexit runs all deferred calls before terminating the goroutine.
+</p>
+
+			
+		
+			
+			
+			<h2 id="GoroutineProfile">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=4804:4859#L112">GoroutineProfile</a></h2>
+			<pre>func GoroutineProfile(p []<a href="#StackRecord">StackRecord</a>) (n <a href="../builtin/index.html#int">int</a>, ok <a href="../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+GoroutineProfile returns n, the number of records in the active goroutine stack profile.
+If len(p) &gt;= n, GoroutineProfile copies the profile into p and returns n, true.
+If len(p) &lt; n, GoroutineProfile does not change p and returns n, false.
+</p>
+<p>
+Most clients should use the runtime/pprof package instead
+of calling GoroutineProfile directly.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Gosched">func <a href="http://golang.org/src/pkg/runtime/extern.go?s=3110:3124#L49">Gosched</a></h2>
+			<pre>func Gosched()</pre>
+			<p>
+Gosched yields the processor, allowing other goroutines to run.  It does not
+suspend the current goroutine, so execution resumes automatically.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LockOSThread">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=454:473#L3">LockOSThread</a></h2>
+			<pre>func LockOSThread()</pre>
+			<p>
+LockOSThread wires the calling goroutine to its current operating system thread.
+Until the calling goroutine exits or calls UnlockOSThread, it will always
+execute in that thread, and no other goroutine can.
+</p>
+
+			
+		
+			
+			
+			<h2 id="MemProfile">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=3574:3644#L80">MemProfile</a></h2>
+			<pre>func MemProfile(p []<a href="#MemProfileRecord">MemProfileRecord</a>, inuseZero <a href="../builtin/index.html#bool">bool</a>) (n <a href="../builtin/index.html#int">int</a>, ok <a href="../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+MemProfile returns n, the number of records in the current memory profile.
+If len(p) &gt;= n, MemProfile copies the profile into p and returns n, true.
+If len(p) &lt; n, MemProfile does not change p and returns n, false.
+</p>
+<p>
+If inuseZero is true, the profile includes allocation records
+where r.AllocBytes &gt; 0 but r.AllocBytes == r.FreeBytes.
+These are sites where memory was allocated, but it has all
+been released back to the runtime.
+</p>
+<p>
+Most clients should use the runtime/pprof package or
+the testing package&#39;s -test.memprofile flag instead
+of calling MemProfile directly.
+</p>
+
+			
+		
+			
+			
+			<h2 id="NumCPU">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=1073:1090#L17">NumCPU</a></h2>
+			<pre>func NumCPU() <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+NumCPU returns the number of logical CPUs on the local machine.
+</p>
+
+			
+		
+			
+			
+			<h2 id="NumCgoCall">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=1167:1190#L20">NumCgoCall</a></h2>
+			<pre>func NumCgoCall() <a href="../builtin/index.html#int64">int64</a></pre>
+			<p>
+NumCgoCall returns the number of cgo calls made by the current process.
+</p>
+
+			
+		
+			
+			
+			<h2 id="NumGoroutine">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=1263:1286#L23">NumGoroutine</a></h2>
+			<pre>func NumGoroutine() <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+NumGoroutine returns the number of goroutines that currently exist.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ReadMemStats">func <a href="http://golang.org/src/pkg/runtime/mem.go?s=2205:2235#L61">ReadMemStats</a></h2>
+			<pre>func ReadMemStats(m *<a href="#MemStats">MemStats</a>)</pre>
+			<p>
+ReadMemStats populates m with memory allocator statistics.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SetBlockProfileRate">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=6095:6129#L139">SetBlockProfileRate</a></h2>
+			<pre>func SetBlockProfileRate(rate <a href="../builtin/index.html#int">int</a>)</pre>
+			<p>
+SetBlockProfileRate controls the fraction of goroutine blocking events
+that are reported in the blocking profile.  The profiler aims to sample
+an average of one blocking event per rate nanoseconds spent blocked.
+</p>
+<p>
+To include every blocking event in the profile, pass rate = 1.
+To turn off profiling entirely, pass rate &lt;= 0.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SetCPUProfileRate">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=5722:5752#L131">SetCPUProfileRate</a></h2>
+			<pre>func SetCPUProfileRate(hz <a href="../builtin/index.html#int">int</a>)</pre>
+			<p>
+SetCPUProfileRate sets the CPU profiling rate to hz samples per second.
+If hz &lt;= 0, SetCPUProfileRate turns off profiling.
+If the profiler is on, the rate cannot be changed without first turning it off.
+</p>
+<p>
+Most clients should use the runtime/pprof package or
+the testing package&#39;s -test.cpuprofile flag instead of calling
+SetCPUProfileRate directly.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SetFinalizer">func <a href="http://golang.org/src/pkg/runtime/extern.go?s=7461:7496#L145">SetFinalizer</a></h2>
+			<pre>func SetFinalizer(x, f interface{})</pre>
+			<p>
+SetFinalizer sets the finalizer associated with x to f.
+When the garbage collector finds an unreachable block
+with an associated finalizer, it clears the association and runs
+f(x) in a separate goroutine.  This makes x reachable again, but
+now without an associated finalizer.  Assuming that SetFinalizer
+is not called again, the next time the garbage collector sees
+that x is unreachable, it will free x.
+</p>
+<p>
+SetFinalizer(x, nil) clears any finalizer associated with x.
+</p>
+<p>
+The argument x must be a pointer to an object allocated by
+calling new or by taking the address of a composite literal.
+The argument f must be a function that takes a single argument
+of x&#39;s type and can have arbitrary ignored return values.
+If either of these is not true, SetFinalizer aborts the program.
+</p>
+<p>
+Finalizers are run in dependency order: if A points at B, both have
+finalizers, and they are otherwise unreachable, only the finalizer
+for A runs; once A is freed, the finalizer for B can run.
+If a cyclic structure includes a block with a finalizer, that
+cycle is not guaranteed to be garbage collected and the finalizer
+is not guaranteed to run, because there is no ordering that
+respects the dependencies.
+</p>
+<p>
+The finalizer for x is scheduled to run at some arbitrary time after
+x becomes unreachable.
+There is no guarantee that finalizers will run before a program exits,
+so typically they are useful only for releasing non-memory resources
+associated with an object during a long-running program.
+For example, an os.File object could use a finalizer to close the
+associated operating system file descriptor when a program discards
+an os.File without calling Close, but it would be a mistake
+to depend on a finalizer to flush an in-memory I/O buffer such as a
+bufio.Writer, because the buffer would not be flushed at program exit.
+</p>
+<p>
+A single goroutine runs all finalizers for a program, sequentially.
+If a finalizer must run for a long time, it should do so by starting
+a new goroutine.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Stack">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=7001:7037#L162">Stack</a></h2>
+			<pre>func Stack(buf []<a href="../builtin/index.html#byte">byte</a>, all <a href="../builtin/index.html#bool">bool</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+Stack formats a stack trace of the calling goroutine into buf
+and returns the number of bytes written to buf.
+If all is true, Stack formats stack traces of all other goroutines
+into buf after the trace for the current goroutine.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ThreadCreateProfile">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=4389:4447#L104">ThreadCreateProfile</a></h2>
+			<pre>func ThreadCreateProfile(p []<a href="#StackRecord">StackRecord</a>) (n <a href="../builtin/index.html#int">int</a>, ok <a href="../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+ThreadCreateProfile returns n, the number of records in the thread creation profile.
+If len(p) &gt;= n, ThreadCreateProfile copies the profile into p and returns n, true.
+If len(p) &lt; n, ThreadCreateProfile does not change p and returns n, false.
+</p>
+<p>
+Most clients should use the runtime/pprof package instead
+of calling ThreadCreateProfile directly.
+</p>
+
+			
+		
+			
+			
+			<h2 id="UnlockOSThread">func <a href="http://golang.org/src/pkg/runtime/debug.go?s=647:668#L7">UnlockOSThread</a></h2>
+			<pre>func UnlockOSThread()</pre>
+			<p>
+UnlockOSThread unwires the calling goroutine from its fixed operating system thread.
+If the calling goroutine has not called LockOSThread, UnlockOSThread is a no-op.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Version">func <a href="http://golang.org/src/pkg/runtime/extern.go?s=7997:8018#L165">Version</a></h2>
+			<pre>func Version() <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Version returns the Go tree&#39;s version string.
+It is either a sequence number or, when possible,
+a release tag like &#34;release.2010-03-04&#34;.
+A trailing + indicates that the tree had local modifications
+at the time of the build.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="BlockProfileRecord">type <a href="http://golang.org/src/pkg/runtime/debug.go?s=6238:6313#L143">BlockProfileRecord</a></h2>
+			<pre>type BlockProfileRecord struct {
+        Count  <a href="../builtin/index.html#int64">int64</a>
+        Cycles <a href="../builtin/index.html#int64">int64</a>
+        <a href="#StackRecord">StackRecord</a>
+}</pre>
+			<p>
+BlockProfileRecord describes blocking events originated
+at a particular call sequence (stack trace).
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Error">type <a href="http://golang.org/src/pkg/runtime/error.go?s=229:463#L1">Error</a></h2>
+			<pre>type Error interface {
+        <a href="../builtin/index.html#error">error</a>
+
+        <span class="comment">// RuntimeError is a no-op function but</span>
+        <span class="comment">// serves to distinguish types that are runtime</span>
+        <span class="comment">// errors from ordinary errors: a type is a</span>
+        <span class="comment">// runtime error if it has a RuntimeError method.</span>
+        RuntimeError()
+}</pre>
+			<p>
+The Error interface identifies a run time error.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Func">type <a href="http://golang.org/src/pkg/runtime/extern.go?s=4248:4620#L70">Func</a></h2>
+			<pre>type Func struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="FuncForPC">func <a href="http://golang.org/src/pkg/runtime/extern.go?s=4740:4772#L85">FuncForPC</a></h3>
+				<pre>func FuncForPC(pc <a href="../builtin/index.html#uintptr">uintptr</a>) *<a href="#Func">Func</a></pre>
+				<p>
+FuncForPC returns a *Func describing the function that contains the
+given program counter address, or else nil.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Func.Entry">func (*Func) <a href="http://golang.org/src/pkg/runtime/extern.go?s=4916:4946#L91">Entry</a></h3>
+				<pre>func (f *<a href="#Func">Func</a>) Entry() <a href="../builtin/index.html#uintptr">uintptr</a></pre>
+				<p>
+Entry returns the entry address of the function.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Func.FileLine">func (*Func) <a href="http://golang.org/src/pkg/runtime/extern.go?s=5159:5218#L97">FileLine</a></h3>
+				<pre>func (f *<a href="#Func">Func</a>) FileLine(pc <a href="../builtin/index.html#uintptr">uintptr</a>) (file <a href="../builtin/index.html#string">string</a>, line <a href="../builtin/index.html#int">int</a>)</pre>
+				<p>
+FileLine returns the file name and line number of the
+source code corresponding to the program counter pc.
+The result will not be accurate if pc is not a program
+counter within f.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Func.Name">func (*Func) <a href="http://golang.org/src/pkg/runtime/extern.go?s=4816:4844#L88">Name</a></h3>
+				<pre>func (f *<a href="#Func">Func</a>) Name() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+Name returns the name of the function.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="MemProfileRecord">type <a href="http://golang.org/src/pkg/runtime/debug.go?s=2128:2405#L43">MemProfileRecord</a></h2>
+			<pre>type MemProfileRecord struct {
+        AllocBytes, FreeBytes     <a href="../builtin/index.html#int64">int64</a>       <span class="comment">// number of bytes allocated, freed</span>
+        AllocObjects, FreeObjects <a href="../builtin/index.html#int64">int64</a>       <span class="comment">// number of objects allocated, freed</span>
+        Stack0                    [32]<a href="../builtin/index.html#uintptr">uintptr</a> <span class="comment">// stack trace for this record; ends at first 0 entry</span>
+}</pre>
+			<p>
+A MemProfileRecord describes the live objects allocated
+by a particular call sequence (stack trace).
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="MemProfileRecord.InUseBytes">func (*MemProfileRecord) <a href="http://golang.org/src/pkg/runtime/debug.go?s=2482:2527#L50">InUseBytes</a></h3>
+				<pre>func (r *<a href="#MemProfileRecord">MemProfileRecord</a>) InUseBytes() <a href="../builtin/index.html#int64">int64</a></pre>
+				<p>
+InUseBytes returns the number of bytes in use (AllocBytes - FreeBytes).
+</p>
+
+				
+				
+			
+				
+				<h3 id="MemProfileRecord.InUseObjects">func (*MemProfileRecord) <a href="http://golang.org/src/pkg/runtime/debug.go?s=2650:2697#L53">InUseObjects</a></h3>
+				<pre>func (r *<a href="#MemProfileRecord">MemProfileRecord</a>) InUseObjects() <a href="../builtin/index.html#int64">int64</a></pre>
+				<p>
+InUseObjects returns the number of objects in use (AllocObjects - FreeObjects).
+</p>
+
+				
+				
+			
+				
+				<h3 id="MemProfileRecord.Stack">func (*MemProfileRecord) <a href="http://golang.org/src/pkg/runtime/debug.go?s=2828:2872#L59">Stack</a></h3>
+				<pre>func (r *<a href="#MemProfileRecord">MemProfileRecord</a>) Stack() []<a href="../builtin/index.html#uintptr">uintptr</a></pre>
+				<p>
+Stack returns the stack trace associated with the record,
+a prefix of r.Stack0.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="MemStats">type <a href="http://golang.org/src/pkg/runtime/mem.go?s=342:1893#L3">MemStats</a></h2>
+			<pre>type MemStats struct {
+        <span class="comment">// General statistics.</span>
+        Alloc      <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bytes allocated and still in use</span>
+        TotalAlloc <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bytes allocated (even if freed)</span>
+        Sys        <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bytes obtained from system (should be sum of XxxSys below)</span>
+        Lookups    <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// number of pointer lookups</span>
+        Mallocs    <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// number of mallocs</span>
+        Frees      <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// number of frees</span>
+
+        <span class="comment">// Main allocation heap statistics.</span>
+        HeapAlloc    <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bytes allocated and still in use</span>
+        HeapSys      <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bytes obtained from system</span>
+        HeapIdle     <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bytes in idle spans</span>
+        HeapInuse    <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bytes in non-idle span</span>
+        HeapReleased <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bytes released to the OS</span>
+        HeapObjects  <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// total number of allocated objects</span>
+
+        <span class="comment">// Low-level fixed-size structure allocator statistics.</span>
+        <span class="comment">//	Inuse is bytes used now.</span>
+        <span class="comment">//	Sys is bytes obtained from system.</span>
+        StackInuse  <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// bootstrap stacks</span>
+        StackSys    <a href="../builtin/index.html#uint64">uint64</a>
+        MSpanInuse  <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// mspan structures</span>
+        MSpanSys    <a href="../builtin/index.html#uint64">uint64</a>
+        MCacheInuse <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// mcache structures</span>
+        MCacheSys   <a href="../builtin/index.html#uint64">uint64</a>
+        BuckHashSys <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// profiling bucket hash table</span>
+
+        <span class="comment">// Garbage collector statistics.</span>
+        NextGC       <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// next run in HeapAlloc time (bytes)</span>
+        LastGC       <a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// last run in absolute time (ns)</span>
+        PauseTotalNs <a href="../builtin/index.html#uint64">uint64</a>
+        PauseNs      [256]<a href="../builtin/index.html#uint64">uint64</a> <span class="comment">// circular buffer of recent GC pause times, most recent at [(NumGC+255)%256]</span>
+        NumGC        <a href="../builtin/index.html#uint32">uint32</a>
+        EnableGC     <a href="../builtin/index.html#bool">bool</a>
+        DebugGC      <a href="../builtin/index.html#bool">bool</a>
+
+        <span class="comment">// Per-size allocation statistics.</span>
+        <span class="comment">// 61 is NumSizeClasses in the C code.</span>
+        BySize [61]struct {
+                Size    <a href="../builtin/index.html#uint32">uint32</a>
+                Mallocs <a href="../builtin/index.html#uint64">uint64</a>
+                Frees   <a href="../builtin/index.html#uint64">uint64</a>
+        }
+}</pre>
+			<p>
+A MemStats records statistics about the memory allocator.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="StackRecord">type <a href="http://golang.org/src/pkg/runtime/debug.go?s=3699:3800#L83">StackRecord</a></h2>
+			<pre>type StackRecord struct {
+        Stack0 [32]<a href="../builtin/index.html#uintptr">uintptr</a> <span class="comment">// stack trace for this record; ends at first 0 entry</span>
+}</pre>
+			<p>
+A StackRecord describes a single execution stack.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="StackRecord.Stack">func (*StackRecord) <a href="http://golang.org/src/pkg/runtime/debug.go?s=3888:3927#L89">Stack</a></h3>
+				<pre>func (r *<a href="#StackRecord">StackRecord</a>) Stack() []<a href="../builtin/index.html#uintptr">uintptr</a></pre>
+				<p>
+Stack returns the stack trace associated with the record,
+a prefix of r.Stack0.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="TypeAssertionError">type <a href="http://golang.org/src/pkg/runtime/error.go?s=523:710#L9">TypeAssertionError</a></h2>
+			<pre>type TypeAssertionError struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A TypeAssertionError explains a failed type assertion.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="TypeAssertionError.Error">func (*TypeAssertionError) <a href="http://golang.org/src/pkg/runtime/error.go?s=758:801#L18">Error</a></h3>
+				<pre>func (e *<a href="#TypeAssertionError">TypeAssertionError</a>) Error() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="TypeAssertionError.RuntimeError">func (*TypeAssertionError) <a href="http://golang.org/src/pkg/runtime/error.go?s=712:753#L16">RuntimeError</a></h3>
+				<pre>func (*<a href="#TypeAssertionError">TypeAssertionError</a>) RuntimeError()</pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="../index.html">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="cgo/index.html">cgo</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cgo contains runtime support for code generated by the cgo tool.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="debug/index.html">debug</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package debug contains facilities for programs to debug themselves while they are running.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="pprof/index.html">pprof</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package pprof writes runtime profiling data in the format expected by the pprof visualization tool.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="race/index.html">race</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package race implements data race detection logic.</td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=894&s_ttfb=901&id=1380993865987918', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/runtime/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:47 GMT -->
+</html>
+

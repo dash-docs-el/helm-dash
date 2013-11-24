@@ -1,0 +1,409 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/bn256 by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:25:35 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>bn256</title>
+  
+    <meta name="twitter:title" content="Package bn256">
+    <meta property="og:title" content="Package bn256">
+    <meta name="description" content="Package bn256 implements a particular bilinear group at the 128-bit security level.">
+    <meta name="twitter:description" content="Package bn256 implements a particular bilinear group at the 128-bit security level.">
+    <meta property="og:description" content="Package bn256 implements a particular bilinear group at the 128-bit security level.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=crypto"><strong>go.crypto:</strong></a>
+  <a href="index.html">code.google.com/p/go.crypto</a><span class="text-muted">/</span><span class="text-muted">bn256</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    <span class="text-muted">|</span> <a href="#pkg-examples">Examples</a>
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package bn256</h2>
+    <p><code>import "code.google.com/p/go.crypto/bn256"</code>
+    </p><p>
+Package bn256 implements a particular bilinear group at the 128-bit security level.
+</p>
+<p>
+Bilinear groups are the basis of many of the new cryptographic protocols
+that have been proposed over the past decade. They consist of a triplet of
+groups (G₁, G₂ and GT) such that there exists a function e(g₁ˣ,g₂ʸ)=gTˣʸ
+(where gₓ is a generator of the respective group). That function is called
+a pairing function.
+</p>
+<p>
+This package specifically implements the Optimal Ate pairing over a 256-bit
+Barreto-Naehrig curve as described in
+<a href="http://cryptojedi.org/papers/dclxvi-20100714.pdf">http://cryptojedi.org/papers/dclxvi-20100714.pdf</a>. Its output is compatible
+with the implementation described in that paper.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    <li><a href="#pkg-variables">Variables</a>
+    </li><li><a href="#RandomG1">func RandomG1(r io.Reader) (*big.Int, *G1, error)</a></li><li><a href="#RandomG2">func RandomG2(r io.Reader) (*big.Int, *G2, error)</a>
+    
+      </li><li><a href="#G1">type G1</a>
+        <ul>
+        
+        <li><a href="#G1.Add">func (e *G1) Add(a, b *G1) *G1</a></li><li><a href="#G1.Marshal">func (n *G1) Marshal() []byte</a></li><li><a href="#G1.Neg">func (e *G1) Neg(a *G1) *G1</a></li><li><a href="#G1.ScalarBaseMult">func (e *G1) ScalarBaseMult(k *big.Int) *G1</a></li><li><a href="#G1.ScalarMult">func (e *G1) ScalarMult(a *G1, k *big.Int) *G1</a></li><li><a href="#G1.String">func (g *G1) String() string</a></li><li><a href="#G1.Unmarshal">func (e *G1) Unmarshal(m []byte) (*G1, bool)</a>
+        </li></ul>
+    
+      </li><li><a href="#G2">type G2</a>
+        <ul>
+        
+        <li><a href="#G2.Add">func (e *G2) Add(a, b *G2) *G2</a></li><li><a href="#G2.Marshal">func (n *G2) Marshal() []byte</a></li><li><a href="#G2.ScalarBaseMult">func (e *G2) ScalarBaseMult(k *big.Int) *G2</a></li><li><a href="#G2.ScalarMult">func (e *G2) ScalarMult(a *G2, k *big.Int) *G2</a></li><li><a href="#G2.String">func (g *G2) String() string</a></li><li><a href="#G2.Unmarshal">func (e *G2) Unmarshal(m []byte) (*G2, bool)</a>
+        </li></ul>
+    
+      </li><li><a href="#GT">type GT</a>
+        <ul>
+        <li><a href="#Pair">func Pair(g1 *G1, g2 *G2) *GT</a>
+        </li><li><a href="#GT.Add">func (e *GT) Add(a, b *GT) *GT</a></li><li><a href="#GT.Marshal">func (n *GT) Marshal() []byte</a></li><li><a href="#GT.Neg">func (e *GT) Neg(a *GT) *GT</a></li><li><a href="#GT.ScalarMult">func (e *GT) ScalarMult(a *GT, k *big.Int) *GT</a></li><li><a href="#GT.String">func (g *GT) String() string</a></li><li><a href="#GT.Unmarshal">func (e *GT) Unmarshal(m []byte) (*GT, bool)</a>
+        </li></ul>
+    
+    </li></ul></div>
+
+    <h4 id="pkg-examples">Examples <a class="permalink" href="#pkg-examples">¶</a></h4><ul class="list-unstyled">
+    <li><a href="#example-Pair" onclick="$('#ex-Pair').addClass('in').removeClass('collapse').height('auto')">Pair</a>
+    </li></ul>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/bn256/?repo=crypto">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto">bn256.go</a> <a href="http://code.google.com/p/go/source/browse/bn256/constants.go?repo=crypto">constants.go</a> <a href="http://code.google.com/p/go/source/browse/bn256/curve.go?repo=crypto">curve.go</a> <a href="http://code.google.com/p/go/source/browse/bn256/gfp12.go?repo=crypto">gfp12.go</a> <a href="http://code.google.com/p/go/source/browse/bn256/gfp2.go?repo=crypto">gfp2.go</a> <a href="http://code.google.com/p/go/source/browse/bn256/gfp6.go?repo=crypto">gfp6.go</a> <a href="http://code.google.com/p/go/source/browse/bn256/optate.go?repo=crypto">optate.go</a> <a href="http://code.google.com/p/go/source/browse/bn256/twist.go?repo=crypto">twist.go</a> </p>
+
+    
+
+    <h3 id="pkg-variables">Variables <a class="permalink" href="#pkg-variables">¶</a></h3><pre>var <span id="Order">Order</span> = bigFromBase10("65000549695646603732796438742359905742570406053903786389881062969044166799969")</pre><p>
+Order is the number of elements in both G₁ and G₂: 36u⁴+36u³+18u³+6u+1.
+</p>
+
+
+    <h3 id="RandomG1">func <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#35">RandomG1</a> <a class="permalink" href="#RandomG1">¶</a></h3>
+    <pre class="funcdecl">func RandomG1(r <a href="http://godoc.org/io/#Reader">io.Reader</a>) (*<a href="http://godoc.org/math/big/#Int">big.Int</a>, *<a href="#G1">G1</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+RandomG1 returns x and g₁ˣ where x is a random, non-zero number read from r.
+</p>
+
+    
+    <h3 id="RandomG2">func <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#152">RandomG2</a> <a class="permalink" href="#RandomG2">¶</a></h3>
+    <pre class="funcdecl">func RandomG2(r <a href="http://godoc.org/io/#Reader">io.Reader</a>) (*<a href="http://godoc.org/math/big/#Int">big.Int</a>, *<a href="#G2">G2</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+RandomG1 returns x and g₂ˣ where x is a random, non-zero number read from r.
+</p>
+
+    
+    
+
+   <h3 id="G1">type <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#30">G1</a> <a class="permalink" href="#G1">¶</a></h3>
+      <pre>type G1 struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+G1 is an abstract cyclic group. The zero value is suitable for use as the
+output of an operation, but cannot be used as an input.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="G1.Add">func (*G1) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#77">Add</a> <a class="permalink" href="#G1.Add">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G1">G1</a>) Add(a, b *<a href="#G1">G1</a>) *<a href="#G1">G1</a></pre><p>
+Add sets e to a+b and then returns e.
+BUG(agl): this function is not complete: a==b fails.
+</p>
+
+        
+        <h4 id="G1.Marshal">func (*G1) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#95">Marshal</a> <a class="permalink" href="#G1.Marshal">¶</a></h4>
+        <pre class="funcdecl">func (n *<a href="#G1">G1</a>) Marshal() []<a href="http://godoc.org/builtin/#byte">byte</a></pre><p>
+Marshal converts n to a byte slice.
+</p>
+
+        
+        <h4 id="G1.Neg">func (*G1) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#86">Neg</a> <a class="permalink" href="#G1.Neg">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G1">G1</a>) Neg(a *<a href="#G1">G1</a>) *<a href="#G1">G1</a></pre><p>
+Neg sets e to -a and then returns e.
+</p>
+
+        
+        <h4 id="G1.ScalarBaseMult">func (*G1) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#58">ScalarBaseMult</a> <a class="permalink" href="#G1.ScalarBaseMult">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G1">G1</a>) ScalarBaseMult(k *<a href="http://godoc.org/math/big/#Int">big.Int</a>) *<a href="#G1">G1</a></pre><p>
+ScalarBaseMult sets e to g*k where g is the generator of the group and
+then returns e.
+</p>
+
+        
+        <h4 id="G1.ScalarMult">func (*G1) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#67">ScalarMult</a> <a class="permalink" href="#G1.ScalarMult">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G1">G1</a>) ScalarMult(a *<a href="#G1">G1</a>, k *<a href="http://godoc.org/math/big/#Int">big.Int</a>) *<a href="#G1">G1</a></pre><p>
+ScalarMult sets e to a*k and then returns e.
+</p>
+
+        
+        <h4 id="G1.String">func (*G1) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#52">String</a> <a class="permalink" href="#G1.String">¶</a></h4>
+        <pre class="funcdecl">func (g *<a href="#G1">G1</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre>
+        
+        <h4 id="G1.Unmarshal">func (*G1) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#113">Unmarshal</a> <a class="permalink" href="#G1.Unmarshal">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G1">G1</a>) Unmarshal(m []<a href="http://godoc.org/builtin/#byte">byte</a>) (*<a href="#G1">G1</a>, <a href="http://godoc.org/builtin/#bool">bool</a>)</pre><p>
+Unmarshal sets e to the result of converting the output of Marshal back into
+a group element and then returns e.
+</p>
+
+        
+        
+
+    <h3 id="G2">type <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#147">G2</a> <a class="permalink" href="#G2">¶</a></h3>
+      <pre>type G2 struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+G2 is an abstract cyclic group. The zero value is suitable for use as the
+output of an operation, but cannot be used as an input.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="G2.Add">func (*G2) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#194">Add</a> <a class="permalink" href="#G2.Add">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G2">G2</a>) Add(a, b *<a href="#G2">G2</a>) *<a href="#G2">G2</a></pre><p>
+Add sets e to a+b and then returns e.
+BUG(agl): this function is not complete: a==b fails.
+</p>
+
+        
+        <h4 id="G2.Marshal">func (*G2) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#203">Marshal</a> <a class="permalink" href="#G2.Marshal">¶</a></h4>
+        <pre class="funcdecl">func (n *<a href="#G2">G2</a>) Marshal() []<a href="http://godoc.org/builtin/#byte">byte</a></pre><p>
+Marshal converts n into a byte slice.
+</p>
+
+        
+        <h4 id="G2.ScalarBaseMult">func (*G2) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#175">ScalarBaseMult</a> <a class="permalink" href="#G2.ScalarBaseMult">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G2">G2</a>) ScalarBaseMult(k *<a href="http://godoc.org/math/big/#Int">big.Int</a>) *<a href="#G2">G2</a></pre><p>
+ScalarBaseMult sets e to g*k where g is the generator of the group and
+then returns out.
+</p>
+
+        
+        <h4 id="G2.ScalarMult">func (*G2) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#184">ScalarMult</a> <a class="permalink" href="#G2.ScalarMult">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G2">G2</a>) ScalarMult(a *<a href="#G2">G2</a>, k *<a href="http://godoc.org/math/big/#Int">big.Int</a>) *<a href="#G2">G2</a></pre><p>
+ScalarMult sets e to a*k and then returns e.
+</p>
+
+        
+        <h4 id="G2.String">func (*G2) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#169">String</a> <a class="permalink" href="#G2.String">¶</a></h4>
+        <pre class="funcdecl">func (g *<a href="#G2">G2</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre>
+        
+        <h4 id="G2.Unmarshal">func (*G2) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#225">Unmarshal</a> <a class="permalink" href="#G2.Unmarshal">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#G2">G2</a>) Unmarshal(m []<a href="http://godoc.org/builtin/#byte">byte</a>) (*<a href="#G2">G2</a>, <a href="http://godoc.org/builtin/#bool">bool</a>)</pre><p>
+Unmarshal sets e to the result of converting the output of Marshal back into
+a group element and then returns e.
+</p>
+
+        
+        
+
+    <h3 id="GT">type <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#264">GT</a> <a class="permalink" href="#GT">¶</a></h3>
+      <pre>type GT struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+GT is an abstract cyclic group. The zero value is suitable for use as the
+output of an operation, but cannot be used as an input.
+</p>
+
+      
+      
+      
+
+        <h4 id="Pair">func <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#367">Pair</a> <a class="permalink" href="#Pair">¶</a></h4>
+        <pre class="funcdecl">func Pair(g1 *<a href="#G1">G1</a>, g2 *<a href="#G2">G2</a>) *<a href="#GT">GT</a></pre><p>
+Pair calculates an Optimal Ate pairing.
+</p>
+
+        <div class="panel-group">
+<div class="panel panel-default" id="example-Pair">
+  <div class="panel-heading"><a class="accordion-toggle" data-toggle="collapse" href="#ex-Pair">Example</a></div>
+  <div id="ex-Pair" class="panel-collapse collapse"><div class="panel-body">
+    
+    <p>Code:
+    </p><pre><span class="com">// This implements the tripartite Diffie-Hellman algorithm from "A One</span>
+<span class="com">// Round Protocol for Tripartite Diffie-Hellman", A. Joux.</span>
+<span class="com">// http://www.springerlink.com/content/cddc57yyva0hburb/fulltext.pdf</span>
+
+<span class="com">// Each of three parties, a, b and c, generate a private value.</span>
+a, _ := rand.Int(rand.Reader, Order)
+b, _ := rand.Int(rand.Reader, Order)
+c, _ := rand.Int(rand.Reader, Order)
+
+<span class="com">// Then each party calculates g₁ and g₂ times their private value.</span>
+pa := new(G1).ScalarBaseMult(a)
+qa := new(G2).ScalarBaseMult(a)
+
+pb := new(G1).ScalarBaseMult(b)
+qb := new(G2).ScalarBaseMult(b)
+
+pc := new(G1).ScalarBaseMult(c)
+qc := new(G2).ScalarBaseMult(c)
+
+<span class="com">// Now each party exchanges its public values with the other two and</span>
+<span class="com">// all parties can calculate the shared key.</span>
+k1 := Pair(pb, qc)
+k1.ScalarMult(k1, a)
+
+k2 := Pair(pc, qa)
+k2.ScalarMult(k2, b)
+
+k3 := Pair(pa, qb)
+k3.ScalarMult(k3, c)
+
+<span class="com">// k1, k2 and k3 will all be equal.</span>
+</pre>
+    
+  </div></div>
+</div>
+
+</div>
+
+        
+
+        <h4 id="GT.Add">func (*GT) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#282">Add</a> <a class="permalink" href="#GT.Add">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#GT">GT</a>) Add(a, b *<a href="#GT">GT</a>) *<a href="#GT">GT</a></pre><p>
+Add sets e to a+b and then returns e.
+</p>
+
+        
+        <h4 id="GT.Marshal">func (*GT) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#300">Marshal</a> <a class="permalink" href="#GT.Marshal">¶</a></h4>
+        <pre class="funcdecl">func (n *<a href="#GT">GT</a>) Marshal() []<a href="http://godoc.org/builtin/#byte">byte</a></pre><p>
+Marshal converts n into a byte slice.
+</p>
+
+        
+        <h4 id="GT.Neg">func (*GT) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#291">Neg</a> <a class="permalink" href="#GT.Neg">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#GT">GT</a>) Neg(a *<a href="#GT">GT</a>) *<a href="#GT">GT</a></pre><p>
+Neg sets e to -a and then returns e.
+</p>
+
+        
+        <h4 id="GT.ScalarMult">func (*GT) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#273">ScalarMult</a> <a class="permalink" href="#GT.ScalarMult">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#GT">GT</a>) ScalarMult(a *<a href="#GT">GT</a>, k *<a href="http://godoc.org/math/big/#Int">big.Int</a>) *<a href="#GT">GT</a></pre><p>
+ScalarMult sets e to a*k and then returns e.
+</p>
+
+        
+        <h4 id="GT.String">func (*GT) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#268">String</a> <a class="permalink" href="#GT.String">¶</a></h4>
+        <pre class="funcdecl">func (g *<a href="#GT">GT</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre>
+        
+        <h4 id="GT.Unmarshal">func (*GT) <a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#338">Unmarshal</a> <a class="permalink" href="#GT.Unmarshal">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#GT">GT</a>) Unmarshal(m []<a href="http://godoc.org/builtin/#byte">byte</a>) (*<a href="#GT">GT</a>, <a href="http://godoc.org/builtin/#bool">bool</a>)</pre><p>
+Unmarshal sets e to the result of converting the output of Marshal back into
+a group element and then returns e.
+</p>
+
+        
+        
+
+    
+
+    <h3 id="pkg-note-bug">Bugs <a class="permalink" href="#pkg-note-bug">¶</a></h3><p><a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#25">☞</a> this implementation is not constant time.</p><p><a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#76">☞</a> this function is not complete: a==b fails.</p><p><a title="View Source" href="http://code.google.com/p/go/source/browse/bn256/bn256.go?repo=crypto#193">☞</a> this function is not complete: a==b fails.
+
+  
+
+
+
+</p><div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.crypto/bn256"></form>
+  <p>Package bn256 imports <a href="bn256a687.html?imports">3 packages</a> (<a href="bn25675f0.html?import-graph">graph</a>) and is imported by <a href="bn256efa9.html?importers">1 packages</a>.
+  Updated <span class="timeago" title="2013-10-01T15:55:02Z">2013-10-01</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/bn256 by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:25:37 GMT -->
+
+</body>

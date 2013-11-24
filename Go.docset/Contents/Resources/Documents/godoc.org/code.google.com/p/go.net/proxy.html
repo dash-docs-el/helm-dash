@@ -1,0 +1,304 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.net/proxy by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:13 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>proxy</title>
+  
+    <meta name="twitter:title" content="Package proxy">
+    <meta property="og:title" content="Package proxy">
+    <meta name="description" content="Package proxy provides support for a variety of protocols to proxy network data.">
+    <meta name="twitter:description" content="Package proxy provides support for a variety of protocols to proxy network data.">
+    <meta property="og:description" content="Package proxy provides support for a variety of protocols to proxy network data.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=net"><strong>go.net:</strong></a>
+  <a href="index.html">code.google.com/p/go.net</a><span class="text-muted">/</span><span class="text-muted">proxy</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package proxy</h2>
+    <p><code>import "code.google.com/p/go.net/proxy"</code>
+    </p><p>
+Package proxy provides support for a variety of protocols to proxy network
+data.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    <li><a href="#pkg-variables">Variables</a>
+    </li><li><a href="#RegisterDialerType">func RegisterDialerType(scheme string, f func(*url.URL, Dialer) (Dialer, error))</a>
+    
+      </li><li><a href="#Auth">type Auth</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Dialer">type Dialer</a>
+        <ul>
+        <li><a href="#FromEnvironment">func FromEnvironment() Dialer</a></li><li><a href="#FromURL">func FromURL(u *url.URL, forward Dialer) (Dialer, error)</a></li><li><a href="#SOCKS5">func SOCKS5(network, addr string, auth *Auth, forward Dialer) (Dialer, error)</a>
+        
+        </li></ul>
+    
+      </li><li><a href="#PerHost">type PerHost</a>
+        <ul>
+        <li><a href="#NewPerHost">func NewPerHost(defaultDialer, bypass Dialer) *PerHost</a>
+        </li><li><a href="#PerHost.AddFromString">func (p *PerHost) AddFromString(s string)</a></li><li><a href="#PerHost.AddHost">func (p *PerHost) AddHost(host string)</a></li><li><a href="#PerHost.AddIP">func (p *PerHost) AddIP(ip net.IP)</a></li><li><a href="#PerHost.AddNetwork">func (p *PerHost) AddNetwork(net *net.IPNet)</a></li><li><a href="#PerHost.AddZone">func (p *PerHost) AddZone(zone string)</a></li><li><a href="#PerHost.Dial">func (p *PerHost) Dial(network, addr string) (c net.Conn, err error)</a>
+        </li></ul>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/proxy/?repo=net">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/proxy/direct.go?repo=net">direct.go</a> <a href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net">per_host.go</a> <a href="http://code.google.com/p/go/source/browse/proxy/proxy.go?repo=net">proxy.go</a> <a href="http://code.google.com/p/go/source/browse/proxy/socks5.go?repo=net">socks5.go</a> </p>
+
+    
+
+    <h3 id="pkg-variables">Variables <a class="permalink" href="#pkg-variables">¶</a></h3><pre>var <span id="Direct">Direct</span> = direct{}</pre><p>
+Direct is a direct proxy: one that makes network connections directly.
+</p>
+
+
+    <h3 id="RegisterDialerType">func <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/proxy.go?repo=net#61">RegisterDialerType</a> <a class="permalink" href="#RegisterDialerType">¶</a></h3>
+    <pre class="funcdecl">func RegisterDialerType(scheme <a href="http://godoc.org/builtin/#string">string</a>, f func(*<a href="http://godoc.org/net/url/#URL">url.URL</a>, <a href="#Dialer">Dialer</a>) (<a href="#Dialer">Dialer</a>, <a href="http://godoc.org/builtin/#error">error</a>))</pre><p>
+RegisterDialerType takes a URL scheme and a function to generate Dialers from
+a URL with that scheme and a forwarding Dialer. Registered schemes are used
+by FromURL.
+</p>
+
+    
+    
+
+   <h3 id="Auth">type <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/proxy.go?repo=net#23">Auth</a> <a class="permalink" href="#Auth">¶</a></h3>
+      <pre>type Auth struct {
+    <span id="Auth.User">User</span>, <span id="Auth.Password">Password</span> <a href="http://godoc.org/builtin/#string">string</a>
+}</pre><p>
+Auth contains authentication parameters that specific Dialers may require.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="Dialer">type <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/proxy.go?repo=net#17">Dialer</a> <a class="permalink" href="#Dialer">¶</a></h3>
+      <pre>type Dialer interface {
+    <span class="com">// Dial connects to the given address via the proxy.</span>
+    <span id="Dialer.Dial">Dial</span>(network, addr <a href="http://godoc.org/builtin/#string">string</a>) (c <a href="http://godoc.org/net/#Conn">net.Conn</a>, err <a href="http://godoc.org/builtin/#error">error</a>)
+}</pre><p>
+A Dialer is a means to establish a connection.
+</p>
+
+      
+      
+      
+
+        <h4 id="FromEnvironment">func <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/proxy.go?repo=net#29">FromEnvironment</a> <a class="permalink" href="#FromEnvironment">¶</a></h4>
+        <pre class="funcdecl">func FromEnvironment() <a href="#Dialer">Dialer</a></pre><p>
+FromEnvironment returns the dialer specified by the proxy related variables in
+the environment.
+</p>
+
+        
+        <h4 id="FromURL">func <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/proxy.go?repo=net#70">FromURL</a> <a class="permalink" href="#FromURL">¶</a></h4>
+        <pre class="funcdecl">func FromURL(u *<a href="http://godoc.org/net/url/#URL">url.URL</a>, forward <a href="#Dialer">Dialer</a>) (<a href="#Dialer">Dialer</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+FromURL returns a Dialer given a URL specification and an underlying
+Dialer for it to make network requests.
+</p>
+
+        
+        <h4 id="SOCKS5">func <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/socks5.go?repo=net#16">SOCKS5</a> <a class="permalink" href="#SOCKS5">¶</a></h4>
+        <pre class="funcdecl">func SOCKS5(network, addr <a href="http://godoc.org/builtin/#string">string</a>, auth *<a href="#Auth">Auth</a>, forward <a href="#Dialer">Dialer</a>) (<a href="#Dialer">Dialer</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+SOCKS5 returns a Dialer that makes SOCKSv5 connections to the given address
+with an optional username and password. See <a href="http://tools.ietf.org/html/rfc1928">RFC 1928</a>.
+</p>
+
+        
+        
+
+        
+
+    <h3 id="PerHost">type <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net#14">PerHost</a> <a class="permalink" href="#PerHost">¶</a></h3>
+      <pre>type PerHost struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+A PerHost directs connections to a default Dialer unless the hostname
+requested matches one of a number of exceptions.
+</p>
+
+      
+      
+      
+
+        <h4 id="NewPerHost">func <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net#26">NewPerHost</a> <a class="permalink" href="#NewPerHost">¶</a></h4>
+        <pre class="funcdecl">func NewPerHost(defaultDialer, bypass <a href="#Dialer">Dialer</a>) *<a href="#PerHost">PerHost</a></pre><p>
+NewPerHost returns a PerHost Dialer that directs connections to either
+defaultDialer or bypass, depending on whether the connection matches one of
+the configured rules.
+</p>
+
+        
+        
+
+        <h4 id="PerHost.AddFromString">func (*PerHost) <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net#82">AddFromString</a> <a class="permalink" href="#PerHost.AddFromString">¶</a></h4>
+        <pre class="funcdecl">func (p *<a href="#PerHost">PerHost</a>) AddFromString(s <a href="http://godoc.org/builtin/#string">string</a>)</pre><p>
+AddFromString parses a string that contains comma-separated values
+specifying hosts that should use the bypass proxy. Each value is either an
+IP address, a CIDR range, a zone (*.example.com) or a hostname
+(localhost). A best effort is made to parse the string and errors are
+ignored.
+</p>
+
+        
+        <h4 id="PerHost.AddHost">func (*PerHost) <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net#135">AddHost</a> <a class="permalink" href="#PerHost.AddHost">¶</a></h4>
+        <pre class="funcdecl">func (p *<a href="#PerHost">PerHost</a>) AddHost(host <a href="http://godoc.org/builtin/#string">string</a>)</pre><p>
+AddHost specifies a hostname that will use the bypass proxy.
+</p>
+
+        
+        <h4 id="PerHost.AddIP">func (*PerHost) <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net#111">AddIP</a> <a class="permalink" href="#PerHost.AddIP">¶</a></h4>
+        <pre class="funcdecl">func (p *<a href="#PerHost">PerHost</a>) AddIP(ip <a href="http://godoc.org/net/#IP">net.IP</a>)</pre><p>
+AddIP specifies an IP address that will use the bypass proxy. Note that
+this will only take effect if a literal IP address is dialed. A connection
+to a named host will never match an IP.
+</p>
+
+        
+        <h4 id="PerHost.AddNetwork">func (*PerHost) <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net#118">AddNetwork</a> <a class="permalink" href="#PerHost.AddNetwork">¶</a></h4>
+        <pre class="funcdecl">func (p *<a href="#PerHost">PerHost</a>) AddNetwork(net *<a href="http://godoc.org/net/#IPNet">net.IPNet</a>)</pre><p>
+AddNetwork specifies an IP range that will use the bypass proxy. Note that
+this will only take effect if a literal IP address is dialed. A connection
+to a named host will never match.
+</p>
+
+        
+        <h4 id="PerHost.AddZone">func (*PerHost) <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net#124">AddZone</a> <a class="permalink" href="#PerHost.AddZone">¶</a></h4>
+        <pre class="funcdecl">func (p *<a href="#PerHost">PerHost</a>) AddZone(zone <a href="http://godoc.org/builtin/#string">string</a>)</pre><p>
+AddZone specifies a DNS suffix that will use the bypass proxy. A zone of
+"example.com" matches "example.com" and all of its subdomains.
+</p>
+
+        
+        <h4 id="PerHost.Dial">func (*PerHost) <a title="View Source" href="http://code.google.com/p/go/source/browse/proxy/per_host.go?repo=net#35">Dial</a> <a class="permalink" href="#PerHost.Dial">¶</a></h4>
+        <pre class="funcdecl">func (p *<a href="#PerHost">PerHost</a>) Dial(network, addr <a href="http://godoc.org/builtin/#string">string</a>) (c <a href="http://godoc.org/net/#Conn">net.Conn</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Dial connects to the address addr on the given network through either
+defaultDialer or bypass.
+</p>
+
+        
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.net/proxy"></form>
+  <p>Package proxy imports <a href="proxya687.html?imports">7 packages</a> (<a href="proxy75f0.html?import-graph">graph</a>) and is imported by <a href="proxyefa9.html?importers">5 packages</a>.
+  Updated <span class="timeago" title="2013-09-20T13:12:30Z">2013-09-20</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.net/proxy by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:14 GMT -->
+
+</body>

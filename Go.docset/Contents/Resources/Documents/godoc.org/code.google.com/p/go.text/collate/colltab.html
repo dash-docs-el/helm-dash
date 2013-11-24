@@ -1,0 +1,344 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/collate/colltab by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:24 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>colltab</title>
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=text"><strong>go.text:</strong></a>
+  <a href="../index.html">code.google.com/p/go.text</a><span class="text-muted">/</span><a href="index.html">collate</a><span class="text-muted">/</span><span class="text-muted">colltab</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package colltab</h2>
+    <p><code>import "code.google.com/p/go.text/collate/colltab"</code>
+    
+    
+
+    </p><h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    <li><a href="#pkg-constants">Constants</a>
+    
+    
+    
+      </li><li><a href="#Elem">type Elem</a>
+        <ul>
+        <li><a href="#MakeElem">func MakeElem(primary, secondary, tertiary int, ccc uint8) (Elem, error)</a></li><li><a href="#MakeQuaternary">func MakeQuaternary(v int) Elem</a>
+        </li><li><a href="#Elem.CCC">func (ce Elem) CCC() uint8</a></li><li><a href="#Elem.Mask">func (ce Elem) Mask(l Level) uint32</a></li><li><a href="#Elem.Primary">func (ce Elem) Primary() int</a></li><li><a href="#Elem.Quaternary">func (ce Elem) Quaternary() int</a></li><li><a href="#Elem.Secondary">func (ce Elem) Secondary() int</a></li><li><a href="#Elem.Tertiary">func (ce Elem) Tertiary() uint8</a></li><li><a href="#Elem.Weight">func (ce Elem) Weight(l Level) int</a>
+        </li></ul>
+    
+      </li><li><a href="#Level">type Level</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Weigher">type Weigher</a>
+        <ul>
+        <li><a href="#Init">func Init(data interface{}) Weigher</a>
+        
+        </li></ul>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/collate/colltab/?repo=text">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text">colelem.go</a> <a href="http://code.google.com/p/go/source/browse/collate/colltab/colltab.go?repo=text">colltab.go</a> <a href="http://code.google.com/p/go/source/browse/collate/colltab/contract.go?repo=text">contract.go</a> <a href="http://code.google.com/p/go/source/browse/collate/colltab/export.go?repo=text">export.go</a> <a href="http://code.google.com/p/go/source/browse/collate/colltab/table.go?repo=text">table.go</a> <a href="http://code.google.com/p/go/source/browse/collate/colltab/trie.go?repo=text">trie.go</a> </p>
+
+    <h3 id="pkg-constants">Constants <a class="permalink" href="#pkg-constants">¶</a></h3><pre>const (
+    <span id="Ignore">Ignore</span> = ceType4
+)</pre><p>
+For normal collation elements, we assume that a collation element either has
+a primary or non-default secondary value, not both.
+Collation elements with a primary value are of the form
+01pppppp pppppppp ppppppp0 ssssssss
+</p>
+<pre>- p* is primary collation value
+- s* is the secondary collation value
+</pre>
+<p>
+00pppppp pppppppp ppppppps sssttttt, where
+</p>
+<pre>- p* is primary collation value
+- s* offset of secondary from default value.
+- t* is the tertiary collation value
+</pre>
+<p>
+100ttttt cccccccc pppppppp pppppppp
+</p>
+<pre>- t* is the tertiar collation value
+- c* is the cannonical combining class
+- p* is the primary collation value
+</pre>
+<p>
+Collation elements with a secondary value are of the form
+1010cccc ccccssss ssssssss tttttttt, where
+</p>
+<pre>- c* is the canonical combining class
+- s* is the secondary collation value
+- t* is the tertiary collation value
+</pre>
+<p>
+11qqqqqq qqqqqqqq qqqqqqq0 00000000
+</p>
+<pre>- q* quaternary value
+</pre>
+<pre>const (
+    <span id="MaxQuaternary">MaxQuaternary</span> = 0x1FFFFF <span class="com">// 21 bits.</span>
+)</pre><pre>const (
+    <span id="PrivateUse">PrivateUse</span> = minContract
+)</pre>
+
+    
+
+    
+
+   <h3 id="Elem">type <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#39">Elem</a> <a class="permalink" href="#Elem">¶</a></h3>
+      <pre>type Elem <a href="http://godoc.org/builtin/#uint32">uint32</a></pre><p>
+Elem is a representation of a collation element. This API provides ways to encode
+and decode Elems. Implementations of collation tables may use values greater
+or equal to PrivateUse for their own purposes.  However, these should never be
+returned by AppendNext.
+</p>
+
+      
+      
+      
+
+        <h4 id="MakeElem">func <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#131">MakeElem</a> <a class="permalink" href="#MakeElem">¶</a></h4>
+        <pre class="funcdecl">func MakeElem(primary, secondary, tertiary <a href="http://godoc.org/builtin/#int">int</a>, ccc <a href="http://godoc.org/builtin/#uint8">uint8</a>) (<a href="#Elem">Elem</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+MakeElem returns an Elem for the given values.  It will return an error
+if the given combination of values is invalid.
+</p>
+
+        
+        <h4 id="MakeQuaternary">func <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#180">MakeQuaternary</a> <a class="permalink" href="#MakeQuaternary">¶</a></h4>
+        <pre class="funcdecl">func MakeQuaternary(v <a href="http://godoc.org/builtin/#int">int</a>) <a href="#Elem">Elem</a></pre><p>
+MakeQuaternary returns an Elem with the given quaternary value.
+</p>
+
+        
+        
+
+        <h4 id="Elem.CCC">func (Elem) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#193">CCC</a> <a class="permalink" href="#Elem.CCC">¶</a></h4>
+        <pre class="funcdecl">func (ce <a href="#Elem">Elem</a>) CCC() <a href="http://godoc.org/builtin/#uint8">uint8</a></pre><p>
+CCC returns the canoncial combining class associated with the underlying character,
+if applicable, or 0 otherwise.
+</p>
+
+        
+        <h4 id="Elem.Mask">func (Elem) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#187">Mask</a> <a class="permalink" href="#Elem.Mask">¶</a></h4>
+        <pre class="funcdecl">func (ce <a href="#Elem">Elem</a>) Mask(l <a href="#Level">Level</a>) <a href="http://godoc.org/builtin/#uint32">uint32</a></pre><p>
+Mask sets weights for any level smaller than l to 0.
+The resulting Elem can be used to test for equality with
+other Elems to which the same mask has been applied.
+</p>
+
+        
+        <h4 id="Elem.Primary">func (Elem) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#204">Primary</a> <a class="permalink" href="#Elem.Primary">¶</a></h4>
+        <pre class="funcdecl">func (ce <a href="#Elem">Elem</a>) Primary() <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+Primary returns the primary collation weight for ce.
+</p>
+
+        
+        <h4 id="Elem.Quaternary">func (Elem) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#268">Quaternary</a> <a class="permalink" href="#Elem.Quaternary">¶</a></h4>
+        <pre class="funcdecl">func (ce <a href="#Elem">Elem</a>) Quaternary() <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+Quaternary returns the quaternary value if explicitly specified,
+0 if ce == Ignore, or MaxQuaternary otherwise.
+Quaternary values are used only for shifted variants.
+</p>
+
+        
+        <h4 id="Elem.Secondary">func (Elem) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#215">Secondary</a> <a class="permalink" href="#Elem.Secondary">¶</a></h4>
+        <pre class="funcdecl">func (ce <a href="#Elem">Elem</a>) Secondary() <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+Secondary returns the secondary collation weight for ce.
+</p>
+
+        
+        <h4 id="Elem.Tertiary">func (Elem) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#233">Tertiary</a> <a class="permalink" href="#Elem.Tertiary">¶</a></h4>
+        <pre class="funcdecl">func (ce <a href="#Elem">Elem</a>) Tertiary() <a href="http://godoc.org/builtin/#uint8">uint8</a></pre><p>
+Tertiary returns the tertiary collation weight for ce.
+</p>
+
+        
+        <h4 id="Elem.Weight">func (Elem) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#278">Weight</a> <a class="permalink" href="#Elem.Weight">¶</a></h4>
+        <pre class="funcdecl">func (ce <a href="#Elem">Elem</a>) Weight(l <a href="#Level">Level</a>) <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+Weight returns the collation weight for the given level.
+</p>
+
+        
+        
+
+    <h3 id="Level">type <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colelem.go?repo=text#18">Level</a> <a class="permalink" href="#Level">¶</a></h3>
+      <pre>type Level <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+Level identifies the collation comparison level.
+The primary level corresponds to the basic sorting of text.
+The secondary level corresponds to accents and related linguistic elements.
+The tertiary level corresponds to casing and related concepts.
+The quaternary level is derived from the other levels by the
+various algorithms for handling variable elements.
+</p>
+
+      <pre>const (
+    <span id="Primary">Primary</span> <a href="#Level">Level</a> = <a href="http://godoc.org/builtin/#iota">iota</a>
+    <span id="Secondary">Secondary</span>
+    <span id="Tertiary">Tertiary</span>
+    <span id="Quaternary">Quaternary</span>
+    <span id="Identity">Identity</span>
+)</pre>
+      
+      
+
+        
+
+        
+
+    <h3 id="Weigher">type <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/colltab.go?repo=text#8">Weigher</a> <a class="permalink" href="#Weigher">¶</a></h3>
+      <pre>type Weigher interface {
+    <span class="com">// Start finds the start of the segment that includes position p.</span>
+    <span id="Weigher.Start">Start</span>(p <a href="http://godoc.org/builtin/#int">int</a>, b []<a href="http://godoc.org/builtin/#byte">byte</a>) <a href="http://godoc.org/builtin/#int">int</a>
+
+    <span class="com">// StartString finds the start of the segment that includes position p.</span>
+    <span id="Weigher.StartString">StartString</span>(p <a href="http://godoc.org/builtin/#int">int</a>, s <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#int">int</a>
+
+    <span class="com">// AppendNext appends Elems to buf corresponding to the longest match</span>
+    <span class="com">// of a single character or contraction from the start of s.</span>
+    <span class="com">// It returns the new buf and the number of bytes consumed.</span>
+    <span id="Weigher.AppendNext">AppendNext</span>(buf []<a href="#Elem">Elem</a>, s []<a href="http://godoc.org/builtin/#byte">byte</a>) (ce []<a href="#Elem">Elem</a>, n <a href="http://godoc.org/builtin/#int">int</a>)
+
+    <span class="com">// AppendNextString appends Elems to buf corresponding to the longest match</span>
+    <span class="com">// of a single character or contraction from the start of s.</span>
+    <span class="com">// It returns the new buf and the number of bytes consumed.</span>
+    <span id="Weigher.AppendNextString">AppendNextString</span>(buf []<a href="#Elem">Elem</a>, s <a href="http://godoc.org/builtin/#string">string</a>) (ce []<a href="#Elem">Elem</a>, n <a href="http://godoc.org/builtin/#int">int</a>)
+
+    <span class="com">// Domain returns a slice of all single characters and contractions for which</span>
+    <span class="com">// collation elements are defined in this table.</span>
+    <span id="Weigher.Domain">Domain</span>() []<a href="http://godoc.org/builtin/#string">string</a>
+
+    <span class="com">// Top returns the highest variable primary value.</span>
+    <span id="Weigher.Top">Top</span>() <a href="http://godoc.org/builtin/#uint32">uint32</a>
+}</pre><p>
+A Weigher can be used as a source for Collator and Searcher.
+</p>
+
+      
+      
+      
+
+        <h4 id="Init">func <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/colltab/export.go?repo=text#8">Init</a> <a class="permalink" href="#Init">¶</a></h4>
+        <pre class="funcdecl">func Init(data interface{}) <a href="#Weigher">Weigher</a></pre><p>
+Init is for internal use only.
+</p>
+
+        
+        
+
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.text/collate/colltab"></form>
+  <p>Package colltab imports <a href="colltaba687.html?imports">4 packages</a> (<a href="colltab75f0.html?import-graph">graph</a>) and is imported by <a href="colltabefa9.html?importers">2 packages</a>.
+  Updated <span class="timeago" title="2013-10-05T07:43:45Z">2013-10-05</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/collate/colltab by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:25 GMT -->
+
+</body>

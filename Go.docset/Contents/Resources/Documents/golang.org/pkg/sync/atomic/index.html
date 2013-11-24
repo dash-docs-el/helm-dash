@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/sync/atomic/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>atomic</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package atomic</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "sync/atomic"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package atomic provides low-level atomic memory primitives
+useful for implementing synchronization algorithms.
+</p>
+<p>
+These functions require great care to be used correctly.
+Except for special, low-level applications, synchronization is better
+done with channels or the facilities of the sync package.
+Share memory by communicating;
+don&#39;t communicate by sharing memory.
+</p>
+<p>
+The compare-and-swap operation, implemented by the CompareAndSwapT
+functions, is the atomic equivalent of:
+</p>
+<pre>if *addr == old {
+	*addr = new
+	return true
+}
+return false
+</pre>
+<p>
+The add operation, implemented by the AddT functions, is the atomic
+equivalent of:
+</p>
+<pre>*addr += delta
+return *addr
+</pre>
+<p>
+The load and store operations, implemented by the LoadT and StoreT
+functions, are the atomic equivalents of &#34;return *addr&#34; and
+&#34;*addr = val&#34;.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#AddInt32">func AddInt32(addr *int32, delta int32) (new int32)</a></dd>
+			
+				
+				<dd><a href="#AddInt64">func AddInt64(addr *int64, delta int64) (new int64)</a></dd>
+			
+				
+				<dd><a href="#AddUint32">func AddUint32(addr *uint32, delta uint32) (new uint32)</a></dd>
+			
+				
+				<dd><a href="#AddUint64">func AddUint64(addr *uint64, delta uint64) (new uint64)</a></dd>
+			
+				
+				<dd><a href="#AddUintptr">func AddUintptr(addr *uintptr, delta uintptr) (new uintptr)</a></dd>
+			
+				
+				<dd><a href="#CompareAndSwapInt32">func CompareAndSwapInt32(addr *int32, old, new int32) (swapped bool)</a></dd>
+			
+				
+				<dd><a href="#CompareAndSwapInt64">func CompareAndSwapInt64(addr *int64, old, new int64) (swapped bool)</a></dd>
+			
+				
+				<dd><a href="#CompareAndSwapPointer">func CompareAndSwapPointer(addr *unsafe.Pointer, old, new unsafe.Pointer) (swapped bool)</a></dd>
+			
+				
+				<dd><a href="#CompareAndSwapUint32">func CompareAndSwapUint32(addr *uint32, old, new uint32) (swapped bool)</a></dd>
+			
+				
+				<dd><a href="#CompareAndSwapUint64">func CompareAndSwapUint64(addr *uint64, old, new uint64) (swapped bool)</a></dd>
+			
+				
+				<dd><a href="#CompareAndSwapUintptr">func CompareAndSwapUintptr(addr *uintptr, old, new uintptr) (swapped bool)</a></dd>
+			
+				
+				<dd><a href="#LoadInt32">func LoadInt32(addr *int32) (val int32)</a></dd>
+			
+				
+				<dd><a href="#LoadInt64">func LoadInt64(addr *int64) (val int64)</a></dd>
+			
+				
+				<dd><a href="#LoadPointer">func LoadPointer(addr *unsafe.Pointer) (val unsafe.Pointer)</a></dd>
+			
+				
+				<dd><a href="#LoadUint32">func LoadUint32(addr *uint32) (val uint32)</a></dd>
+			
+				
+				<dd><a href="#LoadUint64">func LoadUint64(addr *uint64) (val uint64)</a></dd>
+			
+				
+				<dd><a href="#LoadUintptr">func LoadUintptr(addr *uintptr) (val uintptr)</a></dd>
+			
+				
+				<dd><a href="#StoreInt32">func StoreInt32(addr *int32, val int32)</a></dd>
+			
+				
+				<dd><a href="#StoreInt64">func StoreInt64(addr *int64, val int64)</a></dd>
+			
+				
+				<dd><a href="#StorePointer">func StorePointer(addr *unsafe.Pointer, val unsafe.Pointer)</a></dd>
+			
+				
+				<dd><a href="#StoreUint32">func StoreUint32(addr *uint32, val uint32)</a></dd>
+			
+				
+				<dd><a href="#StoreUint64">func StoreUint64(addr *uint64, val uint64)</a></dd>
+			
+				
+				<dd><a href="#StoreUintptr">func StoreUintptr(addr *uintptr, val uintptr)</a></dd>
+			
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/sync/atomic/doc.go">doc.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="AddInt32">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=2471:2522#L57">AddInt32</a></h2>
+			<pre>func AddInt32(addr *<a href="../../builtin/index.html#int32">int32</a>, delta <a href="../../builtin/index.html#int32">int32</a>) (new <a href="../../builtin/index.html#int32">int32</a>)</pre>
+			<p>
+AddInt32 atomically adds delta to *addr and returns the new value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="AddInt64">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=2722:2773#L63">AddInt64</a></h2>
+			<pre>func AddInt64(addr *<a href="../../builtin/index.html#int64">int64</a>, delta <a href="../../builtin/index.html#int64">int64</a>) (new <a href="../../builtin/index.html#int64">int64</a>)</pre>
+			<p>
+AddInt64 atomically adds delta to *addr and returns the new value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="AddUint32">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=2595:2650#L60">AddUint32</a></h2>
+			<pre>func AddUint32(addr *<a href="../../builtin/index.html#uint32">uint32</a>, delta <a href="../../builtin/index.html#uint32">uint32</a>) (new <a href="../../builtin/index.html#uint32">uint32</a>)</pre>
+			<p>
+AddUint32 atomically adds delta to *addr and returns the new value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="AddUint64">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=2846:2901#L66">AddUint64</a></h2>
+			<pre>func AddUint64(addr *<a href="../../builtin/index.html#uint64">uint64</a>, delta <a href="../../builtin/index.html#uint64">uint64</a>) (new <a href="../../builtin/index.html#uint64">uint64</a>)</pre>
+			<p>
+AddUint64 atomically adds delta to *addr and returns the new value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="AddUintptr">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=2975:3034#L69">AddUintptr</a></h2>
+			<pre>func AddUintptr(addr *<a href="../../builtin/index.html#uintptr">uintptr</a>, delta <a href="../../builtin/index.html#uintptr">uintptr</a>) (new <a href="../../builtin/index.html#uintptr">uintptr</a>)</pre>
+			<p>
+AddUintptr atomically adds delta to *addr and returns the new value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CompareAndSwapInt32">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=1519:1587#L39">CompareAndSwapInt32</a></h2>
+			<pre>func CompareAndSwapInt32(addr *<a href="../../builtin/index.html#int32">int32</a>, old, new <a href="../../builtin/index.html#int32">int32</a>) (swapped <a href="../../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+CompareAndSwapInt32 executes the compare-and-swap operation for an int32 value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CompareAndSwapInt64">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=1672:1740#L42">CompareAndSwapInt64</a></h2>
+			<pre>func CompareAndSwapInt64(addr *<a href="../../builtin/index.html#int64">int64</a>, old, new <a href="../../builtin/index.html#int64">int64</a>) (swapped <a href="../../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+CompareAndSwapInt64 executes the compare-and-swap operation for an int64 value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CompareAndSwapPointer">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=2311:2399#L54">CompareAndSwapPointer</a></h2>
+			<pre>func CompareAndSwapPointer(addr *<a href="../../unsafe/index.html">unsafe</a>.<a href="../../unsafe/index.html#Pointer">Pointer</a>, old, new <a href="../../unsafe/index.html">unsafe</a>.<a href="../../unsafe/index.html#Pointer">Pointer</a>) (swapped <a href="../../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+CompareAndSwapPointer executes the compare-and-swap operation for a unsafe.Pointer value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CompareAndSwapUint32">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=1826:1897#L45">CompareAndSwapUint32</a></h2>
+			<pre>func CompareAndSwapUint32(addr *<a href="../../builtin/index.html#uint32">uint32</a>, old, new <a href="../../builtin/index.html#uint32">uint32</a>) (swapped <a href="../../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+CompareAndSwapUint32 executes the compare-and-swap operation for a uint32 value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CompareAndSwapUint64">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=1983:2054#L48">CompareAndSwapUint64</a></h2>
+			<pre>func CompareAndSwapUint64(addr *<a href="../../builtin/index.html#uint64">uint64</a>, old, new <a href="../../builtin/index.html#uint64">uint64</a>) (swapped <a href="../../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+CompareAndSwapUint64 executes the compare-and-swap operation for a uint64 value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CompareAndSwapUintptr">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=2142:2216#L51">CompareAndSwapUintptr</a></h2>
+			<pre>func CompareAndSwapUintptr(addr *<a href="../../builtin/index.html#uintptr">uintptr</a>, old, new <a href="../../builtin/index.html#uintptr">uintptr</a>) (swapped <a href="../../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+CompareAndSwapUintptr executes the compare-and-swap operation for a uintptr value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LoadInt32">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3073:3112#L72">LoadInt32</a></h2>
+			<pre>func LoadInt32(addr *<a href="../../builtin/index.html#int32">int32</a>) (val <a href="../../builtin/index.html#int32">int32</a>)</pre>
+			<p>
+LoadInt32 atomically loads *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LoadInt64">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3151:3190#L75">LoadInt64</a></h2>
+			<pre>func LoadInt64(addr *<a href="../../builtin/index.html#int64">int64</a>) (val <a href="../../builtin/index.html#int64">int64</a>)</pre>
+			<p>
+LoadInt64 atomically loads *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LoadPointer">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3481:3540#L87">LoadPointer</a></h2>
+			<pre>func LoadPointer(addr *<a href="../../unsafe/index.html">unsafe</a>.<a href="../../unsafe/index.html#Pointer">Pointer</a>) (val <a href="../../unsafe/index.html">unsafe</a>.<a href="../../unsafe/index.html#Pointer">Pointer</a>)</pre>
+			<p>
+LoadPointer atomically loads *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LoadUint32">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3230:3272#L78">LoadUint32</a></h2>
+			<pre>func LoadUint32(addr *<a href="../../builtin/index.html#uint32">uint32</a>) (val <a href="../../builtin/index.html#uint32">uint32</a>)</pre>
+			<p>
+LoadUint32 atomically loads *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LoadUint64">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3312:3354#L81">LoadUint64</a></h2>
+			<pre>func LoadUint64(addr *<a href="../../builtin/index.html#uint64">uint64</a>) (val <a href="../../builtin/index.html#uint64">uint64</a>)</pre>
+			<p>
+LoadUint64 atomically loads *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LoadUintptr">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3395:3440#L84">LoadUintptr</a></h2>
+			<pre>func LoadUintptr(addr *<a href="../../builtin/index.html#uintptr">uintptr</a>) (val <a href="../../builtin/index.html#uintptr">uintptr</a>)</pre>
+			<p>
+LoadUintptr atomically loads *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StoreInt32">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3590:3629#L90">StoreInt32</a></h2>
+			<pre>func StoreInt32(addr *<a href="../../builtin/index.html#int32">int32</a>, val <a href="../../builtin/index.html#int32">int32</a>)</pre>
+			<p>
+StoreInt32 atomically stores val into *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StoreInt64">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3679:3718#L93">StoreInt64</a></h2>
+			<pre>func StoreInt64(addr *<a href="../../builtin/index.html#int64">int64</a>, val <a href="../../builtin/index.html#int64">int64</a>)</pre>
+			<p>
+StoreInt64 atomically stores val into *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StorePointer">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=4053:4112#L105">StorePointer</a></h2>
+			<pre>func StorePointer(addr *<a href="../../unsafe/index.html">unsafe</a>.<a href="../../unsafe/index.html#Pointer">Pointer</a>, val <a href="../../unsafe/index.html">unsafe</a>.<a href="../../unsafe/index.html#Pointer">Pointer</a>)</pre>
+			<p>
+StorePointer atomically stores val into *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StoreUint32">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3769:3811#L96">StoreUint32</a></h2>
+			<pre>func StoreUint32(addr *<a href="../../builtin/index.html#uint32">uint32</a>, val <a href="../../builtin/index.html#uint32">uint32</a>)</pre>
+			<p>
+StoreUint32 atomically stores val into *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StoreUint64">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3862:3904#L99">StoreUint64</a></h2>
+			<pre>func StoreUint64(addr *<a href="../../builtin/index.html#uint64">uint64</a>, val <a href="../../builtin/index.html#uint64">uint64</a>)</pre>
+			<p>
+StoreUint64 atomically stores val into *addr.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StoreUintptr">func <a href="http://golang.org/src/pkg/sync/atomic/doc.go?s=3956:4001#L102">StoreUintptr</a></h2>
+			<pre>func StoreUintptr(addr *<a href="../../builtin/index.html#uintptr">uintptr</a>, val <a href="../../builtin/index.html#uintptr">uintptr</a>)</pre>
+			<p>
+StoreUintptr atomically stores val into *addr.
+</p>
+
+			
+		
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=416&id=1380993866366158', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/sync/atomic/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:47 GMT -->
+</html>
+

@@ -1,0 +1,358 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/otr by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:25:51 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>otr</title>
+  
+    <meta name="twitter:title" content="Package otr">
+    <meta property="og:title" content="Package otr">
+    <meta name="description" content="Package otr implements the Off The Record protocol as specified in http://www.cypherpunks.ca/otr/Protocol-v2-3.1.0.html">
+    <meta name="twitter:description" content="Package otr implements the Off The Record protocol as specified in http://www.cypherpunks.ca/otr/Protocol-v2-3.1.0.html">
+    <meta property="og:description" content="Package otr implements the Off The Record protocol as specified in http://www.cypherpunks.ca/otr/Protocol-v2-3.1.0.html">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=crypto"><strong>go.crypto:</strong></a>
+  <a href="index.html">code.google.com/p/go.crypto</a><span class="text-muted">/</span><span class="text-muted">otr</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package otr</h2>
+    <p><code>import "code.google.com/p/go.crypto/otr"</code>
+    </p><p>
+Package otr implements the Off The Record protocol as specified in
+<a href="http://www.cypherpunks.ca/otr/Protocol-v2-3.1.0.html">http://www.cypherpunks.ca/otr/Protocol-v2-3.1.0.html</a></p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    <li><a href="#pkg-variables">Variables</a>
+    
+    
+      </li><li><a href="#Conversation">type Conversation</a>
+        <ul>
+        
+        <li><a href="#Conversation.Authenticate">func (c *Conversation) Authenticate(question string, mutualSecret []byte) (toSend [][]byte, err error)</a></li><li><a href="#Conversation.End">func (c *Conversation) End() (toSend [][]byte)</a></li><li><a href="#Conversation.IsEncrypted">func (c *Conversation) IsEncrypted() bool</a></li><li><a href="#Conversation.Receive">func (c *Conversation) Receive(in []byte) (out []byte, encrypted bool, change SecurityChange, toSend [][]byte, err error)</a></li><li><a href="#Conversation.SMPQuestion">func (c *Conversation) SMPQuestion() string</a></li><li><a href="#Conversation.Send">func (c *Conversation) Send(msg []byte) ([][]byte, error)</a>
+        </li></ul>
+    
+      </li><li><a href="#PrivateKey">type PrivateKey</a>
+        <ul>
+        
+        <li><a href="#PrivateKey.Generate">func (priv *PrivateKey) Generate(rand io.Reader)</a></li><li><a href="#PrivateKey.Import">func (priv *PrivateKey) Import(in []byte) bool</a></li><li><a href="#PrivateKey.Parse">func (priv *PrivateKey) Parse(in []byte) ([]byte, bool)</a></li><li><a href="#PrivateKey.Serialize">func (priv *PrivateKey) Serialize(in []byte) []byte</a></li><li><a href="#PrivateKey.Sign">func (priv *PrivateKey) Sign(rand io.Reader, hashed []byte) []byte</a>
+        </li></ul>
+    
+      </li><li><a href="#PublicKey">type PublicKey</a>
+        <ul>
+        
+        <li><a href="#PublicKey.Fingerprint">func (pk *PublicKey) Fingerprint() []byte</a></li><li><a href="#PublicKey.Parse">func (pk *PublicKey) Parse(in []byte) ([]byte, bool)</a></li><li><a href="#PublicKey.Serialize">func (pk *PublicKey) Serialize(in []byte) []byte</a></li><li><a href="#PublicKey.Verify">func (pk *PublicKey) Verify(hashed, sig []byte) ([]byte, bool)</a>
+        </li></ul>
+    
+      </li><li><a href="#SecurityChange">type SecurityChange</a>
+        
+        
+        
+        
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/otr/?repo=crypto">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto">otr.go</a> <a href="http://code.google.com/p/go/source/browse/otr/smp.go?repo=crypto">smp.go</a> </p>
+
+    
+
+    <h3 id="pkg-variables">Variables <a class="permalink" href="#pkg-variables">¶</a></h3><pre>var <span id="ErrorPrefix">ErrorPrefix</span> = "?OTR Error:"</pre><p>
+ErrorPrefix can be used to make an OTR error by appending an error message
+to it.
+</p>
+<pre>var <span id="QueryMessage">QueryMessage</span> = "?OTRv2?"</pre><p>
+QueryMessage can be sent to a peer to start an OTR conversation.
+</p>
+
+
+    
+
+   <h3 id="Conversation">type <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#164">Conversation</a> <a class="permalink" href="#Conversation">¶</a></h3>
+      <pre>type Conversation struct {
+    <span class="com">// PrivateKey contains the private key to use to sign key exchanges.</span>
+    <span id="Conversation.PrivateKey">PrivateKey</span> *<a href="#PrivateKey">PrivateKey</a>
+
+    <span class="com">// Rand can be set to override the entropy source. Otherwise,</span>
+    <span class="com">// crypto/rand will be used.</span>
+    <span id="Conversation.Rand">Rand</span> <a href="http://godoc.org/io/#Reader">io.Reader</a>
+    <span class="com">// If FragmentSize is set, all messages produced by Receive and Send</span>
+    <span class="com">// will be fragmented into messages of, at most, this number of bytes.</span>
+    <span id="Conversation.FragmentSize">FragmentSize</span> <a href="http://godoc.org/builtin/#int">int</a>
+
+    <span class="com">// Once Receive has returned NewKeys once, the following fields are</span>
+    <span class="com">// valid.</span>
+    <span id="Conversation.SSID">SSID</span>           [8]<a href="http://godoc.org/builtin/#byte">byte</a>
+    <span id="Conversation.TheirPublicKey">TheirPublicKey</span> <a href="#PublicKey">PublicKey</a>
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Conversation represents a relation with a peer. The zero value is a valid
+Conversation, although PrivateKey must be set.
+</p>
+<p>
+When communicating with a peer, all inbound messages should be passed to
+Conversation.Receive and all outbound messages to Conversation.Send. The
+Conversation will take care of maintaining the encryption state and
+negotiating encryption as needed.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="Conversation.Authenticate">func (*Conversation) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#469">Authenticate</a> <a class="permalink" href="#Conversation.Authenticate">¶</a></h4>
+        <pre class="funcdecl">func (c *<a href="#Conversation">Conversation</a>) Authenticate(question <a href="http://godoc.org/builtin/#string">string</a>, mutualSecret []<a href="http://godoc.org/builtin/#byte">byte</a>) (toSend [][]<a href="http://godoc.org/builtin/#byte">byte</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Authenticate begins an authentication with the peer. Authentication involves
+an optional challenge message and a shared secret. The authentication
+proceeds until either Receive returns SMPComplete, SMPSecretNeeded (which
+indicates that a new authentication is happening and thus this one was
+aborted) or SMPFailed.
+</p>
+
+        
+        <h4 id="Conversation.End">func (*Conversation) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#501">End</a> <a class="permalink" href="#Conversation.End">¶</a></h4>
+        <pre class="funcdecl">func (c *<a href="#Conversation">Conversation</a>) End() (toSend [][]<a href="http://godoc.org/builtin/#byte">byte</a>)</pre><p>
+End ends a secure conversation by generating a termination message for
+the peer and switches to unencrypted communication.
+</p>
+
+        
+        <h4 id="Conversation.IsEncrypted">func (*Conversation) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#518">IsEncrypted</a> <a class="permalink" href="#Conversation.IsEncrypted">¶</a></h4>
+        <pre class="funcdecl">func (c *<a href="#Conversation">Conversation</a>) IsEncrypted() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsEncrypted returns true if a message passed to Send would be encrypted
+before transmission. This result remains valid until the next call to
+Receive or End, which may change the state of the Conversation.
+</p>
+
+        
+        <h4 id="Conversation.Receive">func (*Conversation) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#268">Receive</a> <a class="permalink" href="#Conversation.Receive">¶</a></h4>
+        <pre class="funcdecl">func (c *<a href="#Conversation">Conversation</a>) Receive(in []<a href="http://godoc.org/builtin/#byte">byte</a>) (out []<a href="http://godoc.org/builtin/#byte">byte</a>, encrypted <a href="http://godoc.org/builtin/#bool">bool</a>, change <a href="#SecurityChange">SecurityChange</a>, toSend [][]<a href="http://godoc.org/builtin/#byte">byte</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Receive handles a message from a peer. It returns a human readable message,
+an indicator of whether that message was encrypted, a hint about the
+encryption state and zero or more messages to send back to the peer.
+These messages do not need to be passed to Send before transmission.
+</p>
+
+        
+        <h4 id="Conversation.SMPQuestion">func (*Conversation) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#460">SMPQuestion</a> <a class="permalink" href="#Conversation.SMPQuestion">¶</a></h4>
+        <pre class="funcdecl">func (c *<a href="#Conversation">Conversation</a>) SMPQuestion() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+SMPQuestion returns the human readable challenge question from the peer.
+It's only valid after Receive has returned SMPSecretNeeded.
+</p>
+
+        
+        <h4 id="Conversation.Send">func (*Conversation) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#445">Send</a> <a class="permalink" href="#Conversation.Send">¶</a></h4>
+        <pre class="funcdecl">func (c *<a href="#Conversation">Conversation</a>) Send(msg []<a href="http://godoc.org/builtin/#byte">byte</a>) ([][]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Send takes a human readable message from the local user, possibly encrypts
+it and returns zero one or more messages to send to the peer.
+</p>
+
+        
+        
+
+    <h3 id="PrivateKey">type <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1219">PrivateKey</a> <a class="permalink" href="#PrivateKey">¶</a></h3>
+      <pre>type PrivateKey struct {
+    <a href="#PublicKey">PublicKey</a>
+    <a href="http://godoc.org/crypto/dsa/#PrivateKey">dsa.PrivateKey</a>
+}</pre>
+      
+      
+      
+
+        
+
+        <h4 id="PrivateKey.Generate">func (*PrivateKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1257">Generate</a> <a class="permalink" href="#PrivateKey.Generate">¶</a></h4>
+        <pre class="funcdecl">func (priv *<a href="#PrivateKey">PrivateKey</a>) Generate(rand <a href="http://godoc.org/io/#Reader">io.Reader</a>)</pre>
+        
+        <h4 id="PrivateKey.Import">func (*PrivateKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1278">Import</a> <a class="permalink" href="#PrivateKey.Import">¶</a></h4>
+        <pre class="funcdecl">func (priv *<a href="#PrivateKey">PrivateKey</a>) Import(in []<a href="http://godoc.org/builtin/#byte">byte</a>) <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+Import parses the contents of a libotr private key file.
+</p>
+
+        
+        <h4 id="PrivateKey.Parse">func (*PrivateKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1247">Parse</a> <a class="permalink" href="#PrivateKey.Parse">¶</a></h4>
+        <pre class="funcdecl">func (priv *<a href="#PrivateKey">PrivateKey</a>) Parse(in []<a href="http://godoc.org/builtin/#byte">byte</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#bool">bool</a>)</pre>
+        
+        <h4 id="PrivateKey.Serialize">func (*PrivateKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1241">Serialize</a> <a class="permalink" href="#PrivateKey.Serialize">¶</a></h4>
+        <pre class="funcdecl">func (priv *<a href="#PrivateKey">PrivateKey</a>) Serialize(in []<a href="http://godoc.org/builtin/#byte">byte</a>) []<a href="http://godoc.org/builtin/#byte">byte</a></pre>
+        
+        <h4 id="PrivateKey.Sign">func (*PrivateKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1224">Sign</a> <a class="permalink" href="#PrivateKey.Sign">¶</a></h4>
+        <pre class="funcdecl">func (priv *<a href="#PrivateKey">PrivateKey</a>) Sign(rand <a href="http://godoc.org/io/#Reader">io.Reader</a>, hashed []<a href="http://godoc.org/builtin/#byte">byte</a>) []<a href="http://godoc.org/builtin/#byte">byte</a></pre>
+        
+        
+
+    <h3 id="PublicKey">type <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1165">PublicKey</a> <a class="permalink" href="#PublicKey">¶</a></h3>
+      <pre>type PublicKey struct {
+    <a href="http://godoc.org/crypto/dsa/#PublicKey">dsa.PublicKey</a>
+}</pre>
+      
+      
+      
+
+        
+
+        <h4 id="PublicKey.Fingerprint">func (*PublicKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1202">Fingerprint</a> <a class="permalink" href="#PublicKey.Fingerprint">¶</a></h4>
+        <pre class="funcdecl">func (pk *<a href="#PublicKey">PublicKey</a>) Fingerprint() []<a href="http://godoc.org/builtin/#byte">byte</a></pre><p>
+Fingerprint returns the 20-byte, binary fingerprint of the PublicKey.
+</p>
+
+        
+        <h4 id="PublicKey.Parse">func (*PublicKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1169">Parse</a> <a class="permalink" href="#PublicKey.Parse">¶</a></h4>
+        <pre class="funcdecl">func (pk *<a href="#PublicKey">PublicKey</a>) Parse(in []<a href="http://godoc.org/builtin/#byte">byte</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#bool">bool</a>)</pre>
+        
+        <h4 id="PublicKey.Serialize">func (*PublicKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1192">Serialize</a> <a class="permalink" href="#PublicKey.Serialize">¶</a></h4>
+        <pre class="funcdecl">func (pk *<a href="#PublicKey">PublicKey</a>) Serialize(in []<a href="http://godoc.org/builtin/#byte">byte</a>) []<a href="http://godoc.org/builtin/#byte">byte</a></pre>
+        
+        <h4 id="PublicKey.Verify">func (*PublicKey) <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#1209">Verify</a> <a class="permalink" href="#PublicKey.Verify">¶</a></h4>
+        <pre class="funcdecl">func (pk *<a href="#PublicKey">PublicKey</a>) Verify(hashed, sig []<a href="http://godoc.org/builtin/#byte">byte</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#bool">bool</a>)</pre>
+        
+        
+
+    <h3 id="SecurityChange">type <a title="View Source" href="http://code.google.com/p/go/source/browse/otr/otr.go?repo=crypto#29">SecurityChange</a> <a class="permalink" href="#SecurityChange">¶</a></h3>
+      <pre>type SecurityChange <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+SecurityChange describes a change in the security state of a Conversation.
+</p>
+
+      <pre>const (
+    <span id="NoChange">NoChange</span> <a href="#SecurityChange">SecurityChange</a> = <a href="http://godoc.org/builtin/#iota">iota</a>
+    <span class="com">// NewKeys indicates that a key exchange has completed. This occurs</span>
+    <span class="com">// when a conversation first becomes encrypted, and when the keys are</span>
+    <span class="com">// renegotiated within an encrypted conversation.</span>
+    <span id="NewKeys">NewKeys</span>
+    <span class="com">// SMPSecretNeeded indicates that the peer has started an</span>
+    <span class="com">// authentication and that we need to supply a secret. Call SMPQuestion</span>
+    <span class="com">// to get the optional, human readable challenge and then Authenticate</span>
+    <span class="com">// to supply the matching secret.</span>
+    <span id="SMPSecretNeeded">SMPSecretNeeded</span>
+    <span class="com">// SMPComplete indicates that an authentication completed. The identity</span>
+    <span class="com">// of the peer has now been confirmed.</span>
+    <span id="SMPComplete">SMPComplete</span>
+    <span class="com">// SMPFailed indicates that an authentication failed.</span>
+    <span id="SMPFailed">SMPFailed</span>
+    <span class="com">// ConversationEnded indicates that the peer ended the secure</span>
+    <span class="com">// conversation.</span>
+    <span id="ConversationEnded">ConversationEnded</span>
+)</pre>
+      
+      
+
+        
+
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.crypto/otr"></form>
+  <p>Package otr imports <a href="otra687.html?imports">16 packages</a> (<a href="otr75f0.html?import-graph">graph</a>) and is imported by <a href="otrefa9.html?importers">1 packages</a>.
+  Updated <span class="timeago" title="2013-10-01T16:02:09Z">2013-10-01</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/otr by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:25:52 GMT -->
+
+</body>

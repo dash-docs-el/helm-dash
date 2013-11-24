@@ -1,0 +1,685 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/language by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:32 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>language</title>
+  
+    <meta name="twitter:title" content="Package language">
+    <meta property="og:title" content="Package language">
+    <meta name="description" content="NOTE: This package is still under development.">
+    <meta name="twitter:description" content="NOTE: This package is still under development.">
+    <meta property="og:description" content="NOTE: This package is still under development.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=text"><strong>go.text:</strong></a>
+  <a href="index.html">code.google.com/p/go.text</a><span class="text-muted">/</span><span class="text-muted">language</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package language</h2>
+    <p><code>import "code.google.com/p/go.text/language"</code>
+    </p><p>
+NOTE: This package is still under development. Parts of it are not yet implemented,
+and the API is subject to change.
+</p>
+<p>
+The language package provides a type to represent language tags based on BCP 47.
+It supports various canonicalizations defined in CLDR.
+See <a href="http://tools.ietf.org/html/bcp47">http://tools.ietf.org/html/bcp47</a> for more details.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    <li><a href="#pkg-variables">Variables</a>
+    </li><li><a href="#ParseAcceptLanguage">func ParseAcceptLanguage(s string) (tag []Tag, q []float32, err error)</a>
+    
+      </li><li><a href="#Base">type Base</a>
+        <ul>
+        <li><a href="#ParseBase">func ParseBase(s string) (Base, error)</a>
+        </li><li><a href="#Base.ISO3">func (b Base) ISO3() string</a></li><li><a href="#Base.IsPrivateUse">func (b Base) IsPrivateUse() bool</a></li><li><a href="#Base.String">func (b Base) String() string</a></li><li><a href="#Base.Tag">func (b Base) Tag() Tag</a>
+        </li></ul>
+    
+      </li><li><a href="#CanonType">type CanonType</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Confidence">type Confidence</a>
+        <ul>
+        
+        <li><a href="#Confidence.String">func (c Confidence) String() string</a>
+        </li></ul>
+    
+      </li><li><a href="#Currency">type Currency</a>
+        <ul>
+        <li><a href="#ParseCurrency">func ParseCurrency(s string) (Currency, error)</a>
+        </li><li><a href="#Currency.String">func (c Currency) String() string</a>
+        </li></ul>
+    
+      </li><li><a href="#Part">type Part</a>
+        <ul>
+        <li><a href="#Extension">func Extension(e byte) Part</a>
+        </li><li><a href="#Part.String">func (p Part) String() string</a>
+        </li></ul>
+    
+      </li><li><a href="#Region">type Region</a>
+        <ul>
+        <li><a href="#EncodeM49">func EncodeM49(r int) (Region, error)</a></li><li><a href="#ParseRegion">func ParseRegion(s string) (Region, error)</a>
+        </li><li><a href="#Region.ISO3">func (r Region) ISO3() string</a></li><li><a href="#Region.IsCountry">func (r Region) IsCountry() bool</a></li><li><a href="#Region.IsPrivateUse">func (r Region) IsPrivateUse() bool</a></li><li><a href="#Region.M49">func (r Region) M49() int</a></li><li><a href="#Region.String">func (r Region) String() string</a></li><li><a href="#Region.Tag">func (r Region) Tag() Tag</a>
+        </li></ul>
+    
+      </li><li><a href="#Script">type Script</a>
+        <ul>
+        <li><a href="#ParseScript">func ParseScript(s string) (Script, error)</a>
+        </li><li><a href="#Script.IsPrivateUse">func (s Script) IsPrivateUse() bool</a></li><li><a href="#Script.String">func (s Script) String() string</a></li><li><a href="#Script.Tag">func (s Script) Tag() Tag</a>
+        </li></ul>
+    
+      </li><li><a href="#Set">type Set</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Tag">type Tag</a>
+        <ul>
+        <li><a href="#Compose">func Compose(m map[Part]string) (t Tag, err error)</a></li><li><a href="#Make">func Make(id string) Tag</a></li><li><a href="#Parse">func Parse(s string) (t Tag, err error)</a>
+        </li><li><a href="#Tag.Base">func (t Tag) Base() (Base, Confidence)</a></li><li><a href="#Tag.Canonicalize">func (t Tag) Canonicalize(c CanonType) (Tag, error)</a></li><li><a href="#Tag.IsRoot">func (t Tag) IsRoot() bool</a></li><li><a href="#Tag.Part">func (t Tag) Part(p Part) string</a></li><li><a href="#Tag.Parts">func (t Tag) Parts() map[Part]string</a></li><li><a href="#Tag.Region">func (t Tag) Region() (Region, Confidence)</a></li><li><a href="#Tag.Script">func (t Tag) Script() (Script, Confidence)</a></li><li><a href="#Tag.SetTypeForKey">func (t Tag) SetTypeForKey(key, value string) Tag</a></li><li><a href="#Tag.String">func (t Tag) String() string</a></li><li><a href="#Tag.TypeForKey">func (t Tag) TypeForKey(key string) string</a></li><li><a href="#Tag.Variant">func (t Tag) Variant() []Variant</a>
+        </li></ul>
+    
+      </li><li><a href="#Variant">type Variant</a>
+        <ul>
+        
+        <li><a href="#Variant.String">func (v Variant) String() string</a>
+        </li></ul>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/language/?repo=text">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/language/go1_1.go?repo=text">go1_1.go</a> <a href="http://code.google.com/p/go/source/browse/language/language.go?repo=text">language.go</a> <a href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text">lookup.go</a> <a href="http://code.google.com/p/go/source/browse/language/match.go?repo=text">match.go</a> <a href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text">parse.go</a> <a href="http://code.google.com/p/go/source/browse/language/tables.go?repo=text">tables.go</a> </p>
+
+    
+
+    <h3 id="pkg-variables">Variables <a class="permalink" href="#pkg-variables">¶</a></h3><pre>var <span id="MissingLikelyTagsData">MissingLikelyTagsData</span> = <a href="http://godoc.org/errors/#New">errors.New</a>("missing likely tags data")</pre><p>
+MissingLikelyTagsData indicates no information was available
+to compute likely values of missing tags.
+</p>
+
+
+    <h3 id="ParseAcceptLanguage">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text#567">ParseAcceptLanguage</a> <a class="permalink" href="#ParseAcceptLanguage">¶</a></h3>
+    <pre class="funcdecl">func ParseAcceptLanguage(s <a href="http://godoc.org/builtin/#string">string</a>) (tag []<a href="#Tag">Tag</a>, q []<a href="http://godoc.org/builtin/#float32">float32</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ParseAcceptLanguage parses the contents of a Accept-Language header as
+defined in <a href="http://www.google.com/url?q=http://www.ietf.org/rfc/rfc2616.txt">http://www.google.com/url?q=http://www.ietf.org/rfc/rfc2616.txt</a>
+and returns a list of Tags and a list of corresponding quality weights.
+The Tags will be sorted by highest weight first and then by first occurrence.
+Tags with a weight of zero will be dropped. An error will be returned if the
+input could not be parsed.
+</p>
+
+    
+    
+
+   <h3 id="Base">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#347">Base</a> <a class="permalink" href="#Base">¶</a></h3>
+      <pre>type Base struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Base is an ISO 639 language code, used for encoding the base language
+of a language tag.
+</p>
+
+      
+      
+      
+
+        <h4 id="ParseBase">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#353">ParseBase</a> <a class="permalink" href="#ParseBase">¶</a></h4>
+        <pre class="funcdecl">func ParseBase(s <a href="http://godoc.org/builtin/#string">string</a>) (<a href="#Base">Base</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ParseBase parses a 2- or 3-letter ISO 639 code.
+It returns an error if the given string is not a valid language code.
+</p>
+
+        
+        
+
+        <h4 id="Base.ISO3">func (Base) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#218">ISO3</a> <a class="permalink" href="#Base.ISO3">¶</a></h4>
+        <pre class="funcdecl">func (b Base) ISO3() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+ISO3 returns the ISO 639-3 language code.
+</p>
+
+        
+        <h4 id="Base.IsPrivateUse">func (Base) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#234">IsPrivateUse</a> <a class="permalink" href="#Base.IsPrivateUse">¶</a></h4>
+        <pre class="funcdecl">func (b Base) IsPrivateUse() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsPrivateUse reports whether this language code is reserved for private use.
+</p>
+
+        
+        <h4 id="Base.String">func (Base) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#201">String</a> <a class="permalink" href="#Base.String">¶</a></h4>
+        <pre class="funcdecl">func (b Base) String() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+String returns the BCP 47 representation of the langID.
+Use b as variable name, instead of id, to ensure the variable
+used is consistent with that of Base in which this type is embedded.
+</p>
+
+        
+        <h4 id="Base.Tag">func (Base) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#363">Tag</a> <a class="permalink" href="#Base.Tag">¶</a></h4>
+        <pre class="funcdecl">func (b <a href="#Base">Base</a>) Tag() <a href="#Tag">Tag</a></pre><p>
+Tag returns a Tag with this base language as its only subtag.
+</p>
+
+        
+        
+
+    <h3 id="CanonType">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#82">CanonType</a> <a class="permalink" href="#CanonType">¶</a></h3>
+      <pre>type CanonType <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+CanonType can be used to enable or disable various types of canonicalization.
+</p>
+
+      <pre>const (
+    <span class="com">// Replace deprecated values with their preferred ones.</span>
+    <span id="Deprecated">Deprecated</span> <a href="#CanonType">CanonType</a> = 1 &lt;&lt; <a href="http://godoc.org/builtin/#iota">iota</a>
+    <span class="com">// Remove redundant scripts.</span>
+    <span id="SuppressScript">SuppressScript</span>
+    <span class="com">// Normalize legacy encodings, as defined by CLDR.</span>
+    <span id="Legacy">Legacy</span>
+    <span class="com">// Map the dominant language of a macro language group to the macro language subtag.</span>
+    <span class="com">// For example cmn -&gt; zh.</span>
+    <span id="Macro">Macro</span>
+    <span class="com">// The CLDR flag should be used if full compatibility with CLDR is required.  There are</span>
+    <span class="com">// a few cases where language.Tag may differ from CLDR.</span>
+    <span id="CLDR">CLDR</span>
+    <span class="com">// All canonicalizations prescribed by BCP 47.</span>
+    <span id="BCP47">BCP47</span>   = <a href="#Deprecated">Deprecated</a> | <a href="#SuppressScript">SuppressScript</a>
+    <span id="All">All</span>     = <a href="#BCP47">BCP47</a> | <a href="#Legacy">Legacy</a> | <a href="#Macro">Macro</a>
+    <span id="Default">Default</span> = <a href="#All">All</a>
+)</pre>
+      
+      
+
+        
+
+        
+
+    <h3 id="Confidence">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#183">Confidence</a> <a class="permalink" href="#Confidence">¶</a></h3>
+      <pre>type Confidence <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+Confidence indicates the level of certainty for a given return value.
+For example, Serbian may be written in cyrillic or latin script.
+The confidence level indicates whether a value was explicitly specified,
+whether it is typically the only possible value, or whether there is
+an ambiguity.
+</p>
+
+      <pre>const (
+    <span id="No">No</span>    <a href="#Confidence">Confidence</a> = <a href="http://godoc.org/builtin/#iota">iota</a> <span class="com">// full confidence that there was no match</span>
+    <span id="Low">Low</span>                     <span class="com">// most likely value picked out of a set of alternatives</span>
+    <span id="High">High</span>                    <span class="com">// value is generally assumed to be the correct match</span>
+    <span id="Exact">Exact</span>                   <span class="com">// exact match or explicitly specified value</span>
+)</pre>
+      
+      
+
+        
+
+        <h4 id="Confidence.String">func (Confidence) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#194">String</a> <a class="permalink" href="#Confidence.String">¶</a></h4>
+        <pre class="funcdecl">func (c <a href="#Confidence">Confidence</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre>
+        
+        
+
+    <h3 id="Currency">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#438">Currency</a> <a class="permalink" href="#Currency">¶</a></h3>
+      <pre>type Currency struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Currency is an ISO 4217 currency designator.
+</p>
+
+      
+      
+      
+
+        <h4 id="ParseCurrency">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#444">ParseCurrency</a> <a class="permalink" href="#ParseCurrency">¶</a></h4>
+        <pre class="funcdecl">func ParseCurrency(s <a href="http://godoc.org/builtin/#string">string</a>) (<a href="#Currency">Currency</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ParseCurrency parses a 3-letter ISO 4217 code.
+It returns an error if the given string is not a valid currency code.
+</p>
+
+        
+        
+
+        <h4 id="Currency.String">func (Currency) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#384">String</a> <a class="permalink" href="#Currency.String">¶</a></h4>
+        <pre class="funcdecl">func (c Currency) String() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+String returns the upper case representation of the currency.
+</p>
+
+        
+        
+
+    <h3 id="Part">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text#391">Part</a> <a class="permalink" href="#Part">¶</a></h3>
+      <pre>type Part <a href="http://godoc.org/builtin/#byte">byte</a></pre><p>
+A Part identifies a part of the language tag.
+</p>
+
+      <pre>const (
+    <span id="TagPart">TagPart</span> <a href="#Part">Part</a> = <a href="http://godoc.org/builtin/#iota">iota</a> <span class="com">// The tag excluding extensions.</span>
+    <span id="LanguagePart">LanguagePart</span>
+    <span id="ScriptPart">ScriptPart</span>
+    <span id="RegionPart">RegionPart</span>
+    <span id="VariantPart">VariantPart</span>
+)</pre>
+      
+      
+
+        <h4 id="Extension">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text#411">Extension</a> <a class="permalink" href="#Extension">¶</a></h4>
+        <pre class="funcdecl">func Extension(e <a href="http://godoc.org/builtin/#byte">byte</a>) <a href="#Part">Part</a></pre><p>
+Extension returns the Part identifier for extension e, which must be 0-9 or a-z.
+</p>
+
+        
+        
+
+        <h4 id="Part.String">func (Part) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text#403">String</a> <a class="permalink" href="#Part.String">¶</a></h4>
+        <pre class="funcdecl">func (p <a href="#Part">Part</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre>
+        
+        
+
+    <h3 id="Region">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#390">Region</a> <a class="permalink" href="#Region">¶</a></h3>
+      <pre>type Region struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Region is an ISO 3166-1 or UN M.49 code for representing countries and regions.
+</p>
+
+      
+      
+      
+
+        <h4 id="EncodeM49">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#396">EncodeM49</a> <a class="permalink" href="#EncodeM49">¶</a></h4>
+        <pre class="funcdecl">func EncodeM49(r <a href="http://godoc.org/builtin/#int">int</a>) (<a href="#Region">Region</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+EncodeM49 returns the Region for the given UN M.49 code.
+It returns an error if r is not a valid code.
+</p>
+
+        
+        <h4 id="ParseRegion">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#403">ParseRegion</a> <a class="permalink" href="#ParseRegion">¶</a></h4>
+        <pre class="funcdecl">func ParseRegion(s <a href="http://godoc.org/builtin/#string">string</a>) (<a href="#Region">Region</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ParseRegion parses a 2- or 3-letter ISO 3166-1 or a UN M.49 code.
+It returns an error if the given string is not a valid region code.
+</p>
+
+        
+        
+
+        <h4 id="Region.ISO3">func (Region) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#316">ISO3</a> <a class="permalink" href="#Region.ISO3">¶</a></h4>
+        <pre class="funcdecl">func (r Region) ISO3() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+ISO3 returns the 3-letter ISO code of r.
+Note that not all regions have a 3-letter ISO code.
+In such cases this method returns the empty string.
+</p>
+
+        
+        <h4 id="Region.IsCountry">func (Region) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#418">IsCountry</a> <a class="permalink" href="#Region.IsCountry">¶</a></h4>
+        <pre class="funcdecl">func (r <a href="#Region">Region</a>) IsCountry() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsCountry returns whether this region is a country or autonomous area.
+</p>
+
+        
+        <h4 id="Region.IsPrivateUse">func (Region) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#338">IsPrivateUse</a> <a class="permalink" href="#Region.IsPrivateUse">¶</a></h4>
+        <pre class="funcdecl">func (r Region) IsPrivateUse() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsPrivateUse reports whether r is reserved for private use.
+</p>
+
+        
+        <h4 id="Region.M49">func (Region) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#333">M49</a> <a class="permalink" href="#Region.M49">¶</a></h4>
+        <pre class="funcdecl">func (r Region) M49() <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+M49 returns the UN M.49 encoding of r, or 0 if this encoding
+is not defined for r.
+</p>
+
+        
+        <h4 id="Region.String">func (Region) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#302">String</a> <a class="permalink" href="#Region.String">¶</a></h4>
+        <pre class="funcdecl">func (r Region) String() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+String returns the BCP 47 representation for the region.
+It returns "ZZ" for an unspecified region.
+</p>
+
+        
+        <h4 id="Region.Tag">func (Region) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#413">Tag</a> <a class="permalink" href="#Region.Tag">¶</a></h4>
+        <pre class="funcdecl">func (r <a href="#Region">Region</a>) Tag() <a href="#Tag">Tag</a></pre><p>
+Tag returns a Tag with the undetermined language and this region as its only subtags.
+</p>
+
+        
+        
+
+    <h3 id="Script">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#369">Script</a> <a class="permalink" href="#Script">¶</a></h3>
+      <pre>type Script struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Script is a 4-letter ISO 15924 code for representing scripts.
+It is idiomatically represented in title case.
+</p>
+
+      
+      
+      
+
+        <h4 id="ParseScript">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#375">ParseScript</a> <a class="permalink" href="#ParseScript">¶</a></h4>
+        <pre class="funcdecl">func ParseScript(s <a href="http://godoc.org/builtin/#string">string</a>) (<a href="#Script">Script</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ParseScript parses a 4-letter ISO 15924 code.
+It returns an error if the given string is not a valid script code.
+</p>
+
+        
+        
+
+        <h4 id="Script.IsPrivateUse">func (Script) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#367">IsPrivateUse</a> <a class="permalink" href="#Script.IsPrivateUse">¶</a></h4>
+        <pre class="funcdecl">func (s Script) IsPrivateUse() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsPrivateUse reports whether this script code is reserved for private use.
+</p>
+
+        
+        <h4 id="Script.String">func (Script) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/lookup.go?repo=text#359">String</a> <a class="permalink" href="#Script.String">¶</a></h4>
+        <pre class="funcdecl">func (s Script) String() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+String returns the script code in title case.
+It returns "Zyyy" for an unspecified script.
+</p>
+
+        
+        <h4 id="Script.Tag">func (Script) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#385">Tag</a> <a class="permalink" href="#Script.Tag">¶</a></h4>
+        <pre class="funcdecl">func (s <a href="#Script">Script</a>) Tag() <a href="#Tag">Tag</a></pre><p>
+Tag returns a Tag with the undetermined language and this script as its only subtags.
+</p>
+
+        
+        
+
+    <h3 id="Set">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#454">Set</a> <a class="permalink" href="#Set">¶</a></h3>
+      <pre>type Set interface {
+    <span id="Set.Tags">Tags</span>() []<a href="#Tag">Tag</a>
+    <span id="Set.BaseLanguages">BaseLanguages</span>() []<a href="#Base">Base</a>
+    <span id="Set.Regions">Regions</span>() []<a href="#Region">Region</a>
+    <span id="Set.Scripts">Scripts</span>() []<a href="#Script">Script</a>
+    <span id="Set.Currencies">Currencies</span>() []<a href="#Currency">Currency</a>
+}</pre><p>
+Set provides information about a set of tags.
+</p>
+
+      
+      <pre>var (
+    <span id="Supported">Supported</span> <a href="#Set">Set</a> <span class="com">// All supported language indetifiers.</span>
+    <span id="Common">Common</span>    <a href="#Set">Set</a> <span class="com">// A selection of common language indetifiers.</span>
+)</pre>
+      
+
+        
+
+        
+
+    <h3 id="Tag">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#39">Tag</a> <a class="permalink" href="#Tag">¶</a></h3>
+      <pre>type Tag struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Tag represents a BCP 47 language tag. It is used to specifify
+an instance of a specific language or locale.
+All language tag values are guaranteed to be well-formed.
+</p>
+
+      
+      <pre>var (
+    <span class="com">// Und represents the undertermined language. It is also the root language tag.</span>
+    <span id="Und">Und</span>   <a href="#Tag">Tag</a> = und
+    <span id="En">En</span>    <a href="#Tag">Tag</a> = en    <span class="com">// Default language tag for English.</span>
+    <span id="En_US">En_US</span> <a href="#Tag">Tag</a> = en_US <span class="com">// Default language tag for American English.</span>
+    <span id="De">De</span>    <a href="#Tag">Tag</a> = de    <span class="com">// Default language tag for German.</span>
+
+)</pre>
+      
+
+        <h4 id="Compose">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text#417">Compose</a> <a class="permalink" href="#Compose">¶</a></h4>
+        <pre class="funcdecl">func Compose(m map[<a href="#Part">Part</a>]<a href="http://godoc.org/builtin/#string">string</a>) (t <a href="#Tag">Tag</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Compose returns a language tag composed from the given parts or an error
+if any of the strings for the parts are ill-formed.
+</p>
+
+        
+        <h4 id="Make">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#53">Make</a> <a class="permalink" href="#Make">¶</a></h4>
+        <pre class="funcdecl">func Make(id <a href="http://godoc.org/builtin/#string">string</a>) <a href="#Tag">Tag</a></pre><p>
+Make calls Parse and Canonicalize and returns the resulting Tag.
+Any errors are ignored and a sensible default is returned.
+In most cases, language tags should be created using this method.
+</p>
+
+        
+        <h4 id="Parse">func <a title="View Source" href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text#176">Parse</a> <a class="permalink" href="#Parse">¶</a></h4>
+        <pre class="funcdecl">func Parse(s <a href="http://godoc.org/builtin/#string">string</a>) (t <a href="#Tag">Tag</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Parse parses the given BCP 47 string and returns a valid Tag.
+If parsing failed it returns an error and any part of the tag
+that could be parsed.
+If parsing succeeded but an unknown option was found, it
+returns the valid Locale and an error.
+It accepts tags in the BCP 47 format and extensions to this standard
+defined in
+<a href="http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers">http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers</a>.
+</p>
+
+        
+        
+
+        <h4 id="Tag.Base">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#257">Base</a> <a class="permalink" href="#Tag.Base">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) Base() (<a href="#Base">Base</a>, <a href="#Confidence">Confidence</a>)</pre><p>
+Base returns the base language of the language tag. If the base language is
+unspecified, an attempt will be made to infer it from the context.
+It uses a variant of CLDR's Add Likely Subtags algorithm. This is subject to change.
+</p>
+
+        
+        <h4 id="Tag.Canonicalize">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#170">Canonicalize</a> <a class="permalink" href="#Tag.Canonicalize">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) Canonicalize(c <a href="#CanonType">CanonType</a>) (<a href="#Tag">Tag</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Canonicalize returns the canonicalized equivalent of the tag.
+</p>
+
+        
+        <h4 id="Tag.IsRoot">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#65">IsRoot</a> <a class="permalink" href="#Tag.IsRoot">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) IsRoot() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsRoot returns true if t is equal to language "und".
+</p>
+
+        
+        <h4 id="Tag.Part">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text#465">Part</a> <a class="permalink" href="#Tag.Part">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) Part(p <a href="#Part">Part</a>) <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+Part returns the part of the language tag indicated by p.
+The one-letter section identifier, if applicable, is not included.
+Components are separated by a '-'.
+</p>
+
+        
+        <h4 id="Tag.Parts">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/parse.go?repo=text#503">Parts</a> <a class="permalink" href="#Tag.Parts">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) Parts() map[<a href="#Part">Part</a>]<a href="http://godoc.org/builtin/#string">string</a></pre><p>
+Parts returns all parts of the language tag in a map.
+</p>
+
+        
+        <h4 id="Tag.Region">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#307">Region</a> <a class="permalink" href="#Tag.Region">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) Region() (<a href="#Region">Region</a>, <a href="#Confidence">Confidence</a>)</pre><p>
+Region returns the region for the language tag. If it was not explicitly given, it will
+infer a most likely candidate from the context.
+It uses a variant of CLDR's Add Likely Subtags algorithm. This is subject to change.
+</p>
+
+        
+        <h4 id="Tag.Script">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#280">Script</a> <a class="permalink" href="#Tag.Script">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) Script() (<a href="#Script">Script</a>, <a href="#Confidence">Confidence</a>)</pre><p>
+Script infers the script for the language tag. If it was not explictly given, it will infer
+a most likely candidate.
+If more than one script is commonly used for a language, the most likely one
+is returned with a low confidence indication. For example, it returns (Cyrl, Low)
+for Serbian.
+Note that an inferred script is never guaranteed to be the correct one. Latin is
+almost exclusively used for Afrikaans, but Arabic has been used for some texts
+in the past.  Also, the script that is commonly used may change over time.
+It uses a variant of CLDR's Add Likely Subtags algorithm. This is subject to change.
+</p>
+
+        
+        <h4 id="Tag.SetTypeForKey">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#340">SetTypeForKey</a> <a class="permalink" href="#Tag.SetTypeForKey">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) SetTypeForKey(key, value <a href="http://godoc.org/builtin/#string">string</a>) <a href="#Tag">Tag</a></pre><p>
+SetTypeForKey returns a new Tag with the key set to type, where key and type
+are of the allowed values defined for the Unicode locale extension ('u') in
+<a href="http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers">http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers</a>.
+</p>
+
+        
+        <h4 id="Tag.String">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#247">String</a> <a class="permalink" href="#Tag.String">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+String returns the canonical string representation of the language tag.
+</p>
+
+        
+        <h4 id="Tag.TypeForKey">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#332">TypeForKey</a> <a class="permalink" href="#Tag.TypeForKey">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) TypeForKey(key <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+TypeForKey returns the type associated with the given key, where key and type
+are of the allowed values defined for the Unicode locale extension ('u') in
+<a href="http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers">http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers</a>.
+TypeForKey will traverse the inheritance chain to get the correct value.
+</p>
+
+        
+        <h4 id="Tag.Variant">func (Tag) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#323">Variant</a> <a class="permalink" href="#Tag.Variant">¶</a></h4>
+        <pre class="funcdecl">func (t <a href="#Tag">Tag</a>) Variant() []<a href="#Variant">Variant</a></pre><p>
+Variant returns the variants specified explicitly for this language tag.
+or nil if no variant was specified.
+</p>
+
+        
+        
+
+    <h3 id="Variant">type <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#426">Variant</a> <a class="permalink" href="#Variant">¶</a></h3>
+      <pre>type Variant struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Variant represents a registered variant of a language as defined by BCP 47.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="Variant.String">func (Variant) <a title="View Source" href="http://code.google.com/p/go/source/browse/language/language.go?repo=text#432">String</a> <a class="permalink" href="#Variant.String">¶</a></h4>
+        <pre class="funcdecl">func (v <a href="#Variant">Variant</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+String returns the string representation of the variant.
+</p>
+
+        
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.text/language"></form>
+  <p>Package language imports <a href="languagea687.html?imports">7 packages</a> (<a href="language75f0.html?import-graph">graph</a>) and is imported by <a href="languageefa9.html?importers">3 packages</a>.
+  Updated <span class="timeago" title="2013-10-05T03:43:35Z">2013-10-05</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/language by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:33 GMT -->
+
+</body>

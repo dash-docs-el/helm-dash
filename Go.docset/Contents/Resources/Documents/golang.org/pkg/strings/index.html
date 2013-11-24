@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/strings/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>strings</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package strings</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "strings"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package strings implements simple functions to manipulate strings.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Contains">func Contains(s, substr string) bool</a></dd>
+			
+				
+				<dd><a href="#ContainsAny">func ContainsAny(s, chars string) bool</a></dd>
+			
+				
+				<dd><a href="#ContainsRune">func ContainsRune(s string, r rune) bool</a></dd>
+			
+				
+				<dd><a href="#Count">func Count(s, sep string) int</a></dd>
+			
+				
+				<dd><a href="#EqualFold">func EqualFold(s, t string) bool</a></dd>
+			
+				
+				<dd><a href="#Fields">func Fields(s string) []string</a></dd>
+			
+				
+				<dd><a href="#FieldsFunc">func FieldsFunc(s string, f func(rune) bool) []string</a></dd>
+			
+				
+				<dd><a href="#HasPrefix">func HasPrefix(s, prefix string) bool</a></dd>
+			
+				
+				<dd><a href="#HasSuffix">func HasSuffix(s, suffix string) bool</a></dd>
+			
+				
+				<dd><a href="#Index">func Index(s, sep string) int</a></dd>
+			
+				
+				<dd><a href="#IndexAny">func IndexAny(s, chars string) int</a></dd>
+			
+				
+				<dd><a href="#IndexFunc">func IndexFunc(s string, f func(rune) bool) int</a></dd>
+			
+				
+				<dd><a href="#IndexRune">func IndexRune(s string, r rune) int</a></dd>
+			
+				
+				<dd><a href="#Join">func Join(a []string, sep string) string</a></dd>
+			
+				
+				<dd><a href="#LastIndex">func LastIndex(s, sep string) int</a></dd>
+			
+				
+				<dd><a href="#LastIndexAny">func LastIndexAny(s, chars string) int</a></dd>
+			
+				
+				<dd><a href="#LastIndexFunc">func LastIndexFunc(s string, f func(rune) bool) int</a></dd>
+			
+				
+				<dd><a href="#Map">func Map(mapping func(rune) rune, s string) string</a></dd>
+			
+				
+				<dd><a href="#Repeat">func Repeat(s string, count int) string</a></dd>
+			
+				
+				<dd><a href="#Replace">func Replace(s, old, new string, n int) string</a></dd>
+			
+				
+				<dd><a href="#Split">func Split(s, sep string) []string</a></dd>
+			
+				
+				<dd><a href="#SplitAfter">func SplitAfter(s, sep string) []string</a></dd>
+			
+				
+				<dd><a href="#SplitAfterN">func SplitAfterN(s, sep string, n int) []string</a></dd>
+			
+				
+				<dd><a href="#SplitN">func SplitN(s, sep string, n int) []string</a></dd>
+			
+				
+				<dd><a href="#Title">func Title(s string) string</a></dd>
+			
+				
+				<dd><a href="#ToLower">func ToLower(s string) string</a></dd>
+			
+				
+				<dd><a href="#ToLowerSpecial">func ToLowerSpecial(_case unicode.SpecialCase, s string) string</a></dd>
+			
+				
+				<dd><a href="#ToTitle">func ToTitle(s string) string</a></dd>
+			
+				
+				<dd><a href="#ToTitleSpecial">func ToTitleSpecial(_case unicode.SpecialCase, s string) string</a></dd>
+			
+				
+				<dd><a href="#ToUpper">func ToUpper(s string) string</a></dd>
+			
+				
+				<dd><a href="#ToUpperSpecial">func ToUpperSpecial(_case unicode.SpecialCase, s string) string</a></dd>
+			
+				
+				<dd><a href="#Trim">func Trim(s string, cutset string) string</a></dd>
+			
+				
+				<dd><a href="#TrimFunc">func TrimFunc(s string, f func(rune) bool) string</a></dd>
+			
+				
+				<dd><a href="#TrimLeft">func TrimLeft(s string, cutset string) string</a></dd>
+			
+				
+				<dd><a href="#TrimLeftFunc">func TrimLeftFunc(s string, f func(rune) bool) string</a></dd>
+			
+				
+				<dd><a href="#TrimPrefix">func TrimPrefix(s, prefix string) string</a></dd>
+			
+				
+				<dd><a href="#TrimRight">func TrimRight(s string, cutset string) string</a></dd>
+			
+				
+				<dd><a href="#TrimRightFunc">func TrimRightFunc(s string, f func(rune) bool) string</a></dd>
+			
+				
+				<dd><a href="#TrimSpace">func TrimSpace(s string) string</a></dd>
+			
+				
+				<dd><a href="#TrimSuffix">func TrimSuffix(s, suffix string) string</a></dd>
+			
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReader">func NewReader(s string) *Reader</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Len">func (r *Reader) Len() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Read">func (r *Reader) Read(b []byte) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.ReadAt">func (r *Reader) ReadAt(b []byte, off int64) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.ReadByte">func (r *Reader) ReadByte() (b byte, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.ReadRune">func (r *Reader) ReadRune() (ch rune, size int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Seek">func (r *Reader) Seek(offset int64, whence int) (int64, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.UnreadByte">func (r *Reader) UnreadByte() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.UnreadRune">func (r *Reader) UnreadRune() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.WriteTo">func (r *Reader) WriteTo(w io.Writer) (n int64, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#Replacer">type Replacer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReplacer">func NewReplacer(oldnew ...string) *Replacer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Replacer.Replace">func (r *Replacer) Replace(s string) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Replacer.WriteString">func (r *Replacer) WriteString(w io.Writer, s string) (n int, err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Contains">Contains</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_ContainsAny">ContainsAny</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Count">Count</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_EqualFold">EqualFold</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Fields">Fields</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Index">Index</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_IndexRune">IndexRune</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Join">Join</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_LastIndex">LastIndex</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Map">Map</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_NewReplacer">NewReplacer</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Repeat">Repeat</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Replace">Replace</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Split">Split</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_SplitAfter">SplitAfter</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_SplitAfterN">SplitAfterN</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_SplitN">SplitN</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Title">Title</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_ToLower">ToLower</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_ToTitle">ToTitle</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_ToUpper">ToUpper</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Trim">Trim</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_TrimPrefix">TrimPrefix</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_TrimSpace">TrimSpace</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_TrimSuffix">TrimSuffix</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/strings/reader.go">reader.go</a>
+			
+				<a href="http://golang.org/src/pkg/strings/replace.go">replace.go</a>
+			
+				<a href="http://golang.org/src/pkg/strings/search.go">search.go</a>
+			
+				<a href="http://golang.org/src/pkg/strings/strings.go">strings.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="Contains">func <a href="http://golang.org/src/pkg/strings/strings.go?s=2367:2403#L102">Contains</a></h2>
+			<pre>func Contains(s, substr <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+			<p>
+Contains returns true if substr is within s.
+</p>
+
+			<div id="example_Contains" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.Contains(&#34;seafood&#34;, &#34;foo&#34;))
+	fmt.Println(strings.Contains(&#34;seafood&#34;, &#34;bar&#34;))
+	fmt.Println(strings.Contains(&#34;seafood&#34;, &#34;&#34;))
+	fmt.Println(strings.Contains(&#34;&#34;, &#34;&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>true
+false
+true
+true
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="ContainsAny">func <a href="http://golang.org/src/pkg/strings/strings.go?s=2517:2555#L107">ContainsAny</a></h2>
+			<pre>func ContainsAny(s, chars <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+			<p>
+ContainsAny returns true if any Unicode code points in chars are within s.
+</p>
+
+			<div id="example_ContainsAny" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.ContainsAny(&#34;team&#34;, &#34;i&#34;))
+	fmt.Println(strings.ContainsAny(&#34;failure&#34;, &#34;u &amp; i&#34;))
+	fmt.Println(strings.ContainsAny(&#34;foo&#34;, &#34;&#34;))
+	fmt.Println(strings.ContainsAny(&#34;&#34;, &#34;&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>false
+true
+false
+false
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="ContainsRune">func <a href="http://golang.org/src/pkg/strings/strings.go?s=2663:2703#L112">ContainsRune</a></h2>
+			<pre>func ContainsRune(s <a href="../builtin/index.html#string">string</a>, r <a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+			<p>
+ContainsRune returns true if the Unicode code point r is within s.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Count">func <a href="http://golang.org/src/pkg/strings/strings.go?s=1504:1533#L55">Count</a></h2>
+			<pre>func Count(s, sep <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+Count counts the number of non-overlapping instances of sep in s.
+</p>
+
+			<div id="example_Count" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.Count(&#34;cheese&#34;, &#34;e&#34;))
+	fmt.Println(strings.Count(&#34;five&#34;, &#34;&#34;)) // before &amp; after each rune
+}
+</textarea></div>
+				<div class="output"><pre>3
+5
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="EqualFold">func <a href="http://golang.org/src/pkg/strings/strings.go?s=17610:17642#L674">EqualFold</a></h2>
+			<pre>func EqualFold(s, t <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+			<p>
+EqualFold reports whether s and t, interpreted as UTF-8 strings,
+are equal under Unicode case-folding.
+</p>
+
+			<div id="example_EqualFold" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.EqualFold(&#34;Go&#34;, &#34;go&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>true
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="Fields">func <a href="http://golang.org/src/pkg/strings/strings.go?s=7444:7474#L304">Fields</a></h2>
+			<pre>func Fields(s <a href="../builtin/index.html#string">string</a>) []<a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Fields splits the string s around each instance of one or more consecutive white space
+characters, as defined by unicode.IsSpace, returning an array of substrings of s or an
+empty list if s contains only white space.
+</p>
+
+			<div id="example_Fields" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Printf(&#34;Fields are: %q&#34;, strings.Fields(&#34;  foo bar  baz   &#34;))
+}
+</textarea></div>
+				<div class="output"><pre>Fields are: [&#34;foo&#34; &#34;bar&#34; &#34;baz&#34;]
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="FieldsFunc">func <a href="http://golang.org/src/pkg/strings/strings.go?s=7738:7791#L311">FieldsFunc</a></h2>
+			<pre>func FieldsFunc(s <a href="../builtin/index.html#string">string</a>, f func(<a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#bool">bool</a>) []<a href="../builtin/index.html#string">string</a></pre>
+			<p>
+FieldsFunc splits the string s at each run of Unicode code points c satisfying f(c)
+and returns an array of slices of s. If all code points in s satisfy f(c) or the
+string is empty, an empty slice is returned.
+</p>
+
+			
+		
+			
+			
+			<h2 id="HasPrefix">func <a href="http://golang.org/src/pkg/strings/strings.go?s=8905:8942#L368">HasPrefix</a></h2>
+			<pre>func HasPrefix(s, prefix <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+			<p>
+HasPrefix tests whether the string s begins with prefix.
+</p>
+
+			
+		
+			
+			
+			<h2 id="HasSuffix">func <a href="http://golang.org/src/pkg/strings/strings.go?s=9066:9103#L373">HasSuffix</a></h2>
+			<pre>func HasSuffix(s, suffix <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+			<p>
+HasSuffix tests whether the string s ends with suffix.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Index">func <a href="http://golang.org/src/pkg/strings/strings.go?s=2834:2863#L117">Index</a></h2>
+			<pre>func Index(s, sep <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+Index returns the index of the first instance of sep in s, or -1 if sep is not present in s.
+</p>
+
+			<div id="example_Index" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.Index(&#34;chicken&#34;, &#34;ken&#34;))
+	fmt.Println(strings.Index(&#34;chicken&#34;, &#34;dmr&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>4
+-1
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="IndexAny">func <a href="http://golang.org/src/pkg/strings/strings.go?s=4467:4501#L208">IndexAny</a></h2>
+			<pre>func IndexAny(s, chars <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+IndexAny returns the index of the first instance of any Unicode code point
+from chars in s, or -1 if no Unicode code point from chars is present in s.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IndexFunc">func <a href="http://golang.org/src/pkg/strings/strings.go?s=14053:14100#L537">IndexFunc</a></h2>
+			<pre>func IndexFunc(s <a href="../builtin/index.html#string">string</a>, f func(<a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#bool">bool</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+IndexFunc returns the index into s of the first Unicode
+code point satisfying f(c), or -1 if none do.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IndexRune">func <a href="http://golang.org/src/pkg/strings/strings.go?s=4070:4106#L187">IndexRune</a></h2>
+			<pre>func IndexRune(s <a href="../builtin/index.html#string">string</a>, r <a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+IndexRune returns the index of the first instance of the Unicode code point
+r, or -1 if rune is not present in s.
+</p>
+
+			<div id="example_IndexRune" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.IndexRune(&#34;chicken&#34;, &#39;k&#39;))
+	fmt.Println(strings.IndexRune(&#34;chicken&#34;, &#39;d&#39;))
+}
+</textarea></div>
+				<div class="output"><pre>4
+-1
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="Join">func <a href="http://golang.org/src/pkg/strings/strings.go?s=8508:8548#L346">Join</a></h2>
+			<pre>func Join(a []<a href="../builtin/index.html#string">string</a>, sep <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Join concatenates the elements of a to create a single string.   The separator string
+sep is placed between elements in the resulting string.
+</p>
+
+			<div id="example_Join" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	s := []string{&#34;foo&#34;, &#34;bar&#34;, &#34;baz&#34;}
+	fmt.Println(strings.Join(s, &#34;, &#34;))
+}
+</textarea></div>
+				<div class="output"><pre>foo, bar, baz
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="LastIndex">func <a href="http://golang.org/src/pkg/strings/strings.go?s=3598:3631#L161">LastIndex</a></h2>
+			<pre>func LastIndex(s, sep <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+LastIndex returns the index of the last instance of sep in s, or -1 if sep is not present in s.
+</p>
+
+			<div id="example_LastIndex" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.Index(&#34;go gopher&#34;, &#34;go&#34;))
+	fmt.Println(strings.LastIndex(&#34;go gopher&#34;, &#34;go&#34;))
+	fmt.Println(strings.LastIndex(&#34;go gopher&#34;, &#34;rodent&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>0
+3
+-1
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="LastIndexAny">func <a href="http://golang.org/src/pkg/strings/strings.go?s=4803:4841#L224">LastIndexAny</a></h2>
+			<pre>func LastIndexAny(s, chars <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+LastIndexAny returns the index of the last instance of any Unicode code
+point from chars in s, or -1 if no Unicode code point from chars is
+present in s.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LastIndexFunc">func <a href="http://golang.org/src/pkg/strings/strings.go?s=14247:14298#L543">LastIndexFunc</a></h2>
+			<pre>func LastIndexFunc(s <a href="../builtin/index.html#string">string</a>, f func(<a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#bool">bool</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+LastIndexFunc returns the index into s of the last
+Unicode code point satisfying f(c), or -1 if none do.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Map">func <a href="http://golang.org/src/pkg/strings/strings.go?s=9386:9436#L380">Map</a></h2>
+			<pre>func Map(mapping func(<a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#rune">rune</a>, s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Map returns a copy of the string s with all its characters modified
+according to the mapping function. If mapping returns a negative value, the character is
+dropped from the string with no replacement.
+</p>
+
+			<div id="example_Map" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	rot13 := func(r rune) rune {
+		switch {
+		case r &gt;= &#39;A&#39; &amp;&amp; r &lt;= &#39;Z&#39;:
+			return &#39;A&#39; + (r-&#39;A&#39;+13)%26
+		case r &gt;= &#39;a&#39; &amp;&amp; r &lt;= &#39;z&#39;:
+			return &#39;a&#39; + (r-&#39;a&#39;+13)%26
+		}
+		return r
+	}
+	fmt.Println(strings.Map(rot13, &#34;&#39;Twas brillig and the slithy gopher...&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>&#39;Gjnf oevyyvt naq gur fyvgul tbcure...
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="Repeat">func <a href="http://golang.org/src/pkg/strings/strings.go?s=10421:10460#L421">Repeat</a></h2>
+			<pre>func Repeat(s <a href="../builtin/index.html#string">string</a>, count <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Repeat returns a new string consisting of count copies of the string s.
+</p>
+
+			<div id="example_Repeat" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(&#34;ba&#34; + strings.Repeat(&#34;na&#34;, 2))
+}
+</textarea></div>
+				<div class="output"><pre>banana
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="Replace">func <a href="http://golang.org/src/pkg/strings/strings.go?s=16825:16871#L638">Replace</a></h2>
+			<pre>func Replace(s, old, new <a href="../builtin/index.html#string">string</a>, n <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Replace returns a copy of the string s with the first n
+non-overlapping instances of old replaced by new.
+If n &lt; 0, there is no limit on the number of replacements.
+</p>
+
+			<div id="example_Replace" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.Replace(&#34;oink oink oink&#34;, &#34;k&#34;, &#34;ky&#34;, 2))
+	fmt.Println(strings.Replace(&#34;oink oink oink&#34;, &#34;oink&#34;, &#34;moo&#34;, -1))
+}
+</textarea></div>
+				<div class="output"><pre>oinky oinky oink
+moo moo moo
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="Split">func <a href="http://golang.org/src/pkg/strings/strings.go?s=6829:6863#L291">Split</a></h2>
+			<pre>func Split(s, sep <a href="../builtin/index.html#string">string</a>) []<a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Split slices s into all substrings separated by sep and returns a slice of
+the substrings between those separators.
+If sep is empty, Split splits after each UTF-8 sequence.
+It is equivalent to SplitN with a count of -1.
+</p>
+
+			<div id="example_Split" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Printf(&#34;%q\n&#34;, strings.Split(&#34;a,b,c&#34;, &#34;,&#34;))
+	fmt.Printf(&#34;%q\n&#34;, strings.Split(&#34;a man a plan a canal panama&#34;, &#34;a &#34;))
+	fmt.Printf(&#34;%q\n&#34;, strings.Split(&#34; xyz &#34;, &#34;&#34;))
+	fmt.Printf(&#34;%q\n&#34;, strings.Split(&#34;&#34;, &#34;Bernardo O&#39;Higgins&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>[&#34;a&#34; &#34;b&#34; &#34;c&#34;]
+[&#34;&#34; &#34;man &#34; &#34;plan &#34; &#34;canal panama&#34;]
+[&#34; &#34; &#34;x&#34; &#34;y&#34; &#34;z&#34; &#34; &#34;]
+[&#34;&#34;]
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="SplitAfter">func <a href="http://golang.org/src/pkg/strings/strings.go?s=7134:7173#L297">SplitAfter</a></h2>
+			<pre>func SplitAfter(s, sep <a href="../builtin/index.html#string">string</a>) []<a href="../builtin/index.html#string">string</a></pre>
+			<p>
+SplitAfter slices s into all substrings after each instance of sep and
+returns a slice of those substrings.
+If sep is empty, SplitAfter splits after each UTF-8 sequence.
+It is equivalent to SplitAfterN with a count of -1.
+</p>
+
+			<div id="example_SplitAfter" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Printf(&#34;%q\n&#34;, strings.SplitAfter(&#34;a,b,c&#34;, &#34;,&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>[&#34;a,&#34; &#34;b,&#34; &#34;c&#34;]
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="SplitAfterN">func <a href="http://golang.org/src/pkg/strings/strings.go?s=6506:6553#L283">SplitAfterN</a></h2>
+			<pre>func SplitAfterN(s, sep <a href="../builtin/index.html#string">string</a>, n <a href="../builtin/index.html#int">int</a>) []<a href="../builtin/index.html#string">string</a></pre>
+			<p>
+SplitAfterN slices s into substrings after each instance of sep and
+returns a slice of those substrings.
+If sep is empty, SplitAfterN splits after each UTF-8 sequence.
+The count determines the number of substrings to return:
+</p>
+<pre>n &gt; 0: at most n substrings; the last substring will be the unsplit remainder.
+n == 0: the result is nil (zero substrings)
+n &lt; 0: all substrings
+</pre>
+
+			<div id="example_SplitAfterN" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Printf(&#34;%q\n&#34;, strings.SplitAfterN(&#34;a,b,c&#34;, &#34;,&#34;, 2))
+}
+</textarea></div>
+				<div class="output"><pre>[&#34;a,&#34; &#34;b,c&#34;]
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="SplitN">func <a href="http://golang.org/src/pkg/strings/strings.go?s=6031:6073#L274">SplitN</a></h2>
+			<pre>func SplitN(s, sep <a href="../builtin/index.html#string">string</a>, n <a href="../builtin/index.html#int">int</a>) []<a href="../builtin/index.html#string">string</a></pre>
+			<p>
+SplitN slices s into substrings separated by sep and returns a slice of
+the substrings between those separators.
+If sep is empty, SplitN splits after each UTF-8 sequence.
+The count determines the number of substrings to return:
+</p>
+<pre>n &gt; 0: at most n substrings; the last substring will be the unsplit remainder.
+n == 0: the result is nil (zero substrings)
+n &lt; 0: all substrings
+</pre>
+
+			<div id="example_SplitN" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Printf(&#34;%q\n&#34;, strings.SplitN(&#34;a,b,c&#34;, &#34;,&#34;, 2))
+	z := strings.SplitN(&#34;a,b,c&#34;, &#34;,&#34;, 0)
+	fmt.Printf(&#34;%q (nil = %v)\n&#34;, z, z == nil)
+}
+</textarea></div>
+				<div class="output"><pre>[&#34;a&#34; &#34;b,c&#34;]
+[] (nil = true)
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="Title">func <a href="http://golang.org/src/pkg/strings/strings.go?s=12805:12832#L489">Title</a></h2>
+			<pre>func Title(s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Title returns a copy of the string s with all Unicode letters that begin words
+mapped to their title case.
+</p>
+<p>
+BUG: The rule Title uses for word boundaries does not handle Unicode punctuation properly.
+</p>
+
+			<div id="example_Title" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.Title(&#34;her royal highness&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>Her Royal Highness
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="ToLower">func <a href="http://golang.org/src/pkg/strings/strings.go?s=10875:10904#L437">ToLower</a></h2>
+			<pre>func ToLower(s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+ToLower returns a copy of the string s with all Unicode letters mapped to their lower case.
+</p>
+
+			<div id="example_ToLower" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.ToLower(&#34;Gopher&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>gopher
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="ToLowerSpecial">func <a href="http://golang.org/src/pkg/strings/strings.go?s=11533:11596#L450">ToLowerSpecial</a></h2>
+			<pre>func ToLowerSpecial(_case <a href="../unicode/index.html">unicode</a>.<a href="../unicode/index.html#SpecialCase">SpecialCase</a>, s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+ToLowerSpecial returns a copy of the string s with all Unicode letters mapped to their
+lower case, giving priority to the special casing rules.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ToTitle">func <a href="http://golang.org/src/pkg/strings/strings.go?s=11036:11065#L440">ToTitle</a></h2>
+			<pre>func ToTitle(s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+ToTitle returns a copy of the string s with all Unicode letters mapped to their title case.
+</p>
+
+			<div id="example_ToTitle" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.ToTitle(&#34;loud noises&#34;))
+	fmt.Println(strings.ToTitle(&#34;хлеб&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>LOUD NOISES
+ХЛЕБ
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="ToTitleSpecial">func <a href="http://golang.org/src/pkg/strings/strings.go?s=11814:11877#L456">ToTitleSpecial</a></h2>
+			<pre>func ToTitleSpecial(_case <a href="../unicode/index.html">unicode</a>.<a href="../unicode/index.html#SpecialCase">SpecialCase</a>, s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+ToTitleSpecial returns a copy of the string s with all Unicode letters mapped to their
+title case, giving priority to the special casing rules.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ToUpper">func <a href="http://golang.org/src/pkg/strings/strings.go?s=10714:10743#L434">ToUpper</a></h2>
+			<pre>func ToUpper(s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+ToUpper returns a copy of the string s with all Unicode letters mapped to their upper case.
+</p>
+
+			<div id="example_ToUpper" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.ToUpper(&#34;Gopher&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>GOPHER
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="ToUpperSpecial">func <a href="http://golang.org/src/pkg/strings/strings.go?s=11252:11315#L444">ToUpperSpecial</a></h2>
+			<pre>func ToUpperSpecial(_case <a href="../unicode/index.html">unicode</a>.<a href="../unicode/index.html#SpecialCase">SpecialCase</a>, s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+ToUpperSpecial returns a copy of the string s with all Unicode letters mapped to their
+upper case, giving priority to the special casing rules.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Trim">func <a href="http://golang.org/src/pkg/strings/strings.go?s=15318:15359#L586">Trim</a></h2>
+			<pre>func Trim(s <a href="../builtin/index.html#string">string</a>, cutset <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Trim returns a slice of the string s with all leading and
+trailing Unicode code points contained in cutset removed.
+</p>
+
+			<div id="example_Trim" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Printf(&#34;[%q]&#34;, strings.Trim(&#34; !!! Achtung !!! &#34;, &#34;! &#34;))
+}
+</textarea></div>
+				<div class="output"><pre>[&#34;Achtung&#34;]
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="TrimFunc">func <a href="http://golang.org/src/pkg/strings/strings.go?s=13845:13894#L531">TrimFunc</a></h2>
+			<pre>func TrimFunc(s <a href="../builtin/index.html#string">string</a>, f func(<a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#bool">bool</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+TrimFunc returns a slice of the string s with all leading
+and trailing Unicode code points c satisfying f(c) removed.
+</p>
+
+			
+		
+			
+			
+			<h2 id="TrimLeft">func <a href="http://golang.org/src/pkg/strings/strings.go?s=15566:15611#L595">TrimLeft</a></h2>
+			<pre>func TrimLeft(s <a href="../builtin/index.html#string">string</a>, cutset <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+TrimLeft returns a slice of the string s with all leading
+Unicode code points contained in cutset removed.
+</p>
+
+			
+		
+			
+			
+			<h2 id="TrimLeftFunc">func <a href="http://golang.org/src/pkg/strings/strings.go?s=13254:13307#L508">TrimLeftFunc</a></h2>
+			<pre>func TrimLeftFunc(s <a href="../builtin/index.html#string">string</a>, f func(<a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#bool">bool</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+TrimLeftFunc returns a slice of the string s with all leading
+Unicode code points c satisfying f(c) removed.
+</p>
+
+			
+		
+			
+			
+			<h2 id="TrimPrefix">func <a href="http://golang.org/src/pkg/strings/strings.go?s=16295:16335#L619">TrimPrefix</a></h2>
+			<pre>func TrimPrefix(s, prefix <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+TrimPrefix returns s without the provided leading prefix string.
+If s doesn&#39;t start with prefix, s is returned unchanged.
+</p>
+
+			<div id="example_TrimPrefix" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	var s = &#34;Goodbye,, world!&#34;
+	s = strings.TrimPrefix(s, &#34;Goodbye,&#34;)
+	s = strings.TrimPrefix(s, &#34;Howdy,&#34;)
+	fmt.Print(&#34;Hello&#34; + s)
+}
+</textarea></div>
+				<div class="output"><pre>Hello, world!
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="TrimRight">func <a href="http://golang.org/src/pkg/strings/strings.go?s=15825:15871#L604">TrimRight</a></h2>
+			<pre>func TrimRight(s <a href="../builtin/index.html#string">string</a>, cutset <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+TrimRight returns a slice of the string s, with all trailing
+Unicode code points contained in cutset removed.
+</p>
+
+			
+		
+			
+			
+			<h2 id="TrimRightFunc">func <a href="http://golang.org/src/pkg/strings/strings.go?s=13502:13556#L518">TrimRightFunc</a></h2>
+			<pre>func TrimRightFunc(s <a href="../builtin/index.html#string">string</a>, f func(<a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#bool">bool</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+TrimRightFunc returns a slice of the string s with all trailing
+Unicode code points c satisfying f(c) removed.
+</p>
+
+			
+		
+			
+			
+			<h2 id="TrimSpace">func <a href="http://golang.org/src/pkg/strings/strings.go?s=16093:16124#L613">TrimSpace</a></h2>
+			<pre>func TrimSpace(s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+TrimSpace returns a slice of the string s, with all leading
+and trailing white space removed, as defined by Unicode.
+</p>
+
+			<div id="example_TrimSpace" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	fmt.Println(strings.TrimSpace(&#34; \t\n a lone gopher \n\t\r\n&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>a lone gopher
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="TrimSuffix">func <a href="http://golang.org/src/pkg/strings/strings.go?s=16533:16573#L628">TrimSuffix</a></h2>
+			<pre>func TrimSuffix(s, suffix <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+TrimSuffix returns s without the provided trailing suffix string.
+If s doesn&#39;t end with suffix, s is returned unchanged.
+</p>
+
+			<div id="example_TrimSuffix" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	var s = &#34;Hello, goodbye, etc!&#34;
+	s = strings.TrimSuffix(s, &#34;goodbye, etc!&#34;)
+	s = strings.TrimSuffix(s, &#34;planet&#34;)
+	fmt.Print(s, &#34;world!&#34;)
+}
+</textarea></div>
+				<div class="output"><pre>Hello, world!
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+		
+			
+			
+			<h2 id="Reader">type <a href="http://golang.org/src/pkg/strings/reader.go?s=374:500#L6">Reader</a></h2>
+			<pre>type Reader struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Reader implements the io.Reader, io.ReaderAt, io.Seeker, io.WriterTo,
+io.ByteScanner, and io.RuneScanner interfaces by reading
+from a string.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewReader">func <a href="http://golang.org/src/pkg/strings/reader.go?s=2892:2924#L134">NewReader</a></h3>
+				<pre>func NewReader(s <a href="../builtin/index.html#string">string</a>) *<a href="#Reader">Reader</a></pre>
+				<p>
+NewReader returns a new Reader reading from s.
+It is similar to bytes.NewBufferString but more efficient and read-only.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Reader.Len">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=577:603#L14">Len</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Len() <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+Len returns the number of bytes of the unread portion of the
+string.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Reader.Read">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=668:718#L21">Read</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Read(b []<a href="../builtin/index.html#byte">byte</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Reader.ReadAt">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=864:927#L34">ReadAt</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) ReadAt(b []<a href="../builtin/index.html#byte">byte</a>, off <a href="../builtin/index.html#int64">int64</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Reader.ReadByte">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=1123:1170#L48">ReadByte</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) ReadByte() (b <a href="../builtin/index.html#byte">byte</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Reader.ReadRune">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=1423:1481#L67">ReadRune</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) ReadRune() (ch <a href="../builtin/index.html#rune">rune</a>, size <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Reader.Seek">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=1926:1988#L91">Seek</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Seek(offset <a href="../builtin/index.html#int64">int64</a>, whence <a href="../builtin/index.html#int">int</a>) (<a href="../builtin/index.html#int64">int64</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Seek implements the io.Seeker interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Reader.UnreadByte">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=1266:1301#L58">UnreadByte</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) UnreadByte() <a href="../builtin/index.html#error">error</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Reader.UnreadRune">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=1695:1730#L81">UnreadRune</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) UnreadRune() <a href="../builtin/index.html#error">error</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Reader.WriteTo">func (*Reader) <a href="http://golang.org/src/pkg/strings/reader.go?s=2423:2481#L114">WriteTo</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) WriteTo(w <a href="../io/index.html">io</a>.<a href="../io/index.html#Writer">Writer</a>) (n <a href="../builtin/index.html#int64">int64</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteTo implements the io.WriterTo interface.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Replacer">type <a href="http://golang.org/src/pkg/strings/replace.go?s=250:286#L1">Replacer</a></h2>
+			<pre>type Replacer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Replacer replaces a list of strings with replacements.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewReplacer">func <a href="http://golang.org/src/pkg/strings/replace.go?s=876:920#L21">NewReplacer</a></h3>
+				<pre>func NewReplacer(oldnew ...<a href="../builtin/index.html#string">string</a>) *<a href="#Replacer">Replacer</a></pre>
+				<p>
+NewReplacer returns a new Replacer from a list of old, new string pairs.
+Replacements are performed in order, without overlapping matches.
+</p>
+
+				<div id="example_NewReplacer" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	r := strings.NewReplacer(&#34;&lt;&#34;, &#34;&amp;lt;&#34;, &#34;&gt;&#34;, &#34;&amp;gt;&#34;)
+	fmt.Println(r.Replace(&#34;This is &lt;b&gt;HTML&lt;/b&gt;!&#34;))
+}
+</textarea></div>
+				<div class="output"><pre>This is &amp;lt;b&amp;gt;HTML&amp;lt;/b&amp;gt;!
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+
+			
+				
+				<h3 id="Replacer.Replace">func (*Replacer) <a href="http://golang.org/src/pkg/strings/replace.go?s=2044:2087#L68">Replace</a></h3>
+				<pre>func (r *<a href="#Replacer">Replacer</a>) Replace(s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+Replace returns a copy of s with all replacements performed.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Replacer.WriteString">func (*Replacer) <a href="http://golang.org/src/pkg/strings/replace.go?s=2178:2250#L73">WriteString</a></h3>
+				<pre>func (r *<a href="#Replacer">Replacer</a>) WriteString(w <a href="../io/index.html">io</a>.<a href="../io/index.html#Writer">Writer</a>, s <a href="../builtin/index.html#string">string</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteString writes s to w with all replacements performed.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=453&s_ttfb=463&id=1380993866349809', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/strings/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:47 GMT -->
+</html>
+

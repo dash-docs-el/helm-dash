@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/text/scanner/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:48 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>scanner</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package scanner</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "text/scanner"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package scanner provides a scanner and tokenizer for UTF-8-encoded text.
+It takes an io.Reader providing the source, which then can be tokenized
+through repeated calls to the Scan function.  For compatibility with
+existing tools, the NUL character is not allowed. If the first character
+in the source is a UTF-8 encoded byte order mark (BOM), it is discarded.
+</p>
+<p>
+By default, a Scanner skips white space and Go comments and recognizes all
+literals as defined by the Go language specification.  It may be
+customized to recognize only a subset of those literals and to recognize
+different white space characters.
+</p>
+<p>
+Basic usage pattern:
+</p>
+<pre>var s scanner.Scanner
+s.Init(src)
+tok := s.Scan()
+for tok != scanner.EOF {
+	// do something with tok
+	tok = s.Scan()
+}
+</pre>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="#TokenString">func TokenString(tok rune) string</a></dd>
+			
+			
+				
+				<dd><a href="#Position">type Position</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Position.IsValid">func (pos *Position) IsValid() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Position.String">func (pos Position) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Scanner">type Scanner</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Scanner.Init">func (s *Scanner) Init(src io.Reader) *Scanner</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Scanner.Next">func (s *Scanner) Next() rune</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Scanner.Peek">func (s *Scanner) Peek() rune</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Scanner.Pos">func (s *Scanner) Pos() (pos Position)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Scanner.Scan">func (s *Scanner) Scan() rune</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Scanner.TokenText">func (s *Scanner) TokenText() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/text/scanner/scanner.go">scanner.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="ScanIdents">ScanIdents</span>     = 1 &lt;&lt; -<a href="#Ident">Ident</a>
+        <span id="ScanInts">ScanInts</span>       = 1 &lt;&lt; -<a href="#Int">Int</a>
+        <span id="ScanFloats">ScanFloats</span>     = 1 &lt;&lt; -<a href="#Float">Float</a> <span class="comment">// includes Ints</span>
+        <span id="ScanChars">ScanChars</span>      = 1 &lt;&lt; -<a href="#Char">Char</a>
+        <span id="ScanStrings">ScanStrings</span>    = 1 &lt;&lt; -<a href="#String">String</a>
+        <span id="ScanRawStrings">ScanRawStrings</span> = 1 &lt;&lt; -<a href="#RawString">RawString</a>
+        <span id="ScanComments">ScanComments</span>   = 1 &lt;&lt; -<a href="#Comment">Comment</a>
+        <span id="SkipComments">SkipComments</span>   = 1 &lt;&lt; -skipComment <span class="comment">// if set with ScanComments, comments become white space</span>
+        <span id="GoTokens">GoTokens</span>       = <a href="#ScanIdents">ScanIdents</a> | <a href="#ScanFloats">ScanFloats</a> | <a href="#ScanChars">ScanChars</a> | <a href="#ScanStrings">ScanStrings</a> | <a href="#ScanRawStrings">ScanRawStrings</a> | <a href="#ScanComments">ScanComments</a> | <a href="#SkipComments">SkipComments</a>
+)</pre>
+				<p>
+Predefined mode bits to control recognition of tokens. For instance,
+to configure a Scanner such that it only recognizes (Go) identifiers,
+integers, and skips comments, set the Scanner&#39;s Mode field to:
+</p>
+<pre>ScanIdents | ScanInts | SkipComments
+</pre>
+
+			
+				<pre>const (
+        <span id="EOF">EOF</span> = -(<a href="../../builtin/index.html#iota">iota</a> + 1)
+        <span id="Ident">Ident</span>
+        <span id="Int">Int</span>
+        <span id="Float">Float</span>
+        <span id="Char">Char</span>
+        <span id="String">String</span>
+        <span id="RawString">RawString</span>
+        <span id="Comment">Comment</span>
+)</pre>
+				<p>
+The result of Scan is one of the following tokens or a Unicode character.
+</p>
+
+			
+				<pre>const <span id="GoWhitespace">GoWhitespace</span> = 1&lt;&lt;&#39;\t&#39; | 1&lt;&lt;&#39;\n&#39; | 1&lt;&lt;&#39;\r&#39; | 1&lt;&lt;&#39; &#39;</pre>
+				<p>
+GoWhitespace is the default value for the Scanner&#39;s Whitespace field.
+Its value selects Go&#39;s white space characters.
+</p>
+
+			
+		
+		
+		
+			
+			
+			<h2 id="TokenString">func <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=2937:2970#L98">TokenString</a></h2>
+			<pre>func TokenString(tok <a href="../../builtin/index.html#rune">rune</a>) <a href="../../builtin/index.html#string">string</a></pre>
+			<p>
+TokenString returns a printable string for a token or Unicode character.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Position">type <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=1226:1457#L31">Position</a></h2>
+			<pre>type Position struct {
+        Filename <a href="../../builtin/index.html#string">string</a> <span class="comment">// filename, if any</span>
+        Offset   <a href="../../builtin/index.html#int">int</a>    <span class="comment">// byte offset, starting at 0</span>
+        Line     <a href="../../builtin/index.html#int">int</a>    <span class="comment">// line number, starting at 1</span>
+        Column   <a href="../../builtin/index.html#int">int</a>    <span class="comment">// column number, starting at 1 (character count per line)</span>
+}</pre>
+			<p>
+A source position is represented by a Position value.
+A position is valid if Line &gt; 0.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Position.IsValid">func (*Position) <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=1509:1544#L39">IsValid</a></h3>
+				<pre>func (pos *<a href="#Position">Position</a>) IsValid() <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsValid returns true if the position is valid.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Position.String">func (Position) <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=1570:1605#L41">String</a></h3>
+				<pre>func (pos <a href="#Position">Position</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Scanner">type <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=3382:5474#L112">Scanner</a></h2>
+			<pre>type Scanner struct {
+
+        <span class="comment">// Error is called for each error encountered. If no Error</span>
+        <span class="comment">// function is set, the error is reported to os.Stderr.</span>
+        Error func(s *<a href="#Scanner">Scanner</a>, msg <a href="../../builtin/index.html#string">string</a>)
+
+        <span class="comment">// ErrorCount is incremented by one for each error encountered.</span>
+        ErrorCount <a href="../../builtin/index.html#int">int</a>
+
+        <span class="comment">// The Mode field controls which tokens are recognized. For instance,</span>
+        <span class="comment">// to recognize Ints, set the ScanInts bit in Mode. The field may be</span>
+        <span class="comment">// changed at any time.</span>
+        Mode <a href="../../builtin/index.html#uint">uint</a>
+
+        <span class="comment">// The Whitespace field controls which characters are recognized</span>
+        <span class="comment">// as white space. To recognize a character ch &lt;= &#39; &#39; as white space,</span>
+        <span class="comment">// set the ch&#39;th bit in Whitespace (the Scanner&#39;s behavior is undefined</span>
+        <span class="comment">// for values ch &gt; &#39; &#39;). The field may be changed at any time.</span>
+        Whitespace <a href="../../builtin/index.html#uint64">uint64</a>
+
+        <span class="comment">// Start position of most recently scanned token; set by Scan.</span>
+        <span class="comment">// Calling Init or Next invalidates the position (Line == 0).</span>
+        <span class="comment">// The Filename field is always left untouched by the Scanner.</span>
+        <span class="comment">// If an error is reported (via Error) and Position is invalid,</span>
+        <span class="comment">// the scanner is not inside a token. Call Pos to obtain an error</span>
+        <span class="comment">// position in that case.</span>
+        <a href="#Position">Position</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Scanner implements reading of Unicode characters and tokens from an io.Reader.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Scanner.Init">func (*Scanner) <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=5654:5700#L169">Init</a></h3>
+				<pre>func (s *<a href="#Scanner">Scanner</a>) Init(src <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>) *<a href="#Scanner">Scanner</a></pre>
+				<p>
+Init initializes a Scanner with a new source and returns s.
+Error is set to nil, ErrorCount is set to 0, Mode is set to GoTokens,
+and Whitespace is set to GoWhitespace.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Scanner.Next">func (*Scanner) <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=8956:8985#L292">Next</a></h3>
+				<pre>func (s *<a href="#Scanner">Scanner</a>) Next() <a href="../../builtin/index.html#rune">rune</a></pre>
+				<p>
+Next reads and returns the next Unicode character.
+It returns EOF at the end of the source. It reports
+a read error by calling s.Error, if not nil; otherwise
+it prints an error message to os.Stderr. Next does not
+update the Scanner&#39;s Position field; use Pos() to
+get the current position.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Scanner.Peek">func (*Scanner) <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=9297:9326#L303">Peek</a></h3>
+				<pre>func (s *<a href="#Scanner">Scanner</a>) Peek() <a href="../../builtin/index.html#rune">rune</a></pre>
+				<p>
+Peek returns the next Unicode character in the source without advancing
+the scanner. It returns EOF if the scanner&#39;s position is at the last
+character of the source.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Scanner.Pos">func (*Scanner) <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=15690:15728#L621">Pos</a></h3>
+				<pre>func (s *<a href="#Scanner">Scanner</a>) Pos() (pos <a href="#Position">Position</a>)</pre>
+				<p>
+Pos returns the position of the character immediately after
+the character or token returned by the last call to Next or Scan.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Scanner.Scan">func (*Scanner) <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=13657:13686#L521">Scan</a></h3>
+				<pre>func (s *<a href="#Scanner">Scanner</a>) Scan() <a href="../../builtin/index.html#rune">rune</a></pre>
+				<p>
+Scan reads the next token or Unicode character from source and returns it.
+It only recognizes tokens t for which the respective Mode bit (1&lt;&lt;-t) is set.
+It returns EOF at the end of the source. It reports scanner errors (read and
+token errors) by calling s.Error, if not nil; otherwise it prints an error
+message to os.Stderr.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Scanner.TokenText">func (*Scanner) <a href="http://golang.org/src/pkg/text/scanner/scanner.go?s=16250:16286#L643">TokenText</a></h3>
+				<pre>func (s *<a href="#Scanner">Scanner</a>) TokenText() <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+TokenText returns the string corresponding to the most recently scanned token.
+Valid after calling Scan().
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=139&id=1380993866970557', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/text/scanner/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:48 GMT -->
+</html>
+

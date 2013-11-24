@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/net/url/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>url</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package url</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "net/url"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package url parses URLs and implements query escaping.
+See RFC 3986.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#QueryEscape">func QueryEscape(s string) string</a></dd>
+			
+				
+				<dd><a href="#QueryUnescape">func QueryUnescape(s string) (string, error)</a></dd>
+			
+			
+				
+				<dd><a href="#Error">type Error</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Error.Error">func (e *Error) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#EscapeError">type EscapeError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#EscapeError.Error">func (e EscapeError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#URL">type URL</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Parse">func Parse(rawurl string) (url *URL, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseRequestURI">func ParseRequestURI(rawurl string) (url *URL, err error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#URL.IsAbs">func (u *URL) IsAbs() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#URL.Parse">func (u *URL) Parse(ref string) (*URL, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#URL.Query">func (u *URL) Query() Values</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#URL.RequestURI">func (u *URL) RequestURI() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#URL.ResolveReference">func (u *URL) ResolveReference(ref *URL) *URL</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#URL.String">func (u *URL) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Userinfo">type Userinfo</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#User">func User(username string) *Userinfo</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UserPassword">func UserPassword(username, password string) *Userinfo</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Userinfo.Password">func (u *Userinfo) Password() (string, bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Userinfo.String">func (u *Userinfo) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Userinfo.Username">func (u *Userinfo) Username() string</a></dd>
+				
+			
+				
+				<dd><a href="#Values">type Values</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseQuery">func ParseQuery(query string) (m Values, err error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Values.Add">func (v Values) Add(key, value string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Values.Del">func (v Values) Del(key string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Values.Encode">func (v Values) Encode() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Values.Get">func (v Values) Get(key string) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Values.Set">func (v Values) Set(key, value string)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_URL">URL</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Values">Values</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/net/url/url.go">url.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="QueryEscape">func <a href="http://golang.org/src/pkg/net/url/url.go?s=3955:3988#L163">QueryEscape</a></h2>
+			<pre>func QueryEscape(s <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#string">string</a></pre>
+			<p>
+QueryEscape escapes the string so it can be safely placed
+inside a URL query.
+</p>
+
+			
+		
+			
+			
+			<h2 id="QueryUnescape">func <a href="http://golang.org/src/pkg/net/url/url.go?s=2855:2899#L102">QueryUnescape</a></h2>
+			<pre>func QueryUnescape(s <a href="../../builtin/index.html#string">string</a>) (<a href="../../builtin/index.html#string">string</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+QueryUnescape does the inverse transformation of QueryEscape, converting
+%AB into the byte 0xAB and &#39;+&#39; into &#39; &#39; (space). It returns an error if
+any % is not followed by two hexadecimal digits.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Error">type <a href="http://golang.org/src/pkg/net/url/url.go?s=377:433#L8">Error</a></h2>
+			<pre>type Error struct {
+        Op  <a href="../../builtin/index.html#string">string</a>
+        URL <a href="../../builtin/index.html#string">string</a>
+        Err <a href="../../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+Error reports an error and the operation and URL that caused it.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Error.Error">func (*Error) <a href="http://golang.org/src/pkg/net/url/url.go?s=435:465#L14">Error</a></h3>
+				<pre>func (e *<a href="#Error">Error</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="EscapeError">type <a href="http://golang.org/src/pkg/net/url/url.go?s=1019:1042#L49">EscapeError</a></h2>
+			<pre>type EscapeError <a href="../../builtin/index.html#string">string</a></pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="EscapeError.Error">func (EscapeError) <a href="http://golang.org/src/pkg/net/url/url.go?s=1044:1079#L51">Error</a></h3>
+				<pre>func (e <a href="#EscapeError">EscapeError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="URL">type <a href="http://golang.org/src/pkg/net/url/url.go?s=5522:5827#L220">URL</a></h2>
+			<pre>type URL struct {
+        Scheme   <a href="../../builtin/index.html#string">string</a>
+        Opaque   <a href="../../builtin/index.html#string">string</a>    <span class="comment">// encoded opaque data</span>
+        User     *<a href="#Userinfo">Userinfo</a> <span class="comment">// username and password information</span>
+        Host     <a href="../../builtin/index.html#string">string</a>    <span class="comment">// host or host:port</span>
+        Path     <a href="../../builtin/index.html#string">string</a>
+        RawQuery <a href="../../builtin/index.html#string">string</a> <span class="comment">// encoded query values, without &#39;?&#39;</span>
+        Fragment <a href="../../builtin/index.html#string">string</a> <span class="comment">// fragment for references, without &#39;#&#39;</span>
+}</pre>
+			<p>
+A URL represents a parsed URL (technically, a URI reference).
+The general form represented is:
+</p>
+<pre>scheme://[userinfo@]host/path[?query][#fragment]
+</pre>
+<p>
+URLs that do not start with a slash after the scheme are interpreted as:
+</p>
+<pre>scheme:opaque[?query][#fragment]
+</pre>
+<p>
+Note that the Path field is stored in decoded form: /%47%6f%2f becomes /Go/.
+A consequence is that it is impossible to tell which slashes in the Path were
+slashes in the raw URL and which were %2f. This distinction is rarely important,
+but when it is a client must use other routines to parse the raw URL or construct
+the parsed URL. For example, an HTTP server can consult req.RequestURI, and
+an HTTP client can use URL{Host: &#34;example.com&#34;, Opaque: &#34;//example.com/Go%2f&#34;}
+instead of URL{Host: &#34;example.com&#34;, Path: &#34;/Go/&#34;}.
+</p>
+
+
+			
+
+			
+
+			<div id="example_URL" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;net/url&#34;
+)
+
+func main() {
+	u, err := url.Parse(&#34;http://bing.com/search?q=dotnet&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	u.Scheme = &#34;https&#34;
+	u.Host = &#34;google.com&#34;
+	q := u.Query()
+	q.Set(&#34;q&#34;, &#34;golang&#34;)
+	u.RawQuery = q.Encode()
+	fmt.Println(u)
+}
+</textarea></div>
+				<div class="output"><pre>https://google.com/search?q=golang
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+			
+				
+				<h3 id="Parse">func <a href="http://golang.org/src/pkg/net/url/url.go?s=8497:8544#L323">Parse</a></h3>
+				<pre>func Parse(rawurl <a href="../../builtin/index.html#string">string</a>) (url *<a href="#URL">URL</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Parse parses rawurl into a URL structure.
+The rawurl may be relative or absolute.
+</p>
+
+				
+			
+				
+				<h3 id="ParseRequestURI">func <a href="http://golang.org/src/pkg/net/url/url.go?s=9171:9228#L343">ParseRequestURI</a></h3>
+				<pre>func ParseRequestURI(rawurl <a href="../../builtin/index.html#string">string</a>) (url *<a href="#URL">URL</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+ParseRequestURI parses rawurl into a URL structure.  It assumes that
+rawurl was received in an HTTP request, so the rawurl is interpreted
+only as an absolute URI or an absolute path.
+The string rawurl is assumed not to have a #fragment suffix.
+(Web browsers strip #fragment before sending the URL to a web server.)
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="URL.IsAbs">func (*URL) <a href="http://golang.org/src/pkg/net/url/url.go?s=15463:15489#L611">IsAbs</a></h3>
+				<pre>func (u *<a href="#URL">URL</a>) IsAbs() <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsAbs returns true if the URL is absolute.
+</p>
+
+				
+				
+			
+				
+				<h3 id="URL.Parse">func (*URL) <a href="http://golang.org/src/pkg/net/url/url.go?s=15727:15772#L618">Parse</a></h3>
+				<pre>func (u *<a href="#URL">URL</a>) Parse(ref <a href="../../builtin/index.html#string">string</a>) (*<a href="#URL">URL</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Parse parses a URL in the context of the receiver.  The provided URL
+may be relative or absolute.  Parse returns nil, err on parse
+failure, otherwise its return value is the same as ResolveReference.
+</p>
+
+				
+				
+			
+				
+				<h3 id="URL.Query">func (*URL) <a href="http://golang.org/src/pkg/net/url/url.go?s=16980:17008#L664">Query</a></h3>
+				<pre>func (u *<a href="#URL">URL</a>) Query() <a href="#Values">Values</a></pre>
+				<p>
+Query parses RawQuery and returns the corresponding values.
+</p>
+
+				
+				
+			
+				
+				<h3 id="URL.RequestURI">func (*URL) <a href="http://golang.org/src/pkg/net/url/url.go?s=17172:17205#L671">RequestURI</a></h3>
+				<pre>func (u *<a href="#URL">URL</a>) RequestURI() <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+RequestURI returns the encoded path?query or opaque?query
+string that would be used in an HTTP request for u.
+</p>
+
+				
+				
+			
+				
+				<h3 id="URL.ResolveReference">func (*URL) <a href="http://golang.org/src/pkg/net/url/url.go?s=16276:16321#L632">ResolveReference</a></h3>
+				<pre>func (u *<a href="#URL">URL</a>) ResolveReference(ref *<a href="#URL">URL</a>) *<a href="#URL">URL</a></pre>
+				<p>
+ResolveReference resolves a URI reference to an absolute URI from
+an absolute base URI, per RFC 3986 Section 5.2.  The URI reference
+may be relative or absolute.  ResolveReference always returns a new
+URL instance, even if the returned URL is identical to either the
+base or reference. If ref is an absolute URL, then ResolveReference
+ignores base and returns a copy of ref.
+</p>
+
+				
+				
+			
+				
+				<h3 id="URL.String">func (*URL) <a href="http://golang.org/src/pkg/net/url/url.go?s=11532:11561#L433">String</a></h3>
+				<pre>func (u *<a href="#URL">URL</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+String reassembles the URL into a valid URL string.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Userinfo">type <a href="http://golang.org/src/pkg/net/url/url.go?s=6731:6813#L251">Userinfo</a></h2>
+			<pre>type Userinfo struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+The Userinfo type is an immutable encapsulation of username and
+password details for a URL. An existing Userinfo value is guaranteed
+to have a username set (potentially empty, as allowed by RFC 2396),
+and optionally a password.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="User">func <a href="http://golang.org/src/pkg/net/url/url.go?s=5913:5949#L232">User</a></h3>
+				<pre>func User(username <a href="../../builtin/index.html#string">string</a>) *<a href="#Userinfo">Userinfo</a></pre>
+				<p>
+User returns a Userinfo containing the provided username
+and no password set.
+</p>
+
+				
+			
+				
+				<h3 id="UserPassword">func <a href="http://golang.org/src/pkg/net/url/url.go?s=6387:6441#L243">UserPassword</a></h3>
+				<pre>func UserPassword(username, password <a href="../../builtin/index.html#string">string</a>) *<a href="#Userinfo">Userinfo</a></pre>
+				<p>
+UserPassword returns a Userinfo containing the provided username
+and password.
+This functionality should only be used with legacy web sites.
+RFC 2396 warns that interpreting Userinfo this way
+&ldquo;is NOT RECOMMENDED, because the passing of authentication
+information in clear text (such as URI) has proven to be a
+security risk in almost every case where it has been used.&rdquo;
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Userinfo.Password">func (*Userinfo) <a href="http://golang.org/src/pkg/net/url/url.go?s=6985:7029#L263">Password</a></h3>
+				<pre>func (u *<a href="#Userinfo">Userinfo</a>) Password() (<a href="../../builtin/index.html#string">string</a>, <a href="../../builtin/index.html#bool">bool</a>)</pre>
+				<p>
+Password returns the password in case it is set, and whether it is set.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Userinfo.String">func (*Userinfo) <a href="http://golang.org/src/pkg/net/url/url.go?s=7203:7237#L272">String</a></h3>
+				<pre>func (u *<a href="#Userinfo">Userinfo</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+String returns the encoded userinfo information in the standard form
+of &#34;username[:password]&#34;.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Userinfo.Username">func (*Userinfo) <a href="http://golang.org/src/pkg/net/url/url.go?s=6849:6885#L258">Username</a></h3>
+				<pre>func (u *<a href="#Userinfo">Userinfo</a>) Username() <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+Username returns the username.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Values">type <a href="http://golang.org/src/pkg/net/url/url.go?s=12393:12424#L469">Values</a></h2>
+			<pre>type Values map[<a href="../../builtin/index.html#string">string</a>][]<a href="../../builtin/index.html#string">string</a></pre>
+			<p>
+Values maps a string key to a list of values.
+It is typically used for query parameters and form values.
+Unlike in the http.Header map, the keys in a Values map
+are case-sensitive.
+</p>
+
+
+			
+
+			
+
+			<div id="example_Values" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;net/url&#34;
+)
+
+func main() {
+	v := url.Values{}
+	v.Set(&#34;name&#34;, &#34;Ava&#34;)
+	v.Add(&#34;friend&#34;, &#34;Jess&#34;)
+	v.Add(&#34;friend&#34;, &#34;Sarah&#34;)
+	v.Add(&#34;friend&#34;, &#34;Zoe&#34;)
+	// v.Encode() == &#34;name=Ava&amp;friend=Jess&amp;friend=Sarah&amp;friend=Zoe&#34;
+	fmt.Println(v.Get(&#34;name&#34;))
+	fmt.Println(v.Get(&#34;friend&#34;))
+	fmt.Println(v[&#34;friend&#34;])
+}
+</textarea></div>
+				<div class="output"><pre>Ava
+Jess
+[Jess Sarah Zoe]
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+			
+				
+				<h3 id="ParseQuery">func <a href="http://golang.org/src/pkg/net/url/url.go?s=13440:13491#L508">ParseQuery</a></h3>
+				<pre>func ParseQuery(query <a href="../../builtin/index.html#string">string</a>) (m <a href="#Values">Values</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+ParseQuery parses the URL-encoded query string and returns
+a map listing the values specified for each key.
+ParseQuery always returns a non-nil map containing all the
+valid query parameters found; err describes the first decoding error
+encountered, if any.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Values.Add">func (Values) <a href="http://golang.org/src/pkg/net/url/url.go?s=12992:13030#L494">Add</a></h3>
+				<pre>func (v <a href="#Values">Values</a>) Add(key, value <a href="../../builtin/index.html#string">string</a>)</pre>
+				<p>
+Add adds the key to value. It appends to any existing
+values associated with key.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Values.Del">func (Values) <a href="http://golang.org/src/pkg/net/url/url.go?s=13115:13146#L499">Del</a></h3>
+				<pre>func (v <a href="#Values">Values</a>) Del(key <a href="../../builtin/index.html#string">string</a>)</pre>
+				<p>
+Del deletes the values associated with key.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Values.Encode">func (Values) <a href="http://golang.org/src/pkg/net/url/url.go?s=14233:14264#L550">Encode</a></h3>
+				<pre>func (v <a href="#Values">Values</a>) Encode() <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+Encode encodes the values into &ldquo;URL encoded&rdquo; form.
+e.g. &#34;foo=bar&amp;bar=baz&#34;
+</p>
+
+				
+				
+			
+				
+				<h3 id="Values.Get">func (Values) <a href="http://golang.org/src/pkg/net/url/url.go?s=12621:12659#L475">Get</a></h3>
+				<pre>func (v <a href="#Values">Values</a>) Get(key <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+Get gets the first value associated with the given key.
+If there are no values associated with the key, Get returns
+the empty string. To access multiple values, use the map
+directly.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Values.Set">func (Values) <a href="http://golang.org/src/pkg/net/url/url.go?s=12834:12872#L488">Set</a></h3>
+				<pre>func (v <a href="#Values">Values</a>) Set(key, value <a href="../../builtin/index.html#string">string</a>)</pre>
+				<p>
+Set sets the key to value. It replaces any existing
+values.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=402&s_ttfb=411&id=1380993865390269', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/net/url/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

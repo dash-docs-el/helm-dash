@@ -1,0 +1,180 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.image/bmp by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:03 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>bmp</title>
+  
+    <meta name="twitter:title" content="Package bmp">
+    <meta property="og:title" content="Package bmp">
+    <meta name="description" content="Package bmp implements a BMP image decoder and encoder.">
+    <meta name="twitter:description" content="Package bmp implements a BMP image decoder and encoder.">
+    <meta property="og:description" content="Package bmp implements a BMP image decoder and encoder.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=image"><strong>go.image:</strong></a>
+  <a href="index.html">code.google.com/p/go.image</a><span class="text-muted">/</span><span class="text-muted">bmp</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package bmp</h2>
+    <p><code>import "code.google.com/p/go.image/bmp"</code>
+    </p><p>
+Package bmp implements a BMP image decoder and encoder.
+</p>
+<p>
+The BMP specification is at <a href="http://www.digicamsoft.com/bmp/bmp.html">http://www.digicamsoft.com/bmp/bmp.html</a>.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    <li><a href="#pkg-variables">Variables</a>
+    </li><li><a href="#Decode">func Decode(r io.Reader) (image.Image, error)</a></li><li><a href="#DecodeConfig">func DecodeConfig(r io.Reader) (config image.Config, err error)</a></li><li><a href="#Encode">func Encode(w io.Writer, m image.Image) error</a>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/bmp/?repo=image">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/bmp/reader.go?repo=image">reader.go</a> <a href="http://code.google.com/p/go/source/browse/bmp/writer.go?repo=image">writer.go</a> </p>
+
+    
+
+    <h3 id="pkg-variables">Variables <a class="permalink" href="#pkg-variables">¶</a></h3><pre>var <span id="ErrUnsupported">ErrUnsupported</span> = <a href="http://godoc.org/errors/#New">errors.New</a>("bmp: unsupported BMP image")</pre><p>
+ErrUnsupported means that the input BMP image uses a valid but unsupported
+feature.
+</p>
+
+
+    <h3 id="Decode">func <a title="View Source" href="http://code.google.com/p/go/source/browse/bmp/reader.go?repo=image#76">Decode</a> <a class="permalink" href="#Decode">¶</a></h3>
+    <pre class="funcdecl">func Decode(r <a href="http://godoc.org/io/#Reader">io.Reader</a>) (<a href="http://godoc.org/image/#Image">image.Image</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Decode reads a BMP image from r and returns it as an image.Image.
+Limitation: The file must be 8 or 24 bits per pixel.
+</p>
+
+    
+    <h3 id="DecodeConfig">func <a title="View Source" href="http://code.google.com/p/go/source/browse/bmp/reader.go?repo=image#90">DecodeConfig</a> <a class="permalink" href="#DecodeConfig">¶</a></h3>
+    <pre class="funcdecl">func DecodeConfig(r <a href="http://godoc.org/io/#Reader">io.Reader</a>) (config <a href="http://godoc.org/image/#Config">image.Config</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+DecodeConfig returns the color model and dimensions of a BMP image without
+decoding the entire image.
+Limitation: The file must be 8 or 24 bits per pixel.
+</p>
+
+    
+    <h3 id="Encode">func <a title="View Source" href="http://code.google.com/p/go/source/browse/bmp/writer.go?repo=image#90">Encode</a> <a class="permalink" href="#Encode">¶</a></h3>
+    <pre class="funcdecl">func Encode(w <a href="http://godoc.org/io/#Writer">io.Writer</a>, m <a href="http://godoc.org/image/#Image">image.Image</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Encode writes the image m to w in BMP format.
+</p>
+
+    
+    
+
+   
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.image/bmp"></form>
+  <p>Package bmp imports <a href="bmpa687.html?imports">5 packages</a> (<a href="bmp75f0.html?import-graph">graph</a>) and is imported by <a href="bmpefa9.html?importers">7 packages</a>.
+  Updated <span class="timeago" title="2013-09-22T18:20:40Z">2013-09-22</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.image/bmp by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:04 GMT -->
+
+</body>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/encoding/asn1/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>asn1</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package asn1</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "encoding/asn1"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package asn1 implements parsing of DER-encoded ASN.1 data structures,
+as defined in ITU-T Rec X.690.
+</p>
+<p>
+See also &ldquo;A Layman&#39;s Guide to a Subset of ASN.1, BER, and DER,&rdquo;
+<a href="http://luca.ntop.org/Teaching/Appunti/asn1.html">http://luca.ntop.org/Teaching/Appunti/asn1.html</a>.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Marshal">func Marshal(val interface{}) ([]byte, error)</a></dd>
+			
+				
+				<dd><a href="#Unmarshal">func Unmarshal(b []byte, val interface{}) (rest []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#UnmarshalWithParams">func UnmarshalWithParams(b []byte, val interface{}, params string) (rest []byte, err error)</a></dd>
+			
+			
+				
+				<dd><a href="#BitString">type BitString</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BitString.At">func (b BitString) At(i int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BitString.RightAlign">func (b BitString) RightAlign() []byte</a></dd>
+				
+			
+				
+				<dd><a href="#Enumerated">type Enumerated</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Flag">type Flag</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ObjectIdentifier">type ObjectIdentifier</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ObjectIdentifier.Equal">func (oi ObjectIdentifier) Equal(other ObjectIdentifier) bool</a></dd>
+				
+			
+				
+				<dd><a href="#RawContent">type RawContent</a></dd>
+				
+				
+			
+				
+				<dd><a href="#RawValue">type RawValue</a></dd>
+				
+				
+			
+				
+				<dd><a href="#StructuralError">type StructuralError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StructuralError.Error">func (e StructuralError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#SyntaxError">type SyntaxError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SyntaxError.Error">func (e SyntaxError) Error() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/encoding/asn1/asn1.go">asn1.go</a>
+			
+				<a href="http://golang.org/src/pkg/encoding/asn1/common.go">common.go</a>
+			
+				<a href="http://golang.org/src/pkg/encoding/asn1/marshal.go">marshal.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="Marshal">func <a href="http://golang.org/src/pkg/encoding/asn1/marshal.go?s=11571:11616#L561">Marshal</a></h2>
+			<pre>func Marshal(val interface{}) ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+Marshal returns the ASN.1 encoding of val.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Unmarshal">func <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=23635:23701#L830">Unmarshal</a></h2>
+			<pre>func Unmarshal(b []<a href="../../builtin/index.html#byte">byte</a>, val interface{}) (rest []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+Unmarshal parses the DER-encoded ASN.1 data structure b
+and uses the reflect package to fill in an arbitrary value pointed at by val.
+Because Unmarshal uses the reflect package, the structs
+being written to must use upper case field names.
+</p>
+<p>
+An ASN.1 INTEGER can be written to an int, int32, int64,
+or *big.Int (from the math/big package).
+If the encoded value does not fit in the Go type,
+Unmarshal returns a parse error.
+</p>
+<p>
+An ASN.1 BIT STRING can be written to a BitString.
+</p>
+<p>
+An ASN.1 OCTET STRING can be written to a []byte.
+</p>
+<p>
+An ASN.1 OBJECT IDENTIFIER can be written to an
+ObjectIdentifier.
+</p>
+<p>
+An ASN.1 ENUMERATED can be written to an Enumerated.
+</p>
+<p>
+An ASN.1 UTCTIME or GENERALIZEDTIME can be written to a time.Time.
+</p>
+<p>
+An ASN.1 PrintableString or IA5String can be written to a string.
+</p>
+<p>
+Any of the above ASN.1 values can be written to an interface{}.
+The value stored in the interface has the corresponding Go type.
+For integers, that type is int64.
+</p>
+<p>
+An ASN.1 SEQUENCE OF x or SET OF x can be written
+to a slice if an x can be written to the slice&#39;s element type.
+</p>
+<p>
+An ASN.1 SEQUENCE or SET can be written to a struct
+if each of the elements in the sequence can be
+written to the corresponding element in the struct.
+</p>
+<p>
+The following tags on struct fields have special meaning to Unmarshal:
+</p>
+<pre>optional		marks the field as ASN.1 OPTIONAL
+[explicit] tag:x	specifies the ASN.1 tag number; implies ASN.1 CONTEXT SPECIFIC
+default:x		sets the default value for optional integer fields
+</pre>
+<p>
+If the type of the first field of a structure is RawContent then the raw
+ASN1 contents of the struct will be stored in it.
+</p>
+<p>
+Other ASN.1 types are not supported; if it encounters them,
+Unmarshal returns a parse error.
+</p>
+
+			
+		
+			
+			
+			<h2 id="UnmarshalWithParams">func <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=23894:23985#L836">UnmarshalWithParams</a></h2>
+			<pre>func UnmarshalWithParams(b []<a href="../../builtin/index.html#byte">byte</a>, val interface{}, params <a href="../../builtin/index.html#string">string</a>) (rest []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+UnmarshalWithParams allows field parameters to be specified for the
+top-level element. The form of the params is the same as the field tags.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="BitString">type <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=3233:3340#L107">BitString</a></h2>
+			<pre>type BitString struct {
+        Bytes     []<a href="../../builtin/index.html#byte">byte</a> <span class="comment">// bits packed into bytes.</span>
+        BitLength <a href="../../builtin/index.html#int">int</a>    <span class="comment">// length in bits.</span>
+}</pre>
+			<p>
+BitString is the structure to use when you want an ASN.1 BIT STRING type. A
+bit string is padded up to the nearest byte in memory and the number of
+valid bits is recorded. Padding bits will be zero.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="BitString.At">func (BitString) <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=3434:3466#L114">At</a></h3>
+				<pre>func (b <a href="#BitString">BitString</a>) At(i <a href="../../builtin/index.html#int">int</a>) <a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+At returns the bit at the given index. If the index is out of range it
+returns false.
+</p>
+
+				
+				
+			
+				
+				<h3 id="BitString.RightAlign">func (BitString) <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=3706:3744#L125">RightAlign</a></h3>
+				<pre>func (b <a href="#BitString">BitString</a>) RightAlign() []<a href="../../builtin/index.html#byte">byte</a></pre>
+				<p>
+RightAlign returns a slice where the padding bits are at the beginning. The
+slice may share memory with the BitString.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Enumerated">type <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=5801:5820#L210">Enumerated</a></h2>
+			<pre>type Enumerated <a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+An Enumerated is represented as a plain int.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Flag">type <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=5889:5903#L215">Flag</a></h2>
+			<pre>type Flag <a href="../../builtin/index.html#bool">bool</a></pre>
+			<p>
+A Flag accepts any data and is set to true if present.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ObjectIdentifier">type <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=4632:4659#L162">ObjectIdentifier</a></h2>
+			<pre>type ObjectIdentifier []<a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+An ObjectIdentifier represents an ASN.1 OBJECT IDENTIFIER.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ObjectIdentifier.Equal">func (ObjectIdentifier) <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=4731:4792#L165">Equal</a></h3>
+				<pre>func (oi <a href="#ObjectIdentifier">ObjectIdentifier</a>) Equal(other <a href="#ObjectIdentifier">ObjectIdentifier</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+Equal returns true iff oi and other represent the same identifier.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="RawContent">type <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=9095:9117#L334">RawContent</a></h2>
+			<pre>type RawContent []<a href="../../builtin/index.html#byte">byte</a></pre>
+			<p>
+RawContent is used to signal that the undecoded, DER data needs to be
+preserved for a struct. To use it, the first field of the struct must have
+this type. It&#39;s an error for any of the other fields to have this type.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="RawValue">type <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=8741:8867#L324">RawValue</a></h2>
+			<pre>type RawValue struct {
+        Class, Tag <a href="../../builtin/index.html#int">int</a>
+        IsCompound <a href="../../builtin/index.html#bool">bool</a>
+        Bytes      []<a href="../../builtin/index.html#byte">byte</a>
+        FullBytes  []<a href="../../builtin/index.html#byte">byte</a> <span class="comment">// includes the tag and length</span>
+}</pre>
+			<p>
+A RawValue represents an undecoded ASN.1 object.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="StructuralError">type <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=1132:1175#L21">StructuralError</a></h2>
+			<pre>type StructuralError struct {
+        Msg <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+A StructuralError suggests that the ASN.1 data is valid, but the Go type
+which is receiving it doesn&#39;t match.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="StructuralError.Error">func (StructuralError) <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=1177:1216#L25">Error</a></h3>
+				<pre>func (e <a href="#StructuralError">StructuralError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SyntaxError">type <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=1321:1360#L28">SyntaxError</a></h2>
+			<pre>type SyntaxError struct {
+        Msg <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+A SyntaxError suggests that the ASN.1 data is invalid.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="SyntaxError.Error">func (SyntaxError) <a href="http://golang.org/src/pkg/encoding/asn1/asn1.go?s=1362:1397#L32">Error</a></h3>
+				<pre>func (e <a href="#SyntaxError">SyntaxError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=154&id=1380993862549032', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/encoding/asn1/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

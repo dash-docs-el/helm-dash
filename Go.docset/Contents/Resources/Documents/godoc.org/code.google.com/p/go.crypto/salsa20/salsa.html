@@ -1,0 +1,178 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/salsa20/salsa by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:25:56 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>salsa</title>
+  
+    <meta name="twitter:title" content="Package salsa">
+    <meta property="og:title" content="Package salsa">
+    <meta name="description" content="Package salsa provides low-level access to functions in the Salsa family.">
+    <meta name="twitter:description" content="Package salsa provides low-level access to functions in the Salsa family.">
+    <meta property="og:description" content="Package salsa provides low-level access to functions in the Salsa family.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=crypto"><strong>go.crypto:</strong></a>
+  <a href="../index.html">code.google.com/p/go.crypto</a><span class="text-muted">/</span><a href="index.html">salsa20</a><span class="text-muted">/</span><span class="text-muted">salsa</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package salsa</h2>
+    <p><code>import "code.google.com/p/go.crypto/salsa20/salsa"</code>
+    </p><p>
+Package salsa provides low-level access to functions in the Salsa family.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    <li><a href="#pkg-variables">Variables</a>
+    </li><li><a href="#Core208">func Core208(out *[64]byte, in *[64]byte)</a></li><li><a href="#HSalsa20">func HSalsa20(out *[32]byte, in *[16]byte, k *[32]byte, c *[16]byte)</a></li><li><a href="#XORKeyStream">func XORKeyStream(out, in []byte, counter *[16]byte, key *[32]byte)</a>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/salsa20/salsa/?repo=crypto">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/salsa20/salsa/hsalsa20.go?repo=crypto">hsalsa20.go</a> <a href="http://code.google.com/p/go/source/browse/salsa20/salsa/salsa208.go?repo=crypto">salsa208.go</a> <a href="http://code.google.com/p/go/source/browse/salsa20/salsa/salsa20_amd64.go?repo=crypto">salsa20_amd64.go</a> </p>
+
+    
+
+    <h3 id="pkg-variables">Variables <a class="permalink" href="#pkg-variables">¶</a></h3><pre>var <span id="Sigma">Sigma</span> = [16]<a href="http://godoc.org/builtin/#byte">byte</a>{'e', 'x', 'p', 'a', 'n', 'd', ' ', '3', '2', '-', 'b', 'y', 't', 'e', ' ', 'k'}</pre><p>
+Sigma is the Salsa20 constant for 256-bit keys.
+</p>
+
+
+    <h3 id="Core208">func <a title="View Source" href="http://code.google.com/p/go/source/browse/salsa20/salsa/salsa208.go?repo=crypto#9">Core208</a> <a class="permalink" href="#Core208">¶</a></h3>
+    <pre class="funcdecl">func Core208(out *[64]<a href="http://godoc.org/builtin/#byte">byte</a>, in *[64]<a href="http://godoc.org/builtin/#byte">byte</a>)</pre><p>
+Core208 applies the Salsa20/8 core function to the 64-byte array in and puts
+the result into the 64-byte array out. The input and output may be the same array.
+</p>
+
+    
+    <h3 id="HSalsa20">func <a title="View Source" href="http://code.google.com/p/go/source/browse/salsa20/salsa/hsalsa20.go?repo=crypto#14">HSalsa20</a> <a class="permalink" href="#HSalsa20">¶</a></h3>
+    <pre class="funcdecl">func HSalsa20(out *[32]<a href="http://godoc.org/builtin/#byte">byte</a>, in *[16]<a href="http://godoc.org/builtin/#byte">byte</a>, k *[32]<a href="http://godoc.org/builtin/#byte">byte</a>, c *[16]<a href="http://godoc.org/builtin/#byte">byte</a>)</pre><p>
+HSalsa20 applies the HSalsa20 core function to a 16-byte input in, 32-byte
+key k, and 16-byte constant c, and puts the result into the 32-byte array
+out.
+</p>
+
+    
+    <h3 id="XORKeyStream">func <a title="View Source" href="http://code.google.com/p/go/source/browse/salsa20/salsa/salsa20_amd64.go?repo=crypto#18">XORKeyStream</a> <a class="permalink" href="#XORKeyStream">¶</a></h3>
+    <pre class="funcdecl">func XORKeyStream(out, in []<a href="http://godoc.org/builtin/#byte">byte</a>, counter *[16]<a href="http://godoc.org/builtin/#byte">byte</a>, key *[32]<a href="http://godoc.org/builtin/#byte">byte</a>)</pre><p>
+XORKeyStream crypts bytes from in to out using the given key and counters.
+In and out may be the same slice but otherwise should not overlap. Counter
+contains the raw salsa20 counter bytes (both nonce and block counter).
+</p>
+
+    
+    
+
+   
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.crypto/salsa20/salsa"></form>
+  <p>Package salsa is imported by <a href="salsaefa9.html?importers">3 packages</a>.
+  Updated <span class="timeago" title="2013-10-01T16:04:11Z">2013-10-01</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/salsa20/salsa by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:25:57 GMT -->
+
+</body>

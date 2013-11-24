@@ -1,0 +1,410 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.codereview/patch by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:49 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>patch</title>
+  
+    <meta name="twitter:title" content="Package patch">
+    <meta property="og:title" content="Package patch">
+    <meta name="description" content="Package patch implements parsing and execution of the textual and binary patch descriptions used by version control tools such as CVS, Git, Mercurial, and Subversion.">
+    <meta name="twitter:description" content="Package patch implements parsing and execution of the textual and binary patch descriptions used by version control tools such as CVS, Git, Mercurial, and Subversion.">
+    <meta property="og:description" content="Package patch implements parsing and execution of the textual and binary patch descriptions used by version control tools such as CVS, Git, Mercurial, and Subversion.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=codereview"><strong>go.codereview:</strong></a>
+  <a href="index.html">code.google.com/p/go.codereview</a><span class="text-muted">/</span><span class="text-muted">patch</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package patch</h2>
+    <p><code>import "code.google.com/p/go.codereview/patch"</code>
+    </p><p>
+Package patch implements parsing and execution of the textual and
+binary patch descriptions used by version control tools such as
+CVS, Git, Mercurial, and Subversion.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    <li><a href="#pkg-variables">Variables</a>
+    
+    
+      </li><li><a href="#Diff">type Diff</a>
+        <ul>
+        <li><a href="#ParseGitBinary">func ParseGitBinary(raw []byte) (Diff, error)</a>
+        
+        </li></ul>
+    
+      </li><li><a href="#File">type File</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#GitBinaryLiteral">type GitBinaryLiteral</a>
+        <ul>
+        
+        <li><a href="#GitBinaryLiteral.Apply">func (d *GitBinaryLiteral) Apply(old []byte) ([]byte, error)</a>
+        </li></ul>
+    
+      </li><li><a href="#Op">type Op</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Set">type Set</a>
+        <ul>
+        <li><a href="#Parse">func Parse(text []byte) (*Set, error)</a>
+        </li><li><a href="#Set.Apply">func (set *Set) Apply(readFile func(string) ([]byte, error)) ([]Op, error)</a>
+        </li></ul>
+    
+      </li><li><a href="#SyntaxError">type SyntaxError</a>
+        <ul>
+        
+        <li><a href="#SyntaxError.Error">func (e SyntaxError) Error() string</a>
+        </li></ul>
+    
+      </li><li><a href="#TextChunk">type TextChunk</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#TextDiff">type TextDiff</a>
+        <ul>
+        <li><a href="#ParseTextDiff">func ParseTextDiff(raw []byte) (TextDiff, error)</a>
+        </li><li><a href="#TextDiff.Apply">func (d TextDiff) Apply(data []byte) ([]byte, error)</a>
+        </li></ul>
+    
+      </li><li><a href="#Verb">type Verb</a>
+        
+        
+        
+        
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/patch/?repo=codereview">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/patch/apply.go?repo=codereview">apply.go</a> <a href="http://code.google.com/p/go/source/browse/patch/git.go?repo=codereview">git.go</a> <a href="http://code.google.com/p/go/source/browse/patch/patch.go?repo=codereview">patch.go</a> <a href="http://code.google.com/p/go/source/browse/patch/textdiff.go?repo=codereview">textdiff.go</a> </p>
+
+    
+
+    <h3 id="pkg-variables">Variables <a class="permalink" href="#pkg-variables">¶</a></h3><pre>var <span id="ErrPatchFailure">ErrPatchFailure</span> = <a href="http://godoc.org/errors/#New">errors.New</a>("patch did not apply cleanly")</pre>
+
+    
+
+   <h3 id="Diff">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/patch.go?repo=codereview#45">Diff</a> <a class="permalink" href="#Diff">¶</a></h3>
+      <pre>type Diff interface {
+    <span class="com">// Apply applies the changes listed in the diff</span>
+    <span class="com">// to the string s, returning the new version of the string.</span>
+    <span class="com">// Note that the string s need not be a text string.</span>
+    <span id="Diff.Apply">Apply</span>(old []<a href="http://godoc.org/builtin/#byte">byte</a>) (new []<a href="http://godoc.org/builtin/#byte">byte</a>, err <a href="http://godoc.org/builtin/#error">error</a>)
+}</pre><p>
+A Diff is any object that describes changes to transform
+an old byte stream to a new one.
+</p>
+
+      
+      <pre>var <span id="NoDiff">NoDiff</span> <a href="#Diff">Diff</a> = noDiffType(0)</pre><p>
+NoDiff is a no-op Diff implementation: it passes the
+old data through unchanged.
+</p>
+
+      
+
+        <h4 id="ParseGitBinary">func <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/git.go?repo=codereview#71">ParseGitBinary</a> <a class="permalink" href="#ParseGitBinary">¶</a></h4>
+        <pre class="funcdecl">func ParseGitBinary(raw []<a href="http://godoc.org/builtin/#byte">byte</a>) (<a href="#Diff">Diff</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ParseGitBinary parses raw as a Git binary patch.
+</p>
+
+        
+        
+
+        
+
+    <h3 id="File">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/patch.go?repo=codereview#24">File</a> <a class="permalink" href="#File">¶</a></h3>
+      <pre>type File struct {
+    <span id="File.Verb">Verb</span>             <a href="#Verb">Verb</a>
+    <span id="File.Src">Src</span>              <a href="http://godoc.org/builtin/#string">string</a> <span class="com">// source for Verb == Copy, Verb == Rename</span>
+    <span id="File.Dst">Dst</span>              <a href="http://godoc.org/builtin/#string">string</a>
+    <span id="File.OldMode">OldMode</span>, <span id="File.NewMode">NewMode</span> <a href="http://godoc.org/builtin/#int">int</a> <span class="com">// 0 indicates not used</span>
+    <a href="#Diff">Diff</a>                 <span class="com">// changes to data; == NoDiff if operation does not edit file</span>
+}</pre><p>
+A File represents a collection of changes to be made to a single file.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="GitBinaryLiteral">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/git.go?repo=codereview#31">GitBinaryLiteral</a> <a class="permalink" href="#GitBinaryLiteral">¶</a></h3>
+      <pre>type GitBinaryLiteral struct {
+    <span id="GitBinaryLiteral.OldSHA1">OldSHA1</span> []<a href="http://godoc.org/builtin/#byte">byte</a> <span class="com">// if non-empty, the SHA1 hash of the original</span>
+    <span id="GitBinaryLiteral.New">New</span>     []<a href="http://godoc.org/builtin/#byte">byte</a> <span class="com">// the new contents</span>
+}</pre><p>
+GitBinaryLiteral represents a Git binary literal diff.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="GitBinaryLiteral.Apply">func (*GitBinaryLiteral) <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/git.go?repo=codereview#37">Apply</a> <a class="permalink" href="#GitBinaryLiteral.Apply">¶</a></h4>
+        <pre class="funcdecl">func (d *<a href="#GitBinaryLiteral">GitBinaryLiteral</a>) Apply(old []<a href="http://godoc.org/builtin/#byte">byte</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Apply implements the Diff interface's Apply method.
+</p>
+
+        
+        
+
+    <h3 id="Op">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/apply.go?repo=codereview#10">Op</a> <a class="permalink" href="#Op">¶</a></h3>
+      <pre>type Op struct {
+    <span id="Op.Verb">Verb</span> <a href="#Verb">Verb</a>   <span class="com">// action</span>
+    <span id="Op.Src">Src</span>  <a href="http://godoc.org/builtin/#string">string</a> <span class="com">// source file</span>
+    <span id="Op.Dst">Dst</span>  <a href="http://godoc.org/builtin/#string">string</a> <span class="com">// destination file</span>
+    <span id="Op.Mode">Mode</span> <a href="http://godoc.org/builtin/#int">int</a>    <span class="com">// mode for destination (if non-zero)</span>
+    <span id="Op.Data">Data</span> []<a href="http://godoc.org/builtin/#byte">byte</a> <span class="com">// data for destination (if non-nil)</span>
+}</pre><p>
+An Op is a single operation to execute to apply a patch.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="Set">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/patch.go?repo=codereview#18">Set</a> <a class="permalink" href="#Set">¶</a></h3>
+      <pre>type Set struct {
+    <span id="Set.Header">Header</span> <a href="http://godoc.org/builtin/#string">string</a> <span class="com">// free-form text</span>
+    <span id="Set.File">File</span>   []*<a href="#File">File</a>
+}</pre><p>
+A Set represents a set of patches to be applied as a single atomic unit.
+Patch sets are often preceded by a descriptive header.
+</p>
+
+      
+      
+      
+
+        <h4 id="Parse">func <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/patch.go?repo=codereview#73">Parse</a> <a class="permalink" href="#Parse">¶</a></h4>
+        <pre class="funcdecl">func Parse(text []<a href="http://godoc.org/builtin/#byte">byte</a>) (*<a href="#Set">Set</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Parse patches the patch text to create a patch Set.
+The patch text typically comprises a textual header and a sequence
+of file patches, as would be generated by CVS, Subversion,
+Mercurial, or Git.
+</p>
+
+        
+        
+
+        <h4 id="Set.Apply">func (*Set) <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/apply.go?repo=codereview#26">Apply</a> <a class="permalink" href="#Set.Apply">¶</a></h4>
+        <pre class="funcdecl">func (set *<a href="#Set">Set</a>) Apply(readFile func(<a href="http://godoc.org/builtin/#string">string</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#error">error</a>)) ([]<a href="#Op">Op</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Apply applies the patch set to the files named in the patch set,
+constructing an in-memory copy of the new file state.
+It is the client's job to write the changes to the file system
+if desired.
+</p>
+<p>
+The function readFile should return the contents of the named file.
+Typically this function will be io.ReadFile.
+</p>
+
+        
+        
+
+    <h3 id="SyntaxError">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/patch.go?repo=codereview#63">SyntaxError</a> <a class="permalink" href="#SyntaxError">¶</a></h3>
+      <pre>type SyntaxError <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+A SyntaxError represents a syntax error encountered while parsing a patch.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="SyntaxError.Error">func (SyntaxError) <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/patch.go?repo=codereview#65">Error</a> <a class="permalink" href="#SyntaxError.Error">¶</a></h4>
+        <pre class="funcdecl">func (e <a href="#SyntaxError">SyntaxError</a>) Error() <a href="http://godoc.org/builtin/#string">string</a></pre>
+        
+        
+
+    <h3 id="TextChunk">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/textdiff.go?repo=codereview#17">TextChunk</a> <a class="permalink" href="#TextChunk">¶</a></h3>
+      <pre>type TextChunk struct {
+    <span id="TextChunk.Line">Line</span> <a href="http://godoc.org/builtin/#int">int</a>
+    <span id="TextChunk.Old">Old</span>  []<a href="http://godoc.org/builtin/#byte">byte</a>
+    <span id="TextChunk.New">New</span>  []<a href="http://godoc.org/builtin/#byte">byte</a>
+}</pre><p>
+A TextChunk specifies an edit to a section of a file:
+the text beginning at Line, which should be exactly Old,
+is to be replaced with New.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="TextDiff">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/textdiff.go?repo=codereview#12">TextDiff</a> <a class="permalink" href="#TextDiff">¶</a></h3>
+      <pre>type TextDiff []<a href="#TextChunk">TextChunk</a></pre>
+      
+      
+      
+
+        <h4 id="ParseTextDiff">func <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/textdiff.go?repo=codereview#23">ParseTextDiff</a> <a class="permalink" href="#ParseTextDiff">¶</a></h4>
+        <pre class="funcdecl">func ParseTextDiff(raw []<a href="http://godoc.org/builtin/#byte">byte</a>) (<a href="#TextDiff">TextDiff</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre>
+        
+        
+
+        <h4 id="TextDiff.Apply">func (TextDiff) <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/textdiff.go?repo=codereview#162">Apply</a> <a class="permalink" href="#TextDiff.Apply">¶</a></h4>
+        <pre class="funcdecl">func (d <a href="#TextDiff">TextDiff</a>) Apply(data []<a href="http://godoc.org/builtin/#byte">byte</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Apply applies the changes listed in the diff
+to the data, returning the new version.
+</p>
+
+        
+        
+
+    <h3 id="Verb">type <a title="View Source" href="http://code.google.com/p/go/source/browse/patch/patch.go?repo=codereview#33">Verb</a> <a class="permalink" href="#Verb">¶</a></h3>
+      <pre>type Verb <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+A Verb is an action performed on a file.
+</p>
+
+      <pre>const (
+    <span id="Add">Add</span>    <a href="#Verb">Verb</a> = "add"
+    <span id="Copy">Copy</span>   <a href="#Verb">Verb</a> = "copy"
+    <span id="Delete">Delete</span> <a href="#Verb">Verb</a> = "delete"
+    <span id="Edit">Edit</span>   <a href="#Verb">Verb</a> = "edit"
+    <span id="Rename">Rename</span> <a href="#Verb">Verb</a> = "rename"
+)</pre>
+      
+      
+
+        
+
+        
+
+    
+
+    <h3 id="pkg-note-bug">Bugs <a class="permalink" href="#pkg-note-bug">¶</a></h3><p><a title="View Source" href="http://code.google.com/p/go/source/browse/patch/git.go?repo=codereview#28">☞</a> The Git binary delta format is not implemented, only Git binary literals.
+
+  
+
+
+
+</p><div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.codereview/patch"></form>
+  <p>Package patch imports <a href="patcha687.html?imports">10 packages</a> (<a href="patch75f0.html?import-graph">graph</a>).
+  Updated <span class="timeago" title="2013-09-02T15:53:03Z">2013-09-02</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.codereview/patch by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:49 GMT -->
+
+</body>

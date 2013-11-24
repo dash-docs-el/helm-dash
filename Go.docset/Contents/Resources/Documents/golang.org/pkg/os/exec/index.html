@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/os/exec/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>exec</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package exec</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "os/exec"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package exec runs external commands. It wraps os.StartProcess to make it
+easier to remap stdin and stdout, connect I/O with pipes, and do other
+adjustments.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#LookPath">func LookPath(file string) (string, error)</a></dd>
+			
+			
+				
+				<dd><a href="#Cmd">type Cmd</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Command">func Command(name string, arg ...string) *Cmd</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cmd.CombinedOutput">func (c *Cmd) CombinedOutput() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cmd.Output">func (c *Cmd) Output() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cmd.Run">func (c *Cmd) Run() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cmd.Start">func (c *Cmd) Start() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cmd.StderrPipe">func (c *Cmd) StderrPipe() (io.ReadCloser, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cmd.StdinPipe">func (c *Cmd) StdinPipe() (io.WriteCloser, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cmd.StdoutPipe">func (c *Cmd) StdoutPipe() (io.ReadCloser, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cmd.Wait">func (c *Cmd) Wait() error</a></dd>
+				
+			
+				
+				<dd><a href="#Error">type Error</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Error.Error">func (e *Error) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#ExitError">type ExitError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ExitError.Error">func (e *ExitError) Error() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Cmd_Output">Cmd.Output</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Cmd_Start">Cmd.Start</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Cmd_StdoutPipe">Cmd.StdoutPipe</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Command">Command</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_LookPath">LookPath</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/os/exec/exec.go">exec.go</a>
+			
+				<a href="http://golang.org/src/pkg/os/exec/lp_unix.go">lp_unix.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrNotFound">ErrNotFound</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;executable file not found in $PATH&#34;)</pre>
+				<p>
+ErrNotFound is the error resulting if a path search failed to find an executable file.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="LookPath">func <a href="http://golang.org/src/pkg/os/exec/lp_unix.go?s=809:851#L22">LookPath</a></h2>
+			<pre>func LookPath(file <a href="../../builtin/index.html#string">string</a>) (<a href="../../builtin/index.html#string">string</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookPath searches for an executable binary named file
+in the directories named by the PATH environment variable.
+If file contains a slash, it is tried directly and the PATH is not consulted.
+</p>
+
+			<div id="example_LookPath" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;os/exec&#34;
+)
+
+func main() {
+	path, err := exec.LookPath(&#34;fortune&#34;)
+	if err != nil {
+		log.Fatal(&#34;installing fortune is in your future&#34;)
+	}
+	fmt.Printf(&#34;fortune is available at %s\n&#34;, path)
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+		
+			
+			
+			<h2 id="Cmd">type <a href="http://golang.org/src/pkg/os/exec/exec.go?s=708:2865#L21">Cmd</a></h2>
+			<pre>type Cmd struct {
+        <span class="comment">// Path is the path of the command to run.</span>
+        <span class="comment">//</span>
+        <span class="comment">// This is the only field that must be set to a non-zero</span>
+        <span class="comment">// value.</span>
+        Path <a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// Args holds command line arguments, including the command as Args[0].</span>
+        <span class="comment">// If the Args field is empty or nil, Run uses {Path}.</span>
+        <span class="comment">//</span>
+        <span class="comment">// In typical use, both Path and Args are set by calling Command.</span>
+        Args []<a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// Env specifies the environment of the process.</span>
+        <span class="comment">// If Env is nil, Run uses the current process&#39;s environment.</span>
+        Env []<a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// Dir specifies the working directory of the command.</span>
+        <span class="comment">// If Dir is the empty string, Run runs the command in the</span>
+        <span class="comment">// calling process&#39;s current directory.</span>
+        Dir <a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// Stdin specifies the process&#39;s standard input. If Stdin is</span>
+        <span class="comment">// nil, the process reads from the null device (os.DevNull).</span>
+        Stdin <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>
+
+        <span class="comment">// Stdout and Stderr specify the process&#39;s standard output and error.</span>
+        <span class="comment">//</span>
+        <span class="comment">// If either is nil, Run connects the corresponding file descriptor</span>
+        <span class="comment">// to the null device (os.DevNull).</span>
+        <span class="comment">//</span>
+        <span class="comment">// If Stdout and Stderr are the same writer, at most one</span>
+        <span class="comment">// goroutine at a time will call Write.</span>
+        Stdout <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Writer">Writer</a>
+        Stderr <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Writer">Writer</a>
+
+        <span class="comment">// ExtraFiles specifies additional open files to be inherited by the</span>
+        <span class="comment">// new process. It does not include standard input, standard output, or</span>
+        <span class="comment">// standard error. If non-nil, entry i becomes file descriptor 3+i.</span>
+        <span class="comment">//</span>
+        <span class="comment">// BUG: on OS X 10.6, child processes may sometimes inherit unwanted fds.</span>
+        <span class="comment">// http://golang.org/issue/2603</span>
+        ExtraFiles []*<a href="../index.html">os</a>.<a href="../index.html#File">File</a>
+
+        <span class="comment">// SysProcAttr holds optional, operating system-specific attributes.</span>
+        <span class="comment">// Run passes it to os.StartProcess as the os.ProcAttr&#39;s Sys field.</span>
+        SysProcAttr *<a href="../../syscall/index.html">syscall</a>.<a href="../../syscall/index.html#SysProcAttr">SysProcAttr</a>
+
+        <span class="comment">// Process is the underlying process, once started.</span>
+        Process *<a href="../index.html">os</a>.<a href="../index.html#Process">Process</a>
+
+        <span class="comment">// ProcessState contains information about an exited process,</span>
+        <span class="comment">// available after a call to Wait or Run.</span>
+        ProcessState *<a href="../index.html">os</a>.<a href="../index.html#ProcessState">ProcessState</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Cmd represents an external command being prepared or run.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Command">func <a href="http://golang.org/src/pkg/os/exec/exec.go?s=3402:3447#L98">Command</a></h3>
+				<pre>func Command(name <a href="../../builtin/index.html#string">string</a>, arg ...<a href="../../builtin/index.html#string">string</a>) *<a href="#Cmd">Cmd</a></pre>
+				<p>
+Command returns the Cmd struct to execute the named program with
+the given arguments.
+</p>
+<p>
+It sets Path and Args in the returned structure and zeroes the
+other fields.
+</p>
+<p>
+If name contains no path separators, Command uses LookPath to
+resolve the path to a complete name if possible. Otherwise it uses
+name directly.
+</p>
+<p>
+The returned Cmd&#39;s Args field is constructed from the command name
+followed by the elements of arg, so arg should not include the
+command name itself. For example, Command(&#34;echo&#34;, &#34;hello&#34;)
+</p>
+
+				<div id="example_Command" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;os/exec&#34;
+	&#34;strings&#34;
+)
+
+func main() {
+	cmd := exec.Command(&#34;tr&#34;, &#34;a-z&#34;, &#34;A-Z&#34;)
+	cmd.Stdin = strings.NewReader(&#34;some input&#34;)
+	var out bytes.Buffer
+	cmd.Stdout = &amp;out
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf(&#34;in all caps: %q\n&#34;, out.String())
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+
+			
+				
+				<h3 id="Cmd.CombinedOutput">func (*Cmd) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=8564:8610#L334">CombinedOutput</a></h3>
+				<pre>func (c *<a href="#Cmd">Cmd</a>) CombinedOutput() ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+CombinedOutput runs the command and returns its combined standard
+output and standard error.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Cmd.Output">func (*Cmd) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=8269:8307#L322">Output</a></h3>
+				<pre>func (c *<a href="#Cmd">Cmd</a>) Output() ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Output runs the command and returns its standard output.
+</p>
+
+				
+				<div id="example_Cmd_Output" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;os/exec&#34;
+)
+
+func main() {
+	out, err := exec.Command(&#34;date&#34;).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf(&#34;The date is %s\n&#34;, out)
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="Cmd.Run">func (*Cmd) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=5901:5926#L218">Run</a></h3>
+				<pre>func (c *<a href="#Cmd">Cmd</a>) Run() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Run starts the specified command and waits for it to complete.
+</p>
+<p>
+The returned error is nil if the command runs, has no problems
+copying stdin, stdout, and stderr, and exits with a zero exit
+status.
+</p>
+<p>
+If the command fails to run or doesn&#39;t complete successfully, the
+error is of type *ExitError. Other error types may be
+returned for I/O problems.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Cmd.Start">func (*Cmd) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=6076:6103#L226">Start</a></h3>
+				<pre>func (c *<a href="#Cmd">Cmd</a>) Start() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Start starts the specified command but does not wait for it to complete.
+</p>
+
+				
+				<div id="example_Cmd_Start" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;log&#34;
+	&#34;os/exec&#34;
+)
+
+func main() {
+	cmd := exec.Command(&#34;sleep&#34;, &#34;5&#34;)
+	err := cmd.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf(&#34;Waiting for command to finish...&#34;)
+	err = cmd.Wait()
+	log.Printf(&#34;Command finished with error: %v&#34;, err)
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="Cmd.StderrPipe">func (*Cmd) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=10185:10234#L390">StderrPipe</a></h3>
+				<pre>func (c *<a href="#Cmd">Cmd</a>) StderrPipe() (<a href="../../io/index.html">io</a>.<a href="../../io/index.html#ReadCloser">ReadCloser</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+StderrPipe returns a pipe that will be connected to the command&#39;s
+standard error when the command starts.
+The pipe will be closed automatically after Wait sees the command exit.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Cmd.StdinPipe">func (*Cmd) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=8972:9021#L350">StdinPipe</a></h3>
+				<pre>func (c *<a href="#Cmd">Cmd</a>) StdinPipe() (<a href="../../io/index.html">io</a>.<a href="../../io/index.html#WriteCloser">WriteCloser</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+StdinPipe returns a pipe that will be connected to the command&#39;s
+standard input when the command starts.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Cmd.StdoutPipe">func (*Cmd) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=9577:9626#L370">StdoutPipe</a></h3>
+				<pre>func (c *<a href="#Cmd">Cmd</a>) StdoutPipe() (<a href="../../io/index.html">io</a>.<a href="../../io/index.html#ReadCloser">ReadCloser</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+StdoutPipe returns a pipe that will be connected to the command&#39;s
+standard output when the command starts.
+The pipe will be closed automatically after Wait sees the command exit.
+</p>
+
+				
+				<div id="example_Cmd_StdoutPipe" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;encoding/json&#34;
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;os/exec&#34;
+)
+
+func main() {
+	cmd := exec.Command(&#34;echo&#34;, &#34;-n&#34;, `{&#34;Name&#34;: &#34;Bob&#34;, &#34;Age&#34;: 32}`)
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := cmd.Start(); err != nil {
+		log.Fatal(err)
+	}
+	var person struct {
+		Name string
+		Age  int
+	}
+	if err := json.NewDecoder(stdout).Decode(&amp;person); err != nil {
+		log.Fatal(err)
+	}
+	if err := cmd.Wait(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf(&#34;%s is %d years old\n&#34;, person.Name, person.Age)
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="Cmd.Wait">func (*Cmd) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=7680:7706#L292">Wait</a></h3>
+				<pre>func (c *<a href="#Cmd">Cmd</a>) Wait() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Wait waits for the command to exit.
+It must have been started by Start.
+</p>
+<p>
+The returned error is nil if the command runs, has no problems
+copying stdin, stdout, and stderr, and exits with a zero exit
+status.
+</p>
+<p>
+If the command fails to run or doesn&#39;t complete successfully, the
+error is of type *ExitError. Other error types may be
+returned for I/O problems.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Error">type <a href="http://golang.org/src/pkg/os/exec/exec.go?s=499:545#L11">Error</a></h2>
+			<pre>type Error struct {
+        Name <a href="../../builtin/index.html#string">string</a>
+        Err  <a href="../../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+Error records the name of a binary that failed to be executed
+and the reason it failed.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Error.Error">func (*Error) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=547:577#L16">Error</a></h3>
+				<pre>func (e *<a href="#Error">Error</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ExitError">type <a href="http://golang.org/src/pkg/os/exec/exec.go?s=7181:7224#L274">ExitError</a></h2>
+			<pre>type ExitError struct {
+        *<a href="../index.html">os</a>.<a href="../index.html#ProcessState">ProcessState</a>
+}</pre>
+			<p>
+An ExitError reports an unsuccessful exit by a command.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ExitError.Error">func (*ExitError) <a href="http://golang.org/src/pkg/os/exec/exec.go?s=7226:7260#L278">Error</a></h3>
+				<pre>func (e *<a href="#ExitError">ExitError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=409&s_ttfb=416&id=1380993865392179', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/os/exec/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

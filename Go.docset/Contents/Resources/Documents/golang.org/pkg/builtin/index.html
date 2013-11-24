@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/builtin/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>builtin</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package builtin</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "builtin"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package builtin provides documentation for Go&#39;s predeclared identifiers.
+The items documented here are not actually in package builtin
+but their descriptions here allow godoc to present documentation
+for the language&#39;s special identifiers.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="#append">func append(slice []Type, elems ...Type) []Type</a></dd>
+			
+				
+				<dd><a href="#cap">func cap(v Type) int</a></dd>
+			
+				
+				<dd><a href="#close">func close(c chan&lt;- Type)</a></dd>
+			
+				
+				<dd><a href="#complex">func complex(r, i FloatType) ComplexType</a></dd>
+			
+				
+				<dd><a href="#copy">func copy(dst, src []Type) int</a></dd>
+			
+				
+				<dd><a href="#delete">func delete(m map[Type]Type1, key Type)</a></dd>
+			
+				
+				<dd><a href="#imag">func imag(c ComplexType) FloatType</a></dd>
+			
+				
+				<dd><a href="#len">func len(v Type) int</a></dd>
+			
+				
+				<dd><a href="#make">func make(Type, size IntegerType) Type</a></dd>
+			
+				
+				<dd><a href="#new">func new(Type) *Type</a></dd>
+			
+				
+				<dd><a href="#panic">func panic(v interface{})</a></dd>
+			
+				
+				<dd><a href="#real">func real(c ComplexType) FloatType</a></dd>
+			
+				
+				<dd><a href="#recover">func recover() interface{}</a></dd>
+			
+			
+				
+				<dd><a href="#ComplexType">type ComplexType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#FloatType">type FloatType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#IntegerType">type IntegerType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Type">type Type</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Type1">type Type1</a></dd>
+				
+				
+			
+				
+				<dd><a href="#bool">type bool</a></dd>
+				
+				
+			
+				
+				<dd><a href="#byte">type byte</a></dd>
+				
+				
+			
+				
+				<dd><a href="#complex128">type complex128</a></dd>
+				
+				
+			
+				
+				<dd><a href="#complex64">type complex64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#error">type error</a></dd>
+				
+				
+			
+				
+				<dd><a href="#float32">type float32</a></dd>
+				
+				
+			
+				
+				<dd><a href="#float64">type float64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#int">type int</a></dd>
+				
+				
+			
+				
+				<dd><a href="#int16">type int16</a></dd>
+				
+				
+			
+				
+				<dd><a href="#int32">type int32</a></dd>
+				
+				
+			
+				
+				<dd><a href="#int64">type int64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#int8">type int8</a></dd>
+				
+				
+			
+				
+				<dd><a href="#rune">type rune</a></dd>
+				
+				
+			
+				
+				<dd><a href="#string">type string</a></dd>
+				
+				
+			
+				
+				<dd><a href="#uint">type uint</a></dd>
+				
+				
+			
+				
+				<dd><a href="#uint16">type uint16</a></dd>
+				
+				
+			
+				
+				<dd><a href="#uint32">type uint32</a></dd>
+				
+				
+			
+				
+				<dd><a href="#uint64">type uint64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#uint8">type uint8</a></dd>
+				
+				
+			
+				
+				<dd><a href="#uintptr">type uintptr</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/builtin/builtin.go">builtin.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="true">true</span>  = 0 == 0 <span class="comment">// Untyped bool.</span>
+        <span id="false">false</span> = 0 != 0 <span class="comment">// Untyped bool.</span>
+)</pre>
+				<p>
+true and false are the two untyped boolean values.
+</p>
+
+			
+				<pre>const <span id="iota">iota</span> = 0 <span class="comment">// Untyped int.</span>
+</pre>
+				<p>
+iota is a predeclared identifier representing the untyped integer ordinal
+number of the current const specification in a (usually parenthesized)
+const declaration. It is zero-indexed.
+</p>
+
+			
+		
+		
+		
+			
+			
+			<h2 id="append">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=4716:4763#L124">append</a></h2>
+			<pre>func append(slice []<a href="#Type">Type</a>, elems ...<a href="#Type">Type</a>) []<a href="#Type">Type</a></pre>
+			<p>
+The append built-in function appends elements to the end of a slice. If
+it has sufficient capacity, the destination is resliced to accommodate the
+new elements. If it does not, a new underlying array will be allocated.
+Append returns the updated slice. It is therefore necessary to store the
+result of append, often in the variable holding the slice itself:
+</p>
+<pre>slice = append(slice, elem1, elem2)
+slice = append(slice, anotherSlice...)
+</pre>
+<p>
+As a special case, it is legal to append a string to a byte slice, like this:
+</p>
+<pre>slice = append([]byte(&#34;hello &#34;), &#34;world&#34;...)
+</pre>
+
+			
+		
+			
+			
+			<h2 id="cap">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=6143:6163#L154">cap</a></h2>
+			<pre>func cap(v <a href="#Type">Type</a>) int</pre>
+			<p>
+The cap built-in function returns the capacity of v, according to its type:
+</p>
+<pre>Array: the number of elements in v (same as len(v)).
+Pointer to array: the number of elements in *v (same as len(v)).
+Slice: the maximum length the slice can reach when resliced;
+if v is nil, cap(v) is zero.
+Channel: the channel buffer capacity, in units of elements;
+if v is nil, cap(v) is zero.
+</pre>
+
+			
+		
+			
+			
+			<h2 id="close">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=8588:8613#L203">close</a></h2>
+			<pre>func close(c chan&lt;- <a href="#Type">Type</a>)</pre>
+			<p>
+The close built-in function closes a channel, which must be either
+bidirectional or send-only. It should be executed only by the sender,
+never the receiver, and has the effect of shutting down the channel after
+the last sent value is received. After the last value has been received
+from a closed channel c, any receive from c will succeed without
+blocking, returning the zero value for the channel element. The form
+</p>
+<pre>x, ok := &lt;-c
+</pre>
+<p>
+will also set ok to false for a closed channel.
+</p>
+
+			
+		
+			
+			
+			<h2 id="complex">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=7650:7690#L184">complex</a></h2>
+			<pre>func complex(r, i <a href="#FloatType">FloatType</a>) <a href="#ComplexType">ComplexType</a></pre>
+			<p>
+The complex built-in function constructs a complex value from two
+floating-point values. The real and imaginary parts must be of the same
+size, either float32 or float64 (or assignable to them), and the return
+value will be the corresponding complex type (complex64 for float32,
+complex128 for float64).
+</p>
+
+			
+		
+			
+			
+			<h2 id="copy">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=5085:5115#L131">copy</a></h2>
+			<pre>func copy(dst, src []<a href="#Type">Type</a>) int</pre>
+			<p>
+The copy built-in function copies elements from a source slice into a
+destination slice. (As a special case, it also will copy bytes from a
+string to a slice of bytes.) The source and destination may overlap. Copy
+returns the number of elements copied, which will be the minimum of
+len(src) and len(dst).
+</p>
+
+			
+		
+			
+			
+			<h2 id="delete">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=5281:5320#L136">delete</a></h2>
+			<pre>func delete(m map[<a href="#Type">Type</a>]<a href="#Type1">Type1</a>, key <a href="#Type">Type</a>)</pre>
+			<p>
+The delete built-in function deletes the element with the specified key
+(m[key]) from the map. If m is nil or there is no such element, delete
+is a no-op.
+</p>
+
+			
+		
+			
+			
+			<h2 id="imag">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=8050:8084#L193">imag</a></h2>
+			<pre>func imag(c <a href="#ComplexType">ComplexType</a>) <a href="#FloatType">FloatType</a></pre>
+			<p>
+The imag built-in function returns the imaginary part of the complex
+number c. The return value will be floating point type corresponding to
+the type of c.
+</p>
+
+			
+		
+			
+			
+			<h2 id="len">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=5727:5747#L145">len</a></h2>
+			<pre>func len(v <a href="#Type">Type</a>) int</pre>
+			<p>
+The len built-in function returns the length of v, according to its type:
+</p>
+<pre>Array: the number of elements in v.
+Pointer to array: the number of elements in *v (even if v is nil).
+Slice, or map: the number of elements in v; if v is nil, len(v) is zero.
+String: the number of bytes in v.
+Channel: the number of elements queued (unread) in the channel buffer;
+if v is nil, len(v) is zero.
+</pre>
+
+			
+		
+			
+			
+			<h2 id="make">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=7091:7129#L172">make</a></h2>
+			<pre>func make(Type, size <a href="#IntegerType">IntegerType</a>) <a href="#Type">Type</a></pre>
+			<p>
+The make built-in function allocates and initializes an object of type
+slice, map, or chan (only). Like new, the first argument is a type, not a
+value. Unlike new, make&#39;s return type is the same as the type of its
+argument, not a pointer to it. The specification of the result depends on
+the type:
+</p>
+<pre>Slice: The size specifies the length. The capacity of the slice is
+equal to its length. A second integer argument may be provided to
+specify a different capacity; it must be no smaller than the
+length, so make([]int, 0, 10) allocates a slice of length 0 and
+capacity 10.
+Map: An initial allocation is made according to the size but the
+resulting map has length 0. The size may be omitted, in which case
+a small starting size is allocated.
+Channel: The channel&#39;s buffer is initialized with the specified
+buffer capacity. If zero, or the size is omitted, the channel is
+unbuffered.
+</pre>
+
+			
+		
+			
+			
+			<h2 id="new">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=7309:7329#L177">new</a></h2>
+			<pre>func new(<a href="#Type">Type</a>) *<a href="#Type">Type</a></pre>
+			<p>
+The new built-in function allocates memory. The first argument is a type,
+not a value, and the value returned is a pointer to a newly
+allocated zero value of that type.
+</p>
+
+			
+		
+			
+			
+			<h2 id="panic">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=9359:9384#L216">panic</a></h2>
+			<pre>func panic(v interface{})</pre>
+			<p>
+The panic built-in function stops normal execution of the current
+goroutine. When a function F calls panic, normal execution of F stops
+immediately. Any functions whose execution was deferred by F are run in
+the usual way, and then F returns to its caller. To the caller G, the
+invocation of F then behaves like a call to panic, terminating G&#39;s
+execution and running any deferred functions. This continues until all
+functions in the executing goroutine have stopped, in reverse order. At
+that point, the program is terminated and the error condition is reported,
+including the value of the argument to panic. This termination sequence
+is called panicking and can be controlled by the built-in function
+recover.
+</p>
+
+			
+		
+			
+			
+			<h2 id="real">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=7849:7883#L188">real</a></h2>
+			<pre>func real(c <a href="#ComplexType">ComplexType</a>) <a href="#FloatType">FloatType</a></pre>
+			<p>
+The real built-in function returns the real part of the complex number c.
+The return value will be floating point type corresponding to the type of c.
+</p>
+
+			
+		
+			
+			
+			<h2 id="recover">func <a href="http://golang.org/src/pkg/builtin/builtin.go?s=10004:10030#L227">recover</a></h2>
+			<pre>func recover() interface{}</pre>
+			<p>
+The recover built-in function allows a program to manage behavior of a
+panicking goroutine. Executing a call to recover inside a deferred
+function (but not any function called by it) stops the panicking sequence
+by restoring normal execution and retrieves the error value passed to the
+call of panic. If recover is called outside the deferred function it will
+not stop a panicking sequence. In this case, or when the goroutine is not
+panicking, or if the argument supplied to panic was nil, recover returns
+nil. Thus the return value from recover reports whether the goroutine is
+panicking.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="ComplexType">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=4105:4131#L113">ComplexType</a></h2>
+			<pre>type ComplexType complex64</pre>
+			<p>
+ComplexType is here for the purposes of documentation only. It is a
+stand-in for either complex type: complex64 or complex128.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="FloatType">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=3948:3970#L109">FloatType</a></h2>
+			<pre>type FloatType float32</pre>
+			<p>
+FloatType is here for the purposes of documentation only. It is a stand-in
+for either float type: float32 or float64.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="IntegerType">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=3802:3822#L105">IntegerType</a></h2>
+			<pre>type IntegerType int</pre>
+			<p>
+IntegerType is here for the purposes of documentation only. It is a stand-in
+for any integer type: int, uint, int8 etc.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Type">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=3484:3497#L96">Type</a></h2>
+			<pre>type Type int</pre>
+			<p>
+Type is here for the purposes of documentation only. It is a stand-in
+for any Go type, but represents the same type for any given function
+invocation.
+</p>
+
+
+			
+
+			
+				<pre>var <span id="nil">nil</span> <a href="#Type">Type</a> <span class="comment">// Type must be a pointer, channel, func, interface, map, or slice type</span>
+</pre>
+				<p>
+nil is a predeclared identifier representing the zero value for a
+pointer, channel, func, interface, map, or slice type.
+</p>
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Type1">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=3660:3674#L101">Type1</a></h2>
+			<pre>type Type1 int</pre>
+			<p>
+Type1 is here for the purposes of documentation only. It is a stand-in
+for any Go type, but represents the same type for any given function
+invocation.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="bool">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=481:495#L4">bool</a></h2>
+			<pre>type bool bool</pre>
+			<p>
+bool is the set of boolean values, true and false.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="byte">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=2701:2715#L78">byte</a></h2>
+			<pre>type byte byte</pre>
+			<p>
+byte is an alias for uint8 and is equivalent to uint8 in all ways. It is
+used, by convention, to distinguish byte values from 8-bit unsigned
+integer values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="complex128">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1867:1893#L56">complex128</a></h2>
+			<pre>type complex128 complex128</pre>
+			<p>
+complex128 is the set of all complex numbers with float64 real and
+imaginary parts.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="complex64">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1751:1775#L52">complex64</a></h2>
+			<pre>type complex64 complex64</pre>
+			<p>
+complex64 is the set of all complex numbers with float32 real and
+imaginary parts.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="error">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=10181:10221#L231">error</a></h2>
+			<pre>type error interface {
+        Error() string
+}</pre>
+			<p>
+The error built-in interface type is the conventional interface for
+representing an error condition, with the nil value representing no error.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="float32">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1549:1569#L45">float32</a></h2>
+			<pre>type float32 float32</pre>
+			<p>
+float32 is the set of all IEEE-754 32-bit floating-point numbers.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="float64">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1640:1660#L48">float64</a></h2>
+			<pre>type float64 float64</pre>
+			<p>
+float64 is the set of all IEEE-754 64-bit floating-point numbers.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="int">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=2249:2261#L65">int</a></h2>
+			<pre>type int int</pre>
+			<p>
+int is a signed integer type that is at least 32 bits in size. It is a
+distinct type, however, and not an alias for, say, int32.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="int16">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1222:1238#L34">int16</a></h2>
+			<pre>type int16 int16</pre>
+			<p>
+int16 is the set of all signed 16-bit integers.
+Range: -32768 through 32767.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="int32">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1333:1349#L38">int32</a></h2>
+			<pre>type int32 int32</pre>
+			<p>
+int32 is the set of all signed 32-bit integers.
+Range: -2147483648 through 2147483647.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="int64">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1462:1478#L42">int64</a></h2>
+			<pre>type int64 int64</pre>
+			<p>
+int64 is the set of all signed 64-bit integers.
+Range: -9223372036854775808 through 9223372036854775807.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="int8">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1123:1137#L30">int8</a></h2>
+			<pre>type int8 int8</pre>
+			<p>
+int8 is the set of all signed 8-bit integers.
+Range: -128 through 127.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="rune">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=2870:2884#L82">rune</a></h2>
+			<pre>type rune rune</pre>
+			<p>
+rune is an alias for int32 and is equivalent to int32 in all ways. It is
+used, by convention, to distinguish character values from integer values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="string">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=2094:2112#L61">string</a></h2>
+			<pre>type string string</pre>
+			<p>
+string is the set of all strings of 8-bit bytes, conventionally but not
+necessarily representing UTF-8-encoded text. A string may be empty, but
+not nil. Values of string type are immutable.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="uint">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=2403:2417#L69">uint</a></h2>
+			<pre>type uint uint</pre>
+			<p>
+uint is an unsigned integer type that is at least 32 bits in size. It is a
+distinct type, however, and not an alias for, say, uint32.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="uint16">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=804:822#L18">uint16</a></h2>
+			<pre>type uint16 uint16</pre>
+			<p>
+uint16 is the set of all unsigned 16-bit integers.
+Range: 0 through 65535.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="uint32">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=910:928#L22">uint32</a></h2>
+			<pre>type uint32 uint32</pre>
+			<p>
+uint32 is the set of all unsigned 32-bit integers.
+Range: 0 through 4294967295.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="uint64">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=1026:1044#L26">uint64</a></h2>
+			<pre>type uint64 uint64</pre>
+			<p>
+uint64 is the set of all unsigned 64-bit integers.
+Range: 0 through 18446744073709551615.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="uint8">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=705:721#L14">uint8</a></h2>
+			<pre>type uint8 uint8</pre>
+			<p>
+uint8 is the set of all unsigned 8-bit integers.
+Range: 0 through 255.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="uintptr">type <a href="http://golang.org/src/pkg/builtin/builtin.go?s=2513:2533#L73">uintptr</a></h2>
+			<pre>type uintptr uintptr</pre>
+			<p>
+uintptr is an integer type that is large enough to hold the bit pattern of
+any pointer.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=207&s_ttfb=222&id=1380993860078971', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/builtin/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

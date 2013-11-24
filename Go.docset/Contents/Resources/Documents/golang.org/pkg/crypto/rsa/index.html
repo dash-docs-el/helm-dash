@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/crypto/rsa/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>rsa</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package rsa</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "crypto/rsa"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package rsa implements RSA encryption as specified in PKCS#1.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#DecryptOAEP">func DecryptOAEP(hash hash.Hash, random io.Reader, priv *PrivateKey, ciphertext []byte, label []byte) (msg []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#DecryptPKCS1v15">func DecryptPKCS1v15(rand io.Reader, priv *PrivateKey, ciphertext []byte) (out []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#DecryptPKCS1v15SessionKey">func DecryptPKCS1v15SessionKey(rand io.Reader, priv *PrivateKey, ciphertext []byte, key []byte) (err error)</a></dd>
+			
+				
+				<dd><a href="#EncryptOAEP">func EncryptOAEP(hash hash.Hash, random io.Reader, pub *PublicKey, msg []byte, label []byte) (out []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#EncryptPKCS1v15">func EncryptPKCS1v15(rand io.Reader, pub *PublicKey, msg []byte) (out []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#SignPKCS1v15">func SignPKCS1v15(rand io.Reader, priv *PrivateKey, hash crypto.Hash, hashed []byte) (s []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#VerifyPKCS1v15">func VerifyPKCS1v15(pub *PublicKey, hash crypto.Hash, hashed []byte, sig []byte) (err error)</a></dd>
+			
+			
+				
+				<dd><a href="#CRTValue">type CRTValue</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PrecomputedValues">type PrecomputedValues</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PrivateKey">type PrivateKey</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#GenerateKey">func GenerateKey(random io.Reader, bits int) (priv *PrivateKey, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#GenerateMultiPrimeKey">func GenerateMultiPrimeKey(random io.Reader, nprimes int, bits int) (priv *PrivateKey, err error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PrivateKey.Precompute">func (priv *PrivateKey) Precompute()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PrivateKey.Validate">func (priv *PrivateKey) Validate() error</a></dd>
+				
+			
+				
+				<dd><a href="#PublicKey">type PublicKey</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/crypto/rsa/pkcs1v15.go">pkcs1v15.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/rsa/rsa.go">rsa.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrDecryption">ErrDecryption</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;crypto/rsa: decryption error&#34;)</pre>
+				<p>
+ErrDecryption represents a failure to decrypt a message.
+It is deliberately vague to avoid adaptive attacks.
+</p>
+
+			
+				<pre>var <span id="ErrMessageTooLong">ErrMessageTooLong</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;crypto/rsa: message too long for RSA public key size&#34;)</pre>
+				<p>
+ErrMessageTooLong is returned when attempting to encrypt a message which is
+too large for the size of the public key.
+</p>
+
+			
+				<pre>var <span id="ErrVerification">ErrVerification</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;crypto/rsa: verification error&#34;)</pre>
+				<p>
+ErrVerification represents a failure to verify a signature.
+It is deliberately vague to avoid adaptive attacks.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="DecryptOAEP">func <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=12482:12607#L447">DecryptOAEP</a></h2>
+			<pre>func DecryptOAEP(hash <a href="../../hash/index.html">hash</a>.<a href="../../hash/index.html#Hash">Hash</a>, random <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, ciphertext []<a href="../../builtin/index.html#byte">byte</a>, label []<a href="../../builtin/index.html#byte">byte</a>) (msg []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+DecryptOAEP decrypts ciphertext using RSA-OAEP.
+If random != nil, DecryptOAEP uses RSA blinding to avoid timing side-channel attacks.
+</p>
+
+			
+		
+			
+			
+			<h2 id="DecryptPKCS1v15">func <a href="http://golang.org/src/pkg/crypto/rsa/pkcs1v15.go?s=1405:1502#L42">DecryptPKCS1v15</a></h2>
+			<pre>func DecryptPKCS1v15(rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, ciphertext []<a href="../../builtin/index.html#byte">byte</a>) (out []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+DecryptPKCS1v15 decrypts a plaintext using RSA and the padding scheme from PKCS#1 v1.5.
+If rand != nil, it uses RSA blinding to avoid timing side-channel attacks.
+</p>
+
+			
+		
+			
+			
+			<h2 id="DecryptPKCS1v15SessionKey">func <a href="http://golang.org/src/pkg/crypto/rsa/pkcs1v15.go?s=2610:2717#L67">DecryptPKCS1v15SessionKey</a></h2>
+			<pre>func DecryptPKCS1v15SessionKey(rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, ciphertext []<a href="../../builtin/index.html#byte">byte</a>, key []<a href="../../builtin/index.html#byte">byte</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+DecryptPKCS1v15SessionKey decrypts a session key using RSA and the padding scheme from PKCS#1 v1.5.
+If rand != nil, it uses RSA blinding to avoid timing side-channel attacks.
+It returns an error if the ciphertext is the wrong length or if the
+ciphertext is greater than the public modulus. Otherwise, no error is
+returned. If the padding is valid, the resulting plaintext message is copied
+into key. Otherwise, key is unchanged. These alternatives occur in constant
+time. It is intended that the user of this function generate a random
+session key beforehand and continue the protocol with the resulting value.
+This will remove any possibility that an attacker can learn any information
+about the plaintext.
+See &ldquo;Chosen Ciphertext Attacks Against Protocols Based on the RSA
+Encryption Standard PKCS #1&rdquo;, Daniel Bleichenbacher, Advances in Cryptology
+(Crypto &#39;98).
+</p>
+
+			
+		
+			
+			
+			<h2 id="EncryptOAEP">func <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=7645:7761#L258">EncryptOAEP</a></h2>
+			<pre>func EncryptOAEP(hash <a href="../../hash/index.html">hash</a>.<a href="../../hash/index.html#Hash">Hash</a>, random <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, pub *<a href="#PublicKey">PublicKey</a>, msg []<a href="../../builtin/index.html#byte">byte</a>, label []<a href="../../builtin/index.html#byte">byte</a>) (out []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+EncryptOAEP encrypts the given message with RSA-OAEP.
+The message must be no longer than the length of the public modulus less
+twice the hash length plus 2.
+</p>
+
+			
+		
+			
+			
+			<h2 id="EncryptPKCS1v15">func <a href="http://golang.org/src/pkg/crypto/rsa/pkcs1v15.go?s=628:716#L11">EncryptPKCS1v15</a></h2>
+			<pre>func EncryptPKCS1v15(rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, pub *<a href="#PublicKey">PublicKey</a>, msg []<a href="../../builtin/index.html#byte">byte</a>) (out []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+EncryptPKCS1v15 encrypts the given message with RSA and the padding scheme from PKCS#1 v1.5.
+The message must be no longer than the length of the public modulus minus 11 bytes.
+WARNING: use of this function to encrypt plaintexts other than session keys
+is dangerous. Use RSA OAEP in new protocols.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SignPKCS1v15">func <a href="http://golang.org/src/pkg/crypto/rsa/pkcs1v15.go?s=6125:6231#L166">SignPKCS1v15</a></h2>
+			<pre>func SignPKCS1v15(rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, hash <a href="../index.html">crypto</a>.<a href="../index.html#Hash">Hash</a>, hashed []<a href="../../builtin/index.html#byte">byte</a>) (s []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+SignPKCS1v15 calculates the signature of hashed using RSASSA-PKCS1-V1_5-SIGN from RSA PKCS#1 v1.5.
+Note that hashed must be the result of hashing the input message using the
+given hash function.
+</p>
+
+			
+		
+			
+			
+			<h2 id="VerifyPKCS1v15">func <a href="http://golang.org/src/pkg/crypto/rsa/pkcs1v15.go?s=7012:7104#L202">VerifyPKCS1v15</a></h2>
+			<pre>func VerifyPKCS1v15(pub *<a href="#PublicKey">PublicKey</a>, hash <a href="../index.html">crypto</a>.<a href="../index.html#Hash">Hash</a>, hashed []<a href="../../builtin/index.html#byte">byte</a>, sig []<a href="../../builtin/index.html#byte">byte</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+VerifyPKCS1v15 verifies an RSA PKCS#1 v1.5 signature.
+hashed is the result of hashing the input message using the given hash
+function and sig is the signature. A valid signature is indicated by
+returning a nil error.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="CRTValue">type <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=2044:2215#L65">CRTValue</a></h2>
+			<pre>type CRTValue struct {
+        Exp   *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a> <span class="comment">// D mod (prime-1).</span>
+        Coeff *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a> <span class="comment">// R·Coeff ≡ 1 mod Prime.</span>
+        R     *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a> <span class="comment">// product of primes prior to this (inc p and q).</span>
+}</pre>
+			<p>
+CRTValue contains the precomputed chinese remainder theorem values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PrecomputedValues">type <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=1606:1971#L53">PrecomputedValues</a></h2>
+			<pre>type PrecomputedValues struct {
+        Dp, Dq *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a> <span class="comment">// D mod (P-1) (or mod Q-1)</span>
+        Qinv   *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a> <span class="comment">// Q^-1 mod Q</span>
+
+        <span class="comment">// CRTValues is used for the 3rd and subsequent primes. Due to a</span>
+        <span class="comment">// historical accident, the CRT for the first two primes is handled</span>
+        <span class="comment">// differently in PKCS#1 and interoperability is sufficiently</span>
+        <span class="comment">// important that we mirror this.</span>
+        CRTValues []<a href="#CRTValue">CRTValue</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PrivateKey">type <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=1306:1604#L43">PrivateKey</a></h2>
+			<pre>type PrivateKey struct {
+        <a href="#PublicKey">PublicKey</a>            <span class="comment">// public part.</span>
+        D         *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a>   <span class="comment">// private exponent</span>
+        Primes    []*<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a> <span class="comment">// prime factors of N, has &gt;= 2 elements.</span>
+
+        <span class="comment">// Precomputed contains precomputed values that speed up private</span>
+        <span class="comment">// operations, if available.</span>
+        Precomputed <a href="#PrecomputedValues">PrecomputedValues</a>
+}</pre>
+			<p>
+A PrivateKey represents an RSA key
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="GenerateKey">func <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=3802:3876#L116">GenerateKey</a></h3>
+				<pre>func GenerateKey(random <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, bits <a href="../../builtin/index.html#int">int</a>) (priv *<a href="#PrivateKey">PrivateKey</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+GenerateKey generates an RSA keypair of the given bit size.
+</p>
+
+				
+			
+				
+				<h3 id="GenerateMultiPrimeKey">func <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=4487:4584#L130">GenerateMultiPrimeKey</a></h3>
+				<pre>func GenerateMultiPrimeKey(random <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, nprimes <a href="../../builtin/index.html#int">int</a>, bits <a href="../../builtin/index.html#int">int</a>) (priv *<a href="#PrivateKey">PrivateKey</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+GenerateMultiPrimeKey generates a multi-prime RSA keypair of the given bit
+size, as suggested in [1]. Although the public keys are compatible
+(actually, indistinguishable) from the 2-prime case, the private keys are
+not. Thus it may not be possible to export multi-prime private keys in
+certain formats or to subsequently import them into other code.
+</p>
+<p>
+Table 1 in [2] suggests maximum numbers of primes for a given size.
+</p>
+<p>
+[1] US patent 4405829 (1972, expired)
+[2] <a href="http://www.cacr.math.uwaterloo.ca/techreports/2006/cacr2006-16.pdf">http://www.cacr.math.uwaterloo.ca/techreports/2006/cacr2006-16.pdf</a>
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="PrivateKey.Precompute">func (*PrivateKey) <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=9693:9729#L338">Precompute</a></h3>
+				<pre>func (priv *<a href="#PrivateKey">PrivateKey</a>) Precompute()</pre>
+				<p>
+Precompute performs some calculations that speed up private key operations
+in the future.
+</p>
+
+				
+				
+			
+				
+				<h3 id="PrivateKey.Validate">func (*PrivateKey) <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=2348:2388#L73">Validate</a></h3>
+				<pre>func (priv *<a href="#PrivateKey">PrivateKey</a>) Validate() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Validate performs basic sanity checks on the key.
+It returns nil if the key is valid, or else an error describing a problem.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="PublicKey">type <a href="http://golang.org/src/pkg/crypto/rsa/rsa.go?s=475:554#L13">PublicKey</a></h2>
+			<pre>type PublicKey struct {
+        N *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a> <span class="comment">// modulus</span>
+        E <a href="../../builtin/index.html#int">int</a>      <span class="comment">// public exponent</span>
+}</pre>
+			<p>
+A PublicKey represents the public part of an RSA key.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=147&id=1380993861590258', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/crypto/rsa/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

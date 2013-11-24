@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:19 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>Packages</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Directory /src/pkg</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+
+
+
+
+	
+	
+		<div class="pkgGopher">
+			<img class="gopher" src="../../1-ps.googleusercontent.com/x/s.golang-org.appspot.com/golang.org/doc/gopher/xpkg.png.pagespeed.ic.YTXWBPrw2q.jpg"/>
+		</div>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="http://golang.org/">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="archive/index.html">archive</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="archive/tar/index.html">tar</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package tar implements access to tar archives.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="archive/zip/index.html">zip</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package zip provides support for reading and writing ZIP archives.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="bufio/index.html">bufio</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package bufio implements buffered I/O. It wraps an io.Reader or io.Writer object, creating another object (Reader or Writer) that also implements the interface but provides buffering and some help for textual I/O.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="builtin/index.html">builtin</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package builtin provides documentation for Go&#39;s predeclared identifiers.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="bytes/index.html">bytes</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package bytes implements functions for the manipulation of byte slices.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="compress/index.html">compress</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="compress/bzip2/index.html">bzip2</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package bzip2 implements bzip2 decompression.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="compress/flate/index.html">flate</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package flate implements the DEFLATE compressed data format, described in RFC 1951.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="compress/gzip/index.html">gzip</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package gzip implements reading and writing of gzip format compressed files, as specified in RFC 1952.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="compress/lzw/index.html">lzw</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package lzw implements the Lempel-Ziv-Welch compressed data format, described in T. A. Welch, ``A Technique for High-Performance Data Compression&#39;&#39;, Computer, 17(6) (June 1984), pp 8-19.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="compress/zlib/index.html">zlib</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package zlib implements reading and writing of zlib format compressed data, as specified in RFC 1950.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="container/index.html">container</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="container/heap/index.html">heap</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package heap provides heap operations for any type that implements heap.Interface.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="container/list/index.html">list</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package list implements a doubly linked list.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="container/ring/index.html">ring</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package ring implements operations on circular lists.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="crypto/index.html">crypto</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package crypto collects common cryptographic constants.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/aes/index.html">aes</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package aes implements AES encryption (formerly Rijndael), as defined in U.S. Federal Information Processing Standards Publication 197.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/cipher/index.html">cipher</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cipher implements standard block cipher modes that can be wrapped around low-level block cipher implementations.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/des/index.html">des</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package des implements the Data Encryption Standard (DES) and the Triple Data Encryption Algorithm (TDEA) as defined in U.S. Federal Information Processing Standards Publication 46-3.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/dsa/index.html">dsa</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package dsa implements the Digital Signature Algorithm, as defined in FIPS 186-3.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/ecdsa/index.html">ecdsa</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package ecdsa implements the Elliptic Curve Digital Signature Algorithm, as defined in FIPS 186-3.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/elliptic/index.html">elliptic</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package elliptic implements several standard elliptic curves over prime fields.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/hmac/index.html">hmac</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package hmac implements the Keyed-Hash Message Authentication Code (HMAC) as defined in U.S. Federal Information Processing Standards Publication 198.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/md5/index.html">md5</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package md5 implements the MD5 hash algorithm as defined in RFC 1321.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/rand/index.html">rand</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package rand implements a cryptographically secure pseudorandom number generator.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/rc4/index.html">rc4</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package rc4 implements RC4 encryption, as defined in Bruce Schneier&#39;s Applied Cryptography.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/rsa/index.html">rsa</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package rsa implements RSA encryption as specified in PKCS#1.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/sha1/index.html">sha1</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package sha1 implements the SHA1 hash algorithm as defined in RFC 3174.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/sha256/index.html">sha256</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package sha256 implements the SHA224 and SHA256 hash algorithms as defined in FIPS 180-2.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/sha512/index.html">sha512</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package sha512 implements the SHA384 and SHA512 hash algorithms as defined in FIPS 180-2.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/subtle/index.html">subtle</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package subtle implements functions that are often useful in cryptographic code but require careful thought to use correctly.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/tls/index.html">tls</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package tls partially implements TLS 1.0, as specified in RFC 2246.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/x509/index.html">x509</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package x509 parses X.509-encoded keys and certificates.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="crypto/x509/pkix/index.html">pkix</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package pkix contains shared, low level structures used for ASN.1 parsing and serialization of X.509 certificates, CRL and OCSP.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="database/index.html">database</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="database/sql/index.html">sql</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package sql provides a generic interface around SQL (or SQL-like) databases.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="database/sql/driver/index.html">driver</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package driver defines interfaces to be implemented by database drivers as used by package sql.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="debug/index.html">debug</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="debug/dwarf/index.html">dwarf</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package dwarf provides access to DWARF debugging information loaded from executable files, as defined in the DWARF 2.0 Standard at http://dwarfstd.org/doc/dwarf-2.0.0.pdf</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="debug/elf/index.html">elf</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package elf implements access to ELF object files.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="debug/gosym/index.html">gosym</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package gosym implements access to the Go symbol and line number tables embedded in Go binaries generated by the gc compilers.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="debug/macho/index.html">macho</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package macho implements access to Mach-O object files.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="debug/pe/index.html">pe</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package pe implements access to PE (Microsoft Windows Portable Executable) files.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="encoding/index.html">encoding</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/ascii85/index.html">ascii85</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package ascii85 implements the ascii85 data encoding as used in the btoa tool and Adobe&#39;s PostScript and PDF document formats.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/asn1/index.html">asn1</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package asn1 implements parsing of DER-encoded ASN.1 data structures, as defined in ITU-T Rec X.690.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/base32/index.html">base32</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package base32 implements base32 encoding as specified by RFC 4648.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/base64/index.html">base64</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package base64 implements base64 encoding as specified by RFC 4648.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/binary/index.html">binary</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package binary implements translation between numbers and byte sequences and encoding and decoding of varints.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/csv/index.html">csv</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package csv reads and writes comma-separated values (CSV) files.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/gob/index.html">gob</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package gob manages streams of gobs - binary values exchanged between an Encoder (transmitter) and a Decoder (receiver).</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/hex/index.html">hex</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package hex implements hexadecimal encoding and decoding.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/json/index.html">json</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package json implements encoding and decoding of JSON objects as defined in RFC 4627.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/pem/index.html">pem</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package pem implements the PEM data encoding, which originated in Privacy Enhanced Mail.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="encoding/xml/index.html">xml</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package xml implements a simple XML 1.0 parser that understands XML name spaces.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="errors/index.html">errors</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package errors implements functions to manipulate errors.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="expvar/index.html">expvar</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package expvar provides a standardized interface to public variables, such as operation counters in servers.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="flag/index.html">flag</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package flag implements command-line flag parsing.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="fmt/index.html">fmt</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package fmt implements formatted I/O with functions analogous to C&#39;s printf and scanf.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="go/index.html">go</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="go/ast/index.html">ast</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package ast declares the types used to represent syntax trees for Go packages.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="go/build/index.html">build</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package build gathers information about Go packages.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="go/doc/index.html">doc</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package doc extracts source code documentation from a Go AST.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="go/format/index.html">format</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package format implements standard formatting of Go source.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="go/parser/index.html">parser</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package parser implements a parser for Go source files.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="go/printer/index.html">printer</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package printer implements printing of AST nodes.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="go/scanner/index.html">scanner</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package scanner implements a scanner for Go source text.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="go/token/index.html">token</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package token defines constants representing the lexical tokens of the Go programming language and basic operations on tokens (printing, predicates).</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="hash/index.html">hash</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package hash provides interfaces for hash functions.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="hash/adler32/index.html">adler32</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package adler32 implements the Adler-32 checksum.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="hash/crc32/index.html">crc32</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package crc32 implements the 32-bit cyclic redundancy check, or CRC-32, checksum.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="hash/crc64/index.html">crc64</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package crc64 implements the 64-bit cyclic redundancy check, or CRC-64, checksum.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="hash/fnv/index.html">fnv</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package fnv implements FNV-1 and FNV-1a, non-cryptographic hash functions created by Glenn Fowler, Landon Curt Noll, and Phong Vo.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="html/index.html">html</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package html provides functions for escaping and unescaping HTML text.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="html/template/index.html">template</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package template (html/template) implements data-driven templates for generating HTML output safe against code injection.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="image/index.html">image</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package image implements a basic 2-D image library.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="image/color/index.html">color</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package color implements a basic color library.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="image/draw/index.html">draw</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package draw provides image composition functions.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="image/gif/index.html">gif</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package gif implements a GIF image decoder.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="image/jpeg/index.html">jpeg</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package jpeg implements a JPEG image decoder and encoder.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="image/png/index.html">png</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package png implements a PNG image decoder and encoder.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="index/index.html">index</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="index/suffixarray/index.html">suffixarray</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package suffixarray implements substring search in logarithmic time using an in-memory suffix array.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="io/index.html">io</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package io provides basic interfaces to I/O primitives.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="io/ioutil/index.html">ioutil</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package ioutil implements some I/O utility functions.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="log/index.html">log</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package log implements a simple logging package.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="log/syslog/index.html">syslog</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package syslog provides a simple interface to the system log service.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="math/index.html">math</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package math provides basic constants and mathematical functions.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="math/big/index.html">big</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package big implements multi-precision arithmetic (big numbers).</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="math/cmplx/index.html">cmplx</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cmplx provides basic constants and mathematical functions for complex numbers.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="math/rand/index.html">rand</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package rand implements pseudo-random number generators.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="mime/index.html">mime</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package mime implements parts of the MIME spec.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="mime/multipart/index.html">multipart</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package multipart implements MIME multipart parsing, as defined in RFC 2046.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="net/index.html">net</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package net provides a portable interface for network I/O, including TCP/IP, UDP, domain name resolution, and Unix domain sockets.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/http/index.html">http</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package http provides HTTP client and server implementations.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/http/cgi/index.html">cgi</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cgi implements CGI (Common Gateway Interface) as specified in RFC 3875.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/http/cookiejar/index.html">cookiejar</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cookiejar implements an in-memory RFC 6265-compliant http.CookieJar.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/http/fcgi/index.html">fcgi</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package fcgi implements the FastCGI protocol.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/http/httptest/index.html">httptest</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package httptest provides utilities for HTTP testing.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/http/httputil/index.html">httputil</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package httputil provides HTTP utility functions, complementing the more common ones in the net/http package.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/http/pprof/index.html">pprof</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package pprof serves via its HTTP server runtime profiling data in the format expected by the pprof visualization tool.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/mail/index.html">mail</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package mail implements parsing of mail messages.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/rpc/index.html">rpc</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package rpc provides access to the exported methods of an object across a network or other I/O connection.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/rpc/jsonrpc/index.html">jsonrpc</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package jsonrpc implements a JSON-RPC ClientCodec and ServerCodec for the rpc package.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/smtp/index.html">smtp</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package smtp implements the Simple Mail Transfer Protocol as defined in RFC 5321.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/textproto/index.html">textproto</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package textproto implements generic support for text-based request/response protocols in the style of HTTP, NNTP, and SMTP.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="net/url/index.html">url</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package url parses URLs and implements query escaping.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="os/index.html">os</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package os provides a platform-independent interface to operating system functionality.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="os/exec/index.html">exec</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package exec runs external commands.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="os/signal/index.html">signal</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package signal implements access to incoming signals.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="os/user/index.html">user</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package user allows user account lookups by name or id.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="path/index.html">path</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package path implements utility routines for manipulating slash-separated paths.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="path/filepath/index.html">filepath</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package filepath implements utility routines for manipulating filename paths in a way compatible with the target operating system-defined file paths.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="reflect/index.html">reflect</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package reflect implements run-time reflection, allowing a program to manipulate objects with arbitrary types.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="regexp/index.html">regexp</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package regexp implements regular expression search.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="regexp/syntax/index.html">syntax</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package syntax parses regular expressions into parse trees and compiles parse trees into programs.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="runtime/index.html">runtime</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package runtime contains operations that interact with Go&#39;s runtime system, such as functions to control goroutines.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="runtime/cgo/index.html">cgo</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cgo contains runtime support for code generated by the cgo tool.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="runtime/debug/index.html">debug</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package debug contains facilities for programs to debug themselves while they are running.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="runtime/pprof/index.html">pprof</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package pprof writes runtime profiling data in the format expected by the pprof visualization tool.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="runtime/race/index.html">race</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package race implements data race detection logic.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="sort/index.html">sort</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package sort provides primitives for sorting slices and user-defined collections.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="strconv/index.html">strconv</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package strconv implements conversions to and from string representations of basic data types.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="strings/index.html">strings</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package strings implements simple functions to manipulate strings.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="sync/index.html">sync</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package sync provides basic synchronization primitives such as mutual exclusion locks.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="sync/atomic/index.html">atomic</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package atomic provides low-level atomic memory primitives useful for implementing synchronization algorithms.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="syscall/index.html">syscall</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package syscall contains an interface to the low-level operating system primitives.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="testing/index.html">testing</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package testing provides support for automated testing of Go packages.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="testing/iotest/index.html">iotest</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package iotest implements Readers and Writers useful mainly for testing.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="testing/quick/index.html">quick</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package quick implements utility functions to help with black box testing.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="text/index.html">text</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="text/scanner/index.html">scanner</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package scanner provides a scanner and tokenizer for UTF-8-encoded text.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="text/tabwriter/index.html">tabwriter</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package tabwriter implements a write filter (tabwriter.Writer) that translates tabbed columns in input into properly aligned text.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="text/template/index.html">template</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package template implements data-driven templates for generating textual output.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="text/template/parse/index.html">parse</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package parse builds parse trees for templates as defined by text/template and html/template.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="time/index.html">time</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package time provides functionality for measuring and displaying time.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="unicode/index.html">unicode</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package unicode provides data and functions to test some properties of Unicode code points.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="unicode/utf16/index.html">utf16</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package utf16 implements encoding and decoding of UTF-16 sequences.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="unicode/utf8/index.html">utf8</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package utf8 implements functions and constants to support text encoded in UTF-8.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="unsafe/index.html">unsafe</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package unsafe contains operations that step around the type safety of Go programs.</td>
+			</tr>
+		
+	
+	</table>
+	
+	<p>Need more packages? Check out the <a href="http://golang.org/wiki/SubRepositories">sub-repositories</a> and <a href="http://golang.org/wiki/Projects">other Go projects</a>.</p>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=138&s_ttfb=146&id=1380993855381666', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:19 GMT -->
+</html>
+

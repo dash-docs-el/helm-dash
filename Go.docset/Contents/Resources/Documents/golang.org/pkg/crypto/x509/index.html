@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/crypto/x509/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>x509</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package x509</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "crypto/x509"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package x509 parses X.509-encoded keys and certificates.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#CreateCertificate">func CreateCertificate(rand io.Reader, template, parent *Certificate, pub interface{}, priv interface{}) (cert []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#DecryptPEMBlock">func DecryptPEMBlock(b *pem.Block, password []byte) ([]byte, error)</a></dd>
+			
+				
+				<dd><a href="#EncryptPEMBlock">func EncryptPEMBlock(rand io.Reader, blockType string, data, password []byte, alg PEMCipher) (*pem.Block, error)</a></dd>
+			
+				
+				<dd><a href="#IsEncryptedPEMBlock">func IsEncryptedPEMBlock(b *pem.Block) bool</a></dd>
+			
+				
+				<dd><a href="#MarshalPKCS1PrivateKey">func MarshalPKCS1PrivateKey(key *rsa.PrivateKey) []byte</a></dd>
+			
+				
+				<dd><a href="#MarshalPKIXPublicKey">func MarshalPKIXPublicKey(pub interface{}) ([]byte, error)</a></dd>
+			
+				
+				<dd><a href="#ParseCRL">func ParseCRL(crlBytes []byte) (certList *pkix.CertificateList, err error)</a></dd>
+			
+				
+				<dd><a href="#ParseCertificates">func ParseCertificates(asn1Data []byte) ([]*Certificate, error)</a></dd>
+			
+				
+				<dd><a href="#ParseDERCRL">func ParseDERCRL(derBytes []byte) (certList *pkix.CertificateList, err error)</a></dd>
+			
+				
+				<dd><a href="#ParseECPrivateKey">func ParseECPrivateKey(der []byte) (key *ecdsa.PrivateKey, err error)</a></dd>
+			
+				
+				<dd><a href="#ParsePKCS1PrivateKey">func ParsePKCS1PrivateKey(der []byte) (key *rsa.PrivateKey, err error)</a></dd>
+			
+				
+				<dd><a href="#ParsePKCS8PrivateKey">func ParsePKCS8PrivateKey(der []byte) (key interface{}, err error)</a></dd>
+			
+				
+				<dd><a href="#ParsePKIXPublicKey">func ParsePKIXPublicKey(derBytes []byte) (pub interface{}, err error)</a></dd>
+			
+			
+				
+				<dd><a href="#CertPool">type CertPool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewCertPool">func NewCertPool() *CertPool</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CertPool.AddCert">func (s *CertPool) AddCert(cert *Certificate)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CertPool.AppendCertsFromPEM">func (s *CertPool) AppendCertsFromPEM(pemCerts []byte) (ok bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CertPool.Subjects">func (s *CertPool) Subjects() (res [][]byte)</a></dd>
+				
+			
+				
+				<dd><a href="#Certificate">type Certificate</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseCertificate">func ParseCertificate(asn1Data []byte) (*Certificate, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Certificate.CheckCRLSignature">func (c *Certificate) CheckCRLSignature(crl *pkix.CertificateList) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Certificate.CheckSignature">func (c *Certificate) CheckSignature(algo SignatureAlgorithm, signed, signature []byte) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Certificate.CheckSignatureFrom">func (c *Certificate) CheckSignatureFrom(parent *Certificate) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Certificate.CreateCRL">func (c *Certificate) CreateCRL(rand io.Reader, priv interface{}, revokedCerts []pkix.RevokedCertificate, now, expiry time.Time) (crlBytes []byte, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Certificate.Equal">func (c *Certificate) Equal(other *Certificate) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Certificate.Verify">func (c *Certificate) Verify(opts VerifyOptions) (chains [][]*Certificate, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Certificate.VerifyHostname">func (c *Certificate) VerifyHostname(h string) error</a></dd>
+				
+			
+				
+				<dd><a href="#CertificateInvalidError">type CertificateInvalidError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CertificateInvalidError.Error">func (e CertificateInvalidError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#ConstraintViolationError">type ConstraintViolationError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ConstraintViolationError.Error">func (ConstraintViolationError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#ExtKeyUsage">type ExtKeyUsage</a></dd>
+				
+				
+			
+				
+				<dd><a href="#HostnameError">type HostnameError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#HostnameError.Error">func (h HostnameError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#InvalidReason">type InvalidReason</a></dd>
+				
+				
+			
+				
+				<dd><a href="#KeyUsage">type KeyUsage</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PEMCipher">type PEMCipher</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PublicKeyAlgorithm">type PublicKeyAlgorithm</a></dd>
+				
+				
+			
+				
+				<dd><a href="#SignatureAlgorithm">type SignatureAlgorithm</a></dd>
+				
+				
+			
+				
+				<dd><a href="#SystemRootsError">type SystemRootsError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SystemRootsError.Error">func (e SystemRootsError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#UnhandledCriticalExtension">type UnhandledCriticalExtension</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnhandledCriticalExtension.Error">func (h UnhandledCriticalExtension) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#UnknownAuthorityError">type UnknownAuthorityError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnknownAuthorityError.Error">func (e UnknownAuthorityError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#VerifyOptions">type VerifyOptions</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/cert_pool.go">cert_pool.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/pem_decrypt.go">pem_decrypt.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/pkcs1.go">pkcs1.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/pkcs8.go">pkcs8.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/root.go">root.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/root_unix.go">root_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/sec1.go">sec1.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/verify.go">verify.go</a>
+			
+				<a href="http://golang.org/src/pkg/crypto/x509/x509.go">x509.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="PEMCipherDES">PEMCipherDES</span>
+        <span id="PEMCipher3DES">PEMCipher3DES</span>
+        <span id="PEMCipherAES128">PEMCipherAES128</span>
+        <span id="PEMCipherAES192">PEMCipherAES192</span>
+        <span id="PEMCipherAES256">PEMCipherAES256</span>
+)</pre>
+				<p>
+Possible values for the EncryptPEMBlock encryption algorithm.
+</p>
+
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrUnsupportedAlgorithm">ErrUnsupportedAlgorithm</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;crypto/x509: cannot verify signature: algorithm unimplemented&#34;)</pre>
+				<p>
+ErrUnsupportedAlgorithm results from attempting to perform an operation that
+involves algorithms that are not currently implemented.
+</p>
+
+			
+				<pre>var <span id="IncorrectPasswordError">IncorrectPasswordError</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;x509: decryption password incorrect&#34;)</pre>
+				<p>
+IncorrectPasswordError is returned when an incorrect password is detected.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="CreateCertificate">func <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=35498:35627#L1168">CreateCertificate</a></h2>
+			<pre>func CreateCertificate(rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, template, parent *<a href="#Certificate">Certificate</a>, pub interface{}, priv interface{}) (cert []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+CreateCertificate creates a new certificate based on a template. The
+following members of template are used: SerialNumber, Subject, NotBefore,
+NotAfter, KeyUsage, ExtKeyUsage, UnknownExtKeyUsage, BasicConstraintsValid,
+IsCA, MaxPathLen, SubjectKeyId, DNSNames, PermittedDNSDomainsCritical,
+PermittedDNSDomains.
+</p>
+<p>
+The certificate is signed by parent. If parent is equal to template then the
+certificate is self-signed. The parameter pub is the public key of the
+signee and priv is the private key of the signer.
+</p>
+<p>
+The returned slice is the certificate in DER encoding.
+</p>
+<p>
+The only supported key types are RSA and ECDSA (*rsa.PublicKey or
+*ecdsa.PublicKey for pub, *rsa.PrivateKey or *ecdsa.PublicKey for priv).
+</p>
+
+			
+		
+			
+			
+			<h2 id="DecryptPEMBlock">func <a href="http://golang.org/src/pkg/crypto/x509/pem_decrypt.go?s=2933:3000#L102">DecryptPEMBlock</a></h2>
+			<pre>func DecryptPEMBlock(b *<a href="../../encoding/pem/index.html">pem</a>.<a href="../../encoding/pem/index.html#Block">Block</a>, password []<a href="../../builtin/index.html#byte">byte</a>) ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+DecryptPEMBlock takes a password encrypted PEM block and the password used to
+encrypt it and returns a slice of decrypted DER encoded bytes. It inspects
+the DEK-Info header to determine the algorithm used for decryption. If no
+DEK-Info header is present, an error is returned. If an incorrect password
+is detected an IncorrectPasswordError is returned.
+</p>
+
+			
+		
+			
+			
+			<h2 id="EncryptPEMBlock">func <a href="http://golang.org/src/pkg/crypto/x509/pem_decrypt.go?s=4727:4839#L166">EncryptPEMBlock</a></h2>
+			<pre>func EncryptPEMBlock(rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, blockType <a href="../../builtin/index.html#string">string</a>, data, password []<a href="../../builtin/index.html#byte">byte</a>, alg <a href="#PEMCipher">PEMCipher</a>) (*<a href="../../encoding/pem/index.html">pem</a>.<a href="../../encoding/pem/index.html#Block">Block</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+EncryptPEMBlock returns a PEM block of the specified type holding the
+given DER-encoded data encrypted with the specified algorithm and
+password.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsEncryptedPEMBlock">func <a href="http://golang.org/src/pkg/crypto/x509/pem_decrypt.go?s=2315:2358#L89">IsEncryptedPEMBlock</a></h2>
+			<pre>func IsEncryptedPEMBlock(b *<a href="../../encoding/pem/index.html">pem</a>.<a href="../../encoding/pem/index.html#Block">Block</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+			<p>
+IsEncryptedPEMBlock returns if the PEM block is password encrypted.
+</p>
+
+			
+		
+			
+			
+			<h2 id="MarshalPKCS1PrivateKey">func <a href="http://golang.org/src/pkg/crypto/x509/pkcs1.go?s=2097:2152#L77">MarshalPKCS1PrivateKey</a></h2>
+			<pre>func MarshalPKCS1PrivateKey(key *<a href="../rsa/index.html">rsa</a>.<a href="../rsa/index.html#PrivateKey">PrivateKey</a>) []<a href="../../builtin/index.html#byte">byte</a></pre>
+			<p>
+MarshalPKCS1PrivateKey converts a private key to ASN.1 DER encoded form.
+</p>
+
+			
+		
+			
+			
+			<h2 id="MarshalPKIXPublicKey">func <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=1231:1289#L39">MarshalPKIXPublicKey</a></h2>
+			<pre>func MarshalPKIXPublicKey(pub interface{}) ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+MarshalPKIXPublicKey serialises a public key to DER-encoded PKIX format.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParseCRL">func <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=39197:39271#L1305">ParseCRL</a></h2>
+			<pre>func ParseCRL(crlBytes []<a href="../../builtin/index.html#byte">byte</a>) (certList *<a href="pkix/index.html">pkix</a>.<a href="pkix/index.html#CertificateList">CertificateList</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+ParseCRL parses a CRL from the given bytes. It&#39;s often the case that PEM
+encoded CRLs will appear where they should be DER encoded, so this function
+will transparently handle PEM encoding as long as there isn&#39;t any leading
+garbage.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParseCertificates">func <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=30201:30264#L971">ParseCertificates</a></h2>
+			<pre>func ParseCertificates(asn1Data []<a href="../../builtin/index.html#byte">byte</a>) ([]*<a href="#Certificate">Certificate</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+ParseCertificates parses one or more certificates from the given ASN.1 DER
+data. The certificates must be concatenated with no intermediate padding.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParseDERCRL">func <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=39528:39605#L1316">ParseDERCRL</a></h2>
+			<pre>func ParseDERCRL(derBytes []<a href="../../builtin/index.html#byte">byte</a>) (certList *<a href="pkix/index.html">pkix</a>.<a href="pkix/index.html#CertificateList">CertificateList</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+ParseDERCRL parses a DER encoded CRL from the given bytes.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParseECPrivateKey">func <a href="http://golang.org/src/pkg/crypto/x509/sec1.go?s=840:909#L22">ParseECPrivateKey</a></h2>
+			<pre>func ParseECPrivateKey(der []<a href="../../builtin/index.html#byte">byte</a>) (key *<a href="../ecdsa/index.html">ecdsa</a>.<a href="../ecdsa/index.html#PrivateKey">PrivateKey</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+ParseECPrivateKey parses an ASN.1 Elliptic Curve Private Key Structure.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParsePKCS1PrivateKey">func <a href="http://golang.org/src/pkg/crypto/x509/pkcs1.go?s=945:1015#L29">ParsePKCS1PrivateKey</a></h2>
+			<pre>func ParsePKCS1PrivateKey(der []<a href="../../builtin/index.html#byte">byte</a>) (key *<a href="../rsa/index.html">rsa</a>.<a href="../rsa/index.html#PrivateKey">PrivateKey</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+ParsePKCS1PrivateKey returns an RSA private key from its ASN.1 PKCS#1 DER encoded form.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParsePKCS8PrivateKey">func <a href="http://golang.org/src/pkg/crypto/x509/pkcs8.go?s=626:692#L16">ParsePKCS8PrivateKey</a></h2>
+			<pre>func ParsePKCS8PrivateKey(der []<a href="../../builtin/index.html#byte">byte</a>) (key interface{}, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+ParsePKCS8PrivateKey parses an unencrypted, PKCS#8 private key. See
+<a href="http://www.rsa.com/rsalabs/node.asp?id=2130">http://www.rsa.com/rsalabs/node.asp?id=2130</a> and RFC5208.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParsePKIXPublicKey">func <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=769:838#L26">ParsePKIXPublicKey</a></h2>
+			<pre>func ParsePKIXPublicKey(derBytes []<a href="../../builtin/index.html#byte">byte</a>) (pub interface{}, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+ParsePKIXPublicKey parses a DER encoded public key. These values are
+typically found in PEM blocks with &#34;BEGIN PUBLIC KEY&#34;.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="CertPool">type <a href="http://golang.org/src/pkg/crypto/x509/cert_pool.go?s=240:361#L2">CertPool</a></h2>
+			<pre>type CertPool struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+CertPool is a set of certificates.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewCertPool">func <a href="http://golang.org/src/pkg/crypto/x509/cert_pool.go?s=409:437#L9">NewCertPool</a></h3>
+				<pre>func NewCertPool() *<a href="#CertPool">CertPool</a></pre>
+				<p>
+NewCertPool returns a new, empty CertPool.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="CertPool.AddCert">func (*CertPool) <a href="http://golang.org/src/pkg/crypto/x509/cert_pool.go?s=1191:1236#L43">AddCert</a></h3>
+				<pre>func (s *<a href="#CertPool">CertPool</a>) AddCert(cert *<a href="#Certificate">Certificate</a>)</pre>
+				<p>
+AddCert adds a certificate to a pool.
+</p>
+
+				
+				
+			
+				
+				<h3 id="CertPool.AppendCertsFromPEM">func (*CertPool) <a href="http://golang.org/src/pkg/crypto/x509/cert_pool.go?s=2021:2085#L72">AppendCertsFromPEM</a></h3>
+				<pre>func (s *<a href="#CertPool">CertPool</a>) AppendCertsFromPEM(pemCerts []<a href="../../builtin/index.html#byte">byte</a>) (ok <a href="../../builtin/index.html#bool">bool</a>)</pre>
+				<p>
+AppendCertsFromPEM attempts to parse a series of PEM encoded certificates.
+It appends any certificates found to s and returns true if any certificates
+were successfully parsed.
+</p>
+<p>
+On many Linux systems, /etc/ssl/cert.pem will contain the system wide set
+of root CAs in a format suitable for this function.
+</p>
+
+				
+				
+			
+				
+				<h3 id="CertPool.Subjects">func (*CertPool) <a href="http://golang.org/src/pkg/crypto/x509/cert_pool.go?s=2512:2556#L97">Subjects</a></h3>
+				<pre>func (s *<a href="#CertPool">CertPool</a>) Subjects() (res [][]<a href="../../builtin/index.html#byte">byte</a>)</pre>
+				<p>
+Subjects returns a list of the DER-encoded subjects of
+all of the certificates in the pool.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Certificate">type <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=13366:14768#L426">Certificate</a></h2>
+			<pre>type Certificate struct {
+        Raw                     []<a href="../../builtin/index.html#byte">byte</a> <span class="comment">// Complete ASN.1 DER content (certificate, signature algorithm and signature).</span>
+        RawTBSCertificate       []<a href="../../builtin/index.html#byte">byte</a> <span class="comment">// Certificate part of raw ASN.1 DER content.</span>
+        RawSubjectPublicKeyInfo []<a href="../../builtin/index.html#byte">byte</a> <span class="comment">// DER encoded SubjectPublicKeyInfo.</span>
+        RawSubject              []<a href="../../builtin/index.html#byte">byte</a> <span class="comment">// DER encoded Subject</span>
+        RawIssuer               []<a href="../../builtin/index.html#byte">byte</a> <span class="comment">// DER encoded Issuer</span>
+
+        Signature          []<a href="../../builtin/index.html#byte">byte</a>
+        SignatureAlgorithm <a href="#SignatureAlgorithm">SignatureAlgorithm</a>
+
+        PublicKeyAlgorithm <a href="#PublicKeyAlgorithm">PublicKeyAlgorithm</a>
+        PublicKey          interface{}
+
+        Version             <a href="../../builtin/index.html#int">int</a>
+        SerialNumber        *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a>
+        Issuer              <a href="pkix/index.html">pkix</a>.<a href="pkix/index.html#Name">Name</a>
+        Subject             <a href="pkix/index.html">pkix</a>.<a href="pkix/index.html#Name">Name</a>
+        NotBefore, NotAfter <a href="../../time/index.html">time</a>.<a href="../../time/index.html#Time">Time</a> <span class="comment">// Validity bounds.</span>
+        KeyUsage            <a href="#KeyUsage">KeyUsage</a>
+
+        ExtKeyUsage        []<a href="#ExtKeyUsage">ExtKeyUsage</a>           <span class="comment">// Sequence of extended key usages.</span>
+        UnknownExtKeyUsage []<a href="../../encoding/asn1/index.html">asn1</a>.<a href="../../encoding/asn1/index.html#ObjectIdentifier">ObjectIdentifier</a> <span class="comment">// Encountered extended key usages unknown to this package.</span>
+
+        BasicConstraintsValid <a href="../../builtin/index.html#bool">bool</a> <span class="comment">// if true then the next two fields are valid.</span>
+        IsCA                  <a href="../../builtin/index.html#bool">bool</a>
+        MaxPathLen            <a href="../../builtin/index.html#int">int</a>
+
+        SubjectKeyId   []<a href="../../builtin/index.html#byte">byte</a>
+        AuthorityKeyId []<a href="../../builtin/index.html#byte">byte</a>
+
+        <span class="comment">// Subject Alternate Name values</span>
+        DNSNames       []<a href="../../builtin/index.html#string">string</a>
+        EmailAddresses []<a href="../../builtin/index.html#string">string</a>
+        IPAddresses    []<a href="../../net/index.html">net</a>.<a href="../../net/index.html#IP">IP</a>
+
+        <span class="comment">// Name constraints</span>
+        PermittedDNSDomainsCritical <a href="../../builtin/index.html#bool">bool</a> <span class="comment">// if true then the name constraints are marked critical.</span>
+        PermittedDNSDomains         []<a href="../../builtin/index.html#string">string</a>
+
+        PolicyIdentifiers []<a href="../../encoding/asn1/index.html">asn1</a>.<a href="../../encoding/asn1/index.html#ObjectIdentifier">ObjectIdentifier</a>
+}</pre>
+			<p>
+A Certificate represents an X.509 certificate.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ParseCertificate">func <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=29765:29825#L956">ParseCertificate</a></h3>
+				<pre>func ParseCertificate(asn1Data []<a href="../../builtin/index.html#byte">byte</a>) (*<a href="#Certificate">Certificate</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+ParseCertificate parses a single certificate from the given ASN.1 DER data.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Certificate.CheckCRLSignature">func (*Certificate) <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=20553:20631#L620">CheckCRLSignature</a></h3>
+				<pre>func (c *<a href="#Certificate">Certificate</a>) CheckCRLSignature(crl *<a href="pkix/index.html">pkix</a>.<a href="pkix/index.html#CertificateList">CertificateList</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+CheckCRLSignature checks that the signature in crl is from c.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Certificate.CheckSignature">func (*Certificate) <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=18933:19032#L564">CheckSignature</a></h3>
+				<pre>func (c *<a href="#Certificate">Certificate</a>) CheckSignature(algo <a href="#SignatureAlgorithm">SignatureAlgorithm</a>, signed, signature []<a href="../../builtin/index.html#byte">byte</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+CheckSignature verifies that signature is a valid signature over signed from
+c&#39;s public key.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Certificate.CheckSignatureFrom">func (*Certificate) <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=17865:17938#L536">CheckSignatureFrom</a></h3>
+				<pre>func (c *<a href="#Certificate">Certificate</a>) CheckSignatureFrom(parent *<a href="#Certificate">Certificate</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+CheckSignatureFrom verifies that the signature on c is a valid signature
+from parent.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Certificate.CreateCRL">func (*Certificate) <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=39933:40090#L1329">CreateCRL</a></h3>
+				<pre>func (c *<a href="#Certificate">Certificate</a>) CreateCRL(rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, priv interface{}, revokedCerts []<a href="pkix/index.html">pkix</a>.<a href="pkix/index.html#RevokedCertificate">RevokedCertificate</a>, now, expiry <a href="../../time/index.html">time</a>.<a href="../../time/index.html#Time">Time</a>) (crlBytes []<a href="../../builtin/index.html#byte">byte</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+CreateCRL returns a DER encoded CRL, signed by this Certificate, that
+contains the given list of revoked certificates.
+</p>
+<p>
+The only supported key type is RSA (*rsa.PrivateKey for priv).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Certificate.Equal">func (*Certificate) <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=15393:15445#L481">Equal</a></h3>
+				<pre>func (c *<a href="#Certificate">Certificate</a>) Equal(other *<a href="#Certificate">Certificate</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Certificate.Verify">func (*Certificate) <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=6272:6357#L178">Verify</a></h3>
+				<pre>func (c *<a href="#Certificate">Certificate</a>) Verify(opts <a href="#VerifyOptions">VerifyOptions</a>) (chains [][]*<a href="#Certificate">Certificate</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Verify attempts to verify c by building one or more chains from c to a
+certificate in opts.Roots, using certificates in opts.Intermediates if
+needed. If successful, it returns one or more chains where the first
+element of the chain is c and the last element is from opts.Roots.
+</p>
+<p>
+WARNING: this doesn&#39;t do any revocation checking.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Certificate.VerifyHostname">func (*Certificate) <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=10144:10196#L341">VerifyHostname</a></h3>
+				<pre>func (c *<a href="#Certificate">Certificate</a>) VerifyHostname(h <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+VerifyHostname returns nil if c is a valid certificate for the named host.
+Otherwise it returns an error describing the mismatch.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="CertificateInvalidError">type <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=1113:1195#L28">CertificateInvalidError</a></h2>
+			<pre>type CertificateInvalidError struct {
+        Cert   *<a href="#Certificate">Certificate</a>
+        Reason <a href="#InvalidReason">InvalidReason</a>
+}</pre>
+			<p>
+CertificateInvalidError results when an odd error occurs. Users of this
+library probably want to handle all these errors uniformly.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CertificateInvalidError.Error">func (CertificateInvalidError) <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=1197:1244#L33">Error</a></h3>
+				<pre>func (e <a href="#CertificateInvalidError">CertificateInvalidError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ConstraintViolationError">type <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=15203:15241#L475">ConstraintViolationError</a></h2>
+			<pre>type ConstraintViolationError struct{}</pre>
+			<p>
+ConstraintViolationError results when a requested usage is not permitted by
+a certificate. For example: checking a signature when the public key isn&#39;t a
+certificate signing key.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ConstraintViolationError.Error">func (ConstraintViolationError) <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=15243:15289#L477">Error</a></h3>
+				<pre>func (<a href="#ConstraintViolationError">ConstraintViolationError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ExtKeyUsage">type <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=11686:11706#L371">ExtKeyUsage</a></h2>
+			<pre>type ExtKeyUsage <a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+ExtKeyUsage represents an extended set of actions that are valid for a given key.
+Each of the ExtKeyUsage* constants define a unique action.
+</p>
+
+
+			
+				<pre>const (
+        <span id="ExtKeyUsageAny">ExtKeyUsageAny</span> <a href="#ExtKeyUsage">ExtKeyUsage</a> = <a href="../../builtin/index.html#iota">iota</a>
+        <span id="ExtKeyUsageServerAuth">ExtKeyUsageServerAuth</span>
+        <span id="ExtKeyUsageClientAuth">ExtKeyUsageClientAuth</span>
+        <span id="ExtKeyUsageCodeSigning">ExtKeyUsageCodeSigning</span>
+        <span id="ExtKeyUsageEmailProtection">ExtKeyUsageEmailProtection</span>
+        <span id="ExtKeyUsageIPSECEndSystem">ExtKeyUsageIPSECEndSystem</span>
+        <span id="ExtKeyUsageIPSECTunnel">ExtKeyUsageIPSECTunnel</span>
+        <span id="ExtKeyUsageIPSECUser">ExtKeyUsageIPSECUser</span>
+        <span id="ExtKeyUsageTimeStamping">ExtKeyUsageTimeStamping</span>
+        <span id="ExtKeyUsageOCSPSigning">ExtKeyUsageOCSPSigning</span>
+        <span id="ExtKeyUsageMicrosoftServerGatedCrypto">ExtKeyUsageMicrosoftServerGatedCrypto</span>
+        <span id="ExtKeyUsageNetscapeServerGatedCrypto">ExtKeyUsageNetscapeServerGatedCrypto</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="HostnameError">type <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=1886:1961#L51">HostnameError</a></h2>
+			<pre>type HostnameError struct {
+        Certificate *<a href="#Certificate">Certificate</a>
+        Host        <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+HostnameError results when the set of authorized names doesn&#39;t match the
+requested name.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="HostnameError.Error">func (HostnameError) <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=1963:2000#L56">Error</a></h3>
+				<pre>func (h <a href="#HostnameError">HostnameError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="InvalidReason">type <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=239:261#L5">InvalidReason</a></h2>
+			<pre>type InvalidReason <a href="../../builtin/index.html#int">int</a></pre>
+			
+
+			
+				<pre>const (
+        <span class="comment">// NotAuthorizedToSign results when a certificate is signed by another</span>
+        <span class="comment">// which isn&#39;t marked as a CA certificate.</span>
+        <span id="NotAuthorizedToSign">NotAuthorizedToSign</span> <a href="#InvalidReason">InvalidReason</a> = <a href="../../builtin/index.html#iota">iota</a>
+        <span class="comment">// Expired results when a certificate has expired, based on the time</span>
+        <span class="comment">// given in the VerifyOptions.</span>
+        <span id="Expired">Expired</span>
+        <span class="comment">// CANotAuthorizedForThisName results when an intermediate or root</span>
+        <span class="comment">// certificate has a name constraint which doesn&#39;t include the name</span>
+        <span class="comment">// being checked.</span>
+        <span id="CANotAuthorizedForThisName">CANotAuthorizedForThisName</span>
+        <span class="comment">// TooManyIntermediates results when a path length constraint is</span>
+        <span class="comment">// violated.</span>
+        <span id="TooManyIntermediates">TooManyIntermediates</span>
+        <span class="comment">// IncompatibleUsage results when the certificate&#39;s key usage indicates</span>
+        <span class="comment">// that it may only be used for a different purpose.</span>
+        <span id="IncompatibleUsage">IncompatibleUsage</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="KeyUsage">type <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=9599:9616#L328">KeyUsage</a></h2>
+			<pre>type KeyUsage <a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+KeyUsage represents the set of actions that are valid for a given key. It&#39;s
+a bitmap of the KeyUsage* constants.
+</p>
+
+
+			
+				<pre>const (
+        <span id="KeyUsageDigitalSignature">KeyUsageDigitalSignature</span> <a href="#KeyUsage">KeyUsage</a> = 1 &lt;&lt; <a href="../../builtin/index.html#iota">iota</a>
+        <span id="KeyUsageContentCommitment">KeyUsageContentCommitment</span>
+        <span id="KeyUsageKeyEncipherment">KeyUsageKeyEncipherment</span>
+        <span id="KeyUsageDataEncipherment">KeyUsageDataEncipherment</span>
+        <span id="KeyUsageKeyAgreement">KeyUsageKeyAgreement</span>
+        <span id="KeyUsageCertSign">KeyUsageCertSign</span>
+        <span id="KeyUsageCRLSign">KeyUsageCRLSign</span>
+        <span id="KeyUsageEncipherOnly">KeyUsageEncipherOnly</span>
+        <span id="KeyUsageDecipherOnly">KeyUsageDecipherOnly</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PEMCipher">type <a href="http://golang.org/src/pkg/crypto/x509/pem_decrypt.go?s=472:490#L13">PEMCipher</a></h2>
+			<pre>type PEMCipher <a href="../../builtin/index.html#int">int</a></pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PublicKeyAlgorithm">type <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=3453:3480#L138">PublicKeyAlgorithm</a></h2>
+			<pre>type PublicKeyAlgorithm <a href="../../builtin/index.html#int">int</a></pre>
+			
+
+			
+				<pre>const (
+        <span id="UnknownPublicKeyAlgorithm">UnknownPublicKeyAlgorithm</span> <a href="#PublicKeyAlgorithm">PublicKeyAlgorithm</a> = <a href="../../builtin/index.html#iota">iota</a>
+        <span id="RSA">RSA</span>
+        <span id="DSA">DSA</span>
+        <span id="ECDSA">ECDSA</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="SignatureAlgorithm">type <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=3184:3211#L120">SignatureAlgorithm</a></h2>
+			<pre>type SignatureAlgorithm <a href="../../builtin/index.html#int">int</a></pre>
+			
+
+			
+				<pre>const (
+        <span id="UnknownSignatureAlgorithm">UnknownSignatureAlgorithm</span> <a href="#SignatureAlgorithm">SignatureAlgorithm</a> = <a href="../../builtin/index.html#iota">iota</a>
+        <span id="MD2WithRSA">MD2WithRSA</span>
+        <span id="MD5WithRSA">MD5WithRSA</span>
+        <span id="SHA1WithRSA">SHA1WithRSA</span>
+        <span id="SHA256WithRSA">SHA256WithRSA</span>
+        <span id="SHA384WithRSA">SHA384WithRSA</span>
+        <span id="SHA512WithRSA">SHA512WithRSA</span>
+        <span id="DSAWithSHA1">DSAWithSHA1</span>
+        <span id="DSAWithSHA256">DSAWithSHA256</span>
+        <span id="ECDSAWithSHA1">ECDSAWithSHA1</span>
+        <span id="ECDSAWithSHA256">ECDSAWithSHA256</span>
+        <span id="ECDSAWithSHA384">ECDSAWithSHA384</span>
+        <span id="ECDSAWithSHA512">ECDSAWithSHA512</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="SystemRootsError">type <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=2885:2917#L91">SystemRootsError</a></h2>
+			<pre>type SystemRootsError struct {
+}</pre>
+			<p>
+SystemRootsError results when we fail to load the system root certificates.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="SystemRootsError.Error">func (SystemRootsError) <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=2919:2959#L94">Error</a></h3>
+				<pre>func (e <a href="#SystemRootsError">SystemRootsError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="UnhandledCriticalExtension">type <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=20794:20834#L625">UnhandledCriticalExtension</a></h2>
+			<pre>type UnhandledCriticalExtension struct{}</pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="UnhandledCriticalExtension.Error">func (UnhandledCriticalExtension) <a href="http://golang.org/src/pkg/crypto/x509/x509.go?s=20836:20886#L627">Error</a></h3>
+				<pre>func (h <a href="#UnhandledCriticalExtension">UnhandledCriticalExtension</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="UnknownAuthorityError">type <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=2641:2697#L82">UnknownAuthorityError</a></h2>
+			<pre>type UnknownAuthorityError struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+UnknownAuthorityError results when the certificate issuer is unknown
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="UnknownAuthorityError.Error">func (UnknownAuthorityError) <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=2699:2744#L86">Error</a></h3>
+				<pre>func (e <a href="#UnknownAuthorityError">UnknownAuthorityError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="VerifyOptions">type <a href="http://golang.org/src/pkg/crypto/x509/verify.go?s=3185:3698#L100">VerifyOptions</a></h2>
+			<pre>type VerifyOptions struct {
+        DNSName       <a href="../../builtin/index.html#string">string</a>
+        Intermediates *<a href="#CertPool">CertPool</a>
+        Roots         *<a href="#CertPool">CertPool</a> <span class="comment">// if nil, the system roots are used</span>
+        CurrentTime   <a href="../../time/index.html">time</a>.<a href="../../time/index.html#Time">Time</a> <span class="comment">// if zero, the current time is used</span>
+        <span class="comment">// KeyUsage specifies which Extended Key Usage values are acceptable.</span>
+        <span class="comment">// An empty list means ExtKeyUsageServerAuth. Key usage is considered a</span>
+        <span class="comment">// constraint down the chain which mirrors Windows CryptoAPI behaviour,</span>
+        <span class="comment">// but not the spec. To accept any key usage, include ExtKeyUsageAny.</span>
+        KeyUsages []<a href="#ExtKeyUsage">ExtKeyUsage</a>
+}</pre>
+			<p>
+VerifyOptions contains parameters for Certificate.Verify. It&#39;s a structure
+because other PKIX verification APIs have ended up needing many options.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="../index.html">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="pkix/index.html">pkix</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package pkix contains shared, low level structures used for ASN.1 parsing and serialization of X.509 certificates, CRL and OCSP.</td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=538&s_ttfb=545&id=1380993861761657', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/crypto/x509/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

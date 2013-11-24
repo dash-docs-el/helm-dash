@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/fmt/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>fmt</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package fmt</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "fmt"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package fmt implements formatted I/O with functions analogous
+to C&#39;s printf and scanf.  The format &#39;verbs&#39; are derived from C&#39;s but
+are simpler.
+</p>
+<h3 id="hdr-Printing">Printing</h3>
+<p>
+The verbs:
+</p>
+<p>
+General:
+</p>
+<pre>%v	the value in a default format.
+	when printing structs, the plus flag (%+v) adds field names
+%#v	a Go-syntax representation of the value
+%T	a Go-syntax representation of the type of the value
+%%	a literal percent sign; consumes no value
+</pre>
+<p>
+Boolean:
+</p>
+<pre>%t	the word true or false
+</pre>
+<p>
+Integer:
+</p>
+<pre>%b	base 2
+%c	the character represented by the corresponding Unicode code point
+%d	base 10
+%o	base 8
+%q	a single-quoted character literal safely escaped with Go syntax.
+%x	base 16, with lower-case letters for a-f
+%X	base 16, with upper-case letters for A-F
+%U	Unicode format: U+1234; same as &#34;U+%04X&#34;
+</pre>
+<p>
+Floating-point and complex constituents:
+</p>
+<pre>%b	decimalless scientific notation with exponent a power of two,
+	in the manner of strconv.FormatFloat with the &#39;b&#39; format,
+	e.g. -123456p-78
+%e	scientific notation, e.g. -1234.456e+78
+%E	scientific notation, e.g. -1234.456E+78
+%f	decimal point but no exponent, e.g. 123.456
+%g	whichever of %e or %f produces more compact output
+%G	whichever of %E or %f produces more compact output
+</pre>
+<p>
+String and slice of bytes:
+</p>
+<pre>%s	the uninterpreted bytes of the string or slice
+%q	a double-quoted string safely escaped with Go syntax
+%x	base 16, lower-case, two characters per byte
+%X	base 16, upper-case, two characters per byte
+</pre>
+<p>
+Pointer:
+</p>
+<pre>%p	base 16 notation, with leading 0x
+</pre>
+<p>
+There is no &#39;u&#39; flag.  Integers are printed unsigned if they have unsigned type.
+Similarly, there is no need to specify the size of the operand (int8, int64).
+</p>
+<p>
+The width and precision control formatting and are in units of Unicode
+code points.  (This differs from C&#39;s printf where the units are numbers
+of bytes.) Either or both of the flags may be replaced with the
+character &#39;*&#39;, causing their values to be obtained from the next
+operand, which must be of type int.
+</p>
+<p>
+For numeric values, width sets the minimum width of the field and
+precision sets the number of places after the decimal, if appropriate,
+except that for %g/%G it sets the total number of digits. For example,
+given 123.45 the format %6.2f prints 123.45 while %.4g prints 123.5.
+The default precision for %e and %f is 6; for %g it is the smallest
+number of digits necessary to identify the value uniquely.
+</p>
+<p>
+For most values, width is the minimum number of characters to output,
+padding the formatted form with spaces if necessary.
+For strings, precision is the maximum number of characters to output,
+truncating if necessary.
+</p>
+<p>
+Other flags:
+</p>
+<pre>+	always print a sign for numeric values;
+	guarantee ASCII-only output for %q (%+q)
+-	pad with spaces on the right rather than the left (left-justify the field)
+#	alternate format: add leading 0 for octal (%#o), 0x for hex (%#x);
+	0X for hex (%#X); suppress 0x for %p (%#p);
+	for %q, print a raw (backquoted) string if strconv.CanBackquote
+	returns true;
+	write e.g. U+0078 &#39;x&#39; if the character is printable for %U (%#U).
+&#39; &#39;	(space) leave a space for elided sign in numbers (% d);
+	put spaces between bytes printing strings or slices in hex (% x, % X)
+0	pad with leading zeros rather than spaces;
+	for numbers, this moves the padding after the sign
+</pre>
+<p>
+Flags are ignored by verbs that do not expect them.
+For example there is no alternate decimal format, so %#d and %d
+behave identically.
+</p>
+<p>
+For each Printf-like function, there is also a Print function
+that takes no format and is equivalent to saying %v for every
+operand.  Another variant Println inserts blanks between
+operands and appends a newline.
+</p>
+<p>
+Regardless of the verb, if an operand is an interface value,
+the internal concrete value is used, not the interface itself.
+Thus:
+</p>
+<pre>var i interface{} = 23
+fmt.Printf(&#34;%v\n&#34;, i)
+</pre>
+<p>
+will print 23.
+</p>
+<p>
+If an operand implements interface Formatter, that interface
+can be used for fine control of formatting.
+</p>
+<p>
+If the format (which is implicitly %v for Println etc.) is valid
+for a string (%s %q %v %x %X), the following two rules also apply:
+</p>
+<p>
+1. If an operand implements the error interface, the Error method
+will be used to convert the object to a string, which will then
+be formatted as required by the verb (if any).
+</p>
+<p>
+2. If an operand implements method String() string, that method
+will be used to convert the object to a string, which will then
+be formatted as required by the verb (if any).
+</p>
+<p>
+To avoid recursion in cases such as
+</p>
+<pre>type X string
+func (x X) String() string { return Sprintf(&#34;&lt;%s&gt;&#34;, x) }
+</pre>
+<p>
+convert the value before recurring:
+</p>
+<pre>func (x X) String() string { return Sprintf(&#34;&lt;%s&gt;&#34;, string(x)) }
+</pre>
+<p>
+Format errors:
+</p>
+<p>
+If an invalid argument is given for a verb, such as providing
+a string to %d, the generated string will contain a
+description of the problem, as in these examples:
+</p>
+<pre>Wrong type or unknown verb: %!verb(type=value)
+	Printf(&#34;%d&#34;, hi):          %!d(string=hi)
+Too many arguments: %!(EXTRA type=value)
+	Printf(&#34;hi&#34;, &#34;guys&#34;):      hi%!(EXTRA string=guys)
+Too few arguments: %!verb(MISSING)
+	Printf(&#34;hi%d&#34;):            hi %!d(MISSING)
+Non-int for width or precision: %!(BADWIDTH) or %!(BADPREC)
+	Printf(&#34;%*s&#34;, 4.5, &#34;hi&#34;):  %!(BADWIDTH)hi
+	Printf(&#34;%.*s&#34;, 4.5, &#34;hi&#34;): %!(BADPREC)hi
+</pre>
+<p>
+All errors begin with the string &#34;%!&#34; followed sometimes
+by a single character (the verb) and end with a parenthesized
+description.
+</p>
+<p>
+If an Error or String method triggers a panic when called by a
+print routine, the fmt package reformats the error message
+from the panic, decorating it with an indication that it came
+through the fmt package.  For example, if a String method
+calls panic(&#34;bad&#34;), the resulting formatted message will look
+like
+</p>
+<pre>%s(PANIC=bad)
+</pre>
+<p>
+The %s just shows the print verb in use when the failure
+occurred.
+</p>
+<h3 id="hdr-Scanning">Scanning</h3>
+<p>
+An analogous set of functions scans formatted text to yield
+values.  Scan, Scanf and Scanln read from os.Stdin; Fscan,
+Fscanf and Fscanln read from a specified io.Reader; Sscan,
+Sscanf and Sscanln read from an argument string.  Scanln,
+Fscanln and Sscanln stop scanning at a newline and require that
+the items be followed by one; Scanf, Fscanf and Sscanf require
+newlines in the input to match newlines in the format; the other
+routines treat newlines as spaces.
+</p>
+<p>
+Scanf, Fscanf, and Sscanf parse the arguments according to a
+format string, analogous to that of Printf.  For example, %x
+will scan an integer as a hexadecimal number, and %v will scan
+the default representation format for the value.
+</p>
+<p>
+The formats behave analogously to those of Printf with the
+following exceptions:
+</p>
+<pre>%p is not implemented
+%T is not implemented
+%e %E %f %F %g %G are all equivalent and scan any floating point or complex value
+%s and %v on strings scan a space-delimited token
+Flags # and + are not implemented.
+</pre>
+<p>
+The familiar base-setting prefixes 0 (octal) and 0x
+(hexadecimal) are accepted when scanning integers without a
+format or with the %v verb.
+</p>
+<p>
+Width is interpreted in the input text (%5s means at most
+five runes of input will be read to scan a string) but there
+is no syntax for scanning with a precision (no %5.2f, just
+%5f).
+</p>
+<p>
+When scanning with a format, all non-empty runs of space
+characters (except newline) are equivalent to a single
+space in both the format and the input.  With that proviso,
+text in the format string must match the input text; scanning
+stops if it does not, with the return value of the function
+indicating the number of arguments scanned.
+</p>
+<p>
+In all the scanning functions, if an operand implements method
+Scan (that is, it implements the Scanner interface) that
+method will be used to scan the text for that operand.  Also,
+if the number of arguments scanned is less than the number of
+arguments provided, an error is returned.
+</p>
+<p>
+All arguments to be scanned must be either pointers to basic
+types or implementations of the Scanner interface.
+</p>
+<p>
+Note: Fscan etc. can read one character (rune) past the input
+they return, which means that a loop calling a scan routine
+may skip some of the input.  This is usually a problem only
+when there is no space between input values.  If the reader
+provided to Fscan implements ReadRune, that method will be used
+to read characters.  If the reader also implements UnreadRune,
+that method will be used to save the character and successive
+calls will not lose data.  To attach ReadRune and UnreadRune
+methods to a reader without that capability, use
+bufio.NewReader.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Errorf">func Errorf(format string, a ...interface{}) error</a></dd>
+			
+				
+				<dd><a href="#Fprint">func Fprint(w io.Writer, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Fprintf">func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Fprintln">func Fprintln(w io.Writer, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Fscan">func Fscan(r io.Reader, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Fscanf">func Fscanf(r io.Reader, format string, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Fscanln">func Fscanln(r io.Reader, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Print">func Print(a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Printf">func Printf(format string, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Println">func Println(a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Scan">func Scan(a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Scanf">func Scanf(format string, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Scanln">func Scanln(a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Sprint">func Sprint(a ...interface{}) string</a></dd>
+			
+				
+				<dd><a href="#Sprintf">func Sprintf(format string, a ...interface{}) string</a></dd>
+			
+				
+				<dd><a href="#Sprintln">func Sprintln(a ...interface{}) string</a></dd>
+			
+				
+				<dd><a href="#Sscan">func Sscan(str string, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Sscanf">func Sscanf(str string, format string, a ...interface{}) (n int, err error)</a></dd>
+			
+				
+				<dd><a href="#Sscanln">func Sscanln(str string, a ...interface{}) (n int, err error)</a></dd>
+			
+			
+				
+				<dd><a href="#Formatter">type Formatter</a></dd>
+				
+				
+			
+				
+				<dd><a href="#GoStringer">type GoStringer</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ScanState">type ScanState</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Scanner">type Scanner</a></dd>
+				
+				
+			
+				
+				<dd><a href="#State">type State</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Stringer">type Stringer</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/fmt/doc.go">doc.go</a>
+			
+				<a href="http://golang.org/src/pkg/fmt/format.go">format.go</a>
+			
+				<a href="http://golang.org/src/pkg/fmt/print.go">print.go</a>
+			
+				<a href="http://golang.org/src/pkg/fmt/scan.go">scan.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="Errorf">func <a href="http://golang.org/src/pkg/fmt/print.go?s=6069:6119#L227">Errorf</a></h2>
+			<pre>func Errorf(format <a href="../builtin/index.html#string">string</a>, a ...interface{}) <a href="../builtin/index.html#error">error</a></pre>
+			<p>
+Errorf formats according to a format specifier and returns the string
+as a value that satisfies error.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Fprint">func <a href="http://golang.org/src/pkg/fmt/print.go?s=6430:6491#L236">Fprint</a></h2>
+			<pre>func Fprint(w <a href="../io/index.html">io</a>.<a href="../io/index.html#Writer">Writer</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Fprint formats using the default formats for its operands and writes to w.
+Spaces are added between operands when neither is a string.
+It returns the number of bytes written and any write error encountered.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Fprintf">func <a href="http://golang.org/src/pkg/fmt/print.go?s=5284:5361#L202">Fprintf</a></h2>
+			<pre>func Fprintf(w <a href="../io/index.html">io</a>.<a href="../io/index.html#Writer">Writer</a>, format <a href="../builtin/index.html#string">string</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Fprintf formats according to a format specifier and writes to w.
+It returns the number of bytes written and any write error encountered.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Fprintln">func <a href="http://golang.org/src/pkg/fmt/print.go?s=7576:7639#L268">Fprintln</a></h2>
+			<pre>func Fprintln(w <a href="../io/index.html">io</a>.<a href="../io/index.html#Writer">Writer</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Fprintln formats using the default formats for its operands and writes to w.
+Spaces are always added between operands and a newline is appended.
+It returns the number of bytes written and any write error encountered.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Fscan">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=4910:4970#L113">Fscan</a></h2>
+			<pre>func Fscan(r <a href="../io/index.html">io</a>.<a href="../io/index.html#Reader">Reader</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Fscan scans text read from r, storing successive space-separated
+values into successive arguments.  Newlines count as space.  It
+returns the number of items successfully scanned.  If that is less
+than the number of arguments, err will report why.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Fscanf">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=5524:5600#L132">Fscanf</a></h2>
+			<pre>func Fscanf(r <a href="../io/index.html">io</a>.<a href="../io/index.html#Reader">Reader</a>, format <a href="../builtin/index.html#string">string</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Fscanf scans text read from r, storing successive space-separated
+values into successive arguments as determined by the format.  It
+returns the number of items successfully parsed.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Fscanln">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=5183:5245#L122">Fscanln</a></h2>
+			<pre>func Fscanln(r <a href="../io/index.html">io</a>.<a href="../io/index.html#Reader">Reader</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Fscanln is similar to Fscan, but stops scanning at a newline and
+after the final item there must be a newline or EOF.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Print">func <a href="http://golang.org/src/pkg/fmt/print.go?s=6833:6880#L247">Print</a></h2>
+			<pre>func Print(a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Print formats using the default formats for its operands and writes to standard output.
+Spaces are added between operands when neither is a string.
+It returns the number of bytes written and any write error encountered.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Printf">func <a href="http://golang.org/src/pkg/fmt/print.go?s=5625:5688#L212">Printf</a></h2>
+			<pre>func Printf(format <a href="../builtin/index.html#string">string</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Printf formats according to a format specifier and writes to standard output.
+It returns the number of bytes written and any write error encountered.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Println">func <a href="http://golang.org/src/pkg/fmt/print.go?s=7989:8038#L279">Println</a></h2>
+			<pre>func Println(a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Println formats using the default formats for its operands and writes to standard output.
+Spaces are always added between operands and a newline is appended.
+It returns the number of bytes written and any write error encountered.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Scan">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=2960:3006#L60">Scan</a></h2>
+			<pre>func Scan(a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Scan scans text read from standard input, storing successive
+space-separated values into successive arguments.  Newlines count
+as space.  It returns the number of items successfully scanned.
+If that is less than the number of arguments, err will report why.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Scanf">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=3453:3515#L73">Scanf</a></h2>
+			<pre>func Scanf(format <a href="../builtin/index.html#string">string</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Scanf scans text read from standard input, storing successive
+space-separated values into successive arguments as determined by
+the format.  It returns the number of items successfully scanned.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Scanln">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=3164:3212#L66">Scanln</a></h2>
+			<pre>func Scanln(a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Scanln is similar to Scan, but stops scanning at a newline and
+after the final item there must be a newline or EOF.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Sprint">func <a href="http://golang.org/src/pkg/fmt/print.go?s=7076:7112#L253">Sprint</a></h2>
+			<pre>func Sprint(a ...interface{}) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Sprint formats using the default formats for its operands and returns the resulting string.
+Spaces are added between operands when neither is a string.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Sprintf">func <a href="http://golang.org/src/pkg/fmt/print.go?s=5820:5872#L217">Sprintf</a></h2>
+			<pre>func Sprintf(format <a href="../builtin/index.html#string">string</a>, a ...interface{}) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Sprintf formats according to a format specifier and returns the resulting string.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Sprintln">func <a href="http://golang.org/src/pkg/fmt/print.go?s=8246:8284#L285">Sprintln</a></h2>
+			<pre>func Sprintln(a ...interface{}) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Sprintln formats using the default formats for its operands and returns the resulting string.
+Spaces are always added between operands and a newline is appended.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Sscan">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=3981:4040#L92">Sscan</a></h2>
+			<pre>func Sscan(str <a href="../builtin/index.html#string">string</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Sscan scans the argument string, storing successive space-separated
+values into successive arguments.  Newlines count as space.  It
+returns the number of items successfully scanned.  If that is less
+than the number of arguments, err will report why.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Sscanf">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=4518:4593#L105">Sscanf</a></h2>
+			<pre>func Sscanf(str <a href="../builtin/index.html#string">string</a>, format <a href="../builtin/index.html#string">string</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Sscanf scans the argument string, storing successive space-separated
+values into successive arguments as determined by the format.  It
+returns the number of items successfully parsed.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Sscanln">func <a href="http://golang.org/src/pkg/fmt/scan.go?s=4213:4274#L98">Sscanln</a></h2>
+			<pre>func Sscanln(str <a href="../builtin/index.html#string">string</a>, a ...interface{}) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Sscanln is similar to Sscan, but stops scanning at a newline and
+after the final item there must be a newline or EOF.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Formatter">type <a href="http://golang.org/src/pkg/fmt/print.go?s=1647:1700#L42">Formatter</a></h2>
+			<pre>type Formatter interface {
+        Format(f <a href="#State">State</a>, c <a href="../builtin/index.html#rune">rune</a>)
+}</pre>
+			<p>
+Formatter is the interface implemented by values with a custom formatter.
+The implementation of Format may call Sprint(f) or Fprint(f) etc.
+to generate its output.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="GoStringer">type <a href="http://golang.org/src/pkg/fmt/print.go?s=2226:2274#L59">GoStringer</a></h2>
+			<pre>type GoStringer interface {
+        GoString() <a href="../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+GoStringer is implemented by any value that has a GoString method,
+which defines the Go syntax for that value.
+The GoString method is used to print values passed as an operand
+to a %#v format.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ScanState">type <a href="http://golang.org/src/pkg/fmt/scan.go?s=727:2325#L18">ScanState</a></h2>
+			<pre>type ScanState interface {
+        <span class="comment">// ReadRune reads the next rune (Unicode code point) from the input.</span>
+        <span class="comment">// If invoked during Scanln, Fscanln, or Sscanln, ReadRune() will</span>
+        <span class="comment">// return EOF after returning the first &#39;\n&#39; or when reading beyond</span>
+        <span class="comment">// the specified width.</span>
+        ReadRune() (r <a href="../builtin/index.html#rune">rune</a>, size <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)
+        <span class="comment">// UnreadRune causes the next call to ReadRune to return the same rune.</span>
+        UnreadRune() <a href="../builtin/index.html#error">error</a>
+        <span class="comment">// SkipSpace skips space in the input. Newlines are treated as space</span>
+        <span class="comment">// unless the scan operation is Scanln, Fscanln or Sscanln, in which case</span>
+        <span class="comment">// a newline is treated as EOF.</span>
+        SkipSpace()
+        <span class="comment">// Token skips space in the input if skipSpace is true, then returns the</span>
+        <span class="comment">// run of Unicode code points c satisfying f(c).  If f is nil,</span>
+        <span class="comment">// !unicode.IsSpace(c) is used; that is, the token will hold non-space</span>
+        <span class="comment">// characters.  Newlines are treated as space unless the scan operation</span>
+        <span class="comment">// is Scanln, Fscanln or Sscanln, in which case a newline is treated as</span>
+        <span class="comment">// EOF.  The returned slice points to shared data that may be overwritten</span>
+        <span class="comment">// by the next call to Token, a call to a Scan function using the ScanState</span>
+        <span class="comment">// as input, or when the calling Scan method returns.</span>
+        Token(skipSpace <a href="../builtin/index.html#bool">bool</a>, f func(<a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#bool">bool</a>) (token []<a href="../builtin/index.html#byte">byte</a>, err <a href="../builtin/index.html#error">error</a>)
+        <span class="comment">// Width returns the value of the width option and whether it has been set.</span>
+        <span class="comment">// The unit is Unicode code points.</span>
+        Width() (wid <a href="../builtin/index.html#int">int</a>, ok <a href="../builtin/index.html#bool">bool</a>)
+        <span class="comment">// Because ReadRune is implemented by the interface, Read should never be</span>
+        <span class="comment">// called by the scanning routines and a valid implementation of</span>
+        <span class="comment">// ScanState may choose always to return an error from Read.</span>
+        Read(buf []<a href="../builtin/index.html#byte">byte</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+ScanState represents the scanner state passed to custom scanners.
+Scanners may do rune-at-a-time scanning or ask the ScanState
+to discover the next space-delimited token.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Scanner">type <a href="http://golang.org/src/pkg/fmt/scan.go?s=2622:2688#L52">Scanner</a></h2>
+			<pre>type Scanner interface {
+        Scan(state <a href="#ScanState">ScanState</a>, verb <a href="../builtin/index.html#rune">rune</a>) <a href="../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+Scanner is implemented by any value that has a Scan method, which scans
+the input for the representation of a value and stores the result in the
+receiver, which must be a pointer to be useful.  The Scan method is called
+for any argument to Scan, Scanf, or Scanln that implements it.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="State">type <a href="http://golang.org/src/pkg/fmt/print.go?s=1030:1472#L27">State</a></h2>
+			<pre>type State interface {
+        <span class="comment">// Write is the function to call to emit formatted output to be printed.</span>
+        Write(b []<a href="../builtin/index.html#byte">byte</a>) (ret <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)
+        <span class="comment">// Width returns the value of the width option and whether it has been set.</span>
+        Width() (wid <a href="../builtin/index.html#int">int</a>, ok <a href="../builtin/index.html#bool">bool</a>)
+        <span class="comment">// Precision returns the value of the precision option and whether it has been set.</span>
+        Precision() (prec <a href="../builtin/index.html#int">int</a>, ok <a href="../builtin/index.html#bool">bool</a>)
+
+        <span class="comment">// Flag returns whether the flag c, a character, has been set.</span>
+        Flag(c <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#bool">bool</a>
+}</pre>
+			<p>
+State represents the printer state passed to custom formatters.
+It provides access to the io.Writer interface plus information about
+the flags and options for the operand&#39;s format specifier.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Stringer">type <a href="http://golang.org/src/pkg/fmt/print.go?s=1975:2019#L51">Stringer</a></h2>
+			<pre>type Stringer interface {
+        String() <a href="../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+Stringer is implemented by any value that has a String method,
+which defines the &ldquo;native&rdquo; format for that value.
+The String method is used to print values passed as an operand
+to any format that accepts a string or to an unformatted printer
+such as Print.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=515&s_ttfb=521&id=1380993862915339', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/fmt/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

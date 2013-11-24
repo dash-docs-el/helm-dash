@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/net/rpc/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>rpc</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package rpc</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "net/rpc"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package rpc provides access to the exported methods of an object across a
+network or other I/O connection.  A server registers an object, making it visible
+as a service with the name of the type of the object.  After registration, exported
+methods of the object will be accessible remotely.  A server may register multiple
+objects (services) of different types but it is an error to register multiple
+objects of the same type.
+</p>
+<p>
+Only methods that satisfy these criteria will be made available for remote access;
+other methods will be ignored:
+</p>
+<pre>- the method is exported.
+- the method has two arguments, both exported (or builtin) types.
+- the method&#39;s second argument is a pointer.
+- the method has return type error.
+</pre>
+<p>
+In effect, the method must look schematically like
+</p>
+<pre>func (t *T) MethodName(argType T1, replyType *T2) error
+</pre>
+<p>
+where T, T1 and T2 can be marshaled by encoding/gob.
+These requirements apply even if a different codec is used.
+(In the future, these requirements may soften for custom codecs.)
+</p>
+<p>
+The method&#39;s first argument represents the arguments provided by the caller; the
+second argument represents the result parameters to be returned to the caller.
+The method&#39;s return value, if non-nil, is passed back as a string that the client
+sees as if created by errors.New.  If an error is returned, the reply parameter
+will not be sent back to the client.
+</p>
+<p>
+The server may handle requests on a single connection by calling ServeConn.  More
+typically it will create a network listener and call Accept or, for an HTTP
+listener, HandleHTTP and http.Serve.
+</p>
+<p>
+A client wishing to use the service establishes a connection and then invokes
+NewClient on the connection.  The convenience function Dial (DialHTTP) performs
+both steps for a raw network connection (an HTTP connection).  The resulting
+Client object has two methods, Call and Go, that specify the service and method to
+call, a pointer containing the arguments, and a pointer to receive the result
+parameters.
+</p>
+<p>
+The Call method waits for the remote call to complete while the Go method
+launches the call asynchronously and signals completion using the Call
+structure&#39;s Done channel.
+</p>
+<p>
+Unless an explicit codec is set up, package encoding/gob is used to
+transport the data.
+</p>
+<p>
+Here is a simple example.  A server wishes to export an object of type Arith:
+</p>
+<pre>package server
+
+type Args struct {
+	A, B int
+}
+
+type Quotient struct {
+	Quo, Rem int
+}
+
+type Arith int
+
+func (t *Arith) Multiply(args *Args, reply *int) error {
+	*reply = args.A * args.B
+	return nil
+}
+
+func (t *Arith) Divide(args *Args, quo *Quotient) error {
+	if args.B == 0 {
+		return errors.New(&#34;divide by zero&#34;)
+	}
+	quo.Quo = args.A / args.B
+	quo.Rem = args.A % args.B
+	return nil
+}
+</pre>
+<p>
+The server calls (for HTTP service):
+</p>
+<pre>arith := new(Arith)
+rpc.Register(arith)
+rpc.HandleHTTP()
+l, e := net.Listen(&#34;tcp&#34;, &#34;:1234&#34;)
+if e != nil {
+	log.Fatal(&#34;listen error:&#34;, e)
+}
+go http.Serve(l, nil)
+</pre>
+<p>
+At this point, clients can see a service &#34;Arith&#34; with methods &#34;Arith.Multiply&#34; and
+&#34;Arith.Divide&#34;.  To invoke one, a client first dials the server:
+</p>
+<pre>client, err := rpc.DialHTTP(&#34;tcp&#34;, serverAddress + &#34;:1234&#34;)
+if err != nil {
+	log.Fatal(&#34;dialing:&#34;, err)
+}
+</pre>
+<p>
+Then it can make a remote call:
+</p>
+<pre>// Synchronous call
+args := &amp;server.Args{7,8}
+var reply int
+err = client.Call(&#34;Arith.Multiply&#34;, args, &amp;reply)
+if err != nil {
+	log.Fatal(&#34;arith error:&#34;, err)
+}
+fmt.Printf(&#34;Arith: %d*%d=%d&#34;, args.A, args.B, reply)
+</pre>
+<p>
+or
+</p>
+<pre>// Asynchronous call
+quotient := new(Quotient)
+divCall := client.Go(&#34;Arith.Divide&#34;, args, quotient, nil)
+replyCall := &lt;-divCall.Done	// will be equal to divCall
+// check errors, print, etc.
+</pre>
+<p>
+A server implementation will often provide a simple, type-safe wrapper for the
+client.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#Accept">func Accept(lis net.Listener)</a></dd>
+			
+				
+				<dd><a href="#HandleHTTP">func HandleHTTP()</a></dd>
+			
+				
+				<dd><a href="#Register">func Register(rcvr interface{}) error</a></dd>
+			
+				
+				<dd><a href="#RegisterName">func RegisterName(name string, rcvr interface{}) error</a></dd>
+			
+				
+				<dd><a href="#ServeCodec">func ServeCodec(codec ServerCodec)</a></dd>
+			
+				
+				<dd><a href="#ServeConn">func ServeConn(conn io.ReadWriteCloser)</a></dd>
+			
+				
+				<dd><a href="#ServeRequest">func ServeRequest(codec ServerCodec) error</a></dd>
+			
+			
+				
+				<dd><a href="#Call">type Call</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Client">type Client</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Dial">func Dial(network, address string) (*Client, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DialHTTP">func DialHTTP(network, address string) (*Client, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DialHTTPPath">func DialHTTPPath(network, address, path string) (*Client, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewClient">func NewClient(conn io.ReadWriteCloser) *Client</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewClientWithCodec">func NewClientWithCodec(codec ClientCodec) *Client</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Call">func (client *Client) Call(serviceMethod string, args interface{}, reply interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Close">func (client *Client) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Client.Go">func (client *Client) Go(serviceMethod string, args interface{}, reply interface{}, done chan *Call) *Call</a></dd>
+				
+			
+				
+				<dd><a href="#ClientCodec">type ClientCodec</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Request">type Request</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Response">type Response</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Server">type Server</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewServer">func NewServer() *Server</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Server.Accept">func (server *Server) Accept(lis net.Listener)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Server.HandleHTTP">func (server *Server) HandleHTTP(rpcPath, debugPath string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Server.Register">func (server *Server) Register(rcvr interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Server.RegisterName">func (server *Server) RegisterName(name string, rcvr interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Server.ServeCodec">func (server *Server) ServeCodec(codec ServerCodec)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Server.ServeConn">func (server *Server) ServeConn(conn io.ReadWriteCloser)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Server.ServeHTTP">func (server *Server) ServeHTTP(w http.ResponseWriter, req *http.Request)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Server.ServeRequest">func (server *Server) ServeRequest(codec ServerCodec) error</a></dd>
+				
+			
+				
+				<dd><a href="#ServerCodec">type ServerCodec</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ServerError">type ServerError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ServerError.Error">func (e ServerError) Error() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/net/rpc/client.go">client.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/rpc/debug.go">debug.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/rpc/server.go">server.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span class="comment">// Defaults used by HandleHTTP</span>
+        <span id="DefaultRPCPath">DefaultRPCPath</span>   = &#34;/_goRPC_&#34;
+        <span id="DefaultDebugPath">DefaultDebugPath</span> = &#34;/debug/rpc&#34;
+)</pre>
+				
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="DefaultServer">DefaultServer</span> = <a href="#NewServer">NewServer</a>()</pre>
+				<p>
+DefaultServer is the default instance of *Server.
+</p>
+
+			
+				<pre>var <span id="ErrShutdown">ErrShutdown</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;connection is shut down&#34;)</pre>
+				
+			
+		
+		
+			
+			
+			<h2 id="Accept">func <a href="http://golang.org/src/pkg/net/rpc/server.go?s=19301:19330#L634">Accept</a></h2>
+			<pre>func Accept(lis <a href="../index.html">net</a>.<a href="../index.html#Listener">Listener</a>)</pre>
+			<p>
+Accept accepts connections on the listener and serves requests
+to DefaultServer for each incoming connection.
+Accept blocks; the caller typically invokes it in a go statement.
+</p>
+
+			
+		
+			
+			
+			<h2 id="HandleHTTP">func <a href="http://golang.org/src/pkg/net/rpc/server.go?s=20561:20578#L667">HandleHTTP</a></h2>
+			<pre>func HandleHTTP()</pre>
+			<p>
+HandleHTTP registers an HTTP handler for RPC messages to DefaultServer
+on DefaultRPCPath and a debugging handler on DefaultDebugPath.
+It is still necessary to invoke http.Serve(), typically in a go statement.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Register">func <a href="http://golang.org/src/pkg/net/rpc/server.go?s=17404:17441#L587">Register</a></h2>
+			<pre>func Register(rcvr interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+			<p>
+Register publishes the receiver&#39;s methods in the DefaultServer.
+</p>
+
+			
+		
+			
+			
+			<h2 id="RegisterName">func <a href="http://golang.org/src/pkg/net/rpc/server.go?s=17600:17654#L591">RegisterName</a></h2>
+			<pre>func RegisterName(name <a href="../../builtin/index.html#string">string</a>, rcvr interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+			<p>
+RegisterName is like Register but uses the provided name for the type
+instead of the receiver&#39;s concrete type.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ServeCodec">func <a href="http://golang.org/src/pkg/net/rpc/server.go?s=18827:18861#L621">ServeCodec</a></h2>
+			<pre>func ServeCodec(codec <a href="#ServerCodec">ServerCodec</a>)</pre>
+			<p>
+ServeCodec is like ServeConn but uses the specified codec to
+decode requests and encode responses.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ServeConn">func <a href="http://golang.org/src/pkg/net/rpc/server.go?s=18646:18685#L615">ServeConn</a></h2>
+			<pre>func ServeConn(conn <a href="../../io/index.html">io</a>.<a href="../../io/index.html#ReadWriteCloser">ReadWriteCloser</a>)</pre>
+			<p>
+ServeConn runs the DefaultServer on a single connection.
+ServeConn blocks, serving the connection until the client hangs up.
+The caller typically invokes ServeConn in a go statement.
+ServeConn uses the gob wire format (see package gob) on the
+connection.  To use an alternate codec, use ServeCodec.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ServeRequest">func <a href="http://golang.org/src/pkg/net/rpc/server.go?s=19026:19068#L627">ServeRequest</a></h2>
+			<pre>func ServeRequest(codec <a href="#ServerCodec">ServerCodec</a>) <a href="../../builtin/index.html#error">error</a></pre>
+			<p>
+ServeRequest is like ServeCodec but synchronously serves a single request.
+It does not close the codec upon completion.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Call">type <a href="http://golang.org/src/pkg/net/rpc/client.go?s=540:900#L19">Call</a></h2>
+			<pre>type Call struct {
+        ServiceMethod <a href="../../builtin/index.html#string">string</a>      <span class="comment">// The name of the service and method to call.</span>
+        Args          interface{} <span class="comment">// The argument to the function (*struct).</span>
+        Reply         interface{} <span class="comment">// The reply from the function (*struct).</span>
+        Error         <a href="../../builtin/index.html#error">error</a>       <span class="comment">// After completion, the error status.</span>
+        Done          chan *<a href="#Call">Call</a>  <span class="comment">// Strobes when call is complete.</span>
+}</pre>
+			<p>
+Call represents an active RPC.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Client">type <a href="http://golang.org/src/pkg/net/rpc/client.go?s=1084:1296#L31">Client</a></h2>
+			<pre>type Client struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Client represents an RPC Client.
+There may be multiple outstanding Calls associated
+with a single Client, and a Client may be used by
+multiple goroutines simultaneously.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Dial">func <a href="http://golang.org/src/pkg/net/rpc/client.go?s=7048:7099#L254">Dial</a></h3>
+				<pre>func Dial(network, address <a href="../../builtin/index.html#string">string</a>) (*<a href="#Client">Client</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Dial connects to an RPC server at the specified network address.
+</p>
+
+				
+			
+				
+				<h3 id="DialHTTP">func <a href="http://golang.org/src/pkg/net/rpc/client.go?s=6101:6156#L221">DialHTTP</a></h3>
+				<pre>func DialHTTP(network, address <a href="../../builtin/index.html#string">string</a>) (*<a href="#Client">Client</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+DialHTTP connects to an HTTP RPC server at the specified network address
+listening on the default HTTP RPC path.
+</p>
+
+				
+			
+				
+				<h3 id="DialHTTPPath">func <a href="http://golang.org/src/pkg/net/rpc/client.go?s=6310:6375#L227">DialHTTPPath</a></h3>
+				<pre>func DialHTTPPath(network, address, path <a href="../../builtin/index.html#string">string</a>) (*<a href="#Client">Client</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+DialHTTPPath connects to an HTTP RPC server
+at the specified network address and path.
+</p>
+
+				
+			
+				
+				<h3 id="NewClient">func <a href="http://golang.org/src/pkg/net/rpc/client.go?s=4899:4946#L173">NewClient</a></h3>
+				<pre>func NewClient(conn <a href="../../io/index.html">io</a>.<a href="../../io/index.html#ReadWriteCloser">ReadWriteCloser</a>) *<a href="#Client">Client</a></pre>
+				<p>
+NewClient returns a new Client to handle requests to the
+set of services at the other end of the connection.
+It adds a buffer to the write side of the connection so
+the header and payload are sent as a unit.
+</p>
+
+				
+			
+				
+				<h3 id="NewClientWithCodec">func <a href="http://golang.org/src/pkg/net/rpc/client.go?s=5220:5270#L181">NewClientWithCodec</a></h3>
+				<pre>func NewClientWithCodec(codec <a href="#ClientCodec">ClientCodec</a>) *<a href="#Client">Client</a></pre>
+				<p>
+NewClientWithCodec is like NewClient but uses the specified
+codec to encode requests and decode responses.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Client.Call">func (*Client) <a href="http://golang.org/src/pkg/net/rpc/client.go?s=8481:8572#L299">Call</a></h3>
+				<pre>func (client *<a href="#Client">Client</a>) Call(serviceMethod <a href="../../builtin/index.html#string">string</a>, args interface{}, reply interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Call invokes the named function, waits for it to complete, and returns its error status.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Client.Close">func (*Client) <a href="http://golang.org/src/pkg/net/rpc/client.go?s=7213:7248#L262">Close</a></h3>
+				<pre>func (client *<a href="#Client">Client</a>) Close() <a href="../../builtin/index.html#error">error</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Client.Go">func (*Client) <a href="http://golang.org/src/pkg/net/rpc/client.go?s=7755:7861#L277">Go</a></h3>
+				<pre>func (client *<a href="#Client">Client</a>) Go(serviceMethod <a href="../../builtin/index.html#string">string</a>, args interface{}, reply interface{}, done chan *<a href="#Call">Call</a>) *<a href="#Call">Call</a></pre>
+				<p>
+Go invokes the function asynchronously.  It returns the Call structure representing
+the invocation.  The done channel will signal when the call is complete by returning
+the same Call object.  If done is nil, Go will allocate a new channel.
+If non-nil, done must be buffered or Go will deliberately crash.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="ClientCodec">type <a href="http://golang.org/src/pkg/net/rpc/client.go?s=1759:1922#L50">ClientCodec</a></h2>
+			<pre>type ClientCodec interface {
+        WriteRequest(*<a href="#Request">Request</a>, interface{}) <a href="../../builtin/index.html#error">error</a>
+        ReadResponseHeader(*<a href="#Response">Response</a>) <a href="../../builtin/index.html#error">error</a>
+        ReadResponseBody(interface{}) <a href="../../builtin/index.html#error">error</a>
+
+        Close() <a href="../../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+A ClientCodec implements writing of RPC requests and
+reading of RPC responses for the client side of an RPC session.
+The client calls WriteRequest to write a request to the connection
+and calls ReadResponseHeader and ReadResponseBody in pairs
+to read responses.  The client calls Close when finished with the
+connection. ReadResponseBody may be called with a nil
+argument to force the body of the response to be read and then
+discarded.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Request">type <a href="http://golang.org/src/pkg/net/rpc/server.go?s=5013:5199#L157">Request</a></h2>
+			<pre>type Request struct {
+        ServiceMethod <a href="../../builtin/index.html#string">string</a> <span class="comment">// format: &#34;Service.Method&#34;</span>
+        Seq           <a href="../../builtin/index.html#uint64">uint64</a> <span class="comment">// sequence number chosen by client</span>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Request is a header written before every RPC call.  It is used internally
+but documented here as an aid to debugging, such as when analyzing
+network traffic.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Response">type <a href="http://golang.org/src/pkg/net/rpc/server.go?s=5371:5600#L166">Response</a></h2>
+			<pre>type Response struct {
+        ServiceMethod <a href="../../builtin/index.html#string">string</a> <span class="comment">// echoes that of the Request</span>
+        Seq           <a href="../../builtin/index.html#uint64">uint64</a> <span class="comment">// echoes that of the request</span>
+        Error         <a href="../../builtin/index.html#string">string</a> <span class="comment">// error, if any.</span>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Response is a header written before every RPC return.  It is used internally
+but documented here as an aid to debugging, such as when analyzing
+network traffic.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Server">type <a href="http://golang.org/src/pkg/net/rpc/server.go?s=5638:5874#L174">Server</a></h2>
+			<pre>type Server struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Server represents an RPC Server.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewServer">func <a href="http://golang.org/src/pkg/net/rpc/server.go?s=5911:5935#L184">NewServer</a></h3>
+				<pre>func NewServer() *<a href="#Server">Server</a></pre>
+				<p>
+NewServer returns a new Server.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Server.Accept">func (*Server) <a href="http://golang.org/src/pkg/net/rpc/server.go?s=17131:17177#L576">Accept</a></h3>
+				<pre>func (server *<a href="#Server">Server</a>) Accept(lis <a href="../index.html">net</a>.<a href="../index.html#Listener">Listener</a>)</pre>
+				<p>
+Accept accepts connections on the listener and serves requests
+for each incoming connection.  Accept blocks; the caller typically
+invokes it in a go statement.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Server.HandleHTTP">func (*Server) <a href="http://golang.org/src/pkg/net/rpc/server.go?s=20205:20264#L659">HandleHTTP</a></h3>
+				<pre>func (server *<a href="#Server">Server</a>) HandleHTTP(rpcPath, debugPath <a href="../../builtin/index.html#string">string</a>)</pre>
+				<p>
+HandleHTTP registers an HTTP handler for RPC messages on rpcPath,
+and a debugging handler on debugPath.
+It is still necessary to invoke http.Serve(), typically in a go statement.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Server.Register">func (*Server) <a href="http://golang.org/src/pkg/net/rpc/server.go?s=7038:7092#L216">Register</a></h3>
+				<pre>func (server *<a href="#Server">Server</a>) Register(rcvr interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Register publishes in the server the set of methods of the
+receiver value that satisfy the following conditions:
+</p>
+<pre>- exported method
+- two arguments, both pointers to exported structs
+- one return value, of type error
+</pre>
+<p>
+It returns an error if the receiver is not an exported type or has
+no methods or unsuitable methods. It also logs the error using package log.
+The client accesses each method using a string of the form &#34;Type.Method&#34;,
+where Type is the receiver&#39;s concrete type.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Server.RegisterName">func (*Server) <a href="http://golang.org/src/pkg/net/rpc/server.go?s=7256:7327#L222">RegisterName</a></h3>
+				<pre>func (server *<a href="#Server">Server</a>) RegisterName(name <a href="../../builtin/index.html#string">string</a>, rcvr interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+RegisterName is like Register but uses the provided name for the type
+instead of the receiver&#39;s concrete type.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Server.ServeCodec">func (*Server) <a href="http://golang.org/src/pkg/net/rpc/server.go?s=13068:13119#L422">ServeCodec</a></h3>
+				<pre>func (server *<a href="#Server">Server</a>) ServeCodec(codec <a href="#ServerCodec">ServerCodec</a>)</pre>
+				<p>
+ServeCodec is like ServeConn but uses the specified codec to
+decode requests and encode responses.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Server.ServeConn">func (*Server) <a href="http://golang.org/src/pkg/net/rpc/server.go?s=12769:12825#L414">ServeConn</a></h3>
+				<pre>func (server *<a href="#Server">Server</a>) ServeConn(conn <a href="../../io/index.html">io</a>.<a href="../../io/index.html#ReadWriteCloser">ReadWriteCloser</a>)</pre>
+				<p>
+ServeConn runs the server on a single connection.
+ServeConn blocks, serving the connection until the client hangs up.
+The caller typically invokes ServeConn in a go statement.
+ServeConn uses the gob wire format (see package gob) on the
+connection.  To use an alternate codec, use ServeCodec.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Server.ServeHTTP">func (*Server) <a href="http://golang.org/src/pkg/net/rpc/server.go?s=19533:19606#L640">ServeHTTP</a></h3>
+				<pre>func (server *<a href="#Server">Server</a>) ServeHTTP(w <a href="../http/index.html">http</a>.<a href="../http/index.html#ResponseWriter">ResponseWriter</a>, req *<a href="../http/index.html">http</a>.<a href="../http/index.html#Request">Request</a>)</pre>
+				<p>
+ServeHTTP implements an http.Handler that answers RPC requests.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Server.ServeRequest">func (*Server) <a href="http://golang.org/src/pkg/net/rpc/server.go?s=13770:13829#L447">ServeRequest</a></h3>
+				<pre>func (server *<a href="#Server">Server</a>) ServeRequest(codec <a href="#ServerCodec">ServerCodec</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+ServeRequest is like ServeCodec but synchronously serves a single request.
+It does not close the codec upon completion.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="ServerCodec">type <a href="http://golang.org/src/pkg/net/rpc/server.go?s=18168:18330#L602">ServerCodec</a></h2>
+			<pre>type ServerCodec interface {
+        ReadRequestHeader(*<a href="#Request">Request</a>) <a href="../../builtin/index.html#error">error</a>
+        ReadRequestBody(interface{}) <a href="../../builtin/index.html#error">error</a>
+        WriteResponse(*<a href="#Response">Response</a>, interface{}) <a href="../../builtin/index.html#error">error</a>
+
+        Close() <a href="../../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+A ServerCodec implements reading of RPC requests and writing of
+RPC responses for the server side of an RPC session.
+The server calls ReadRequestHeader and ReadRequestBody in pairs
+to read requests from the connection, and it calls WriteResponse to
+write a response back.  The server calls Close when finished with the
+connection. ReadRequestBody may be called with a nil
+argument to force the body of the request to be read and discarded.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ServerError">type <a href="http://golang.org/src/pkg/net/rpc/client.go?s=365:388#L10">ServerError</a></h2>
+			<pre>type ServerError <a href="../../builtin/index.html#string">string</a></pre>
+			<p>
+ServerError represents an error that has been returned from
+the remote side of the RPC connection.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ServerError.Error">func (ServerError) <a href="http://golang.org/src/pkg/net/rpc/client.go?s=390:425#L12">Error</a></h3>
+				<pre>func (e <a href="#ServerError">ServerError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="../index.html">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="jsonrpc/index.html">jsonrpc</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package jsonrpc implements a JSON-RPC ClientCodec and ServerCodec for the rpc package.</td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=409&s_ttfb=418&id=1380993865286487', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/net/rpc/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

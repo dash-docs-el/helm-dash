@@ -1,0 +1,2435 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/image/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>image</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package image</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "image"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package image implements a basic 2-D image library.
+</p>
+<p>
+The fundamental interface is called Image. An Image contains colors, which
+are described in the image/color package.
+</p>
+<p>
+Values of the Image interface are created either by calling functions such
+as NewRGBA and NewPaletted, or by calling Decode on an io.Reader containing
+image data in a format such as GIF, JPEG or PNG. Decoding any particular
+image format requires the prior registration of a decoder function.
+Registration is typically automatic as a side effect of initializing that
+format&#39;s package so that, to decode a PNG image, it suffices to have
+</p>
+<pre>import _ &#34;image/png&#34;
+</pre>
+<p>
+in a program&#39;s main package. The _ means to import a package purely for its
+initialization side effects.
+</p>
+<p>
+See &#34;The Go image package&#34; for more details:
+<a href="http://golang.org/doc/articles/image_package.html">http://golang.org/doc/articles/image_package.html</a>
+</p>
+
+			</div>
+		</div>
+		<div id="example_" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;image&#34;
+	&#34;log&#34;
+	&#34;os&#34;
+
+	// Package image/jpeg is not used explicitly in the code below,
+	// but is imported for its initialization side-effect, which allows
+	// image.Decode to understand JPEG formatted images. Uncomment these
+	// two lines to also understand GIF and PNG images:
+	// _ &#34;image/gif&#34;
+	// _ &#34;image/png&#34;
+	_ &#34;image/jpeg&#34;
+)
+
+func main() {
+	// Open the file.
+	file, err := os.Open(&#34;testdata/video-001.jpeg&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	// Decode the image.
+	m, _, err := image.Decode(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	bounds := m.Bounds()
+
+	// Calculate a 16-bin histogram for m&#39;s red, green, blue and alpha components.
+	//
+	// An image&#39;s bounds do not necessarily start at (0, 0), so the two loops start
+	// at bounds.Min.Y and bounds.Min.X. Looping over Y first and X second is more
+	// likely to result in better memory access patterns than X first and Y second.
+	var histogram [16][4]int
+	for y := bounds.Min.Y; y &lt; bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x &lt; bounds.Max.X; x++ {
+			r, g, b, a := m.At(x, y).RGBA()
+			// A color&#39;s RGBA method returns values in the range [0, 65535].
+			// Shifting by 12 reduces this to the range [0, 15].
+			histogram[r&gt;&gt;12][0]++
+			histogram[g&gt;&gt;12][1]++
+			histogram[b&gt;&gt;12][2]++
+			histogram[a&gt;&gt;12][3]++
+		}
+	}
+
+	// Print the results.
+	fmt.Printf(&#34;%-14s %6s %6s %6s %6s\n&#34;, &#34;bin&#34;, &#34;red&#34;, &#34;green&#34;, &#34;blue&#34;, &#34;alpha&#34;)
+	for i, x := range histogram {
+		fmt.Printf(&#34;0x%04x-0x%04x: %6d %6d %6d %6d\n&#34;, i&lt;&lt;12, (i+1)&lt;&lt;12-1, x[0], x[1], x[2], x[3])
+	}
+}
+</textarea></div>
+				<div class="output"><pre>bin               red  green   blue  alpha
+0x0000-0x0fff:    471    819   7596      0
+0x1000-0x1fff:    576   2892    726      0
+0x2000-0x2fff:   1038   2330    943      0
+0x3000-0x3fff:    883   2321   1014      0
+0x4000-0x4fff:    501   1295    525      0
+0x5000-0x5fff:    302    962    242      0
+0x6000-0x6fff:    219    358    150      0
+0x7000-0x7fff:    352    281    192      0
+0x8000-0x8fff:   3688    216    246      0
+0x9000-0x9fff:   2277    237    283      0
+0xa000-0xafff:    971    254    357      0
+0xb000-0xbfff:    317    306    429      0
+0xc000-0xcfff:    203    402    401      0
+0xd000-0xdfff:    256    394    241      0
+0xe000-0xefff:    378    343    173      0
+0xf000-0xffff:   3018   2040   1932  15450
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#RegisterFormat">func RegisterFormat(name, magic string, decode func(io.Reader) (Image, error), decodeConfig func(io.Reader) (Config, error))</a></dd>
+			
+			
+				
+				<dd><a href="#Alpha">type Alpha</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewAlpha">func NewAlpha(r Rectangle) *Alpha</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha.At">func (p *Alpha) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha.Bounds">func (p *Alpha) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha.ColorModel">func (p *Alpha) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha.Opaque">func (p *Alpha) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha.PixOffset">func (p *Alpha) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha.Set">func (p *Alpha) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha.SetAlpha">func (p *Alpha) SetAlpha(x, y int, c color.Alpha)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha.SubImage">func (p *Alpha) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#Alpha16">type Alpha16</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewAlpha16">func NewAlpha16(r Rectangle) *Alpha16</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha16.At">func (p *Alpha16) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha16.Bounds">func (p *Alpha16) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha16.ColorModel">func (p *Alpha16) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha16.Opaque">func (p *Alpha16) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha16.PixOffset">func (p *Alpha16) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha16.Set">func (p *Alpha16) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha16.SetAlpha16">func (p *Alpha16) SetAlpha16(x, y int, c color.Alpha16)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Alpha16.SubImage">func (p *Alpha16) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#Config">type Config</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DecodeConfig">func DecodeConfig(r io.Reader) (Config, string, error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Gray">type Gray</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewGray">func NewGray(r Rectangle) *Gray</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray.At">func (p *Gray) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray.Bounds">func (p *Gray) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray.ColorModel">func (p *Gray) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray.Opaque">func (p *Gray) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray.PixOffset">func (p *Gray) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray.Set">func (p *Gray) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray.SetGray">func (p *Gray) SetGray(x, y int, c color.Gray)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray.SubImage">func (p *Gray) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#Gray16">type Gray16</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewGray16">func NewGray16(r Rectangle) *Gray16</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray16.At">func (p *Gray16) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray16.Bounds">func (p *Gray16) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray16.ColorModel">func (p *Gray16) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray16.Opaque">func (p *Gray16) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray16.PixOffset">func (p *Gray16) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray16.Set">func (p *Gray16) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray16.SetGray16">func (p *Gray16) SetGray16(x, y int, c color.Gray16)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Gray16.SubImage">func (p *Gray16) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#Image">type Image</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Decode">func Decode(r io.Reader) (Image, string, error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#NRGBA">type NRGBA</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewNRGBA">func NewNRGBA(r Rectangle) *NRGBA</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA.At">func (p *NRGBA) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA.Bounds">func (p *NRGBA) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA.ColorModel">func (p *NRGBA) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA.Opaque">func (p *NRGBA) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA.PixOffset">func (p *NRGBA) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA.Set">func (p *NRGBA) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA.SetNRGBA">func (p *NRGBA) SetNRGBA(x, y int, c color.NRGBA)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA.SubImage">func (p *NRGBA) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#NRGBA64">type NRGBA64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewNRGBA64">func NewNRGBA64(r Rectangle) *NRGBA64</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA64.At">func (p *NRGBA64) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA64.Bounds">func (p *NRGBA64) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA64.ColorModel">func (p *NRGBA64) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA64.Opaque">func (p *NRGBA64) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA64.PixOffset">func (p *NRGBA64) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA64.Set">func (p *NRGBA64) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA64.SetNRGBA64">func (p *NRGBA64) SetNRGBA64(x, y int, c color.NRGBA64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NRGBA64.SubImage">func (p *NRGBA64) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#Paletted">type Paletted</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewPaletted">func NewPaletted(r Rectangle, p color.Palette) *Paletted</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.At">func (p *Paletted) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.Bounds">func (p *Paletted) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.ColorIndexAt">func (p *Paletted) ColorIndexAt(x, y int) uint8</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.ColorModel">func (p *Paletted) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.Opaque">func (p *Paletted) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.PixOffset">func (p *Paletted) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.Set">func (p *Paletted) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.SetColorIndex">func (p *Paletted) SetColorIndex(x, y int, index uint8)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Paletted.SubImage">func (p *Paletted) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#PalettedImage">type PalettedImage</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Point">type Point</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Pt">func Pt(X, Y int) Point</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.Add">func (p Point) Add(q Point) Point</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.Div">func (p Point) Div(k int) Point</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.Eq">func (p Point) Eq(q Point) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.In">func (p Point) In(r Rectangle) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.Mod">func (p Point) Mod(r Rectangle) Point</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.Mul">func (p Point) Mul(k int) Point</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.String">func (p Point) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.Sub">func (p Point) Sub(q Point) Point</a></dd>
+				
+			
+				
+				<dd><a href="#RGBA">type RGBA</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewRGBA">func NewRGBA(r Rectangle) *RGBA</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA.At">func (p *RGBA) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA.Bounds">func (p *RGBA) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA.ColorModel">func (p *RGBA) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA.Opaque">func (p *RGBA) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA.PixOffset">func (p *RGBA) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA.Set">func (p *RGBA) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA.SetRGBA">func (p *RGBA) SetRGBA(x, y int, c color.RGBA)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA.SubImage">func (p *RGBA) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#RGBA64">type RGBA64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewRGBA64">func NewRGBA64(r Rectangle) *RGBA64</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA64.At">func (p *RGBA64) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA64.Bounds">func (p *RGBA64) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA64.ColorModel">func (p *RGBA64) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA64.Opaque">func (p *RGBA64) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA64.PixOffset">func (p *RGBA64) PixOffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA64.Set">func (p *RGBA64) Set(x, y int, c color.Color)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA64.SetRGBA64">func (p *RGBA64) SetRGBA64(x, y int, c color.RGBA64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RGBA64.SubImage">func (p *RGBA64) SubImage(r Rectangle) Image</a></dd>
+				
+			
+				
+				<dd><a href="#Rectangle">type Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rect">func Rect(x0, y0, x1, y1 int) Rectangle</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Add">func (r Rectangle) Add(p Point) Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Canon">func (r Rectangle) Canon() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Dx">func (r Rectangle) Dx() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Dy">func (r Rectangle) Dy() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Empty">func (r Rectangle) Empty() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Eq">func (r Rectangle) Eq(s Rectangle) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.In">func (r Rectangle) In(s Rectangle) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Inset">func (r Rectangle) Inset(n int) Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Intersect">func (r Rectangle) Intersect(s Rectangle) Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Overlaps">func (r Rectangle) Overlaps(s Rectangle) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Size">func (r Rectangle) Size() Point</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.String">func (r Rectangle) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Sub">func (r Rectangle) Sub(p Point) Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rectangle.Union">func (r Rectangle) Union(s Rectangle) Rectangle</a></dd>
+				
+			
+				
+				<dd><a href="#Uniform">type Uniform</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewUniform">func NewUniform(c color.Color) *Uniform</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Uniform.At">func (c *Uniform) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Uniform.Bounds">func (c *Uniform) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Uniform.ColorModel">func (c *Uniform) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Uniform.Convert">func (c *Uniform) Convert(color.Color) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Uniform.Opaque">func (c *Uniform) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Uniform.RGBA">func (c *Uniform) RGBA() (r, g, b, a uint32)</a></dd>
+				
+			
+				
+				<dd><a href="#YCbCr">type YCbCr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewYCbCr">func NewYCbCr(r Rectangle, subsampleRatio YCbCrSubsampleRatio) *YCbCr</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#YCbCr.At">func (p *YCbCr) At(x, y int) color.Color</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#YCbCr.Bounds">func (p *YCbCr) Bounds() Rectangle</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#YCbCr.COffset">func (p *YCbCr) COffset(x, y int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#YCbCr.ColorModel">func (p *YCbCr) ColorModel() color.Model</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#YCbCr.Opaque">func (p *YCbCr) Opaque() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#YCbCr.SubImage">func (p *YCbCr) SubImage(r Rectangle) Image</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#YCbCr.YOffset">func (p *YCbCr) YOffset(x, y int) int</a></dd>
+				
+			
+				
+				<dd><a href="#YCbCrSubsampleRatio">type YCbCrSubsampleRatio</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#YCbCrSubsampleRatio.String">func (s YCbCrSubsampleRatio) String() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_">Package</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/image/format.go">format.go</a>
+			
+				<a href="http://golang.org/src/pkg/image/geom.go">geom.go</a>
+			
+				<a href="http://golang.org/src/pkg/image/image.go">image.go</a>
+			
+				<a href="http://golang.org/src/pkg/image/names.go">names.go</a>
+			
+				<a href="http://golang.org/src/pkg/image/ycbcr.go">ycbcr.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+        <span class="comment">// Black is an opaque black uniform image.</span>
+        <span id="Black">Black</span> = <a href="#NewUniform">NewUniform</a>(<a href="color/index.html">color</a>.<a href="color/index.html#Black">Black</a>)
+        <span class="comment">// White is an opaque white uniform image.</span>
+        <span id="White">White</span> = <a href="#NewUniform">NewUniform</a>(<a href="color/index.html">color</a>.<a href="color/index.html#White">White</a>)
+        <span class="comment">// Transparent is a fully transparent uniform image.</span>
+        <span id="Transparent">Transparent</span> = <a href="#NewUniform">NewUniform</a>(<a href="color/index.html">color</a>.<a href="color/index.html#Transparent">Transparent</a>)
+        <span class="comment">// Opaque is a fully opaque uniform image.</span>
+        <span id="Opaque">Opaque</span> = <a href="#NewUniform">NewUniform</a>(<a href="color/index.html">color</a>.<a href="color/index.html#Opaque">Opaque</a>)
+)</pre>
+				
+			
+				<pre>var <span id="ErrFormat">ErrFormat</span> = <a href="../errors/index.html">errors</a>.<a href="../errors/index.html#New">New</a>(&#34;image: unknown format&#34;)</pre>
+				<p>
+ErrFormat indicates that decoding encountered an unknown format.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="RegisterFormat">func <a href="http://golang.org/src/pkg/image/format.go?s=1005:1129#L22">RegisterFormat</a></h2>
+			<pre>func RegisterFormat(name, magic <a href="../builtin/index.html#string">string</a>, decode func(<a href="../io/index.html">io</a>.<a href="../io/index.html#Reader">Reader</a>) (<a href="#Image">Image</a>, <a href="../builtin/index.html#error">error</a>), decodeConfig func(<a href="../io/index.html">io</a>.<a href="../io/index.html#Reader">Reader</a>) (<a href="#Config">Config</a>, <a href="../builtin/index.html#error">error</a>))</pre>
+			<p>
+RegisterFormat registers an image format for use by Decode.
+Name is the name of the format, like &#34;jpeg&#34; or &#34;png&#34;.
+Magic is the magic prefix that identifies the format&#39;s encoding. The magic
+string can contain &#34;?&#34; wildcards that each match any one byte.
+Decode is the function that decodes the encoded image.
+DecodeConfig is the function that decodes just its configuration.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Alpha">type <a href="http://golang.org/src/pkg/image/image.go?s=13183:13485#L456">Alpha</a></h2>
+			<pre>type Alpha struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, as alpha values. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*1].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+Alpha is an in-memory image whose At method returns color.Alpha values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewAlpha">func <a href="http://golang.org/src/pkg/image/image.go?s=15279:15312#L537">NewAlpha</a></h3>
+				<pre>func NewAlpha(r <a href="#Rectangle">Rectangle</a>) *<a href="#Alpha">Alpha</a></pre>
+				<p>
+NewAlpha returns a new Alpha with the given bounds.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Alpha.At">func (*Alpha) <a href="http://golang.org/src/pkg/image/image.go?s=13611:13651#L470">At</a></h3>
+				<pre>func (p *<a href="#Alpha">Alpha</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha.Bounds">func (*Alpha) <a href="http://golang.org/src/pkg/image/image.go?s=13557:13591#L468">Bounds</a></h3>
+				<pre>func (p *<a href="#Alpha">Alpha</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha.ColorModel">func (*Alpha) <a href="http://golang.org/src/pkg/image/image.go?s=13487:13527#L466">ColorModel</a></h3>
+				<pre>func (p *<a href="#Alpha">Alpha</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha.Opaque">func (*Alpha) <a href="http://golang.org/src/pkg/image/image.go?s=14947:14976#L519">Opaque</a></h3>
+				<pre>func (p *<a href="#Alpha">Alpha</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Alpha.PixOffset">func (*Alpha) <a href="http://golang.org/src/pkg/image/image.go?s=13872:13911#L480">PixOffset</a></h3>
+				<pre>func (p *<a href="#Alpha">Alpha</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Alpha.Set">func (*Alpha) <a href="http://golang.org/src/pkg/image/image.go?s=13972:14016#L484">Set</a></h3>
+				<pre>func (p *<a href="#Alpha">Alpha</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha.SetAlpha">func (*Alpha) <a href="http://golang.org/src/pkg/image/image.go?s=14146:14195#L492">SetAlpha</a></h3>
+				<pre>func (p *<a href="#Alpha">Alpha</a>) SetAlpha(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Alpha">Alpha</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha.SubImage">func (*Alpha) <a href="http://golang.org/src/pkg/image/image.go?s=14434:14477#L502">SubImage</a></h3>
+				<pre>func (p *<a href="#Alpha">Alpha</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Alpha16">type <a href="http://golang.org/src/pkg/image/image.go?s=15480:15805#L544">Alpha16</a></h2>
+			<pre>type Alpha16 struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, as alpha values in big-endian format. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*2].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+Alpha16 is an in-memory image whose At method returns color.Alpha64 values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewAlpha16">func <a href="http://golang.org/src/pkg/image/image.go?s=17789:17826#L628">NewAlpha16</a></h3>
+				<pre>func NewAlpha16(r <a href="#Rectangle">Rectangle</a>) *<a href="#Alpha16">Alpha16</a></pre>
+				<p>
+NewAlpha16 returns a new Alpha16 with the given bounds.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Alpha16.At">func (*Alpha16) <a href="http://golang.org/src/pkg/image/image.go?s=15937:15979#L558">At</a></h3>
+				<pre>func (p *<a href="#Alpha16">Alpha16</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha16.Bounds">func (*Alpha16) <a href="http://golang.org/src/pkg/image/image.go?s=15881:15917#L556">Bounds</a></h3>
+				<pre>func (p *<a href="#Alpha16">Alpha16</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha16.ColorModel">func (*Alpha16) <a href="http://golang.org/src/pkg/image/image.go?s=15807:15849#L554">ColorModel</a></h3>
+				<pre>func (p *<a href="#Alpha16">Alpha16</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha16.Opaque">func (*Alpha16) <a href="http://golang.org/src/pkg/image/image.go?s=17422:17453#L610">Opaque</a></h3>
+				<pre>func (p *<a href="#Alpha16">Alpha16</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Alpha16.PixOffset">func (*Alpha16) <a href="http://golang.org/src/pkg/image/image.go?s=16238:16279#L568">PixOffset</a></h3>
+				<pre>func (p *<a href="#Alpha16">Alpha16</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Alpha16.Set">func (*Alpha16) <a href="http://golang.org/src/pkg/image/image.go?s=16340:16386#L572">Set</a></h3>
+				<pre>func (p *<a href="#Alpha16">Alpha16</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha16.SetAlpha16">func (*Alpha16) <a href="http://golang.org/src/pkg/image/image.go?s=16570:16625#L582">SetAlpha16</a></h3>
+				<pre>func (p *<a href="#Alpha16">Alpha16</a>) SetAlpha16(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Alpha16">Alpha16</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Alpha16.SubImage">func (*Alpha16) <a href="http://golang.org/src/pkg/image/image.go?s=16903:16948#L593">SubImage</a></h3>
+				<pre>func (p *<a href="#Alpha16">Alpha16</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Config">type <a href="http://golang.org/src/pkg/image/image.go?s=1133:1201#L19">Config</a></h2>
+			<pre>type Config struct {
+        ColorModel    <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a>
+        Width, Height <a href="../builtin/index.html#int">int</a>
+}</pre>
+			<p>
+Config holds an image&#39;s color model and dimensions.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DecodeConfig">func <a href="http://golang.org/src/pkg/image/format.go?s=2674:2728#L82">DecodeConfig</a></h3>
+				<pre>func DecodeConfig(r <a href="../io/index.html">io</a>.<a href="../io/index.html#Reader">Reader</a>) (<a href="#Config">Config</a>, <a href="../builtin/index.html#string">string</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+DecodeConfig decodes the color model and dimensions of an image that has
+been encoded in a registered format. The string returned is the format name
+used during format registration. Format registration is typically done by
+the init method of the codec-specific package.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Gray">type <a href="http://golang.org/src/pkg/image/image.go?s=17990:18290#L635">Gray</a></h2>
+			<pre>type Gray struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, as gray values. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*1].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+Gray is an in-memory image whose At method returns color.Gray values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewGray">func <a href="http://golang.org/src/pkg/image/image.go?s=19836:19867#L703">NewGray</a></h3>
+				<pre>func NewGray(r <a href="#Rectangle">Rectangle</a>) *<a href="#Gray">Gray</a></pre>
+				<p>
+NewGray returns a new Gray with the given bounds.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Gray.At">func (*Gray) <a href="http://golang.org/src/pkg/image/image.go?s=18413:18452#L649">At</a></h3>
+				<pre>func (p *<a href="#Gray">Gray</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray.Bounds">func (*Gray) <a href="http://golang.org/src/pkg/image/image.go?s=18360:18393#L647">Bounds</a></h3>
+				<pre>func (p *<a href="#Gray">Gray</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray.ColorModel">func (*Gray) <a href="http://golang.org/src/pkg/image/image.go?s=18292:18331#L645">ColorModel</a></h3>
+				<pre>func (p *<a href="#Gray">Gray</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray.Opaque">func (*Gray) <a href="http://golang.org/src/pkg/image/image.go?s=19736:19764#L698">Opaque</a></h3>
+				<pre>func (p *<a href="#Gray">Gray</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Gray.PixOffset">func (*Gray) <a href="http://golang.org/src/pkg/image/image.go?s=18671:18709#L659">PixOffset</a></h3>
+				<pre>func (p *<a href="#Gray">Gray</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Gray.Set">func (*Gray) <a href="http://golang.org/src/pkg/image/image.go?s=18770:18813#L663">Set</a></h3>
+				<pre>func (p *<a href="#Gray">Gray</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray.SetGray">func (*Gray) <a href="http://golang.org/src/pkg/image/image.go?s=18941:18987#L671">SetGray</a></h3>
+				<pre>func (p *<a href="#Gray">Gray</a>) SetGray(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Gray">Gray</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray.SubImage">func (*Gray) <a href="http://golang.org/src/pkg/image/image.go?s=19226:19268#L681">SubImage</a></h3>
+				<pre>func (p *<a href="#Gray">Gray</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Gray16">type <a href="http://golang.org/src/pkg/image/image.go?s=20032:20355#L710">Gray16</a></h2>
+			<pre>type Gray16 struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, as gray values in big-endian format. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*2].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+Gray16 is an in-memory image whose At method returns color.Gray16 values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewGray16">func <a href="http://golang.org/src/pkg/image/image.go?s=22062:22097#L781">NewGray16</a></h3>
+				<pre>func NewGray16(r <a href="#Rectangle">Rectangle</a>) *<a href="#Gray16">Gray16</a></pre>
+				<p>
+NewGray16 returns a new Gray16 with the given bounds.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Gray16.At">func (*Gray16) <a href="http://golang.org/src/pkg/image/image.go?s=20484:20525#L724">At</a></h3>
+				<pre>func (p *<a href="#Gray16">Gray16</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray16.Bounds">func (*Gray16) <a href="http://golang.org/src/pkg/image/image.go?s=20429:20464#L722">Bounds</a></h3>
+				<pre>func (p *<a href="#Gray16">Gray16</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray16.ColorModel">func (*Gray16) <a href="http://golang.org/src/pkg/image/image.go?s=20357:20398#L720">ColorModel</a></h3>
+				<pre>func (p *<a href="#Gray16">Gray16</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray16.Opaque">func (*Gray16) <a href="http://golang.org/src/pkg/image/image.go?s=21956:21986#L776">Opaque</a></h3>
+				<pre>func (p *<a href="#Gray16">Gray16</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Gray16.PixOffset">func (*Gray16) <a href="http://golang.org/src/pkg/image/image.go?s=20782:20822#L734">PixOffset</a></h3>
+				<pre>func (p *<a href="#Gray16">Gray16</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Gray16.Set">func (*Gray16) <a href="http://golang.org/src/pkg/image/image.go?s=20883:20928#L738">Set</a></h3>
+				<pre>func (p *<a href="#Gray16">Gray16</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray16.SetGray16">func (*Gray16) <a href="http://golang.org/src/pkg/image/image.go?s=21110:21162#L748">SetGray16</a></h3>
+				<pre>func (p *<a href="#Gray16">Gray16</a>) SetGray16(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Gray16">Gray16</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Gray16.SubImage">func (*Gray16) <a href="http://golang.org/src/pkg/image/image.go?s=21440:21484#L759">SubImage</a></h3>
+				<pre>func (p *<a href="#Gray16">Gray16</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Image">type <a href="http://golang.org/src/pkg/image/image.go?s=1292:1768#L26">Image</a></h2>
+			<pre>type Image interface {
+        <span class="comment">// ColorModel returns the Image&#39;s color model.</span>
+        ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a>
+        <span class="comment">// Bounds returns the domain for which At can return non-zero color.</span>
+        <span class="comment">// The bounds do not necessarily contain the point (0, 0).</span>
+        Bounds() <a href="#Rectangle">Rectangle</a>
+        <span class="comment">// At returns the color of the pixel at (x, y).</span>
+        <span class="comment">// At(Bounds().Min.X, Bounds().Min.Y) returns the upper-left pixel of the grid.</span>
+        <span class="comment">// At(Bounds().Max.X-1, Bounds().Max.Y-1) returns the lower-right one.</span>
+        At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>
+}</pre>
+			<p>
+Image is a finite rectangular grid of color.Color values taken from a color
+model.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Decode">func <a href="http://golang.org/src/pkg/image/format.go?s=2204:2251#L68">Decode</a></h3>
+				<pre>func Decode(r <a href="../io/index.html">io</a>.<a href="../io/index.html#Reader">Reader</a>) (<a href="#Image">Image</a>, <a href="../builtin/index.html#string">string</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Decode decodes an image that has been encoded in a registered format.
+The string returned is the format name used during format registration.
+Format registration is typically done by the init method of the codec-
+specific package.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="NRGBA">type <a href="http://golang.org/src/pkg/image/image.go?s=7717:8023#L253">NRGBA</a></h2>
+			<pre>type NRGBA struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, in R, G, B, A order. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*4].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+NRGBA is an in-memory image whose At method returns color.NRGBA values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewNRGBA">func <a href="http://golang.org/src/pkg/image/image.go?s=9985:10018#L341">NewNRGBA</a></h3>
+				<pre>func NewNRGBA(r <a href="#Rectangle">Rectangle</a>) *<a href="#NRGBA">NRGBA</a></pre>
+				<p>
+NewNRGBA returns a new NRGBA with the given bounds.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="NRGBA.At">func (*NRGBA) <a href="http://golang.org/src/pkg/image/image.go?s=8149:8189#L267">At</a></h3>
+				<pre>func (p *<a href="#NRGBA">NRGBA</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA.Bounds">func (*NRGBA) <a href="http://golang.org/src/pkg/image/image.go?s=8095:8129#L265">Bounds</a></h3>
+				<pre>func (p *<a href="#NRGBA">NRGBA</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA.ColorModel">func (*NRGBA) <a href="http://golang.org/src/pkg/image/image.go?s=8025:8065#L263">ColorModel</a></h3>
+				<pre>func (p *<a href="#NRGBA">NRGBA</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA.Opaque">func (*NRGBA) <a href="http://golang.org/src/pkg/image/image.go?s=9648:9677#L323">Opaque</a></h3>
+				<pre>func (p *<a href="#NRGBA">NRGBA</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NRGBA.PixOffset">func (*NRGBA) <a href="http://golang.org/src/pkg/image/image.go?s=8448:8487#L277">PixOffset</a></h3>
+				<pre>func (p *<a href="#NRGBA">NRGBA</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="NRGBA.Set">func (*NRGBA) <a href="http://golang.org/src/pkg/image/image.go?s=8548:8592#L281">Set</a></h3>
+				<pre>func (p *<a href="#NRGBA">NRGBA</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA.SetNRGBA">func (*NRGBA) <a href="http://golang.org/src/pkg/image/image.go?s=8791:8840#L293">SetNRGBA</a></h3>
+				<pre>func (p *<a href="#NRGBA">NRGBA</a>) SetNRGBA(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#NRGBA">NRGBA</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA.SubImage">func (*NRGBA) <a href="http://golang.org/src/pkg/image/image.go?s=9135:9178#L306">SubImage</a></h3>
+				<pre>func (p *<a href="#NRGBA">NRGBA</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="NRGBA64">type <a href="http://golang.org/src/pkg/image/image.go?s=10186:10516#L348">NRGBA64</a></h2>
+			<pre>type NRGBA64 struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, in R, G, B, A order and big-endian format. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*8].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+NRGBA64 is an in-memory image whose At method returns color.NRGBA64 values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewNRGBA64">func <a href="http://golang.org/src/pkg/image/image.go?s=12980:13017#L449">NewNRGBA64</a></h3>
+				<pre>func NewNRGBA64(r <a href="#Rectangle">Rectangle</a>) *<a href="#NRGBA64">NRGBA64</a></pre>
+				<p>
+NewNRGBA64 returns a new NRGBA64 with the given bounds.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="NRGBA64.At">func (*NRGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=10648:10690#L362">At</a></h3>
+				<pre>func (p *<a href="#NRGBA64">NRGBA64</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA64.Bounds">func (*NRGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=10592:10628#L360">Bounds</a></h3>
+				<pre>func (p *<a href="#NRGBA64">NRGBA64</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA64.ColorModel">func (*NRGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=10518:10560#L358">ColorModel</a></h3>
+				<pre>func (p *<a href="#NRGBA64">NRGBA64</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA64.Opaque">func (*NRGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=12613:12644#L431">Opaque</a></h3>
+				<pre>func (p *<a href="#NRGBA64">NRGBA64</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NRGBA64.PixOffset">func (*NRGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=11093:11134#L377">PixOffset</a></h3>
+				<pre>func (p *<a href="#NRGBA64">NRGBA64</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="NRGBA64.Set">func (*NRGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=11195:11241#L381">Set</a></h3>
+				<pre>func (p *<a href="#NRGBA64">NRGBA64</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA64.SetNRGBA64">func (*NRGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=11596:11651#L397">SetNRGBA64</a></h3>
+				<pre>func (p *<a href="#NRGBA64">NRGBA64</a>) SetNRGBA64(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#NRGBA64">NRGBA64</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="NRGBA64.SubImage">func (*NRGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=12094:12139#L414">SubImage</a></h3>
+				<pre>func (p *<a href="#NRGBA64">NRGBA64</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Paletted">type <a href="http://golang.org/src/pkg/image/image.go?s=22260:22627#L788">Paletted</a></h2>
+			<pre>type Paletted struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, as palette indices. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*1].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+        <span class="comment">// Palette is the image&#39;s palette.</span>
+        Palette <a href="color/index.html">color</a>.<a href="color/index.html#Palette">Palette</a>
+}</pre>
+			<p>
+Paletted is an in-memory image of uint8 indices into a given palette.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewPaletted">func <a href="http://golang.org/src/pkg/image/image.go?s=24802:24858#L890">NewPaletted</a></h3>
+				<pre>func NewPaletted(r <a href="#Rectangle">Rectangle</a>, p <a href="color/index.html">color</a>.<a href="color/index.html#Palette">Palette</a>) *<a href="#Paletted">Paletted</a></pre>
+				<p>
+NewPaletted returns a new Paletted with the given width, height and palette.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Paletted.At">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=22752:22795#L804">At</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Paletted.Bounds">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=22695:22732#L802">Bounds</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Paletted.ColorIndexAt">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=23317:23364#L829">ColorIndexAt</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) ColorIndexAt(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#uint8">uint8</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Paletted.ColorModel">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=22629:22672#L800">ColorModel</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Paletted.Opaque">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=24344:24376#L867">Opaque</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Paletted.PixOffset">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=23055:23097#L817">PixOffset</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Paletted.Set">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=23158:23205#L821">Set</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Paletted.SetColorIndex">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=23457:23512#L837">SetColorIndex</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) SetColorIndex(x, y <a href="../builtin/index.html#int">int</a>, index <a href="../builtin/index.html#uint8">uint8</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="Paletted.SubImage">func (*Paletted) <a href="http://golang.org/src/pkg/image/image.go?s=23753:23799#L847">SubImage</a></h3>
+				<pre>func (p *<a href="#Paletted">Paletted</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="PalettedImage">type <a href="http://golang.org/src/pkg/image/image.go?s=2088:2224#L43">PalettedImage</a></h2>
+			<pre>type PalettedImage interface {
+        <span class="comment">// ColorIndexAt returns the palette index of the pixel at (x, y).</span>
+        ColorIndexAt(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#uint8">uint8</a>
+        <a href="#Image">Image</a>
+}</pre>
+			<p>
+PalettedImage is an image whose colors may come from a limited palette.
+If m is a PalettedImage and m.ColorModel() returns a PalettedColorModel p,
+then m.At(x, y) should be equivalent to p[m.ColorIndexAt(x, y)]. If m&#39;s
+color model is not a PalettedColorModel, then ColorIndexAt&#39;s behavior is
+undefined.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Point">type <a href="http://golang.org/src/pkg/image/geom.go?s=271:302#L2">Point</a></h2>
+			<pre>type Point struct {
+        X, Y <a href="../builtin/index.html#int">int</a>
+}</pre>
+			<p>
+A Point is an X, Y coordinate pair. The axes increase right and down.
+</p>
+
+
+			
+
+			
+				<pre>var <span id="ZP">ZP</span> <a href="#Point">Point</a></pre>
+				<p>
+ZP is the zero Point.
+</p>
+
+			
+
+			
+
+			
+				
+				<h3 id="Pt">func <a href="http://golang.org/src/pkg/image/geom.go?s=1527:1550#L62">Pt</a></h3>
+				<pre>func Pt(X, Y <a href="../builtin/index.html#int">int</a>) <a href="#Point">Point</a></pre>
+				<p>
+Pt is shorthand for Point{X, Y}.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Point.Add">func (Point) <a href="http://golang.org/src/pkg/image/geom.go?s=496:529#L12">Add</a></h3>
+				<pre>func (p <a href="#Point">Point</a>) Add(q <a href="#Point">Point</a>) <a href="#Point">Point</a></pre>
+				<p>
+Add returns the vector p+q.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Point.Div">func (Point) <a href="http://golang.org/src/pkg/image/geom.go?s=808:839#L27">Div</a></h3>
+				<pre>func (p <a href="#Point">Point</a>) Div(k <a href="../builtin/index.html#int">int</a>) <a href="#Point">Point</a></pre>
+				<p>
+Div returns the vector p/k.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Point.Eq">func (Point) <a href="http://golang.org/src/pkg/image/geom.go?s=1382:1413#L54">Eq</a></h3>
+				<pre>func (p <a href="#Point">Point</a>) Eq(q <a href="#Point">Point</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Eq returns whether p and q are equal.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Point.In">func (Point) <a href="http://golang.org/src/pkg/image/geom.go?s=910:945#L32">In</a></h3>
+				<pre>func (p <a href="#Point">Point</a>) In(r <a href="#Rectangle">Rectangle</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+In returns whether p is in r.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Point.Mod">func (Point) <a href="http://golang.org/src/pkg/image/geom.go?s=1149:1186#L39">Mod</a></h3>
+				<pre>func (p <a href="#Point">Point</a>) Mod(r <a href="#Rectangle">Rectangle</a>) <a href="#Point">Point</a></pre>
+				<p>
+Mod returns the point q in r such that p.X-q.X is a multiple of r&#39;s width
+and p.Y-q.Y is a multiple of r&#39;s height.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Point.Mul">func (Point) <a href="http://golang.org/src/pkg/image/geom.go?s=708:739#L22">Mul</a></h3>
+				<pre>func (p <a href="#Point">Point</a>) Mul(k <a href="../builtin/index.html#int">int</a>) <a href="#Point">Point</a></pre>
+				<p>
+Mul returns the vector p*k.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Point.String">func (Point) <a href="http://golang.org/src/pkg/image/geom.go?s=365:395#L7">String</a></h3>
+				<pre>func (p <a href="#Point">Point</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+String returns a string representation of p like &#34;(3,4)&#34;.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Point.Sub">func (Point) <a href="http://golang.org/src/pkg/image/geom.go?s=602:635#L17">Sub</a></h3>
+				<pre>func (p <a href="#Point">Point</a>) Sub(q <a href="#Point">Point</a>) <a href="#Point">Point</a></pre>
+				<p>
+Sub returns the vector p-q.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="RGBA">type <a href="http://golang.org/src/pkg/image/image.go?s=2299:2604#L50">RGBA</a></h2>
+			<pre>type RGBA struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, in R, G, B, A order. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*4].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+RGBA is an in-memory image whose At method returns color.RGBA values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewRGBA">func <a href="http://golang.org/src/pkg/image/image.go?s=4547:4578#L138">NewRGBA</a></h3>
+				<pre>func NewRGBA(r <a href="#Rectangle">Rectangle</a>) *<a href="#RGBA">RGBA</a></pre>
+				<p>
+NewRGBA returns a new RGBA with the given bounds.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="RGBA.At">func (*RGBA) <a href="http://golang.org/src/pkg/image/image.go?s=2727:2766#L64">At</a></h3>
+				<pre>func (p *<a href="#RGBA">RGBA</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA.Bounds">func (*RGBA) <a href="http://golang.org/src/pkg/image/image.go?s=2674:2707#L62">Bounds</a></h3>
+				<pre>func (p *<a href="#RGBA">RGBA</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA.ColorModel">func (*RGBA) <a href="http://golang.org/src/pkg/image/image.go?s=2606:2645#L60">ColorModel</a></h3>
+				<pre>func (p *<a href="#RGBA">RGBA</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA.Opaque">func (*RGBA) <a href="http://golang.org/src/pkg/image/image.go?s=4213:4241#L120">Opaque</a></h3>
+				<pre>func (p *<a href="#RGBA">RGBA</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="RGBA.PixOffset">func (*RGBA) <a href="http://golang.org/src/pkg/image/image.go?s=3023:3061#L74">PixOffset</a></h3>
+				<pre>func (p *<a href="#RGBA">RGBA</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="RGBA.Set">func (*RGBA) <a href="http://golang.org/src/pkg/image/image.go?s=3122:3165#L78">Set</a></h3>
+				<pre>func (p *<a href="#RGBA">RGBA</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA.SetRGBA">func (*RGBA) <a href="http://golang.org/src/pkg/image/image.go?s=3362:3408#L90">SetRGBA</a></h3>
+				<pre>func (p *<a href="#RGBA">RGBA</a>) SetRGBA(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#RGBA">RGBA</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA.SubImage">func (*RGBA) <a href="http://golang.org/src/pkg/image/image.go?s=3703:3745#L103">SubImage</a></h3>
+				<pre>func (p *<a href="#RGBA">RGBA</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="RGBA64">type <a href="http://golang.org/src/pkg/image/image.go?s=4743:5072#L145">RGBA64</a></h2>
+			<pre>type RGBA64 struct {
+        <span class="comment">// Pix holds the image&#39;s pixels, in R, G, B, A order and big-endian format. The pixel at</span>
+        <span class="comment">// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*8].</span>
+        Pix []<a href="../builtin/index.html#uint8">uint8</a>
+        <span class="comment">// Stride is the Pix stride (in bytes) between vertically adjacent pixels.</span>
+        Stride <a href="../builtin/index.html#int">int</a>
+        <span class="comment">// Rect is the image&#39;s bounds.</span>
+        Rect <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+RGBA64 is an in-memory image whose At method returns color.RGBA64 values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewRGBA64">func <a href="http://golang.org/src/pkg/image/image.go?s=7517:7552#L246">NewRGBA64</a></h3>
+				<pre>func NewRGBA64(r <a href="#Rectangle">Rectangle</a>) *<a href="#RGBA64">RGBA64</a></pre>
+				<p>
+NewRGBA64 returns a new RGBA64 with the given bounds.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="RGBA64.At">func (*RGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=5201:5242#L159">At</a></h3>
+				<pre>func (p *<a href="#RGBA64">RGBA64</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA64.Bounds">func (*RGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=5146:5181#L157">Bounds</a></h3>
+				<pre>func (p *<a href="#RGBA64">RGBA64</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA64.ColorModel">func (*RGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=5074:5115#L155">ColorModel</a></h3>
+				<pre>func (p *<a href="#RGBA64">RGBA64</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA64.Opaque">func (*RGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=7153:7183#L228">Opaque</a></h3>
+				<pre>func (p *<a href="#RGBA64">RGBA64</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="RGBA64.PixOffset">func (*RGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=5643:5683#L174">PixOffset</a></h3>
+				<pre>func (p *<a href="#RGBA64">RGBA64</a>) PixOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+PixOffset returns the index of the first element of Pix that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="RGBA64.Set">func (*RGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=5744:5789#L178">Set</a></h3>
+				<pre>func (p *<a href="#RGBA64">RGBA64</a>) Set(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA64.SetRGBA64">func (*RGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=6142:6194#L194">SetRGBA64</a></h3>
+				<pre>func (p *<a href="#RGBA64">RGBA64</a>) SetRGBA64(x, y <a href="../builtin/index.html#int">int</a>, c <a href="color/index.html">color</a>.<a href="color/index.html#RGBA64">RGBA64</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="RGBA64.SubImage">func (*RGBA64) <a href="http://golang.org/src/pkg/image/image.go?s=6637:6681#L211">SubImage</a></h3>
+				<pre>func (p *<a href="#RGBA64">RGBA64</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Rectangle">type <a href="http://golang.org/src/pkg/image/geom.go?s=1832:1873#L70">Rectangle</a></h2>
+			<pre>type Rectangle struct {
+        Min, Max <a href="#Point">Point</a>
+}</pre>
+			<p>
+A Rectangle contains the points with Min.X &lt;= X &lt; Max.X, Min.Y &lt;= Y &lt; Max.Y.
+It is well-formed if Min.X &lt;= Max.X and likewise for Y. Points are always
+well-formed. A rectangle&#39;s methods always return well-formed outputs for
+well-formed inputs.
+</p>
+
+
+			
+
+			
+				<pre>var <span id="ZR">ZR</span> <a href="#Rectangle">Rectangle</a></pre>
+				<p>
+ZR is the zero Rectangle.
+</p>
+
+			
+
+			
+
+			
+				
+				<h3 id="Rect">func <a href="http://golang.org/src/pkg/image/geom.go?s=5288:5327#L216">Rect</a></h3>
+				<pre>func Rect(x0, y0, x1, y1 <a href="../builtin/index.html#int">int</a>) <a href="#Rectangle">Rectangle</a></pre>
+				<p>
+Rect is shorthand for Rectangle{Pt(x0, y0), Pt(x1, y1)}.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Rectangle.Add">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=2380:2421#L98">Add</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Add(p <a href="#Point">Point</a>) <a href="#Rectangle">Rectangle</a></pre>
+				<p>
+Add returns the rectangle r translated by p.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Canon">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=4999:5035#L202">Canon</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Canon() <a href="#Rectangle">Rectangle</a></pre>
+				<p>
+Canon returns the canonical version of r. The returned rectangle has minimum
+and maximum coordinates swapped if necessary so that it is well-formed.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Dx">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=2053:2080#L80">Dx</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Dx() <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+Dx returns r&#39;s width.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Dy">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=2138:2165#L85">Dy</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Dy() <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+Dy returns r&#39;s height.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Empty">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=4043:4074#L173">Empty</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Empty() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Empty returns whether the rectangle contains no points.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Eq">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=4170:4209#L178">Eq</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Eq(s <a href="#Rectangle">Rectangle</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Eq returns whether r and s are equal.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.In">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=4567:4606#L190">In</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) In(s <a href="#Rectangle">Rectangle</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+In returns whether every point in r is in s.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Inset">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=2905:2946#L116">Inset</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Inset(n <a href="../builtin/index.html#int">int</a>) <a href="#Rectangle">Rectangle</a></pre>
+				<p>
+Inset returns the rectangle r inset by n, which may be negative. If either
+of r&#39;s dimensions is less than 2*n then an empty rectangle near the center
+of r will be returned.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Intersect">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=3350:3401#L136">Intersect</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Intersect(s <a href="#Rectangle">Rectangle</a>) <a href="#Rectangle">Rectangle</a></pre>
+				<p>
+Intersect returns the largest rectangle contained by both r and s. If the
+two rectangles do not overlap then the zero rectangle will be returned.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Overlaps">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=4377:4422#L184">Overlaps</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Overlaps(s <a href="#Rectangle">Rectangle</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Overlaps returns whether r and s have a non-empty intersection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Size">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=2235:2266#L90">Size</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Size() <a href="#Point">Point</a></pre>
+				<p>
+Size returns r&#39;s width and height.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.String">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=1942:1976#L75">String</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+String returns a string representation of r like &#34;(3,4)-(6,5)&#34;.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Sub">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=2576:2617#L106">Sub</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Sub(p <a href="#Point">Point</a>) <a href="#Rectangle">Rectangle</a></pre>
+				<p>
+Sub returns the rectangle r translated by -p.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rectangle.Union">func (Rectangle) <a href="http://golang.org/src/pkg/image/geom.go?s=3733:3780#L156">Union</a></h3>
+				<pre>func (r <a href="#Rectangle">Rectangle</a>) Union(s <a href="#Rectangle">Rectangle</a>) <a href="#Rectangle">Rectangle</a></pre>
+				<p>
+Union returns the smallest rectangle that contains both r and s.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Uniform">type <a href="http://golang.org/src/pkg/image/names.go?s=668:706#L14">Uniform</a></h2>
+			<pre>type Uniform struct {
+        C <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>
+}</pre>
+			<p>
+Uniform is an infinite-sized Image of uniform color.
+It implements the color.Color, color.Model, and Image interfaces.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewUniform">func <a href="http://golang.org/src/pkg/image/names.go?s=1220:1259#L40">NewUniform</a></h3>
+				<pre>func NewUniform(c <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>) *<a href="#Uniform">Uniform</a></pre>
+				
+				
+			
+
+			
+				
+				<h3 id="Uniform.At">func (*Uniform) <a href="http://golang.org/src/pkg/image/names.go?s=998:1040#L32">At</a></h3>
+				<pre>func (c *<a href="#Uniform">Uniform</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Uniform.Bounds">func (*Uniform) <a href="http://golang.org/src/pkg/image/names.go?s=903:939#L30">Bounds</a></h3>
+				<pre>func (c *<a href="#Uniform">Uniform</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Uniform.ColorModel">func (*Uniform) <a href="http://golang.org/src/pkg/image/names.go?s=777:819#L22">ColorModel</a></h3>
+				<pre>func (c *<a href="#Uniform">Uniform</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Uniform.Convert">func (*Uniform) <a href="http://golang.org/src/pkg/image/names.go?s=835:885#L26">Convert</a></h3>
+				<pre>func (c *<a href="#Uniform">Uniform</a>) Convert(<a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Uniform.Opaque">func (*Uniform) <a href="http://golang.org/src/pkg/image/names.go?s=1137:1168#L35">Opaque</a></h3>
+				<pre>func (c *<a href="#Uniform">Uniform</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Opaque scans the entire image and returns whether or not it is fully opaque.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Uniform.RGBA">func (*Uniform) <a href="http://golang.org/src/pkg/image/names.go?s=708:752#L18">RGBA</a></h3>
+				<pre>func (c *<a href="#Uniform">Uniform</a>) RGBA() (r, g, b, a <a href="../builtin/index.html#uint32">uint32</a>)</pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="YCbCr">type <a href="http://golang.org/src/pkg/image/ycbcr.go?s=1514:1661#L36">YCbCr</a></h2>
+			<pre>type YCbCr struct {
+        Y, Cb, Cr      []<a href="../builtin/index.html#uint8">uint8</a>
+        YStride        <a href="../builtin/index.html#int">int</a>
+        CStride        <a href="../builtin/index.html#int">int</a>
+        SubsampleRatio <a href="#YCbCrSubsampleRatio">YCbCrSubsampleRatio</a>
+        Rect           <a href="#Rectangle">Rectangle</a>
+}</pre>
+			<p>
+YCbCr is an in-memory image of Y&#39;CbCr colors. There is one Y sample per
+pixel, but each Cb and Cr sample can span one or more pixels.
+YStride is the Y slice index delta between vertically adjacent pixels.
+CStride is the Cb and Cr slice index delta between vertically adjacent pixels
+that map to separate chroma samples.
+It is not an absolute requirement, but YStride and len(Y) are typically
+multiples of 8, and:
+</p>
+<pre>For 4:4:4, CStride == YStride/1 &amp;&amp; len(Cb) == len(Cr) == len(Y)/1.
+For 4:2:2, CStride == YStride/2 &amp;&amp; len(Cb) == len(Cr) == len(Y)/2.
+For 4:2:0, CStride == YStride/2 &amp;&amp; len(Cb) == len(Cr) == len(Y)/4.
+For 4:4:0, CStride == YStride/1 &amp;&amp; len(Cb) == len(Cr) == len(Y)/2.
+</pre>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewYCbCr">func <a href="http://golang.org/src/pkg/image/ycbcr.go?s=3668:3737#L116">NewYCbCr</a></h3>
+				<pre>func NewYCbCr(r <a href="#Rectangle">Rectangle</a>, subsampleRatio <a href="#YCbCrSubsampleRatio">YCbCrSubsampleRatio</a>) *<a href="#YCbCr">YCbCr</a></pre>
+				<p>
+NewYCbCr returns a new YCbCr with the given bounds and subsample ratio.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="YCbCr.At">func (*YCbCr) <a href="http://golang.org/src/pkg/image/ycbcr.go?s=1789:1829#L52">At</a></h3>
+				<pre>func (p *<a href="#YCbCr">YCbCr</a>) At(x, y <a href="../builtin/index.html#int">int</a>) <a href="color/index.html">color</a>.<a href="color/index.html#Color">Color</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="YCbCr.Bounds">func (*YCbCr) <a href="http://golang.org/src/pkg/image/ycbcr.go?s=1734:1768#L48">Bounds</a></h3>
+				<pre>func (p *<a href="#YCbCr">YCbCr</a>) Bounds() <a href="#Rectangle">Rectangle</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="YCbCr.COffset">func (*YCbCr) <a href="http://golang.org/src/pkg/image/ycbcr.go?s=2302:2339#L73">COffset</a></h3>
+				<pre>func (p *<a href="#YCbCr">YCbCr</a>) COffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+COffset returns the index of the first element of Cb or Cr that corresponds
+to the pixel at (x, y).
+</p>
+
+				
+				
+			
+				
+				<h3 id="YCbCr.ColorModel">func (*YCbCr) <a href="http://golang.org/src/pkg/image/ycbcr.go?s=1663:1703#L44">ColorModel</a></h3>
+				<pre>func (p *<a href="#YCbCr">YCbCr</a>) ColorModel() <a href="color/index.html">color</a>.<a href="color/index.html#Model">Model</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="YCbCr.Opaque">func (*YCbCr) <a href="http://golang.org/src/pkg/image/ycbcr.go?s=3545:3574#L111">Opaque</a></h3>
+				<pre>func (p *<a href="#YCbCr">YCbCr</a>) Opaque() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="YCbCr.SubImage">func (*YCbCr) <a href="http://golang.org/src/pkg/image/ycbcr.go?s=2891:2934#L88">SubImage</a></h3>
+				<pre>func (p *<a href="#YCbCr">YCbCr</a>) SubImage(r <a href="#Rectangle">Rectangle</a>) <a href="#Image">Image</a></pre>
+				<p>
+SubImage returns an image representing the portion of the image p visible
+through r. The returned value shares pixels with the original image.
+</p>
+
+				
+				
+			
+				
+				<h3 id="YCbCr.YOffset">func (*YCbCr) <a href="http://golang.org/src/pkg/image/ycbcr.go?s=2097:2134#L67">YOffset</a></h3>
+				<pre>func (p *<a href="#YCbCr">YCbCr</a>) YOffset(x, y <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+YOffset returns the index of the first element of Y that corresponds to
+the pixel at (x, y).
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="YCbCrSubsampleRatio">type <a href="http://golang.org/src/pkg/image/ycbcr.go?s=278:306#L2">YCbCrSubsampleRatio</a></h2>
+			<pre>type YCbCrSubsampleRatio <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+YCbCrSubsampleRatio is the chroma subsample ratio used in a YCbCr image.
+</p>
+
+
+			
+				<pre>const (
+        <span id="YCbCrSubsampleRatio444">YCbCrSubsampleRatio444</span> <a href="#YCbCrSubsampleRatio">YCbCrSubsampleRatio</a> = <a href="../builtin/index.html#iota">iota</a>
+        <span id="YCbCrSubsampleRatio422">YCbCrSubsampleRatio422</span>
+        <span id="YCbCrSubsampleRatio420">YCbCrSubsampleRatio420</span>
+        <span id="YCbCrSubsampleRatio440">YCbCrSubsampleRatio440</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="YCbCrSubsampleRatio.String">func (YCbCrSubsampleRatio) <a href="http://golang.org/src/pkg/image/ycbcr.go?s=442:486#L11">String</a></h3>
+				<pre>func (s <a href="#YCbCrSubsampleRatio">YCbCrSubsampleRatio</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="../index.html">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="color/index.html">color</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package color implements a basic color library.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="draw/index.html">draw</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package draw provides image composition functions.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="gif/index.html">gif</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package gif implements a GIF image decoder.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="jpeg/index.html">jpeg</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package jpeg implements a JPEG image decoder and encoder.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="png/index.html">png</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package png implements a PNG image decoder and encoder.</td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=270&s_ttfb=284&id=1380993863879306', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/image/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

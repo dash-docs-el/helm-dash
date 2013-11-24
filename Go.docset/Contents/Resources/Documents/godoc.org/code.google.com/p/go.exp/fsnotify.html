@@ -1,0 +1,296 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.exp/fsnotify by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:38 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>fsnotify</title>
+  
+    <meta name="twitter:title" content="Package fsnotify">
+    <meta property="og:title" content="Package fsnotify">
+    <meta name="description" content="Package fsnotify implements filesystem notification.">
+    <meta name="twitter:description" content="Package fsnotify implements filesystem notification.">
+    <meta property="og:description" content="Package fsnotify implements filesystem notification.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=exp"><strong>go.exp:</strong></a>
+  <a href="index.html">code.google.com/p/go.exp</a><span class="text-muted">/</span><span class="text-muted">fsnotify</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    <span class="text-muted">|</span> <a href="#pkg-examples">Examples</a>
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package fsnotify</h2>
+    <p><code>import "code.google.com/p/go.exp/fsnotify"</code>
+    </p><p>
+Package fsnotify implements filesystem notification.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    <li><a href="#pkg-constants">Constants</a>
+    
+    
+    
+      </li><li><a href="#FileEvent">type FileEvent</a>
+        <ul>
+        
+        <li><a href="#FileEvent.IsCreate">func (e *FileEvent) IsCreate() bool</a></li><li><a href="#FileEvent.IsDelete">func (e *FileEvent) IsDelete() bool</a></li><li><a href="#FileEvent.IsModify">func (e *FileEvent) IsModify() bool</a></li><li><a href="#FileEvent.IsRename">func (e *FileEvent) IsRename() bool</a></li><li><a href="#FileEvent.String">func (e *FileEvent) String() string</a>
+        </li></ul>
+    
+      </li><li><a href="#Watcher">type Watcher</a>
+        <ul>
+        <li><a href="#NewWatcher">func NewWatcher() (*Watcher, error)</a>
+        </li><li><a href="#Watcher.Close">func (w *Watcher) Close() error</a></li><li><a href="#Watcher.RemoveWatch">func (w *Watcher) RemoveWatch(path string) error</a></li><li><a href="#Watcher.Watch">func (w *Watcher) Watch(path string) error</a></li><li><a href="#Watcher.WatchFlags">func (w *Watcher) WatchFlags(path string, flags uint32) error</a>
+        </li></ul>
+    
+    </li></ul></div>
+
+    <h4 id="pkg-examples">Examples <a class="permalink" href="#pkg-examples">¶</a></h4><ul class="list-unstyled">
+    <li><a href="#example-NewWatcher" onclick="$('#ex-NewWatcher').addClass('in').removeClass('collapse').height('auto')">NewWatcher</a>
+    </li></ul>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/fsnotify/?repo=exp">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify.go?repo=exp">fsnotify.go</a> <a href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp">fsnotify_linux.go</a> </p>
+
+    <h3 id="pkg-constants">Constants <a class="permalink" href="#pkg-constants">¶</a></h3><pre>const (
+    <span id="FSN_CREATE">FSN_CREATE</span> = 1
+    <span id="FSN_MODIFY">FSN_MODIFY</span> = 2
+    <span id="FSN_DELETE">FSN_DELETE</span> = 4
+    <span id="FSN_RENAME">FSN_RENAME</span> = 8
+
+    <span id="FSN_ALL">FSN_ALL</span> = <a href="#FSN_MODIFY">FSN_MODIFY</a> | <a href="#FSN_DELETE">FSN_DELETE</a> | <a href="#FSN_RENAME">FSN_RENAME</a> | <a href="#FSN_CREATE">FSN_CREATE</a>
+)</pre>
+
+    
+
+    
+
+   <h3 id="FileEvent">type <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp#59">FileEvent</a> <a class="permalink" href="#FileEvent">¶</a></h3>
+      <pre>type FileEvent struct {
+    <span id="FileEvent.Name">Name</span> <a href="http://godoc.org/builtin/#string">string</a> <span class="com">// File name (optional)</span>
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre>
+      
+      
+      
+
+        
+
+        <h4 id="FileEvent.IsCreate">func (*FileEvent) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp#66">IsCreate</a> <a class="permalink" href="#FileEvent.IsCreate">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#FileEvent">FileEvent</a>) IsCreate() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsCreate reports whether the FileEvent was triggerd by a creation
+</p>
+
+        
+        <h4 id="FileEvent.IsDelete">func (*FileEvent) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp#71">IsDelete</a> <a class="permalink" href="#FileEvent.IsDelete">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#FileEvent">FileEvent</a>) IsDelete() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsDelete reports whether the FileEvent was triggerd by a delete
+</p>
+
+        
+        <h4 id="FileEvent.IsModify">func (*FileEvent) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp#76">IsModify</a> <a class="permalink" href="#FileEvent.IsModify">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#FileEvent">FileEvent</a>) IsModify() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsModify reports whether the FileEvent was triggerd by a file modification or attribute change
+</p>
+
+        
+        <h4 id="FileEvent.IsRename">func (*FileEvent) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp#81">IsRename</a> <a class="permalink" href="#FileEvent.IsRename">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#FileEvent">FileEvent</a>) IsRename() <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsRename reports whether the FileEvent was triggerd by a change name
+</p>
+
+        
+        <h4 id="FileEvent.String">func (*FileEvent) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify.go?repo=exp#86">String</a> <a class="permalink" href="#FileEvent.String">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#FileEvent">FileEvent</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+String formats the event e in the form
+"filename: DELETE|MODIFY|..."
+</p>
+
+        
+        
+
+    <h3 id="Watcher">type <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp#90">Watcher</a> <a class="permalink" href="#Watcher">¶</a></h3>
+      <pre>type Watcher struct {
+    <span id="Watcher.Error">Error</span> chan <a href="http://godoc.org/builtin/#error">error</a> <span class="com">// Errors are sent on this channel</span>
+
+    <span id="Watcher.Event">Event</span> chan *<a href="#FileEvent">FileEvent</a> <span class="com">// Events are returned on this channel</span>
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre>
+      
+      
+      
+
+        <h4 id="NewWatcher">func <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp#105">NewWatcher</a> <a class="permalink" href="#NewWatcher">¶</a></h4>
+        <pre class="funcdecl">func NewWatcher() (*<a href="#Watcher">Watcher</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+NewWatcher creates and returns a new inotify instance using inotify_init(2)
+</p>
+
+        <div class="panel-group">
+<div class="panel panel-default" id="example-NewWatcher">
+  <div class="panel-heading"><a class="accordion-toggle" data-toggle="collapse" href="#ex-NewWatcher">Example</a></div>
+  <div id="ex-NewWatcher" class="panel-collapse collapse"><div class="panel-body">
+    
+    <p>Code:<span class="pull-right"><a href="http://play.golang.org/p/u3NmWSjd1M">play</a>&nbsp;</span>
+    </p><pre>watcher, err := fsnotify.NewWatcher()
+if err != nil {
+    log.Fatal(err)
+}
+
+go func() {
+    for {
+        select {
+        case ev := &lt;-watcher.Event:
+            log.Println("event:", ev)
+        case err := &lt;-watcher.Error:
+            log.Println("error:", err)
+        }
+    }
+}()
+
+err = watcher.Watch("/tmp/foo")
+if err != nil {
+    log.Fatal(err)
+}
+</pre>
+    
+  </div></div>
+</div>
+
+</div>
+
+        
+
+        <h4 id="Watcher.Close">func (*Watcher) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify_linux.go?repo=exp#129">Close</a> <a class="permalink" href="#Watcher.Close">¶</a></h4>
+        <pre class="funcdecl">func (w *<a href="#Watcher">Watcher</a>) Close() <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Close closes an inotify watcher instance
+It sends a message to the reader goroutine to quit and removes all watches
+associated with the inotify instance
+</p>
+
+        
+        <h4 id="Watcher.RemoveWatch">func (*Watcher) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify.go?repo=exp#77">RemoveWatch</a> <a class="permalink" href="#Watcher.RemoveWatch">¶</a></h4>
+        <pre class="funcdecl">func (w *<a href="#Watcher">Watcher</a>) RemoveWatch(path <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Remove a watch on a file
+</p>
+
+        
+        <h4 id="Watcher.Watch">func (*Watcher) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify.go?repo=exp#61">Watch</a> <a class="permalink" href="#Watcher.Watch">¶</a></h4>
+        <pre class="funcdecl">func (w *<a href="#Watcher">Watcher</a>) Watch(path <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Watch a given file path
+</p>
+
+        
+        <h4 id="Watcher.WatchFlags">func (*Watcher) <a title="View Source" href="http://code.google.com/p/go/source/browse/fsnotify/fsnotify.go?repo=exp#69">WatchFlags</a> <a class="permalink" href="#Watcher.WatchFlags">¶</a></h4>
+        <pre class="funcdecl">func (w *<a href="#Watcher">Watcher</a>) WatchFlags(path <a href="http://godoc.org/builtin/#string">string</a>, flags <a href="http://godoc.org/builtin/#uint32">uint32</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Watch a given file path for a particular set of notifications (FSN_MODIFY etc.)
+</p>
+
+        
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.exp/fsnotify"></form>
+  <p>Package fsnotify imports <a href="fsnotifya687.html?imports">7 packages</a> (<a href="fsnotify75f0.html?import-graph">graph</a>) and is imported by <a href="fsnotifyefa9.html?importers">5 packages</a>.
+  Updated <span class="timeago" title="2013-09-22T03:31:56Z">2013-09-22</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.exp/fsnotify by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:40 GMT -->
+
+</body>

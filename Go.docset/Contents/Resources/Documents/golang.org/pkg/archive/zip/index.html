@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/archive/zip/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>zip</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package zip</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "archive/zip"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package zip provides support for reading and writing ZIP archives.
+</p>
+<p>
+See: <a href="http://www.pkware.com/documents/casestudies/APPNOTE.TXT">http://www.pkware.com/documents/casestudies/APPNOTE.TXT</a>
+</p>
+<p>
+This package does not support disk spanning.
+</p>
+<p>
+A note about ZIP64:
+</p>
+<p>
+To be backwards compatible the FileHeader has both 32 and 64 bit Size
+fields. The 64 bit fields will always contain the correct value and
+for normal archives both fields will be the same. For files requiring
+the ZIP64 format the 32 bit fields will be 0xffffffff and the 64 bit
+fields must be used instead.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+			
+				
+				<dd><a href="#File">type File</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.Open">func (f *File) Open() (rc io.ReadCloser, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#FileHeader">type FileHeader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileInfoHeader">func FileInfoHeader(fi os.FileInfo) (*FileHeader, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.FileInfo">func (h *FileHeader) FileInfo() os.FileInfo</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.ModTime">func (h *FileHeader) ModTime() time.Time</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.Mode">func (h *FileHeader) Mode() (mode os.FileMode)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.SetModTime">func (h *FileHeader) SetModTime(t time.Time)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.SetMode">func (h *FileHeader) SetMode(mode os.FileMode)</a></dd>
+				
+			
+				
+				<dd><a href="#ReadCloser">type ReadCloser</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OpenReader">func OpenReader(name string) (*ReadCloser, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ReadCloser.Close">func (rc *ReadCloser) Close() error</a></dd>
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReader">func NewReader(r io.ReaderAt, size int64) (*Reader, error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriter">func NewWriter(w io.Writer) *Writer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Close">func (w *Writer) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Create">func (w *Writer) Create(name string) (io.Writer, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.CreateHeader">func (w *Writer) CreateHeader(fh *FileHeader) (io.Writer, error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Reader">Reader</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Writer">Writer</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/archive/zip/reader.go">reader.go</a>
+			
+				<a href="http://golang.org/src/pkg/archive/zip/struct.go">struct.go</a>
+			
+				<a href="http://golang.org/src/pkg/archive/zip/writer.go">writer.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="Store">Store</span>   <a href="../../builtin/index.html#uint16">uint16</a> = 0
+        <span id="Deflate">Deflate</span> <a href="../../builtin/index.html#uint16">uint16</a> = 8
+)</pre>
+				<p>
+Compression methods.
+</p>
+
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+        <span id="ErrFormat">ErrFormat</span>    = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;zip: not a valid zip file&#34;)
+        <span id="ErrAlgorithm">ErrAlgorithm</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;zip: unsupported compression algorithm&#34;)
+        <span id="ErrChecksum">ErrChecksum</span>  = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;zip: checksum error&#34;)
+)</pre>
+				
+			
+		
+		
+		
+			
+			
+			<h2 id="File">type <a href="http://golang.org/src/pkg/archive/zip/reader.go?s=598:696#L26">File</a></h2>
+			<pre>type File struct {
+        <a href="#FileHeader">FileHeader</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="File.Open">func (*File) <a href="http://golang.org/src/pkg/archive/zip/reader.go?s=2711:2762#L111">Open</a></h3>
+				<pre>func (f *<a href="#File">File</a>) Open() (rc <a href="../../io/index.html">io</a>.<a href="../../io/index.html#ReadCloser">ReadCloser</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Open returns a ReadCloser that provides access to the File&#39;s contents.
+Multiple files may be read concurrently.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="FileHeader">type <a href="http://golang.org/src/pkg/archive/zip/struct.go?s=2041:2778#L59">FileHeader</a></h2>
+			<pre>type FileHeader struct {
+        <span class="comment">// Name is the name of the file.</span>
+        <span class="comment">// It must be a relative path: it must not start with a drive</span>
+        <span class="comment">// letter (e.g. C:) or leading slash, and only forward slashes</span>
+        <span class="comment">// are allowed.</span>
+        Name <a href="../../builtin/index.html#string">string</a>
+
+        CreatorVersion     <a href="../../builtin/index.html#uint16">uint16</a>
+        ReaderVersion      <a href="../../builtin/index.html#uint16">uint16</a>
+        Flags              <a href="../../builtin/index.html#uint16">uint16</a>
+        Method             <a href="../../builtin/index.html#uint16">uint16</a>
+        ModifiedTime       <a href="../../builtin/index.html#uint16">uint16</a> <span class="comment">// MS-DOS time</span>
+        ModifiedDate       <a href="../../builtin/index.html#uint16">uint16</a> <span class="comment">// MS-DOS date</span>
+        CRC32              <a href="../../builtin/index.html#uint32">uint32</a>
+        CompressedSize     <a href="../../builtin/index.html#uint32">uint32</a> <span class="comment">// deprecated; use CompressedSize64</span>
+        UncompressedSize   <a href="../../builtin/index.html#uint32">uint32</a> <span class="comment">// deprecated; use UncompressedSize64</span>
+        CompressedSize64   <a href="../../builtin/index.html#uint64">uint64</a>
+        UncompressedSize64 <a href="../../builtin/index.html#uint64">uint64</a>
+        Extra              []<a href="../../builtin/index.html#byte">byte</a>
+        ExternalAttrs      <a href="../../builtin/index.html#uint32">uint32</a> <span class="comment">// Meaning depends on CreatorVersion</span>
+        Comment            <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+FileHeader describes a file within a zip file.
+See the zip spec for details.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="FileInfoHeader">func <a href="http://golang.org/src/pkg/archive/zip/struct.go?s=3581:3637#L106">FileInfoHeader</a></h3>
+				<pre>func FileInfoHeader(fi <a href="../../os/index.html">os</a>.<a href="../../os/index.html#FileInfo">FileInfo</a>) (*<a href="#FileHeader">FileHeader</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+FileInfoHeader creates a partially-populated FileHeader from an
+os.FileInfo.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="FileHeader.FileInfo">func (*FileHeader) <a href="http://golang.org/src/pkg/archive/zip/struct.go?s=2835:2878#L83">FileInfo</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) FileInfo() <a href="../../os/index.html">os</a>.<a href="../../os/index.html#FileInfo">FileInfo</a></pre>
+				<p>
+FileInfo returns an os.FileInfo for the FileHeader.
+</p>
+
+				
+				
+			
+				
+				<h3 id="FileHeader.ModTime">func (*FileHeader) <a href="http://golang.org/src/pkg/archive/zip/struct.go?s=5263:5303#L165">ModTime</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) ModTime() <a href="../../time/index.html">time</a>.<a href="../../time/index.html#Time">Time</a></pre>
+				<p>
+ModTime returns the modification time.
+The resolution is 2s.
+</p>
+
+				
+				
+			
+				
+				<h3 id="FileHeader.Mode">func (*FileHeader) <a href="http://golang.org/src/pkg/archive/zip/struct.go?s=6015:6061#L195">Mode</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) Mode() (mode <a href="../../os/index.html">os</a>.<a href="../../os/index.html#FileMode">FileMode</a>)</pre>
+				<p>
+Mode returns the permission and mode bits for the FileHeader.
+</p>
+
+				
+				
+			
+				
+				<h3 id="FileHeader.SetModTime">func (*FileHeader) <a href="http://golang.org/src/pkg/archive/zip/struct.go?s=5469:5513#L171">SetModTime</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) SetModTime(t <a href="../../time/index.html">time</a>.<a href="../../time/index.html#Time">Time</a>)</pre>
+				<p>
+SetModTime sets the ModifiedTime and ModifiedDate fields to the given time.
+The resolution is 2s.
+</p>
+
+				
+				
+			
+				
+				<h3 id="FileHeader.SetMode">func (*FileHeader) <a href="http://golang.org/src/pkg/archive/zip/struct.go?s=6436:6482#L209">SetMode</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) SetMode(mode <a href="../../os/index.html">os</a>.<a href="../../os/index.html#FileMode">FileMode</a>)</pre>
+				<p>
+SetMode changes the permission and mode bits for the FileHeader.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="ReadCloser">type <a href="http://golang.org/src/pkg/archive/zip/reader.go?s=550:596#L21">ReadCloser</a></h2>
+			<pre>type ReadCloser struct {
+        <a href="#Reader">Reader</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="OpenReader">func <a href="http://golang.org/src/pkg/archive/zip/reader.go?s=848:897#L38">OpenReader</a></h3>
+				<pre>func OpenReader(name <a href="../../builtin/index.html#string">string</a>) (*<a href="#ReadCloser">ReadCloser</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+OpenReader will open the Zip file specified by name and return a ReadCloser.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="ReadCloser.Close">func (*ReadCloser) <a href="http://golang.org/src/pkg/archive/zip/reader.go?s=2531:2566#L105">Close</a></h3>
+				<pre>func (rc *<a href="#ReadCloser">ReadCloser</a>) Close() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes the Zip file, rendering it unusable for I/O.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="http://golang.org/src/pkg/archive/zip/reader.go?s=472:548#L15">Reader</a></h2>
+			<pre>type Reader struct {
+        File    []*<a href="#File">File</a>
+        Comment <a href="../../builtin/index.html#string">string</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			<div id="example_Reader" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code"><span class="comment">// Open a zip archive for reading.</span>
+    r, err := zip.OpenReader(&#34;testdata/readme.zip&#34;)
+    if err != nil {
+            log.Fatal(err)
+    }
+    defer r.Close()
+
+    <span class="comment">// Iterate through the files in the archive,</span>
+    <span class="comment">// printing some of their contents.</span>
+    for _, f := range r.File {
+            fmt.Printf(&#34;Contents of %s:\n&#34;, f.Name)
+            rc, err := f.Open()
+            if err != nil {
+                    log.Fatal(err)
+            }
+            _, err = io.CopyN(os.Stdout, rc, 68)
+            if err != nil {
+                    log.Fatal(err)
+            }
+            rc.Close()
+            fmt.Println()
+    }
+    <span class="comment"></pre>
+			
+			<p>Output:</p>
+			<pre class="output">Contents of README:
+This is the source code repository for the Go programming language.
+</pre>
+			
+		
+	</div>
+</div>
+
+
+			
+				
+				<h3 id="NewReader">func <a href="http://golang.org/src/pkg/archive/zip/reader.go?s=1265:1323#L59">NewReader</a></h3>
+				<pre>func NewReader(r <a href="../../io/index.html">io</a>.<a href="../../io/index.html#ReaderAt">ReaderAt</a>, size <a href="../../builtin/index.html#int64">int64</a>) (*<a href="#Reader">Reader</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+NewReader returns a new Reader reading from r, which is assumed to
+have the given size in bytes.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Writer">type <a href="http://golang.org/src/pkg/archive/zip/writer.go?s=397:491#L11">Writer</a></h2>
+			<pre>type Writer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Writer implements a zip file writer.
+</p>
+
+
+			
+
+			
+
+			<div id="example_Writer" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code">
+    <span class="comment">// Create a buffer to write our archive to.</span>
+    buf := new(bytes.Buffer)
+
+    <span class="comment">// Create a new zip archive.</span>
+    w := zip.NewWriter(buf)
+
+    <span class="comment">// Add some files to the archive.</span>
+    var files = []struct {
+            Name, Body string
+    }{
+            {&#34;readme.txt&#34;, &#34;This archive contains some text files.&#34;},
+            {&#34;gopher.txt&#34;, &#34;Gopher names:\nGeorge\nGeoffrey\nGonzo&#34;},
+            {&#34;todo.txt&#34;, &#34;Get animal handling licence.\nWrite more examples.&#34;},
+    }
+    for _, file := range files {
+            f, err := w.Create(file.Name)
+            if err != nil {
+                    log.Fatal(err)
+            }
+            _, err = f.Write([]byte(file.Body))
+            if err != nil {
+                    log.Fatal(err)
+            }
+    }
+
+    <span class="comment">// Make sure to check the error on Close.</span>
+    err := w.Close()
+    if err != nil {
+            log.Fatal(err)
+    }
+</pre>
+			
+		
+	</div>
+</div>
+
+
+			
+				
+				<h3 id="NewWriter">func <a href="http://golang.org/src/pkg/archive/zip/writer.go?s=604:639#L24">NewWriter</a></h3>
+				<pre>func NewWriter(w <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Writer">Writer</a>) *<a href="#Writer">Writer</a></pre>
+				<p>
+NewWriter returns a new Writer writing a zip file to w.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Writer.Close">func (*Writer) <a href="http://golang.org/src/pkg/archive/zip/writer.go?s=833:863#L30">Close</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Close() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Close finishes writing the zip file by writing the central directory.
+It does not (and can not) close the underlying writer.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Create">func (*Writer) <a href="http://golang.org/src/pkg/archive/zip/writer.go?s=5125:5180#L161">Create</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Create(name <a href="../../builtin/index.html#string">string</a>) (<a href="../../io/index.html">io</a>.<a href="../../io/index.html#Writer">Writer</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Create adds a file to the zip file using the provided name.
+It returns a Writer to which the file contents should be written.
+The name must be a relative path: it must not start with a drive
+letter (e.g. C:) or leading slash, and only forward slashes are
+allowed.
+The file&#39;s contents must be written to the io.Writer before the next
+call to Create, CreateHeader, or Close.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.CreateHeader">func (*Writer) <a href="http://golang.org/src/pkg/archive/zip/writer.go?s=5563:5627#L174">CreateHeader</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) CreateHeader(fh *<a href="#FileHeader">FileHeader</a>) (<a href="../../io/index.html">io</a>.<a href="../../io/index.html#Writer">Writer</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+CreateHeader adds a file to the zip file using the provided FileHeader
+for the file metadata.
+It returns a Writer to which the file contents should be written.
+The file&#39;s contents must be written to the io.Writer before the next
+call to Create, CreateHeader, or Close.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=144&id=1380993859978592', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/archive/zip/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+
