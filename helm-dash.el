@@ -3,12 +3,13 @@
 (require 'helm)
 (require 'sqlite)
 
+(setq sqlite-conn (sqlite-init "Go.docset/Contents/Resources/docSet.dsidx"))
+
 (defun helm-dash-search ()
- (let ((conn (sqlite-init "Go.docset/Contents/Resources/docSet.dsidx"))
-       (db "searchIndex")
+ (let ((db "searchIndex")
        (res nil))
-   (setq res (sqlite-query conn (format "SELECT type, name, path FROM %s WHERE \"name\" like \"%%%s%%\"" db helm-pattern)))
-   (sqlite-bye conn)
+
+   (setq res (sqlite-query sqlite-conn (format "SELECT type, name, path FROM %s WHERE \"name\" like \"%%%s%%\"" db helm-pattern)))
    (mapcar (lambda (x)
                    (cons (cadr x) (format "%s%s%s%s"
                                           "file://"
