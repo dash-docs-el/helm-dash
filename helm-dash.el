@@ -1,4 +1,6 @@
 (load-file "sqlite.el")
+
+(require 'helm)
 (require 'sqlite)
 
 (defun helm-dash-search ()
