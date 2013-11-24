@@ -10,7 +10,8 @@
    (setq res (sqlite-query conn (format "SELECT type, name, path FROM %s WHERE \"name\" like \"%%%s%%\"" db helm-pattern)))
    (sqlite-bye conn)
    (mapcar (lambda (x)
-                   (cons (cadr x) (format "%s%s%s"
+                   (cons (cadr x) (format "%s%s%s%s"
+                                          "file://"
                                           default-directory
                                           "Go.docset/Contents/Resources/Documents/"
                                           (caddr x))))
