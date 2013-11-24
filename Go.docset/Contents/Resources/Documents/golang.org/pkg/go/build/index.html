@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/go/build/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>build</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package build</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "go/build"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package build gathers information about Go packages.
+</p>
+<h3 id="hdr-Go_Path">Go Path</h3>
+<p>
+The Go path is a list of directory trees containing Go source code.
+It is consulted to resolve imports that cannot be found in the standard
+Go tree.  The default path is the value of the GOPATH environment
+variable, interpreted as a path list appropriate to the operating system
+(on Unix, the variable is a colon-separated string;
+on Windows, a semicolon-separated string;
+on Plan 9, a list).
+</p>
+<p>
+Each directory listed in the Go path must have a prescribed structure:
+</p>
+<p>
+The src/ directory holds source code.  The path below &#39;src&#39; determines
+the import path or executable name.
+</p>
+<p>
+The pkg/ directory holds installed package objects.
+As in the Go tree, each target operating system and
+architecture pair has its own subdirectory of pkg
+(pkg/GOOS_GOARCH).
+</p>
+<p>
+If DIR is a directory listed in the Go path, a package with
+source in DIR/src/foo/bar can be imported as &#34;foo/bar&#34; and
+has its compiled form installed to &#34;DIR/pkg/GOOS_GOARCH/foo/bar.a&#34;
+(or, for gccgo, &#34;DIR/pkg/gccgo/foo/libbar.a&#34;).
+</p>
+<p>
+The bin/ directory holds compiled commands.
+Each command is named for its source directory, but only
+using the final element, not the entire path.  That is, the
+command with source in DIR/src/foo/quux is installed into
+DIR/bin/quux, not DIR/bin/foo/quux.  The foo/ is stripped
+so that you can add DIR/bin to your PATH to get at the
+installed commands.
+</p>
+<p>
+Here&#39;s an example directory layout:
+</p>
+<pre>GOPATH=/home/user/gocode
+
+/home/user/gocode/
+    src/
+        foo/
+            bar/               (go code in package bar)
+                x.go
+            quux/              (go code in package main)
+                y.go
+    bin/
+        quux                   (installed command)
+    pkg/
+        linux_amd64/
+            foo/
+                bar.a          (installed package object)
+</pre>
+<h3 id="hdr-Build_Constraints">Build Constraints</h3>
+<p>
+A build constraint is a line comment beginning with the directive +build
+that lists the conditions under which a file should be included in the package.
+Constraints may appear in any kind of source file (not just Go), but
+they must appear near the top of the file, preceded
+only by blank lines and other line comments.
+</p>
+<p>
+To distinguish build constraints from package documentation, a series of
+build constraints must be followed by a blank line.
+</p>
+<p>
+A build constraint is evaluated as the OR of space-separated options;
+each option evaluates as the AND of its comma-separated terms;
+and each term is an alphanumeric word or, preceded by !, its negation.
+That is, the build constraint:
+</p>
+<pre>// +build linux,386 darwin,!cgo
+</pre>
+<p>
+corresponds to the boolean formula:
+</p>
+<pre>(linux AND 386) OR (darwin AND (NOT cgo))
+</pre>
+<p>
+A file may have multiple build constraints. The overall constraint is the AND
+of the individual constraints. That is, the build constraints:
+</p>
+<pre>// +build linux darwin
+// +build 386
+</pre>
+<p>
+corresponds to the boolean formula:
+</p>
+<pre>(linux OR darwin) AND 386
+</pre>
+<p>
+During a particular build, the following words are satisfied:
+</p>
+<pre>- the target operating system, as spelled by runtime.GOOS
+- the target architecture, as spelled by runtime.GOARCH
+- the compiler being used, either &#34;gc&#34; or &#34;gccgo&#34;
+- &#34;cgo&#34;, if ctxt.CgoEnabled is true
+- &#34;go1.1&#34;, from Go version 1.1 onward
+- any additional words listed in ctxt.BuildTags
+</pre>
+<p>
+If a file&#39;s name, after stripping the extension and a possible _test suffix,
+matches any of the following patterns:
+</p>
+<pre>*_GOOS
+*_GOARCH
+*_GOOS_GOARCH
+</pre>
+<p>
+(example: source_windows_amd64.go) or the literals:
+</p>
+<pre>GOOS
+GOARCH
+</pre>
+<p>
+(example: windows.go) where GOOS and GOARCH represent any known operating
+system and architecture values respectively, then the file is considered to
+have an implicit build constraint requiring those terms.
+</p>
+<p>
+To keep a file from being considered for the build:
+</p>
+<pre>// +build ignore
+</pre>
+<p>
+(any other unsatisfied word will work as well, but &ldquo;ignore&rdquo; is conventional.)
+</p>
+<p>
+To build a file only when using cgo, and only on Linux and OS X:
+</p>
+<pre>// +build linux,cgo darwin,cgo
+</pre>
+<p>
+Such a file is usually paired with another file implementing the
+default functionality for other systems, which in this case would
+carry the constraint:
+</p>
+<pre>// +build !linux,!darwin !cgo
+</pre>
+<p>
+Naming a file dns_windows.go will cause it to be included only when
+building the package for Windows; similarly, math_386.s will be included
+only when building the package for 32-bit x86.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#ArchChar">func ArchChar(goarch string) (string, error)</a></dd>
+			
+				
+				<dd><a href="#IsLocalImport">func IsLocalImport(path string) bool</a></dd>
+			
+			
+				
+				<dd><a href="#Context">type Context</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Context.Import">func (ctxt *Context) Import(path string, srcDir string, mode ImportMode) (*Package, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Context.ImportDir">func (ctxt *Context) ImportDir(dir string, mode ImportMode) (*Package, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Context.SrcDirs">func (ctxt *Context) SrcDirs() []string</a></dd>
+				
+			
+				
+				<dd><a href="#ImportMode">type ImportMode</a></dd>
+				
+				
+			
+				
+				<dd><a href="#NoGoError">type NoGoError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NoGoError.Error">func (e *NoGoError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Package">type Package</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Import">func Import(path, srcDir string, mode ImportMode) (*Package, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ImportDir">func ImportDir(dir string, mode ImportMode) (*Package, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Package.IsCommand">func (p *Package) IsCommand() bool</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/go/build/build.go">build.go</a>
+			
+				<a href="http://golang.org/src/pkg/go/build/doc.go">doc.go</a>
+			
+				<a href="http://golang.org/src/pkg/go/build/read.go">read.go</a>
+			
+				<a href="http://golang.org/src/pkg/go/build/syslist.go">syslist.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ToolDir">ToolDir</span> = <a href="../../path/filepath/index.html">filepath</a>.<a href="../../path/filepath/index.html#Join">Join</a>(<a href="../../runtime/index.html">runtime</a>.<a href="../../runtime/index.html#GOROOT">GOROOT</a>(), &#34;pkg/tool/&#34;+<a href="../../runtime/index.html">runtime</a>.<a href="../../runtime/index.html#GOOS">GOOS</a>+&#34;_&#34;+<a href="../../runtime/index.html">runtime</a>.<a href="../../runtime/index.html#GOARCH">GOARCH</a>)</pre>
+				<p>
+ToolDir is the directory containing build tools.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="ArchChar">func <a href="http://golang.org/src/pkg/go/build/build.go?s=31045:31089#L1103">ArchChar</a></h2>
+			<pre>func ArchChar(goarch <a href="../../builtin/index.html#string">string</a>) (<a href="../../builtin/index.html#string">string</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+ArchChar returns the architecture character for the given goarch.
+For example, ArchChar(&#34;amd64&#34;) returns &#34;6&#34;.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsLocalImport">func <a href="http://golang.org/src/pkg/go/build/build.go?s=30782:30818#L1096">IsLocalImport</a></h2>
+			<pre>func IsLocalImport(path <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+			<p>
+IsLocalImport reports whether the import path is
+a local import path, like &#34;.&#34;, &#34;..&#34;, &#34;./foo&#34;, or &#34;../foo&#34;.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Context">type <a href="http://golang.org/src/pkg/go/build/build.go?s=435:3510#L19">Context</a></h2>
+			<pre>type Context struct {
+        GOARCH      <a href="../../builtin/index.html#string">string</a> <span class="comment">// target architecture</span>
+        GOOS        <a href="../../builtin/index.html#string">string</a> <span class="comment">// target operating system</span>
+        GOROOT      <a href="../../builtin/index.html#string">string</a> <span class="comment">// Go root</span>
+        GOPATH      <a href="../../builtin/index.html#string">string</a> <span class="comment">// Go path</span>
+        CgoEnabled  <a href="../../builtin/index.html#bool">bool</a>   <span class="comment">// whether cgo can be used</span>
+        UseAllFiles <a href="../../builtin/index.html#bool">bool</a>   <span class="comment">// use files regardless of +build lines, file names</span>
+        Compiler    <a href="../../builtin/index.html#string">string</a> <span class="comment">// compiler to assume when computing target paths</span>
+
+        <span class="comment">// The build and release tags specify build constraints</span>
+        <span class="comment">// that should be considered satisfied when processing +build lines.</span>
+        <span class="comment">// Clients creating a new context may customize BuildTags, which</span>
+        <span class="comment">// defaults to empty, but it is usually an error to customize ReleaseTags,</span>
+        <span class="comment">// which defaults to the list of Go releases the current release is compatible with.</span>
+        <span class="comment">// In addition to the BuildTags and ReleaseTags, build constraints</span>
+        <span class="comment">// consider the values of GOARCH and GOOS as satisfied tags.</span>
+        BuildTags   []<a href="../../builtin/index.html#string">string</a>
+        ReleaseTags []<a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// The install suffix specifies a suffix to use in the name of the installation</span>
+        <span class="comment">// directory. By default it is empty, but custom builds that need to keep</span>
+        <span class="comment">// their outputs separate can set InstallSuffix to do so. For example, when</span>
+        <span class="comment">// using the race detector, the go command uses InstallSuffix = &#34;race&#34;, so</span>
+        <span class="comment">// that on a Linux/386 system, packages are written to a directory named</span>
+        <span class="comment">// &#34;linux_386_race&#34; instead of the usual &#34;linux_386&#34;.</span>
+        InstallSuffix <a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// JoinPath joins the sequence of path fragments into a single path.</span>
+        <span class="comment">// If JoinPath is nil, Import uses filepath.Join.</span>
+        JoinPath func(elem ...<a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// SplitPathList splits the path list into a slice of individual paths.</span>
+        <span class="comment">// If SplitPathList is nil, Import uses filepath.SplitList.</span>
+        SplitPathList func(list <a href="../../builtin/index.html#string">string</a>) []<a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// IsAbsPath reports whether path is an absolute path.</span>
+        <span class="comment">// If IsAbsPath is nil, Import uses filepath.IsAbs.</span>
+        IsAbsPath func(path <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#bool">bool</a>
+
+        <span class="comment">// IsDir reports whether the path names a directory.</span>
+        <span class="comment">// If IsDir is nil, Import calls os.Stat and uses the result&#39;s IsDir method.</span>
+        IsDir func(path <a href="../../builtin/index.html#string">string</a>) <a href="../../builtin/index.html#bool">bool</a>
+
+        <span class="comment">// HasSubdir reports whether dir is a subdirectory of</span>
+        <span class="comment">// (perhaps multiple levels below) root.</span>
+        <span class="comment">// If so, HasSubdir sets rel to a slash-separated path that</span>
+        <span class="comment">// can be joined to root to produce a path equivalent to dir.</span>
+        <span class="comment">// If HasSubdir is nil, Import uses an implementation built on</span>
+        <span class="comment">// filepath.EvalSymlinks.</span>
+        HasSubdir func(root, dir <a href="../../builtin/index.html#string">string</a>) (rel <a href="../../builtin/index.html#string">string</a>, ok <a href="../../builtin/index.html#bool">bool</a>)
+
+        <span class="comment">// ReadDir returns a slice of os.FileInfo, sorted by Name,</span>
+        <span class="comment">// describing the content of the named directory.</span>
+        <span class="comment">// If ReadDir is nil, Import uses ioutil.ReadDir.</span>
+        ReadDir func(dir <a href="../../builtin/index.html#string">string</a>) (fi []<a href="../../os/index.html">os</a>.<a href="../../os/index.html#FileInfo">FileInfo</a>, err <a href="../../builtin/index.html#error">error</a>)
+
+        <span class="comment">// OpenFile opens a file (not a directory) for reading.</span>
+        <span class="comment">// If OpenFile is nil, Import uses os.Open.</span>
+        OpenFile func(path <a href="../../builtin/index.html#string">string</a>) (r <a href="../../io/index.html">io</a>.<a href="../../io/index.html#ReadCloser">ReadCloser</a>, err <a href="../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+A Context specifies the supporting context for a build.
+</p>
+
+
+			
+
+			
+				<pre>var <span id="Default">Default</span> <a href="#Context">Context</a> = defaultContext()</pre>
+				<p>
+Default is the default Context for builds.
+It uses the GOARCH, GOOS, GOROOT, and GOPATH environment variables
+if set, or else the compiled code&#39;s GOARCH, GOOS, and GOROOT.
+</p>
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Context.Import">func (*Context) <a href="http://golang.org/src/pkg/go/build/build.go?s=13492:13582#L409">Import</a></h3>
+				<pre>func (ctxt *<a href="#Context">Context</a>) Import(path <a href="../../builtin/index.html#string">string</a>, srcDir <a href="../../builtin/index.html#string">string</a>, mode <a href="#ImportMode">ImportMode</a>) (*<a href="#Package">Package</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Import returns details about the Go package named by the import path,
+interpreting local import paths relative to the srcDir directory.
+If the path is a local import path naming a package that can be imported
+using a standard import path, the returned package will set p.ImportPath
+to that path.
+</p>
+<p>
+In the directory containing the package, .go, .c, .h, and .s files are
+considered part of the package except for:
+</p>
+<pre>- .go files in package documentation
+- files starting with _ or . (likely editor temporary files)
+- files with build constraints not satisfied by the context
+</pre>
+<p>
+If an error occurs, Import returns a non-nil error and a non-nil
+*Package containing partial information.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Context.ImportDir">func (*Context) <a href="http://golang.org/src/pkg/go/build/build.go?s=12432:12509#L379">ImportDir</a></h3>
+				<pre>func (ctxt *<a href="#Context">Context</a>) ImportDir(dir <a href="../../builtin/index.html#string">string</a>, mode <a href="#ImportMode">ImportMode</a>) (*<a href="#Package">Package</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+ImportDir is like Import but processes the Go package found in
+the named directory.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Context.SrcDirs">func (*Context) <a href="http://golang.org/src/pkg/go/build/build.go?s=7565:7604#L228">SrcDirs</a></h3>
+				<pre>func (ctxt *<a href="#Context">Context</a>) SrcDirs() []<a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+SrcDirs returns a list of package source root directories.
+It draws from the current Go root and Go path but omits directories
+that do not exist.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="ImportMode">type <a href="http://golang.org/src/pkg/go/build/build.go?s=9776:9796#L315">ImportMode</a></h2>
+			<pre>type ImportMode <a href="../../builtin/index.html#uint">uint</a></pre>
+			<p>
+An ImportMode controls the behavior of the Import method.
+</p>
+
+
+			
+				<pre>const (
+        <span class="comment">// If FindOnly is set, Import stops after locating the directory</span>
+        <span class="comment">// that should contain the sources for a package.  It does not</span>
+        <span class="comment">// read any files in the directory.</span>
+        <span id="FindOnly">FindOnly</span> <a href="#ImportMode">ImportMode</a> = 1 &lt;&lt; <a href="../../builtin/index.html#iota">iota</a>
+
+        <span class="comment">// If AllowBinary is set, Import can be satisfied by a compiled</span>
+        <span class="comment">// package object without corresponding sources.</span>
+        <span id="AllowBinary">AllowBinary</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="NoGoError">type <a href="http://golang.org/src/pkg/go/build/build.go?s=12650:12687#L385">NoGoError</a></h2>
+			<pre>type NoGoError struct {
+        Dir <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+NoGoError is the error used by Import to describe a directory
+containing no Go source files.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NoGoError.Error">func (*NoGoError) <a href="http://golang.org/src/pkg/go/build/build.go?s=12689:12723#L389">Error</a></h3>
+				<pre>func (e *<a href="#NoGoError">NoGoError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Package">type <a href="http://golang.org/src/pkg/go/build/build.go?s=10198:12119#L329">Package</a></h2>
+			<pre>type Package struct {
+        Dir        <a href="../../builtin/index.html#string">string</a> <span class="comment">// directory containing package sources</span>
+        Name       <a href="../../builtin/index.html#string">string</a> <span class="comment">// package name</span>
+        Doc        <a href="../../builtin/index.html#string">string</a> <span class="comment">// documentation synopsis</span>
+        ImportPath <a href="../../builtin/index.html#string">string</a> <span class="comment">// import path of package (&#34;&#34; if unknown)</span>
+        Root       <a href="../../builtin/index.html#string">string</a> <span class="comment">// root of Go tree where this package lives</span>
+        SrcRoot    <a href="../../builtin/index.html#string">string</a> <span class="comment">// package source root directory (&#34;&#34; if unknown)</span>
+        PkgRoot    <a href="../../builtin/index.html#string">string</a> <span class="comment">// package install root directory (&#34;&#34; if unknown)</span>
+        BinDir     <a href="../../builtin/index.html#string">string</a> <span class="comment">// command install directory (&#34;&#34; if unknown)</span>
+        Goroot     <a href="../../builtin/index.html#bool">bool</a>   <span class="comment">// package found in Go root</span>
+        PkgObj     <a href="../../builtin/index.html#string">string</a> <span class="comment">// installed .a file</span>
+
+        <span class="comment">// Source files</span>
+        GoFiles        []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .go source files (excluding CgoFiles, TestGoFiles, XTestGoFiles)</span>
+        CgoFiles       []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .go source files that import &#34;C&#34;</span>
+        IgnoredGoFiles []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .go source files ignored for this build</span>
+        CFiles         []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .c source files</span>
+        HFiles         []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .h source files</span>
+        SFiles         []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .s source files</span>
+        SysoFiles      []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .syso system object files to add to archive</span>
+        SwigFiles      []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .swig files</span>
+        SwigCXXFiles   []<a href="../../builtin/index.html#string">string</a> <span class="comment">// .swigcxx files</span>
+
+        <span class="comment">// Cgo directives</span>
+        CgoPkgConfig []<a href="../../builtin/index.html#string">string</a> <span class="comment">// Cgo pkg-config directives</span>
+        CgoCFLAGS    []<a href="../../builtin/index.html#string">string</a> <span class="comment">// Cgo CFLAGS directives</span>
+        CgoLDFLAGS   []<a href="../../builtin/index.html#string">string</a> <span class="comment">// Cgo LDFLAGS directives</span>
+
+        <span class="comment">// Dependency information</span>
+        Imports   []<a href="../../builtin/index.html#string">string</a>                    <span class="comment">// imports from GoFiles, CgoFiles</span>
+        ImportPos map[<a href="../../builtin/index.html#string">string</a>][]<a href="../token/index.html">token</a>.<a href="../token/index.html#Position">Position</a> <span class="comment">// line information for Imports</span>
+
+        <span class="comment">// Test information</span>
+        TestGoFiles    []<a href="../../builtin/index.html#string">string</a>                    <span class="comment">// _test.go files in package</span>
+        TestImports    []<a href="../../builtin/index.html#string">string</a>                    <span class="comment">// imports from TestGoFiles</span>
+        TestImportPos  map[<a href="../../builtin/index.html#string">string</a>][]<a href="../token/index.html">token</a>.<a href="../token/index.html#Position">Position</a> <span class="comment">// line information for TestImports</span>
+        XTestGoFiles   []<a href="../../builtin/index.html#string">string</a>                    <span class="comment">// _test.go files outside package</span>
+        XTestImports   []<a href="../../builtin/index.html#string">string</a>                    <span class="comment">// imports from XTestGoFiles</span>
+        XTestImportPos map[<a href="../../builtin/index.html#string">string</a>][]<a href="../token/index.html">token</a>.<a href="../token/index.html#Position">Position</a> <span class="comment">// line information for XTestImports</span>
+}</pre>
+			<p>
+A Package describes the Go package found in a directory.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Import">func <a href="http://golang.org/src/pkg/go/build/build.go?s=22473:22540#L763">Import</a></h3>
+				<pre>func Import(path, srcDir <a href="../../builtin/index.html#string">string</a>, mode <a href="#ImportMode">ImportMode</a>) (*<a href="#Package">Package</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Import is shorthand for Default.Import.
+</p>
+
+				
+			
+				
+				<h3 id="ImportDir">func <a href="http://golang.org/src/pkg/go/build/build.go?s=22638:22699#L768">ImportDir</a></h3>
+				<pre>func ImportDir(dir <a href="../../builtin/index.html#string">string</a>, mode <a href="#ImportMode">ImportMode</a>) (*<a href="#Package">Package</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+ImportDir is shorthand for Default.ImportDir.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Package.IsCommand">func (*Package) <a href="http://golang.org/src/pkg/go/build/build.go?s=12277:12311#L373">IsCommand</a></h3>
+				<pre>func (p *<a href="#Package">Package</a>) IsCommand() <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsCommand reports whether the package is considered a
+command to be installed (not just a library).
+Packages named &#34;main&#34; are treated as commands.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=386&s_ttfb=394&id=1380993863186051', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/go/build/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

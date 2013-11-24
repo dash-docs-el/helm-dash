@@ -1,0 +1,214 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/nacl/box by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:25:40 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>box</title>
+  
+    <meta name="twitter:title" content="Package box">
+    <meta property="og:title" content="Package box">
+    <meta name="description" content="Package box authenticates and encrypts messages using public-key cryptography.">
+    <meta name="twitter:description" content="Package box authenticates and encrypts messages using public-key cryptography.">
+    <meta property="og:description" content="Package box authenticates and encrypts messages using public-key cryptography.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=crypto"><strong>go.crypto:</strong></a>
+  <a href="../index.html">code.google.com/p/go.crypto</a><span class="text-muted">/</span><a href="index.html">nacl</a><span class="text-muted">/</span><span class="text-muted">box</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package box</h2>
+    <p><code>import "code.google.com/p/go.crypto/nacl/box"</code>
+    </p><p>
+Package box authenticates and encrypts messages using public-key cryptography.
+</p>
+<p>
+Box uses Curve25519, XSalsa20 and Poly1305 to encrypt and authenticate
+messages. The length of messages is not hidden.
+</p>
+<p>
+It is the caller's responsibility to ensure the uniqueness of nonces—for
+example, by using nonce 1 for the first message, nonce 2 for the second
+message, etc. Nonces are long enough that randomly generated nonces have
+negligible risk of collision.
+</p>
+<p>
+This package is interoperable with NaCl: <a href="http://nacl.cr.yp.to/box.html">http://nacl.cr.yp.to/box.html</a>.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    <li><a href="#pkg-constants">Constants</a>
+    
+    </li><li><a href="#GenerateKey">func GenerateKey(rand io.Reader) (publicKey, privateKey *[32]byte, err error)</a></li><li><a href="#Open">func Open(out, box []byte, nonce *[24]byte, peersPublicKey, privateKey *[32]byte) ([]byte, bool)</a></li><li><a href="#OpenAfterPrecomputation">func OpenAfterPrecomputation(out, box []byte, nonce *[24]byte, sharedKey *[32]byte) ([]byte, bool)</a></li><li><a href="#Precompute">func Precompute(sharedKey, peersPublicKey, privateKey *[32]byte)</a></li><li><a href="#Seal">func Seal(out, message []byte, nonce *[24]byte, peersPublicKey, privateKey *[32]byte) []byte</a></li><li><a href="#SealAfterPrecomputation">func SealAfterPrecomputation(out, message []byte, nonce *[24]byte, sharedKey *[32]byte) []byte</a>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/nacl/box/?repo=crypto">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/nacl/box/box.go?repo=crypto">box.go</a> </p>
+
+    <h3 id="pkg-constants">Constants <a class="permalink" href="#pkg-constants">¶</a></h3><pre>const <span id="Overhead">Overhead</span> = <a href="secretbox/index.html#Overhead">secretbox.Overhead</a></pre><p>
+Overhead is the number of bytes of overhead when boxing a message.
+</p>
+
+
+    
+
+    <h3 id="GenerateKey">func <a title="View Source" href="http://code.google.com/p/go/source/browse/nacl/box/box.go?repo=crypto#32">GenerateKey</a> <a class="permalink" href="#GenerateKey">¶</a></h3>
+    <pre class="funcdecl">func GenerateKey(rand <a href="http://godoc.org/io/#Reader">io.Reader</a>) (publicKey, privateKey *[32]<a href="http://godoc.org/builtin/#byte">byte</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+GenerateKey generates a new public/private key pair suitable for use with
+Seal and Open.
+</p>
+
+    
+    <h3 id="Open">func <a title="View Source" href="http://code.google.com/p/go/source/browse/nacl/box/box.go?repo=crypto#75">Open</a> <a class="permalink" href="#Open">¶</a></h3>
+    <pre class="funcdecl">func Open(out, box []<a href="http://godoc.org/builtin/#byte">byte</a>, nonce *[24]<a href="http://godoc.org/builtin/#byte">byte</a>, peersPublicKey, privateKey *[32]<a href="http://godoc.org/builtin/#byte">byte</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#bool">bool</a>)</pre><p>
+Open authenticates and decrypts a box produced by Seal and appends the
+message to out, which must not overlap box. The output will be Overhead
+bytes smaller than box.
+</p>
+
+    
+    <h3 id="OpenAfterPrecomputation">func <a title="View Source" href="http://code.google.com/p/go/source/browse/nacl/box/box.go?repo=crypto#83">OpenAfterPrecomputation</a> <a class="permalink" href="#OpenAfterPrecomputation">¶</a></h3>
+    <pre class="funcdecl">func OpenAfterPrecomputation(out, box []<a href="http://godoc.org/builtin/#byte">byte</a>, nonce *[24]<a href="http://godoc.org/builtin/#byte">byte</a>, sharedKey *[32]<a href="http://godoc.org/builtin/#byte">byte</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#bool">bool</a>)</pre><p>
+OpenAfterPrecomputation performs the same actions as Open, but takes a
+shared key as generated by Precompute.
+</p>
+
+    
+    <h3 id="Precompute">func <a title="View Source" href="http://code.google.com/p/go/source/browse/nacl/box/box.go?repo=crypto#52">Precompute</a> <a class="permalink" href="#Precompute">¶</a></h3>
+    <pre class="funcdecl">func Precompute(sharedKey, peersPublicKey, privateKey *[32]<a href="http://godoc.org/builtin/#byte">byte</a>)</pre><p>
+Precompute calculates the shared key between peersPublicKey and privateKey
+and writes it to sharedKey. The shared key can be used with
+OpenAfterPrecomputation and SealAfterPrecomputation to speed up processing
+when using the same pair of keys repeatedly.
+</p>
+
+    
+    <h3 id="Seal">func <a title="View Source" href="http://code.google.com/p/go/source/browse/nacl/box/box.go?repo=crypto#60">Seal</a> <a class="permalink" href="#Seal">¶</a></h3>
+    <pre class="funcdecl">func Seal(out, message []<a href="http://godoc.org/builtin/#byte">byte</a>, nonce *[24]<a href="http://godoc.org/builtin/#byte">byte</a>, peersPublicKey, privateKey *[32]<a href="http://godoc.org/builtin/#byte">byte</a>) []<a href="http://godoc.org/builtin/#byte">byte</a></pre><p>
+Seal appends an encrypted and authenticated copy of message to out, which
+will be Overhead bytes longer than the original and must not overlap. The
+nonce must be unique for each distinct message for a given pair of keys.
+</p>
+
+    
+    <h3 id="SealAfterPrecomputation">func <a title="View Source" href="http://code.google.com/p/go/source/browse/nacl/box/box.go?repo=crypto#68">SealAfterPrecomputation</a> <a class="permalink" href="#SealAfterPrecomputation">¶</a></h3>
+    <pre class="funcdecl">func SealAfterPrecomputation(out, message []<a href="http://godoc.org/builtin/#byte">byte</a>, nonce *[24]<a href="http://godoc.org/builtin/#byte">byte</a>, sharedKey *[32]<a href="http://godoc.org/builtin/#byte">byte</a>) []<a href="http://godoc.org/builtin/#byte">byte</a></pre><p>
+SealAfterPrecomputation performs the same actions as Seal, but takes a
+shared key as generated by Precompute.
+</p>
+
+    
+    
+
+   
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.crypto/nacl/box"></form>
+  <p>Package box imports <a href="boxa687.html?imports">4 packages</a> (<a href="box75f0.html?import-graph">graph</a>) and is imported by <a href="boxefa9.html?importers">3 packages</a>.
+  Updated <span class="timeago" title="2013-10-01T15:57:04Z">2013-10-01</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/nacl/box by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:25:41 GMT -->
+
+</body>

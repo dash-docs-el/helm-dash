@@ -1,0 +1,4010 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/net/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>net</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package net</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "net"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package net provides a portable interface for network I/O, including
+TCP/IP, UDP, domain name resolution, and Unix domain sockets.
+</p>
+<p>
+Although the package provides access to low-level networking
+primitives, most clients will need only the basic interface provided
+by the Dial, Listen, and Accept functions and the associated
+Conn and Listener interfaces. The crypto/tls package uses
+the same interfaces and similar Dial and Listen functions.
+</p>
+<p>
+The Dial function connects to a server:
+</p>
+<pre>conn, err := net.Dial(&#34;tcp&#34;, &#34;google.com:80&#34;)
+if err != nil {
+	// handle error
+}
+fmt.Fprintf(conn, &#34;GET / HTTP/1.0\r\n\r\n&#34;)
+status, err := bufio.NewReader(conn).ReadString(&#39;\n&#39;)
+// ...
+</pre>
+<p>
+The Listen function creates servers:
+</p>
+<pre>ln, err := net.Listen(&#34;tcp&#34;, &#34;:8080&#34;)
+if err != nil {
+	// handle error
+}
+for {
+	conn, err := ln.Accept()
+	if err != nil {
+		// handle error
+		continue
+	}
+	go handleConnection(conn)
+}
+</pre>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#InterfaceAddrs">func InterfaceAddrs() ([]Addr, error)</a></dd>
+			
+				
+				<dd><a href="#Interfaces">func Interfaces() ([]Interface, error)</a></dd>
+			
+				
+				<dd><a href="#JoinHostPort">func JoinHostPort(host, port string) string</a></dd>
+			
+				
+				<dd><a href="#LookupAddr">func LookupAddr(addr string) (name []string, err error)</a></dd>
+			
+				
+				<dd><a href="#LookupCNAME">func LookupCNAME(name string) (cname string, err error)</a></dd>
+			
+				
+				<dd><a href="#LookupHost">func LookupHost(host string) (addrs []string, err error)</a></dd>
+			
+				
+				<dd><a href="#LookupIP">func LookupIP(host string) (addrs []IP, err error)</a></dd>
+			
+				
+				<dd><a href="#LookupMX">func LookupMX(name string) (mx []*MX, err error)</a></dd>
+			
+				
+				<dd><a href="#LookupNS">func LookupNS(name string) (ns []*NS, err error)</a></dd>
+			
+				
+				<dd><a href="#LookupPort">func LookupPort(network, service string) (port int, err error)</a></dd>
+			
+				
+				<dd><a href="#LookupSRV">func LookupSRV(service, proto, name string) (cname string, addrs []*SRV, err error)</a></dd>
+			
+				
+				<dd><a href="#LookupTXT">func LookupTXT(name string) (txt []string, err error)</a></dd>
+			
+				
+				<dd><a href="#SplitHostPort">func SplitHostPort(hostport string) (host, port string, err error)</a></dd>
+			
+			
+				
+				<dd><a href="#Addr">type Addr</a></dd>
+				
+				
+			
+				
+				<dd><a href="#AddrError">type AddrError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AddrError.Error">func (e *AddrError) Error() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AddrError.Temporary">func (e *AddrError) Temporary() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AddrError.Timeout">func (e *AddrError) Timeout() bool</a></dd>
+				
+			
+				
+				<dd><a href="#Conn">type Conn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Dial">func Dial(network, address string) (Conn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DialTimeout">func DialTimeout(network, address string, timeout time.Duration) (Conn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileConn">func FileConn(f *os.File) (c Conn, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Pipe">func Pipe() (Conn, Conn)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#DNSConfigError">type DNSConfigError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DNSConfigError.Error">func (e *DNSConfigError) Error() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DNSConfigError.Temporary">func (e *DNSConfigError) Temporary() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DNSConfigError.Timeout">func (e *DNSConfigError) Timeout() bool</a></dd>
+				
+			
+				
+				<dd><a href="#DNSError">type DNSError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DNSError.Error">func (e *DNSError) Error() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DNSError.Temporary">func (e *DNSError) Temporary() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DNSError.Timeout">func (e *DNSError) Timeout() bool</a></dd>
+				
+			
+				
+				<dd><a href="#Dialer">type Dialer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Dialer.Dial">func (d *Dialer) Dial(network, address string) (Conn, error)</a></dd>
+				
+			
+				
+				<dd><a href="#Error">type Error</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Flags">type Flags</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Flags.String">func (f Flags) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#HardwareAddr">type HardwareAddr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseMAC">func ParseMAC(s string) (hw HardwareAddr, err error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#HardwareAddr.String">func (a HardwareAddr) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#IP">type IP</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPv4">func IPv4(a, b, c, d byte) IP</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseCIDR">func ParseCIDR(s string) (IP, *IPNet, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseIP">func ParseIP(s string) IP</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.DefaultMask">func (ip IP) DefaultMask() IPMask</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.Equal">func (ip IP) Equal(x IP) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.IsGlobalUnicast">func (ip IP) IsGlobalUnicast() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.IsInterfaceLocalMulticast">func (ip IP) IsInterfaceLocalMulticast() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.IsLinkLocalMulticast">func (ip IP) IsLinkLocalMulticast() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.IsLinkLocalUnicast">func (ip IP) IsLinkLocalUnicast() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.IsLoopback">func (ip IP) IsLoopback() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.IsMulticast">func (ip IP) IsMulticast() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.IsUnspecified">func (ip IP) IsUnspecified() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.Mask">func (ip IP) Mask(mask IPMask) IP</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.String">func (ip IP) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.To16">func (ip IP) To16() IP</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IP.To4">func (ip IP) To4() IP</a></dd>
+				
+			
+				
+				<dd><a href="#IPAddr">type IPAddr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ResolveIPAddr">func ResolveIPAddr(net, addr string) (*IPAddr, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPAddr.Network">func (a *IPAddr) Network() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPAddr.String">func (a *IPAddr) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#IPConn">type IPConn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DialIP">func DialIP(netProto string, laddr, raddr *IPAddr) (*IPConn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ListenIP">func ListenIP(netProto string, laddr *IPAddr) (*IPConn, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.Close">func (c *IPConn) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.File">func (c *IPConn) File() (f *os.File, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.LocalAddr">func (c *IPConn) LocalAddr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.Read">func (c *IPConn) Read(b []byte) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.ReadFrom">func (c *IPConn) ReadFrom(b []byte) (int, Addr, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.ReadFromIP">func (c *IPConn) ReadFromIP(b []byte) (int, *IPAddr, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.ReadMsgIP">func (c *IPConn) ReadMsgIP(b, oob []byte) (n, oobn, flags int, addr *IPAddr, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.RemoteAddr">func (c *IPConn) RemoteAddr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.SetDeadline">func (c *IPConn) SetDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.SetReadBuffer">func (c *IPConn) SetReadBuffer(bytes int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.SetReadDeadline">func (c *IPConn) SetReadDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.SetWriteBuffer">func (c *IPConn) SetWriteBuffer(bytes int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.SetWriteDeadline">func (c *IPConn) SetWriteDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.Write">func (c *IPConn) Write(b []byte) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.WriteMsgIP">func (c *IPConn) WriteMsgIP(b, oob []byte, addr *IPAddr) (n, oobn int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.WriteTo">func (c *IPConn) WriteTo(b []byte, addr Addr) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPConn.WriteToIP">func (c *IPConn) WriteToIP(b []byte, addr *IPAddr) (int, error)</a></dd>
+				
+			
+				
+				<dd><a href="#IPMask">type IPMask</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CIDRMask">func CIDRMask(ones, bits int) IPMask</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPv4Mask">func IPv4Mask(a, b, c, d byte) IPMask</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPMask.Size">func (m IPMask) Size() (ones, bits int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPMask.String">func (m IPMask) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#IPNet">type IPNet</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPNet.Contains">func (n *IPNet) Contains(ip IP) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPNet.Network">func (n *IPNet) Network() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IPNet.String">func (n *IPNet) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Interface">type Interface</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#InterfaceByIndex">func InterfaceByIndex(index int) (*Interface, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#InterfaceByName">func InterfaceByName(name string) (*Interface, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Interface.Addrs">func (ifi *Interface) Addrs() ([]Addr, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Interface.MulticastAddrs">func (ifi *Interface) MulticastAddrs() ([]Addr, error)</a></dd>
+				
+			
+				
+				<dd><a href="#InvalidAddrError">type InvalidAddrError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#InvalidAddrError.Error">func (e InvalidAddrError) Error() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#InvalidAddrError.Temporary">func (e InvalidAddrError) Temporary() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#InvalidAddrError.Timeout">func (e InvalidAddrError) Timeout() bool</a></dd>
+				
+			
+				
+				<dd><a href="#Listener">type Listener</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileListener">func FileListener(f *os.File) (l Listener, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Listen">func Listen(net, laddr string) (Listener, error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#MX">type MX</a></dd>
+				
+				
+			
+				
+				<dd><a href="#NS">type NS</a></dd>
+				
+				
+			
+				
+				<dd><a href="#OpError">type OpError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OpError.Error">func (e *OpError) Error() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OpError.Temporary">func (e *OpError) Temporary() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OpError.Timeout">func (e *OpError) Timeout() bool</a></dd>
+				
+			
+				
+				<dd><a href="#PacketConn">type PacketConn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FilePacketConn">func FilePacketConn(f *os.File) (c PacketConn, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ListenPacket">func ListenPacket(net, laddr string) (PacketConn, error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ParseError">type ParseError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseError.Error">func (e *ParseError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#SRV">type SRV</a></dd>
+				
+				
+			
+				
+				<dd><a href="#TCPAddr">type TCPAddr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ResolveTCPAddr">func ResolveTCPAddr(net, addr string) (*TCPAddr, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPAddr.Network">func (a *TCPAddr) Network() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPAddr.String">func (a *TCPAddr) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#TCPConn">type TCPConn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DialTCP">func DialTCP(net string, laddr, raddr *TCPAddr) (*TCPConn, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.Close">func (c *TCPConn) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.CloseRead">func (c *TCPConn) CloseRead() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.CloseWrite">func (c *TCPConn) CloseWrite() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.File">func (c *TCPConn) File() (f *os.File, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.LocalAddr">func (c *TCPConn) LocalAddr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.Read">func (c *TCPConn) Read(b []byte) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.ReadFrom">func (c *TCPConn) ReadFrom(r io.Reader) (int64, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.RemoteAddr">func (c *TCPConn) RemoteAddr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.SetDeadline">func (c *TCPConn) SetDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.SetKeepAlive">func (c *TCPConn) SetKeepAlive(keepalive bool) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.SetLinger">func (c *TCPConn) SetLinger(sec int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.SetNoDelay">func (c *TCPConn) SetNoDelay(noDelay bool) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.SetReadBuffer">func (c *TCPConn) SetReadBuffer(bytes int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.SetReadDeadline">func (c *TCPConn) SetReadDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.SetWriteBuffer">func (c *TCPConn) SetWriteBuffer(bytes int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.SetWriteDeadline">func (c *TCPConn) SetWriteDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPConn.Write">func (c *TCPConn) Write(b []byte) (int, error)</a></dd>
+				
+			
+				
+				<dd><a href="#TCPListener">type TCPListener</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ListenTCP">func ListenTCP(net string, laddr *TCPAddr) (*TCPListener, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPListener.Accept">func (l *TCPListener) Accept() (Conn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPListener.AcceptTCP">func (l *TCPListener) AcceptTCP() (*TCPConn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPListener.Addr">func (l *TCPListener) Addr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPListener.Close">func (l *TCPListener) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPListener.File">func (l *TCPListener) File() (f *os.File, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TCPListener.SetDeadline">func (l *TCPListener) SetDeadline(t time.Time) error</a></dd>
+				
+			
+				
+				<dd><a href="#UDPAddr">type UDPAddr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ResolveUDPAddr">func ResolveUDPAddr(net, addr string) (*UDPAddr, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPAddr.Network">func (a *UDPAddr) Network() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPAddr.String">func (a *UDPAddr) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#UDPConn">type UDPConn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DialUDP">func DialUDP(net string, laddr, raddr *UDPAddr) (*UDPConn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ListenMulticastUDP">func ListenMulticastUDP(net string, ifi *Interface, gaddr *UDPAddr) (*UDPConn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ListenUDP">func ListenUDP(net string, laddr *UDPAddr) (*UDPConn, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.Close">func (c *UDPConn) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.File">func (c *UDPConn) File() (f *os.File, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.LocalAddr">func (c *UDPConn) LocalAddr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.Read">func (c *UDPConn) Read(b []byte) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.ReadFrom">func (c *UDPConn) ReadFrom(b []byte) (int, Addr, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.ReadFromUDP">func (c *UDPConn) ReadFromUDP(b []byte) (n int, addr *UDPAddr, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.ReadMsgUDP">func (c *UDPConn) ReadMsgUDP(b, oob []byte) (n, oobn, flags int, addr *UDPAddr, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.RemoteAddr">func (c *UDPConn) RemoteAddr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.SetDeadline">func (c *UDPConn) SetDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.SetReadBuffer">func (c *UDPConn) SetReadBuffer(bytes int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.SetReadDeadline">func (c *UDPConn) SetReadDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.SetWriteBuffer">func (c *UDPConn) SetWriteBuffer(bytes int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.SetWriteDeadline">func (c *UDPConn) SetWriteDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.Write">func (c *UDPConn) Write(b []byte) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.WriteMsgUDP">func (c *UDPConn) WriteMsgUDP(b, oob []byte, addr *UDPAddr) (n, oobn int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.WriteTo">func (c *UDPConn) WriteTo(b []byte, addr Addr) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UDPConn.WriteToUDP">func (c *UDPConn) WriteToUDP(b []byte, addr *UDPAddr) (int, error)</a></dd>
+				
+			
+				
+				<dd><a href="#UnixAddr">type UnixAddr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ResolveUnixAddr">func ResolveUnixAddr(net, addr string) (*UnixAddr, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixAddr.Network">func (a *UnixAddr) Network() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixAddr.String">func (a *UnixAddr) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#UnixConn">type UnixConn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DialUnix">func DialUnix(net string, laddr, raddr *UnixAddr) (*UnixConn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ListenUnixgram">func ListenUnixgram(net string, laddr *UnixAddr) (*UnixConn, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.Close">func (c *UnixConn) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.CloseRead">func (c *UnixConn) CloseRead() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.CloseWrite">func (c *UnixConn) CloseWrite() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.File">func (c *UnixConn) File() (f *os.File, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.LocalAddr">func (c *UnixConn) LocalAddr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.Read">func (c *UnixConn) Read(b []byte) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.ReadFrom">func (c *UnixConn) ReadFrom(b []byte) (int, Addr, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.ReadFromUnix">func (c *UnixConn) ReadFromUnix(b []byte) (n int, addr *UnixAddr, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.ReadMsgUnix">func (c *UnixConn) ReadMsgUnix(b, oob []byte) (n, oobn, flags int, addr *UnixAddr, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.RemoteAddr">func (c *UnixConn) RemoteAddr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.SetDeadline">func (c *UnixConn) SetDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.SetReadBuffer">func (c *UnixConn) SetReadBuffer(bytes int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.SetReadDeadline">func (c *UnixConn) SetReadDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.SetWriteBuffer">func (c *UnixConn) SetWriteBuffer(bytes int) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.SetWriteDeadline">func (c *UnixConn) SetWriteDeadline(t time.Time) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.Write">func (c *UnixConn) Write(b []byte) (int, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.WriteMsgUnix">func (c *UnixConn) WriteMsgUnix(b, oob []byte, addr *UnixAddr) (n, oobn int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.WriteTo">func (c *UnixConn) WriteTo(b []byte, addr Addr) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixConn.WriteToUnix">func (c *UnixConn) WriteToUnix(b []byte, addr *UnixAddr) (n int, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#UnixListener">type UnixListener</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ListenUnix">func ListenUnix(net string, laddr *UnixAddr) (*UnixListener, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixListener.Accept">func (l *UnixListener) Accept() (c Conn, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixListener.AcceptUnix">func (l *UnixListener) AcceptUnix() (*UnixConn, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixListener.Addr">func (l *UnixListener) Addr() Addr</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixListener.Close">func (l *UnixListener) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixListener.File">func (l *UnixListener) File() (f *os.File, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnixListener.SetDeadline">func (l *UnixListener) SetDeadline(t time.Time) (err error)</a></dd>
+				
+			
+				
+				<dd><a href="#UnknownNetworkError">type UnknownNetworkError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnknownNetworkError.Error">func (e UnknownNetworkError) Error() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnknownNetworkError.Temporary">func (e UnknownNetworkError) Temporary() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnknownNetworkError.Timeout">func (e UnknownNetworkError) Timeout() bool</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Listener">Listener</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/net/cgo_linux.go">cgo_linux.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/cgo_unix.go">cgo_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/dial.go">dial.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/dnsclient.go">dnsclient.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/dnsclient_unix.go">dnsclient_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/dnsconfig_unix.go">dnsconfig_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/dnsmsg.go">dnsmsg.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/fd_poll_runtime.go">fd_poll_runtime.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/fd_unix.go">fd_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/file_unix.go">file_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/hosts.go">hosts.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/interface.go">interface.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/interface_linux.go">interface_linux.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/ip.go">ip.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/iprawsock.go">iprawsock.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/iprawsock_posix.go">iprawsock_posix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/ipsock.go">ipsock.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/ipsock_posix.go">ipsock_posix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/lookup.go">lookup.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/lookup_unix.go">lookup_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/mac.go">mac.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/net.go">net.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/parse.go">parse.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/pipe.go">pipe.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/port.go">port.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/port_unix.go">port_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sendfile_linux.go">sendfile_linux.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sock_cloexec.go">sock_cloexec.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sock_linux.go">sock_linux.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sock_posix.go">sock_posix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sock_unix.go">sock_unix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sockopt_linux.go">sockopt_linux.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sockopt_posix.go">sockopt_posix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sockoptip_linux.go">sockoptip_linux.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/sockoptip_posix.go">sockoptip_posix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/tcpsock.go">tcpsock.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/tcpsock_posix.go">tcpsock_posix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/udpsock.go">udpsock.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/udpsock_posix.go">udpsock_posix.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/unixsock.go">unixsock.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/unixsock_posix.go">unixsock_posix.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="IPv4len">IPv4len</span> = 4
+        <span id="IPv6len">IPv6len</span> = 16
+)</pre>
+				<p>
+IP address lengths (bytes).
+</p>
+
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+        <span id="IPv4bcast">IPv4bcast</span>     = <a href="#IPv4">IPv4</a>(255, 255, 255, 255) <span class="comment">// broadcast</span>
+        <span id="IPv4allsys">IPv4allsys</span>    = <a href="#IPv4">IPv4</a>(224, 0, 0, 1)       <span class="comment">// all systems</span>
+        <span id="IPv4allrouter">IPv4allrouter</span> = <a href="#IPv4">IPv4</a>(224, 0, 0, 2)       <span class="comment">// all routers</span>
+        <span id="IPv4zero">IPv4zero</span>      = <a href="#IPv4">IPv4</a>(0, 0, 0, 0)         <span class="comment">// all zeros</span>
+)</pre>
+				<p>
+Well-known IPv4 addresses
+</p>
+
+			
+				<pre>var (
+        <span id="IPv6zero">IPv6zero</span>                   = <a href="#IP">IP</a>{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        <span id="IPv6unspecified">IPv6unspecified</span>            = <a href="#IP">IP</a>{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        <span id="IPv6loopback">IPv6loopback</span>               = <a href="#IP">IP</a>{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
+        <span id="IPv6interfacelocalallnodes">IPv6interfacelocalallnodes</span> = <a href="#IP">IP</a>{0xff, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x01}
+        <span id="IPv6linklocalallnodes">IPv6linklocalallnodes</span>      = <a href="#IP">IP</a>{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x01}
+        <span id="IPv6linklocalallrouters">IPv6linklocalallrouters</span>    = <a href="#IP">IP</a>{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02}
+)</pre>
+				<p>
+Well-known IPv6 addresses
+</p>
+
+			
+				<pre>var <span id="ErrWriteToConnected">ErrWriteToConnected</span> = <a href="../errors/index.html">errors</a>.<a href="../errors/index.html#New">New</a>(&#34;use of WriteTo with pre-connected UDP&#34;)</pre>
+				
+			
+		
+		
+			
+			
+			<h2 id="InterfaceAddrs">func <a href="http://golang.org/src/pkg/net/interface.go?s=2432:2469#L76">InterfaceAddrs</a></h2>
+			<pre>func InterfaceAddrs() ([]<a href="#Addr">Addr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+InterfaceAddrs returns a list of the system&#39;s network interface
+addresses.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Interfaces">func <a href="http://golang.org/src/pkg/net/interface.go?s=2281:2319#L70">Interfaces</a></h2>
+			<pre>func Interfaces() ([]<a href="#Interface">Interface</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+Interfaces returns a list of the system&#39;s network interfaces.
+</p>
+
+			
+		
+			
+			
+			<h2 id="JoinHostPort">func <a href="http://golang.org/src/pkg/net/ipsock.go?s=3832:3875#L146">JoinHostPort</a></h2>
+			<pre>func JoinHostPort(host, port <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+JoinHostPort combines host and port into a network address of the
+form &#34;host:port&#34; or, if host contains a colon or a percent sign,
+&#34;[host]:port&#34;.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupAddr">func <a href="http://golang.org/src/pkg/net/lookup.go?s=3150:3205#L93">LookupAddr</a></h2>
+			<pre>func LookupAddr(addr <a href="../builtin/index.html#string">string</a>) (name []<a href="../builtin/index.html#string">string</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupAddr performs a reverse lookup for the given address, returning a list
+of names mapping to that address.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupCNAME">func <a href="http://golang.org/src/pkg/net/lookup.go?s=1864:1919#L59">LookupCNAME</a></h2>
+			<pre>func LookupCNAME(name <a href="../builtin/index.html#string">string</a>) (cname <a href="../builtin/index.html#string">string</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupCNAME returns the canonical DNS host for the given name.
+Callers that do not care about the canonical name can call
+LookupHost or LookupIP directly; both take care of resolving
+the canonical name as part of the lookup.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupHost">func <a href="http://golang.org/src/pkg/net/lookup.go?s=307:363#L3">LookupHost</a></h2>
+			<pre>func LookupHost(host <a href="../builtin/index.html#string">string</a>) (addrs []<a href="../builtin/index.html#string">string</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupHost looks up the given host using the local resolver.
+It returns an array of that host&#39;s addresses.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupIP">func <a href="http://golang.org/src/pkg/net/lookup.go?s=1376:1426#L46">LookupIP</a></h2>
+			<pre>func LookupIP(host <a href="../builtin/index.html#string">string</a>) (addrs []<a href="#IP">IP</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupIP looks up host using the local resolver.
+It returns an array of that host&#39;s IPv4 and IPv6 addresses.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupMX">func <a href="http://golang.org/src/pkg/net/lookup.go?s=2662:2710#L77">LookupMX</a></h2>
+			<pre>func LookupMX(name <a href="../builtin/index.html#string">string</a>) (mx []*<a href="#MX">MX</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupMX returns the DNS MX records for the given domain name sorted by preference.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupNS">func <a href="http://golang.org/src/pkg/net/lookup.go?s=2805:2853#L82">LookupNS</a></h2>
+			<pre>func LookupNS(name <a href="../builtin/index.html#string">string</a>) (ns []*<a href="#NS">NS</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupNS returns the DNS NS records for the given domain name.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupPort">func <a href="http://golang.org/src/pkg/net/lookup.go?s=1522:1584#L51">LookupPort</a></h2>
+			<pre>func LookupPort(network, service <a href="../builtin/index.html#string">string</a>) (port <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupPort looks up the port for the given network and service.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupSRV">func <a href="http://golang.org/src/pkg/net/lookup.go?s=2446:2529#L72">LookupSRV</a></h2>
+			<pre>func LookupSRV(service, proto, name <a href="../builtin/index.html#string">string</a>) (cname <a href="../builtin/index.html#string">string</a>, addrs []*<a href="#SRV">SRV</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupSRV tries to resolve an SRV query of the given service,
+protocol, and domain name.  The proto is &#34;tcp&#34; or &#34;udp&#34;.
+The returned records are sorted by priority and randomized
+by weight within a priority.
+</p>
+<p>
+LookupSRV constructs the DNS name to look up following RFC 2782.
+That is, it looks up _service._proto.name.  To accommodate services
+publishing SRV records under non-standard names, if both service
+and proto are empty strings, LookupSRV looks up name directly.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LookupTXT">func <a href="http://golang.org/src/pkg/net/lookup.go?s=2950:3003#L87">LookupTXT</a></h2>
+			<pre>func LookupTXT(name <a href="../builtin/index.html#string">string</a>) (txt []<a href="../builtin/index.html#string">string</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+LookupTXT returns the DNS TXT records for the given domain name.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SplitHostPort">func <a href="http://golang.org/src/pkg/net/ipsock.go?s=1963:2029#L66">SplitHostPort</a></h2>
+			<pre>func SplitHostPort(hostport <a href="../builtin/index.html#string">string</a>) (host, port <a href="../builtin/index.html#string">string</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+			<p>
+SplitHostPort splits a network address of the form &#34;host:port&#34;,
+&#34;[host]:port&#34; or &#34;[ipv6-host%zone]:port&#34; into host or
+ipv6-host%zone and port.  A literal address or host name for IPv6
+must be enclosed in square brackets, as in &#34;[::1]:80&#34;,
+&#34;[ipv6-host]:http&#34; or &#34;[ipv6-host%zone]:80&#34;.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Addr">type <a href="http://golang.org/src/pkg/net/net.go?s=1248:1356#L45">Addr</a></h2>
+			<pre>type Addr interface {
+        Network() <a href="../builtin/index.html#string">string</a> <span class="comment">// name of the network</span>
+        String() <a href="../builtin/index.html#string">string</a>  <span class="comment">// string form of address</span>
+}</pre>
+			<p>
+Addr represents a network end point address.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="AddrError">type <a href="http://golang.org/src/pkg/net/net.go?s=9438:9489#L333">AddrError</a></h2>
+			<pre>type AddrError struct {
+        Err  <a href="../builtin/index.html#string">string</a>
+        Addr <a href="../builtin/index.html#string">string</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="AddrError.Error">func (*AddrError) <a href="http://golang.org/src/pkg/net/net.go?s=9491:9525#L338">Error</a></h3>
+				<pre>func (e *<a href="#AddrError">AddrError</a>) Error() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="AddrError.Temporary">func (*AddrError) <a href="http://golang.org/src/pkg/net/net.go?s=9630:9666#L349">Temporary</a></h3>
+				<pre>func (e *<a href="#AddrError">AddrError</a>) Temporary() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="AddrError.Timeout">func (*AddrError) <a href="http://golang.org/src/pkg/net/net.go?s=9686:9720#L353">Timeout</a></h3>
+				<pre>func (e *<a href="#AddrError">AddrError</a>) Timeout() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Conn">type <a href="http://golang.org/src/pkg/net/net.go?s=1486:3251#L53">Conn</a></h2>
+			<pre>type Conn interface {
+        <span class="comment">// Read reads data from the connection.</span>
+        <span class="comment">// Read can be made to time out and return a Error with Timeout() == true</span>
+        <span class="comment">// after a fixed time limit; see SetDeadline and SetReadDeadline.</span>
+        Read(b []<a href="../builtin/index.html#byte">byte</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)
+
+        <span class="comment">// Write writes data to the connection.</span>
+        <span class="comment">// Write can be made to time out and return a Error with Timeout() == true</span>
+        <span class="comment">// after a fixed time limit; see SetDeadline and SetWriteDeadline.</span>
+        Write(b []<a href="../builtin/index.html#byte">byte</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)
+
+        <span class="comment">// Close closes the connection.</span>
+        <span class="comment">// Any blocked Read or Write operations will be unblocked and return errors.</span>
+        Close() <a href="../builtin/index.html#error">error</a>
+
+        <span class="comment">// LocalAddr returns the local network address.</span>
+        LocalAddr() <a href="#Addr">Addr</a>
+
+        <span class="comment">// RemoteAddr returns the remote network address.</span>
+        RemoteAddr() <a href="#Addr">Addr</a>
+
+        <span class="comment">// SetDeadline sets the read and write deadlines associated</span>
+        <span class="comment">// with the connection. It is equivalent to calling both</span>
+        <span class="comment">// SetReadDeadline and SetWriteDeadline.</span>
+        <span class="comment">//</span>
+        <span class="comment">// A deadline is an absolute time after which I/O operations</span>
+        <span class="comment">// fail with a timeout (see type Error) instead of</span>
+        <span class="comment">// blocking. The deadline applies to all future I/O, not just</span>
+        <span class="comment">// the immediately following call to Read or Write.</span>
+        <span class="comment">//</span>
+        <span class="comment">// An idle timeout can be implemented by repeatedly extending</span>
+        <span class="comment">// the deadline after successful Read or Write calls.</span>
+        <span class="comment">//</span>
+        <span class="comment">// A zero value for t means I/O operations will not time out.</span>
+        SetDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a>
+
+        <span class="comment">// SetReadDeadline sets the deadline for future Read calls.</span>
+        <span class="comment">// A zero value for t means Read will not time out.</span>
+        SetReadDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a>
+
+        <span class="comment">// SetWriteDeadline sets the deadline for future Write calls.</span>
+        <span class="comment">// Even if write times out, it may return n &gt; 0, indicating that</span>
+        <span class="comment">// some of the data was successfully written.</span>
+        <span class="comment">// A zero value for t means Write will not time out.</span>
+        SetWriteDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+Conn is a generic stream-oriented network connection.
+</p>
+<p>
+Multiple goroutines may invoke methods on a Conn simultaneously.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Dial">func <a href="http://golang.org/src/pkg/net/dial.go?s=3727:3775#L119">Dial</a></h3>
+				<pre>func Dial(network, address <a href="../builtin/index.html#string">string</a>) (<a href="#Conn">Conn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Dial connects to the address on the named network.
+</p>
+<p>
+Known networks are &#34;tcp&#34;, &#34;tcp4&#34; (IPv4-only), &#34;tcp6&#34; (IPv6-only),
+&#34;udp&#34;, &#34;udp4&#34; (IPv4-only), &#34;udp6&#34; (IPv6-only), &#34;ip&#34;, &#34;ip4&#34;
+(IPv4-only), &#34;ip6&#34; (IPv6-only), &#34;unix&#34;, &#34;unixgram&#34; and
+&#34;unixpacket&#34;.
+</p>
+<p>
+For TCP and UDP networks, addresses have the form host:port.
+If host is a literal IPv6 address or host name, it must be enclosed
+in square brackets as in &#34;[::1]:80&#34;, &#34;[ipv6-host]:http&#34; or
+&#34;[ipv6-host%zone]:80&#34;.
+The functions JoinHostPort and SplitHostPort manipulate addresses
+in this form.
+</p>
+<p>
+Examples:
+</p>
+<pre>Dial(&#34;tcp&#34;, &#34;12.34.56.78:80&#34;)
+Dial(&#34;tcp&#34;, &#34;google.com:http&#34;)
+Dial(&#34;tcp&#34;, &#34;[2001:db8::1]:http&#34;)
+Dial(&#34;tcp&#34;, &#34;[fe80::1%lo0]:80&#34;)
+</pre>
+<p>
+For IP networks, the network must be &#34;ip&#34;, &#34;ip4&#34; or &#34;ip6&#34; followed
+by a colon and a protocol number or name and the addr must be a
+literal IP address.
+</p>
+<p>
+Examples:
+</p>
+<pre>Dial(&#34;ip4:1&#34;, &#34;127.0.0.1&#34;)
+Dial(&#34;ip6:ospf&#34;, &#34;::1&#34;)
+</pre>
+<p>
+For Unix networks, the address must be a file system path.
+</p>
+
+				
+			
+				
+				<h3 id="DialTimeout">func <a href="http://golang.org/src/pkg/net/dial.go?s=3933:4011#L126">DialTimeout</a></h3>
+				<pre>func DialTimeout(network, address <a href="../builtin/index.html#string">string</a>, timeout <a href="../time/index.html">time</a>.<a href="../time/index.html#Duration">Duration</a>) (<a href="#Conn">Conn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+DialTimeout acts like Dial but takes a timeout.
+The timeout includes name resolution, if required.
+</p>
+
+				
+			
+				
+				<h3 id="FileConn">func <a href="http://golang.org/src/pkg/net/file_unix.go?s=2015:2060#L71">FileConn</a></h3>
+				<pre>func FileConn(f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>) (c <a href="#Conn">Conn</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+FileConn returns a copy of the network connection corresponding to
+the open file f.  It is the caller&#39;s responsibility to close f when
+finished.  Closing c does not affect f, and closing f does not
+affect c.
+</p>
+
+				
+			
+				
+				<h3 id="Pipe">func <a href="http://golang.org/src/pkg/net/pipe.go?s=462:486#L8">Pipe</a></h3>
+				<pre>func Pipe() (<a href="#Conn">Conn</a>, <a href="#Conn">Conn</a>)</pre>
+				<p>
+Pipe creates a synchronous, in-memory, full duplex
+network connection; both ends implement the Conn interface.
+Reads on one end are matched with writes on the other,
+copying data directly between the two; there is no internal
+buffering.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="DNSConfigError">type <a href="http://golang.org/src/pkg/net/net.go?s=10067:10108#L364">DNSConfigError</a></h2>
+			<pre>type DNSConfigError struct {
+        Err <a href="../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+DNSConfigError represents an error reading the machine&#39;s DNS configuration.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DNSConfigError.Error">func (*DNSConfigError) <a href="http://golang.org/src/pkg/net/net.go?s=10110:10149#L368">Error</a></h3>
+				<pre>func (e *<a href="#DNSConfigError">DNSConfigError</a>) Error() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="DNSConfigError.Temporary">func (*DNSConfigError) <a href="http://golang.org/src/pkg/net/net.go?s=10267:10308#L373">Temporary</a></h3>
+				<pre>func (e *<a href="#DNSConfigError">DNSConfigError</a>) Temporary() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="DNSConfigError.Timeout">func (*DNSConfigError) <a href="http://golang.org/src/pkg/net/net.go?s=10208:10247#L372">Timeout</a></h3>
+				<pre>func (e *<a href="#DNSConfigError">DNSConfigError</a>) Timeout() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DNSError">type <a href="http://golang.org/src/pkg/net/dnsclient.go?s=249:405#L3">DNSError</a></h2>
+			<pre>type DNSError struct {
+        Err       <a href="../builtin/index.html#string">string</a> <span class="comment">// description of the error</span>
+        Name      <a href="../builtin/index.html#string">string</a> <span class="comment">// name looked for</span>
+        Server    <a href="../builtin/index.html#string">string</a> <span class="comment">// server used</span>
+        IsTimeout <a href="../builtin/index.html#bool">bool</a>
+}</pre>
+			<p>
+DNSError represents a DNS lookup error.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DNSError.Error">func (*DNSError) <a href="http://golang.org/src/pkg/net/dnsclient.go?s=407:440#L10">Error</a></h3>
+				<pre>func (e *<a href="#DNSError">DNSError</a>) Error() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="DNSError.Temporary">func (*DNSError) <a href="http://golang.org/src/pkg/net/dnsclient.go?s=643:678#L23">Temporary</a></h3>
+				<pre>func (e *<a href="#DNSError">DNSError</a>) Temporary() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="DNSError.Timeout">func (*DNSError) <a href="http://golang.org/src/pkg/net/dnsclient.go?s=584:617#L22">Timeout</a></h3>
+				<pre>func (e *<a href="#DNSError">DNSError</a>) Timeout() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Dialer">type <a href="http://golang.org/src/pkg/net/dial.go?s=448:1273#L7">Dialer</a></h2>
+			<pre>type Dialer struct {
+        <span class="comment">// Timeout is the maximum amount of time a dial will wait for</span>
+        <span class="comment">// a connect to complete. If Deadline is also set, it may fail</span>
+        <span class="comment">// earlier.</span>
+        <span class="comment">//</span>
+        <span class="comment">// The default is no timeout.</span>
+        <span class="comment">//</span>
+        <span class="comment">// With or without a timeout, the operating system may impose</span>
+        <span class="comment">// its own earlier timeout. For instance, TCP timeouts are</span>
+        <span class="comment">// often around 3 minutes.</span>
+        Timeout <a href="../time/index.html">time</a>.<a href="../time/index.html#Duration">Duration</a>
+
+        <span class="comment">// Deadline is the absolute point in time after which dials</span>
+        <span class="comment">// will fail. If Timeout is set, it may fail earlier.</span>
+        <span class="comment">// Zero means no deadline, or dependent on the operating system</span>
+        <span class="comment">// as with the Timeout option.</span>
+        Deadline <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>
+
+        <span class="comment">// LocalAddr is the local address to use when dialing an</span>
+        <span class="comment">// address. The address must be of a compatible type for the</span>
+        <span class="comment">// network being dialed.</span>
+        <span class="comment">// If nil, a local address is automatically chosen.</span>
+        LocalAddr <a href="#Addr">Addr</a>
+}</pre>
+			<p>
+A Dialer contains options for connecting to an address.
+</p>
+<p>
+The zero value for each field is equivalent to dialing
+without that option. Dialing with the zero value of Dialer
+is therefore equivalent to just calling the Dial function.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Dialer.Dial">func (*Dialer) <a href="http://golang.org/src/pkg/net/dial.go?s=4215:4275#L135">Dial</a></h3>
+				<pre>func (d *<a href="#Dialer">Dialer</a>) Dial(network, address <a href="../builtin/index.html#string">string</a>) (<a href="#Conn">Conn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Dial connects to the address on the named network.
+</p>
+<p>
+See func Dial for a description of the network and address
+parameters.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Error">type <a href="http://golang.org/src/pkg/net/net.go?s=5642:5763#L200">Error</a></h2>
+			<pre>type Error interface {
+        <a href="../builtin/index.html#error">error</a>
+        Timeout() <a href="../builtin/index.html#bool">bool</a>   <span class="comment">// Is the error a timeout?</span>
+        Temporary() <a href="../builtin/index.html#bool">bool</a> <span class="comment">// Is the error temporary?</span>
+}</pre>
+			<p>
+An Error represents a network error.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Flags">type <a href="http://golang.org/src/pkg/net/interface.go?s=1071:1086#L18">Flags</a></h2>
+			<pre>type Flags <a href="../builtin/index.html#uint">uint</a></pre>
+			
+
+			
+				<pre>const (
+        <span id="FlagUp">FlagUp</span>           <a href="#Flags">Flags</a> = 1 &lt;&lt; <a href="../builtin/index.html#iota">iota</a> <span class="comment">// interface is up</span>
+        <span id="FlagBroadcast">FlagBroadcast</span>                      <span class="comment">// interface supports broadcast access capability</span>
+        <span id="FlagLoopback">FlagLoopback</span>                       <span class="comment">// interface is a loopback interface</span>
+        <span id="FlagPointToPoint">FlagPointToPoint</span>                   <span class="comment">// interface belongs to a point-to-point link</span>
+        <span id="FlagMulticast">FlagMulticast</span>                      <span class="comment">// interface supports multicast access capability</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Flags.String">func (Flags) <a href="http://golang.org/src/pkg/net/interface.go?s=1575:1605#L36">String</a></h3>
+				<pre>func (f <a href="#Flags">Flags</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="HardwareAddr">type <a href="http://golang.org/src/pkg/net/mac.go?s=316:340#L4">HardwareAddr</a></h2>
+			<pre>type HardwareAddr []<a href="../builtin/index.html#byte">byte</a></pre>
+			<p>
+A HardwareAddr represents a physical hardware address.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ParseMAC">func <a href="http://golang.org/src/pkg/net/mac.go?s=866:918#L29">ParseMAC</a></h3>
+				<pre>func ParseMAC(s <a href="../builtin/index.html#string">string</a>) (hw <a href="#HardwareAddr">HardwareAddr</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ParseMAC parses s as an IEEE 802 MAC-48, EUI-48, or EUI-64 using one of the
+following formats:
+</p>
+<pre>01:23:45:67:89:ab
+01:23:45:67:89:ab:cd:ef
+01-23-45-67-89-ab
+01-23-45-67-89-ab-cd-ef
+0123.4567.89ab
+0123.4567.89ab.cdef
+</pre>
+
+				
+			
+
+			
+				
+				<h3 id="HardwareAddr.String">func (HardwareAddr) <a href="http://golang.org/src/pkg/net/mac.go?s=342:379#L6">String</a></h3>
+				<pre>func (a <a href="#HardwareAddr">HardwareAddr</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="IP">type <a href="http://golang.org/src/pkg/net/ip.go?s=919:933#L20">IP</a></h2>
+			<pre>type IP []<a href="../builtin/index.html#byte">byte</a></pre>
+			<p>
+An IP is a single IP address, a slice of bytes.
+Functions in this package accept either 4-byte (IPv4)
+or 16-byte (IPv6) slices as input.
+</p>
+<p>
+Note that in this documentation, referring to an
+IP address as an IPv4 address or an IPv6 address
+is a semantic property of the address, not just the
+length of the byte slice: a 16-byte slice can still
+be an IPv4 address.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="IPv4">func <a href="http://golang.org/src/pkg/net/ip.go?s=1189:1218#L33">IPv4</a></h3>
+				<pre>func IPv4(a, b, c, d <a href="../builtin/index.html#byte">byte</a>) <a href="#IP">IP</a></pre>
+				<p>
+IPv4 returns the IP address (in 16-byte form) of the
+IPv4 address a.b.c.d.
+</p>
+
+				
+			
+				
+				<h3 id="ParseCIDR">func <a href="http://golang.org/src/pkg/net/ip.go?s=13811:13855#L611">ParseCIDR</a></h3>
+				<pre>func ParseCIDR(s <a href="../builtin/index.html#string">string</a>) (<a href="#IP">IP</a>, *<a href="#IPNet">IPNet</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ParseCIDR parses s as a CIDR notation IP address and mask,
+like &#34;192.168.100.1/24&#34; or &#34;2001:DB8::/48&#34;, as defined in
+RFC 4632 and RFC 4291.
+</p>
+<p>
+It returns the IP address and the network implied by the IP
+and mask.  For example, ParseCIDR(&#34;192.168.100.1/16&#34;) returns
+the IP address 192.168.100.1 and the network 192.168.0.0/16.
+</p>
+
+				
+			
+				
+				<h3 id="ParseIP">func <a href="http://golang.org/src/pkg/net/ip.go?s=13344:13369#L596">ParseIP</a></h3>
+				<pre>func ParseIP(s <a href="../builtin/index.html#string">string</a>) <a href="#IP">IP</a></pre>
+				<p>
+ParseIP parses s as an IP address, returning the result.
+The string s can be in dotted decimal (&#34;74.125.19.99&#34;)
+or IPv6 (&#34;2001:4860:0:2001::68&#34;) form.
+If s is not a valid textual representation of an IP address,
+ParseIP returns nil.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="IP.DefaultMask">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=5492:5525#L203">DefaultMask</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) DefaultMask() <a href="#IPMask">IPMask</a></pre>
+				<p>
+DefaultMask returns the default IP mask for the IP address ip.
+Only IPv4 addresses have default masks; DefaultMask returns
+nil if ip is not a valid IPv4 address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.Equal">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=7534:7563#L306">Equal</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) Equal(x <a href="#IP">IP</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Equal returns true if ip and x are the same IP address.
+An IPv4 address and that same address in IPv6 form are
+considered to be equal.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.IsGlobalUnicast">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=4289:4324#L149">IsGlobalUnicast</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) IsGlobalUnicast() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsGlobalUnicast returns true if ip is a global unicast
+address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.IsInterfaceLocalMulticast">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=3583:3628#L125">IsInterfaceLocalMulticast</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) IsInterfaceLocalMulticast() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsInterfaceLinkLocalMulticast returns true if ip is
+an interface-local multicast address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.IsLinkLocalMulticast">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=3781:3821#L131">IsLinkLocalMulticast</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) IsLinkLocalMulticast() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsLinkLocalMulticast returns true if ip is a link-local
+multicast address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.IsLinkLocalUnicast">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=4046:4084#L140">IsLinkLocalUnicast</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) IsLinkLocalUnicast() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsLinkLocalUnicast returns true if ip is a link-local
+unicast address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.IsLoopback">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=3161:3191#L108">IsLoopback</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) IsLoopback() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsLoopback returns true if ip is a loopback address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.IsMulticast">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=3354:3385#L116">IsMulticast</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) IsMulticast() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsMulticast returns true if ip is a multicast address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.IsUnspecified">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=2981:3014#L100">IsUnspecified</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) IsUnspecified() <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsUnspecified returns true if ip is an unspecified address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.Mask">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=5880:5913#L227">Mask</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) Mask(mask <a href="#IPMask">IPMask</a>) <a href="#IP">IP</a></pre>
+				<p>
+Mask returns the result of masking the IP address ip with mask.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.String">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=6479:6507#L249">String</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+String returns the string form of the IP address ip.
+If the address is an IPv4 address, the string representation
+is dotted decimal (&#34;74.125.19.99&#34;).  Otherwise the representation
+is IPv6 (&#34;2001:4860:0:2001::68&#34;).
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.To16">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=5006:5028#L183">To16</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) To16() <a href="#IP">IP</a></pre>
+				<p>
+To16 converts the IP address ip to a 16-byte representation.
+If ip is not an IP address (it is the wrong length), To16 returns nil.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IP.To4">func (IP) <a href="http://golang.org/src/pkg/net/ip.go?s=4679:4700#L168">To4</a></h3>
+				<pre>func (ip <a href="#IP">IP</a>) To4() <a href="#IP">IP</a></pre>
+				<p>
+To4 converts the IPv4 address ip to a 4-byte representation.
+If ip is not an IPv4 address, To4 returns nil.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="IPAddr">type <a href="http://golang.org/src/pkg/net/iprawsock.go?s=227:302#L1">IPAddr</a></h2>
+			<pre>type IPAddr struct {
+        IP   <a href="#IP">IP</a>
+        Zone <a href="../builtin/index.html#string">string</a> <span class="comment">// IPv6 scoped addressing zone</span>
+}</pre>
+			<p>
+IPAddr represents the address of an IP end point.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ResolveIPAddr">func <a href="http://golang.org/src/pkg/net/iprawsock.go?s=739:792#L19">ResolveIPAddr</a></h3>
+				<pre>func ResolveIPAddr(net, addr <a href="../builtin/index.html#string">string</a>) (*<a href="#IPAddr">IPAddr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ResolveIPAddr parses addr as an IP address of the form &#34;host&#34; or
+&#34;ipv6-host%zone&#34; and resolves the domain name on the network net,
+which must be &#34;ip&#34;, &#34;ip4&#34; or &#34;ip6&#34;.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="IPAddr.Network">func (*IPAddr) <a href="http://golang.org/src/pkg/net/iprawsock.go?s=357:390#L4">Network</a></h3>
+				<pre>func (a *<a href="#IPAddr">IPAddr</a>) Network() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+Network returns the address&#39;s network name, &#34;ip&#34;.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPAddr.String">func (*IPAddr) <a href="http://golang.org/src/pkg/net/iprawsock.go?s=408:440#L6">String</a></h3>
+				<pre>func (a *<a href="#IPAddr">IPAddr</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="IPConn">type <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=1138:1166#L44">IPConn</a></h2>
+			<pre>type IPConn struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+IPConn is the implementation of the Conn and PacketConn interfaces
+for IP network connections.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DialIP">func <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=4554:4621#L154">DialIP</a></h3>
+				<pre>func DialIP(netProto <a href="../builtin/index.html#string">string</a>, laddr, raddr *<a href="#IPAddr">IPAddr</a>) (*<a href="#IPConn">IPConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+DialIP connects to the remote address raddr on the network protocol
+netProto, which must be &#34;ip&#34;, &#34;ip4&#34;, or &#34;ip6&#34; followed by a colon
+and a protocol number or name.
+</p>
+
+				
+			
+				
+				<h3 id="ListenIP">func <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=5440:5502#L182">ListenIP</a></h3>
+				<pre>func ListenIP(netProto <a href="../builtin/index.html#string">string</a>, laddr *<a href="#IPAddr">IPAddr</a>) (*<a href="#IPConn">IPConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ListenIP listens for incoming IP packets addressed to the local
+address laddr.  The returned connection&#39;s ReadFrom and WriteTo
+methods can be used to receive and send IP packets with per-packet
+addressing.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="IPConn.Close">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3733:3761#L125">Close</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) Close() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.File">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=5533:5578#L197">File</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) File() (f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+File sets the underlying os.File to blocking mode and returns a copy.
+It is the caller&#39;s responsibility to close f when finished.
+Closing c does not affect f, and closing f does not affect c.
+</p>
+<p>
+The returned os.File&#39;s file descriptor is different from the connection&#39;s.
+Attempting to change properties of the original using this duplicate
+may or may not have the desired effect.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.LocalAddr">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3877:3908#L133">LocalAddr</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) LocalAddr() <a href="#Addr">Addr</a></pre>
+				<p>
+LocalAddr returns the local network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.Read">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3430:3472#L109">Read</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) Read(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Read implements the Conn Read method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.ReadFrom">func (*IPConn) <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=2207:2261#L80">ReadFrom</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) ReadFrom(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="#Addr">Addr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadFrom implements the PacketConn ReadFrom method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.ReadFromIP">func (*IPConn) <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=1552:1611#L57">ReadFromIP</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) ReadFromIP(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, *<a href="#IPAddr">IPAddr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadFromIP reads an IP packet from c, copying the payload into b.
+It returns the number of bytes copied into b and the return address
+that was on the packet.
+</p>
+<p>
+ReadFromIP can be made to time out and return an error with
+Timeout() == true after a fixed time limit; see SetDeadline and
+SetReadDeadline.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.ReadMsgIP">func (*IPConn) <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=2657:2744#L92">ReadMsgIP</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) ReadMsgIP(b, oob []<a href="../builtin/index.html#byte">byte</a>) (n, oobn, flags <a href="../builtin/index.html#int">int</a>, addr *<a href="#IPAddr">IPAddr</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadMsgIP reads a packet from c, copying the payload into b and the
+associated out-of-band data into oob.  It returns the number of
+bytes copied into b, the number of bytes copied into oob, the flags
+that were set on the packet and the source address of the packet.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.RemoteAddr">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4013:4045#L141">RemoteAddr</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) RemoteAddr() <a href="#Addr">Addr</a></pre>
+				<p>
+RemoteAddr returns the remote network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.SetDeadline">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4155:4200#L149">SetDeadline</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) SetDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetDeadline implements the Conn SetDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.SetReadBuffer">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4771:4816#L174">SetReadBuffer</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) SetReadBuffer(bytes <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetReadBuffer sets the size of the operating system&#39;s
+receive buffer associated with the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.SetReadDeadline">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4339:4388#L157">SetReadDeadline</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) SetReadDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetReadDeadline implements the Conn SetReadDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.SetWriteBuffer">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=5007:5053#L183">SetWriteBuffer</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) SetWriteBuffer(bytes <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetWriteBuffer sets the size of the operating system&#39;s
+transmit buffer associated with the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.SetWriteDeadline">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4533:4583#L165">SetWriteDeadline</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) SetWriteDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetWriteDeadline implements the Conn SetWriteDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.Write">func (*IPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3586:3629#L117">Write</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) Write(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Write implements the Conn Write method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.WriteMsgIP">func (*IPConn) <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=4099:4180#L140">WriteMsgIP</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) WriteMsgIP(b, oob []<a href="../builtin/index.html#byte">byte</a>, addr *<a href="#IPAddr">IPAddr</a>) (n, oobn <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteMsgIP writes a packet to addr via c, copying the payload from
+b and the associated out-of-band data from oob.  It returns the
+number of payload and out-of-band bytes written.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.WriteTo">func (*IPConn) <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=3676:3734#L126">WriteTo</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) WriteTo(b []<a href="../builtin/index.html#byte">byte</a>, addr <a href="#Addr">Addr</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteTo implements the PacketConn WriteTo method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPConn.WriteToIP">func (*IPConn) <a href="http://golang.org/src/pkg/net/iprawsock_posix.go?s=3372:3435#L114">WriteToIP</a></h3>
+				<pre>func (c *<a href="#IPConn">IPConn</a>) WriteToIP(b []<a href="../builtin/index.html#byte">byte</a>, addr *<a href="#IPAddr">IPAddr</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteToIP writes an IP packet to addr via c, copying the payload
+from b.
+</p>
+<p>
+WriteToIP can be made to time out and return an error with
+Timeout() == true after a fixed time limit; see SetDeadline and
+SetWriteDeadline.  On packet-oriented connections, write timeouts
+are rare.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="IPMask">type <a href="http://golang.org/src/pkg/net/ip.go?s=967:985#L23">IPMask</a></h2>
+			<pre>type IPMask []<a href="../builtin/index.html#byte">byte</a></pre>
+			<p>
+An IP mask is an IP address.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CIDRMask">func <a href="http://golang.org/src/pkg/net/ip.go?s=1774:1810#L59">CIDRMask</a></h3>
+				<pre>func CIDRMask(ones, bits <a href="../builtin/index.html#int">int</a>) <a href="#IPMask">IPMask</a></pre>
+				<p>
+CIDRMask returns an IPMask consisting of `ones&#39; 1 bits
+followed by 0s up to a total length of `bits&#39; bits.
+For a mask of this form, CIDRMask is the inverse of IPMask.Size.
+</p>
+
+				
+			
+				
+				<h3 id="IPv4Mask">func <a href="http://golang.org/src/pkg/net/ip.go?s=1472:1509#L47">IPv4Mask</a></h3>
+				<pre>func IPv4Mask(a, b, c, d <a href="../builtin/index.html#byte">byte</a>) <a href="#IPMask">IPMask</a></pre>
+				<p>
+IPv4Mask returns the IP mask (in 4-byte form) of the
+IPv4 mask a.b.c.d.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="IPMask.Size">func (IPMask) <a href="http://golang.org/src/pkg/net/ip.go?s=8644:8683#L363">Size</a></h3>
+				<pre>func (m <a href="#IPMask">IPMask</a>) Size() (ones, bits <a href="../builtin/index.html#int">int</a>)</pre>
+				<p>
+Size returns the number of leading ones and total bits in the mask.
+If the mask is not in the canonical form--ones followed by zeros--then
+Size returns 0, 0.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPMask.String">func (IPMask) <a href="http://golang.org/src/pkg/net/ip.go?s=8841:8872#L372">String</a></h3>
+				<pre>func (m <a href="#IPMask">IPMask</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+String returns the hexadecimal form of m, with no punctuation.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="IPNet">type <a href="http://golang.org/src/pkg/net/ip.go?s=1025:1106#L26">IPNet</a></h2>
+			<pre>type IPNet struct {
+        IP   <a href="#IP">IP</a>     <span class="comment">// network number</span>
+        Mask <a href="#IPMask">IPMask</a> <span class="comment">// network mask</span>
+}</pre>
+			<p>
+An IPNet represents an IP network.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="IPNet.Contains">func (*IPNet) <a href="http://golang.org/src/pkg/net/ip.go?s=9385:9421#L407">Contains</a></h3>
+				<pre>func (n *<a href="#IPNet">IPNet</a>) Contains(ip <a href="#IP">IP</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+				<p>
+Contains reports whether the network includes ip.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPNet.Network">func (*IPNet) <a href="http://golang.org/src/pkg/net/ip.go?s=9705:9737#L425">Network</a></h3>
+				<pre>func (n *<a href="#IPNet">IPNet</a>) Network() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+Network returns the address&#39;s network name, &#34;ip+net&#34;.
+</p>
+
+				
+				
+			
+				
+				<h3 id="IPNet.String">func (*IPNet) <a href="http://golang.org/src/pkg/net/ip.go?s=10114:10145#L433">String</a></h3>
+				<pre>func (n *<a href="#IPNet">IPNet</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+String returns the CIDR notation of n like &#34;192.168.100.1/24&#34;
+or &#34;2001:DB8::/48&#34; as defined in RFC 4632 and RFC 4291.
+If the mask is not in the canonical form, it returns the
+string which consists of an IP address, followed by a slash
+character and a mask expressed as hexadecimal form with no
+punctuation like &#34;192.168.100.1/c000ff00&#34;.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Interface">type <a href="http://golang.org/src/pkg/net/interface.go?s=703:1069#L10">Interface</a></h2>
+			<pre>type Interface struct {
+        Index        <a href="../builtin/index.html#int">int</a>          <span class="comment">// positive integer that starts at one, zero is never used</span>
+        MTU          <a href="../builtin/index.html#int">int</a>          <span class="comment">// maximum transmission unit</span>
+        Name         <a href="../builtin/index.html#string">string</a>       <span class="comment">// e.g., &#34;en0&#34;, &#34;lo0&#34;, &#34;eth0.100&#34;</span>
+        HardwareAddr <a href="#HardwareAddr">HardwareAddr</a> <span class="comment">// IEEE MAC-48, EUI-48 and EUI-64 form</span>
+        Flags        <a href="#Flags">Flags</a>        <span class="comment">// e.g., FlagUp, FlagLoopback, FlagMulticast</span>
+}</pre>
+			<p>
+Interface represents a mapping between network interface name
+and index.  It also represents network interface facility
+information.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="InterfaceByIndex">func <a href="http://golang.org/src/pkg/net/interface.go?s=2569:2621#L81">InterfaceByIndex</a></h3>
+				<pre>func InterfaceByIndex(index <a href="../builtin/index.html#int">int</a>) (*<a href="#Interface">Interface</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+InterfaceByIndex returns the interface specified by index.
+</p>
+
+				
+			
+				
+				<h3 id="InterfaceByName">func <a href="http://golang.org/src/pkg/net/interface.go?s=3043:3096#L102">InterfaceByName</a></h3>
+				<pre>func InterfaceByName(name <a href="../builtin/index.html#string">string</a>) (*<a href="#Interface">Interface</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+InterfaceByName returns the interface specified by name.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Interface.Addrs">func (*Interface) <a href="http://golang.org/src/pkg/net/interface.go?s=1835:1880#L53">Addrs</a></h3>
+				<pre>func (ifi *<a href="#Interface">Interface</a>) Addrs() ([]<a href="#Addr">Addr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Addrs returns interface addresses for a specific interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Interface.MulticastAddrs">func (*Interface) <a href="http://golang.org/src/pkg/net/interface.go?s=2061:2115#L62">MulticastAddrs</a></h3>
+				<pre>func (ifi *<a href="#Interface">Interface</a>) MulticastAddrs() ([]<a href="#Addr">Addr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+MulticastAddrs returns multicast, joined group addresses for
+a specific interface.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="InvalidAddrError">type <a href="http://golang.org/src/pkg/net/ipsock.go?s=1449:1477#L55">InvalidAddrError</a></h2>
+			<pre>type InvalidAddrError <a href="../builtin/index.html#string">string</a></pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="InvalidAddrError.Error">func (InvalidAddrError) <a href="http://golang.org/src/pkg/net/ipsock.go?s=1479:1519#L57">Error</a></h3>
+				<pre>func (e <a href="#InvalidAddrError">InvalidAddrError</a>) Error() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="InvalidAddrError.Temporary">func (InvalidAddrError) <a href="http://golang.org/src/pkg/net/ipsock.go?s=1603:1645#L59">Temporary</a></h3>
+				<pre>func (e <a href="#InvalidAddrError">InvalidAddrError</a>) Temporary() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="InvalidAddrError.Timeout">func (InvalidAddrError) <a href="http://golang.org/src/pkg/net/ipsock.go?s=1543:1583#L58">Timeout</a></h3>
+				<pre>func (e <a href="#InvalidAddrError">InvalidAddrError</a>) Timeout() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Listener">type <a href="http://golang.org/src/pkg/net/net.go?s=7731:8039#L255">Listener</a></h2>
+			<pre>type Listener interface {
+        <span class="comment">// Accept waits for and returns the next connection to the listener.</span>
+        Accept() (c <a href="#Conn">Conn</a>, err <a href="../builtin/index.html#error">error</a>)
+
+        <span class="comment">// Close closes the listener.</span>
+        <span class="comment">// Any blocked Accept operations will be unblocked and return errors.</span>
+        Close() <a href="../builtin/index.html#error">error</a>
+
+        <span class="comment">// Addr returns the listener&#39;s network address.</span>
+        Addr() <a href="#Addr">Addr</a>
+}</pre>
+			<p>
+A Listener is a generic network listener for stream-oriented protocols.
+</p>
+<p>
+Multiple goroutines may invoke methods on a Listener simultaneously.
+</p>
+
+
+			
+
+			
+
+			<div id="example_Listener" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;io&#34;
+	&#34;log&#34;
+	&#34;net&#34;
+)
+
+func main() {
+	// Listen on TCP port 2000 on all interfaces.
+	l, err := net.Listen(&#34;tcp&#34;, &#34;:2000&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer l.Close()
+	for {
+		// Wait for a connection.
+		conn, err := l.Accept()
+		if err != nil {
+			log.Fatal(err)
+		}
+		// Handle the connection in a new goroutine.
+		// The loop then returns to accepting, so that
+		// multiple connections may be served concurrently.
+		go func(c net.Conn) {
+			// Echo all incoming data.
+			io.Copy(c, c)
+			// Shut down the connection.
+			c.Close()
+		}(conn)
+	}
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+			
+				
+				<h3 id="FileListener">func <a href="http://golang.org/src/pkg/net/file_unix.go?s=2600:2653#L94">FileListener</a></h3>
+				<pre>func FileListener(f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>) (l <a href="#Listener">Listener</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+FileListener returns a copy of the network listener corresponding
+to the open file f.  It is the caller&#39;s responsibility to close l
+when finished.  Closing l does not affect f, and closing f does not
+affect l.
+</p>
+
+				
+			
+				
+				<h3 id="Listen">func <a href="http://golang.org/src/pkg/net/dial.go?s=5427:5475#L176">Listen</a></h3>
+				<pre>func Listen(net, laddr <a href="../builtin/index.html#string">string</a>) (<a href="#Listener">Listener</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Listen announces on the local network address laddr.
+The network net must be a stream-oriented network: &#34;tcp&#34;, &#34;tcp4&#34;,
+&#34;tcp6&#34;, &#34;unix&#34; or &#34;unixpacket&#34;.
+See Dial for the syntax of laddr.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="MX">type <a href="http://golang.org/src/pkg/net/dnsclient.go?s=5556:5600#L215">MX</a></h2>
+			<pre>type MX struct {
+        Host <a href="../builtin/index.html#string">string</a>
+        Pref <a href="../builtin/index.html#uint16">uint16</a>
+}</pre>
+			<p>
+An MX represents a single DNS MX record.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="NS">type <a href="http://golang.org/src/pkg/net/dnsclient.go?s=6078:6109#L239">NS</a></h2>
+			<pre>type NS struct {
+        Host <a href="../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+An NS represents a single DNS NS record.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="OpError">type <a href="http://golang.org/src/pkg/net/net.go?s=8248:8604#L272">OpError</a></h2>
+			<pre>type OpError struct {
+        <span class="comment">// Op is the operation which caused the error, such as</span>
+        <span class="comment">// &#34;read&#34; or &#34;write&#34;.</span>
+        Op <a href="../builtin/index.html#string">string</a>
+
+        <span class="comment">// Net is the network type on which this error occurred,</span>
+        <span class="comment">// such as &#34;tcp&#34; or &#34;udp6&#34;.</span>
+        Net <a href="../builtin/index.html#string">string</a>
+
+        <span class="comment">// Addr is the network address on which this error occurred.</span>
+        Addr <a href="#Addr">Addr</a>
+
+        <span class="comment">// Err is the error that occurred during the operation.</span>
+        Err <a href="../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+OpError is the error type usually returned by functions in the net
+package. It describes the operation, network type, and address of
+an error.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="OpError.Error">func (*OpError) <a href="http://golang.org/src/pkg/net/net.go?s=8606:8638#L288">Error</a></h3>
+				<pre>func (e *<a href="#OpError">OpError</a>) Error() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="OpError.Temporary">func (*OpError) <a href="http://golang.org/src/pkg/net/net.go?s=8867:8901#L307">Temporary</a></h3>
+				<pre>func (e *<a href="#OpError">OpError</a>) Temporary() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="OpError.Timeout">func (*OpError) <a href="http://golang.org/src/pkg/net/net.go?s=9037:9069#L318">Timeout</a></h3>
+				<pre>func (e *<a href="#OpError">OpError</a>) Timeout() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="PacketConn">type <a href="http://golang.org/src/pkg/net/net.go?s=5905:7579#L209">PacketConn</a></h2>
+			<pre>type PacketConn interface {
+        <span class="comment">// ReadFrom reads a packet from the connection,</span>
+        <span class="comment">// copying the payload into b.  It returns the number of</span>
+        <span class="comment">// bytes copied into b and the return address that</span>
+        <span class="comment">// was on the packet.</span>
+        <span class="comment">// ReadFrom can be made to time out and return</span>
+        <span class="comment">// an error with Timeout() == true after a fixed time limit;</span>
+        <span class="comment">// see SetDeadline and SetReadDeadline.</span>
+        ReadFrom(b []<a href="../builtin/index.html#byte">byte</a>) (n <a href="../builtin/index.html#int">int</a>, addr <a href="#Addr">Addr</a>, err <a href="../builtin/index.html#error">error</a>)
+
+        <span class="comment">// WriteTo writes a packet with payload b to addr.</span>
+        <span class="comment">// WriteTo can be made to time out and return</span>
+        <span class="comment">// an error with Timeout() == true after a fixed time limit;</span>
+        <span class="comment">// see SetDeadline and SetWriteDeadline.</span>
+        <span class="comment">// On packet-oriented connections, write timeouts are rare.</span>
+        WriteTo(b []<a href="../builtin/index.html#byte">byte</a>, addr <a href="#Addr">Addr</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)
+
+        <span class="comment">// Close closes the connection.</span>
+        <span class="comment">// Any blocked ReadFrom or WriteTo operations will be unblocked and return errors.</span>
+        Close() <a href="../builtin/index.html#error">error</a>
+
+        <span class="comment">// LocalAddr returns the local network address.</span>
+        LocalAddr() <a href="#Addr">Addr</a>
+
+        <span class="comment">// SetDeadline sets the read and write deadlines associated</span>
+        <span class="comment">// with the connection.</span>
+        SetDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a>
+
+        <span class="comment">// SetReadDeadline sets the deadline for future Read calls.</span>
+        <span class="comment">// If the deadline is reached, Read will fail with a timeout</span>
+        <span class="comment">// (see type Error) instead of blocking.</span>
+        <span class="comment">// A zero value for t means Read will not time out.</span>
+        SetReadDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a>
+
+        <span class="comment">// SetWriteDeadline sets the deadline for future Write calls.</span>
+        <span class="comment">// If the deadline is reached, Write will fail with a timeout</span>
+        <span class="comment">// (see type Error) instead of blocking.</span>
+        <span class="comment">// A zero value for t means Write will not time out.</span>
+        <span class="comment">// Even if write times out, it may return n &gt; 0, indicating that</span>
+        <span class="comment">// some of the data was successfully written.</span>
+        SetWriteDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+PacketConn is a generic packet-oriented network connection.
+</p>
+<p>
+Multiple goroutines may invoke methods on a PacketConn simultaneously.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="FilePacketConn">func <a href="http://golang.org/src/pkg/net/file_unix.go?s=3141:3198#L113">FilePacketConn</a></h3>
+				<pre>func FilePacketConn(f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>) (c <a href="#PacketConn">PacketConn</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+FilePacketConn returns a copy of the packet network connection
+corresponding to the open file f.  It is the caller&#39;s
+responsibility to close f when finished.  Closing c does not affect
+f, and closing f does not affect c.
+</p>
+
+				
+			
+				
+				<h3 id="ListenPacket">func <a href="http://golang.org/src/pkg/net/dial.go?s=5947:6003#L194">ListenPacket</a></h3>
+				<pre>func ListenPacket(net, laddr <a href="../builtin/index.html#string">string</a>) (<a href="#PacketConn">PacketConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ListenPacket announces on the local network address laddr.
+The network net must be a packet-oriented network: &#34;udp&#34;, &#34;udp4&#34;,
+&#34;udp6&#34;, &#34;ip&#34;, &#34;ip4&#34;, &#34;ip6&#34; or &#34;unixgram&#34;.
+See Dial for the syntax of laddr.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="ParseError">type <a href="http://golang.org/src/pkg/net/ip.go?s=12957:13009#L582">ParseError</a></h2>
+			<pre>type ParseError struct {
+        Type <a href="../builtin/index.html#string">string</a>
+        Text <a href="../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+A ParseError represents a malformed text string and the type of string that was expected.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ParseError.Error">func (*ParseError) <a href="http://golang.org/src/pkg/net/ip.go?s=13011:13046#L587">Error</a></h3>
+				<pre>func (e *<a href="#ParseError">ParseError</a>) Error() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SRV">type <a href="http://golang.org/src/pkg/net/dnsclient.go?s=4238:4325#L156">SRV</a></h2>
+			<pre>type SRV struct {
+        Target   <a href="../builtin/index.html#string">string</a>
+        Port     <a href="../builtin/index.html#uint16">uint16</a>
+        Priority <a href="../builtin/index.html#uint16">uint16</a>
+        Weight   <a href="../builtin/index.html#uint16">uint16</a>
+}</pre>
+			<p>
+An SRV represents a single DNS SRV record.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="TCPAddr">type <a href="http://golang.org/src/pkg/net/tcpsock.go?s=228:314#L1">TCPAddr</a></h2>
+			<pre>type TCPAddr struct {
+        IP   <a href="#IP">IP</a>
+        Port <a href="../builtin/index.html#int">int</a>
+        Zone <a href="../builtin/index.html#string">string</a> <span class="comment">// IPv6 scoped addressing zone</span>
+}</pre>
+			<p>
+TCPAddr represents the address of a TCP end point.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ResolveTCPAddr">func <a href="http://golang.org/src/pkg/net/tcpsock.go?s=993:1048#L23">ResolveTCPAddr</a></h3>
+				<pre>func ResolveTCPAddr(net, addr <a href="../builtin/index.html#string">string</a>) (*<a href="#TCPAddr">TCPAddr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ResolveTCPAddr parses addr as a TCP address of the form &#34;host:port&#34;
+or &#34;[ipv6-host%zone]:port&#34; and resolves a pair of domain name and
+port name on the network net, which must be &#34;tcp&#34;, &#34;tcp4&#34; or
+&#34;tcp6&#34;.  A literal address or host name for IPv6 must be enclosed
+in square brackets, as in &#34;[::1]:80&#34;, &#34;[ipv6-host]:http&#34; or
+&#34;[ipv6-host%zone]:80&#34;.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="TCPAddr.Network">func (*TCPAddr) <a href="http://golang.org/src/pkg/net/tcpsock.go?s=370:404#L5">Network</a></h3>
+				<pre>func (a *<a href="#TCPAddr">TCPAddr</a>) Network() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+Network returns the address&#39;s network name, &#34;tcp&#34;.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPAddr.String">func (*TCPAddr) <a href="http://golang.org/src/pkg/net/tcpsock.go?s=423:456#L7">String</a></h3>
+				<pre>func (a *<a href="#TCPAddr">TCPAddr</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="TCPConn">type <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=1481:1510#L51">TCPConn</a></h2>
+			<pre>type TCPConn struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+TCPConn is an implementation of the Conn interface for TCP network
+connections.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DialTCP">func <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=3644:3709#L128">DialTCP</a></h3>
+				<pre>func DialTCP(net <a href="../builtin/index.html#string">string</a>, laddr, raddr *<a href="#TCPAddr">TCPAddr</a>) (*<a href="#TCPConn">TCPConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+DialTCP connects to the remote address raddr on the network net,
+which must be &#34;tcp&#34;, &#34;tcp4&#34;, or &#34;tcp6&#34;.  If laddr is not nil, it is
+used as the local address for the connection.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="TCPConn.Close">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3733:3761#L125">Close</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) Close() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.CloseRead">func (*TCPConn) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=1930:1965#L71">CloseRead</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) CloseRead() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+CloseRead shuts down the reading side of the TCP connection.
+Most callers should just use Close.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.CloseWrite">func (*TCPConn) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=2141:2177#L80">CloseWrite</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) CloseWrite() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+CloseWrite shuts down the writing side of the TCP connection.
+Most callers should just use Close.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.File">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=5533:5578#L197">File</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) File() (f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+File sets the underlying os.File to blocking mode and returns a copy.
+It is the caller&#39;s responsibility to close f when finished.
+Closing c does not affect f, and closing f does not affect c.
+</p>
+<p>
+The returned os.File&#39;s file descriptor is different from the connection&#39;s.
+Attempting to change properties of the original using this duplicate
+may or may not have the desired effect.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.LocalAddr">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3877:3908#L133">LocalAddr</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) LocalAddr() <a href="#Addr">Addr</a></pre>
+				<p>
+LocalAddr returns the local network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.Read">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3430:3472#L109">Read</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) Read(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Read implements the Conn Read method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.ReadFrom">func (*TCPConn) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=1666:1720#L62">ReadFrom</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) ReadFrom(r <a href="../io/index.html">io</a>.<a href="../io/index.html#Reader">Reader</a>) (<a href="../builtin/index.html#int64">int64</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadFrom implements the io.ReaderFrom ReadFrom method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.RemoteAddr">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4013:4045#L141">RemoteAddr</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) RemoteAddr() <a href="#Addr">Addr</a></pre>
+				<p>
+RemoteAddr returns the remote network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.SetDeadline">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4155:4200#L149">SetDeadline</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) SetDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetDeadline implements the Conn SetDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.SetKeepAlive">func (*TCPConn) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=2947:2999#L107">SetKeepAlive</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) SetKeepAlive(keepalive <a href="../builtin/index.html#bool">bool</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetKeepAlive sets whether the operating system should send
+keepalive messages on the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.SetLinger">func (*TCPConn) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=2726:2768#L98">SetLinger</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) SetLinger(sec <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetLinger sets the behavior of Close() on a connection which still
+has data waiting to be sent or to be acknowledged.
+</p>
+<p>
+If sec &lt; 0 (the default), Close returns immediately and the
+operating system finishes sending the data in the background.
+</p>
+<p>
+If sec == 0, Close returns immediately and the operating system
+discards any unsent or unacknowledged data.
+</p>
+<p>
+If sec &gt; 0, Close blocks for at most sec seconds waiting for data
+to be sent and acknowledged.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.SetNoDelay">func (*TCPConn) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=3327:3375#L118">SetNoDelay</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) SetNoDelay(noDelay <a href="../builtin/index.html#bool">bool</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetNoDelay controls whether the operating system should delay
+packet transmission in hopes of sending fewer packets (Nagle&#39;s
+algorithm).  The default is true (no delay), meaning that data is
+sent as soon as possible after a Write.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.SetReadBuffer">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4771:4816#L174">SetReadBuffer</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) SetReadBuffer(bytes <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetReadBuffer sets the size of the operating system&#39;s
+receive buffer associated with the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.SetReadDeadline">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4339:4388#L157">SetReadDeadline</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) SetReadDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetReadDeadline implements the Conn SetReadDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.SetWriteBuffer">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=5007:5053#L183">SetWriteBuffer</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) SetWriteBuffer(bytes <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetWriteBuffer sets the size of the operating system&#39;s
+transmit buffer associated with the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.SetWriteDeadline">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4533:4583#L165">SetWriteDeadline</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) SetWriteDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetWriteDeadline implements the Conn SetWriteDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPConn.Write">func (*TCPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3586:3629#L117">Write</a></h3>
+				<pre>func (c *<a href="#TCPConn">TCPConn</a>) Write(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Write implements the Conn Write method.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="TCPListener">type <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=7024:7062#L209">TCPListener</a></h2>
+			<pre>type TCPListener struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+TCPListener is a TCP network listener.  Clients should typically
+use variables of type Listener instead of assuming TCP.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ListenTCP">func <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=8971:9035#L270">ListenTCP</a></h3>
+				<pre>func ListenTCP(net <a href="../builtin/index.html#string">string</a>, laddr *<a href="#TCPAddr">TCPAddr</a>) (*<a href="#TCPListener">TCPListener</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ListenTCP announces on the TCP address laddr and returns a TCP
+listener.  Net must be &#34;tcp&#34;, &#34;tcp4&#34;, or &#34;tcp6&#34;.  If laddr has a
+port of 0, ListenTCP will choose an available port.  The caller can
+use the Addr method of TCPListener to retrieve the chosen address.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="TCPListener.Accept">func (*TCPListener) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=7514:7558#L228">Accept</a></h3>
+				<pre>func (l *<a href="#TCPListener">TCPListener</a>) Accept() (<a href="#Conn">Conn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Accept implements the Accept method in the Listener interface; it
+waits for the next call and returns a generic Conn.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPListener.AcceptTCP">func (*TCPListener) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=7166:7217#L215">AcceptTCP</a></h3>
+				<pre>func (l *<a href="#TCPListener">TCPListener</a>) AcceptTCP() (*<a href="#TCPConn">TCPConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+AcceptTCP accepts the next incoming call and returns the new
+connection and the remote address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPListener.Addr">func (*TCPListener) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=7914:7947#L246">Addr</a></h3>
+				<pre>func (l *<a href="#TCPListener">TCPListener</a>) Addr() <a href="#Addr">Addr</a></pre>
+				<p>
+Addr returns the listener&#39;s network address, a *TCPAddr.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPListener.Close">func (*TCPListener) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=7735:7770#L238">Close</a></h3>
+				<pre>func (l *<a href="#TCPListener">TCPListener</a>) Close() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+Close stops listening on the TCP address.
+Already Accepted connections are not closed.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPListener.File">func (*TCPListener) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=8620:8672#L264">File</a></h3>
+				<pre>func (l *<a href="#TCPListener">TCPListener</a>) File() (f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+File returns a copy of the underlying os.File, set to blocking
+mode.  It is the caller&#39;s responsibility to close f when finished.
+Closing l does not affect f, and closing f does not affect l.
+</p>
+<p>
+The returned os.File&#39;s file descriptor is different from the
+connection&#39;s.  Attempting to change properties of the original
+using this duplicate may or may not have the desired effect.
+</p>
+
+				
+				
+			
+				
+				<h3 id="TCPListener.SetDeadline">func (*TCPListener) <a href="http://golang.org/src/pkg/net/tcpsock_posix.go?s=8078:8130#L250">SetDeadline</a></h3>
+				<pre>func (l *<a href="#TCPListener">TCPListener</a>) SetDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetDeadline sets the deadline associated with the listener.
+A zero time value disables the deadline.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="UDPAddr">type <a href="http://golang.org/src/pkg/net/udpsock.go?s=324:410#L2">UDPAddr</a></h2>
+			<pre>type UDPAddr struct {
+        IP   <a href="#IP">IP</a>
+        Port <a href="../builtin/index.html#int">int</a>
+        Zone <a href="../builtin/index.html#string">string</a> <span class="comment">// IPv6 scoped addressing zone</span>
+}</pre>
+			<p>
+UDPAddr represents the address of a UDP end point.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ResolveUDPAddr">func <a href="http://golang.org/src/pkg/net/udpsock.go?s=1089:1144#L27">ResolveUDPAddr</a></h3>
+				<pre>func ResolveUDPAddr(net, addr <a href="../builtin/index.html#string">string</a>) (*<a href="#UDPAddr">UDPAddr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ResolveUDPAddr parses addr as a UDP address of the form &#34;host:port&#34;
+or &#34;[ipv6-host%zone]:port&#34; and resolves a pair of domain name and
+port name on the network net, which must be &#34;udp&#34;, &#34;udp4&#34; or
+&#34;udp6&#34;.  A literal address or host name for IPv6 must be enclosed
+in square brackets, as in &#34;[::1]:80&#34;, &#34;[ipv6-host]:http&#34; or
+&#34;[ipv6-host%zone]:80&#34;.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="UDPAddr.Network">func (*UDPAddr) <a href="http://golang.org/src/pkg/net/udpsock.go?s=466:500#L9">Network</a></h3>
+				<pre>func (a *<a href="#UDPAddr">UDPAddr</a>) Network() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+Network returns the address&#39;s network name, &#34;udp&#34;.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPAddr.String">func (*UDPAddr) <a href="http://golang.org/src/pkg/net/udpsock.go?s=519:552#L11">String</a></h3>
+				<pre>func (a *<a href="#UDPAddr">UDPAddr</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="UDPConn">type <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=1183:1212#L44">UDPConn</a></h2>
+			<pre>type UDPConn struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+UDPConn is the implementation of the Conn and PacketConn interfaces
+for UDP network connections.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DialUDP">func <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=4654:4719#L153">DialUDP</a></h3>
+				<pre>func DialUDP(net <a href="../builtin/index.html#string">string</a>, laddr, raddr *<a href="#UDPAddr">UDPAddr</a>) (*<a href="#UDPConn">UDPConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+DialUDP connects to the remote address raddr on the network net,
+which must be &#34;udp&#34;, &#34;udp4&#34;, or &#34;udp6&#34;.  If laddr is not nil, it is
+used as the local address for the connection.
+</p>
+
+				
+			
+				
+				<h3 id="ListenMulticastUDP">func <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=6251:6336#L200">ListenMulticastUDP</a></h3>
+				<pre>func ListenMulticastUDP(net <a href="../builtin/index.html#string">string</a>, ifi *<a href="#Interface">Interface</a>, gaddr *<a href="#UDPAddr">UDPAddr</a>) (*<a href="#UDPConn">UDPConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ListenMulticastUDP listens for incoming multicast UDP packets
+addressed to the group address gaddr on ifi, which specifies the
+interface to join.  ListenMulticastUDP uses default multicast
+interface if ifi is nil.
+</p>
+
+				
+			
+				
+				<h3 id="ListenUDP">func <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=5642:5702#L180">ListenUDP</a></h3>
+				<pre>func ListenUDP(net <a href="../builtin/index.html#string">string</a>, laddr *<a href="#UDPAddr">UDPAddr</a>) (*<a href="#UDPConn">UDPConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ListenUDP listens for incoming UDP packets addressed to the local
+address laddr.  Net must be &#34;udp&#34;, &#34;udp4&#34;, or &#34;udp6&#34;.  If laddr has
+a port of 0, ListenUDP will choose an available port.
+The LocalAddr method of the returned UDPConn can be used to
+discover the port.  The returned connection&#39;s ReadFrom and WriteTo
+methods can be used to receive and send UDP packets with per-packet
+addressing.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="UDPConn.Close">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3733:3761#L125">Close</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) Close() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.File">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=5533:5578#L197">File</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) File() (f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+File sets the underlying os.File to blocking mode and returns a copy.
+It is the caller&#39;s responsibility to close f when finished.
+Closing c does not affect f, and closing f does not affect c.
+</p>
+<p>
+The returned os.File&#39;s file descriptor is different from the connection&#39;s.
+Attempting to change properties of the original using this duplicate
+may or may not have the desired effect.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.LocalAddr">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3877:3908#L133">LocalAddr</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) LocalAddr() <a href="#Addr">Addr</a></pre>
+				<p>
+LocalAddr returns the local network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.Read">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3430:3472#L109">Read</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) Read(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Read implements the Conn Read method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.ReadFrom">func (*UDPConn) <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=2051:2106#L72">ReadFrom</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) ReadFrom(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="#Addr">Addr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadFrom implements the PacketConn ReadFrom method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.ReadFromUDP">func (*UDPConn) <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=1603:1676#L57">ReadFromUDP</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) ReadFromUDP(b []<a href="../builtin/index.html#byte">byte</a>) (n <a href="../builtin/index.html#int">int</a>, addr *<a href="#UDPAddr">UDPAddr</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadFromUDP reads a UDP packet from c, copying the payload into b.
+It returns the number of bytes copied into b and the return address
+that was on the packet.
+</p>
+<p>
+ReadFromUDP can be made to time out and return an error with
+Timeout() == true after a fixed time limit; see SetDeadline and
+SetReadDeadline.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.ReadMsgUDP">func (*UDPConn) <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=2507:2597#L85">ReadMsgUDP</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) ReadMsgUDP(b, oob []<a href="../builtin/index.html#byte">byte</a>) (n, oobn, flags <a href="../builtin/index.html#int">int</a>, addr *<a href="#UDPAddr">UDPAddr</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadMsgUDP reads a packet from c, copying the payload into b and
+the associated out-of-band data into oob.  It returns the number
+of bytes copied into b, the number of bytes copied into oob, the
+flags that were set on the packet and the source address of the
+packet.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.RemoteAddr">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4013:4045#L141">RemoteAddr</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) RemoteAddr() <a href="#Addr">Addr</a></pre>
+				<p>
+RemoteAddr returns the remote network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.SetDeadline">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4155:4200#L149">SetDeadline</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) SetDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetDeadline implements the Conn SetDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.SetReadBuffer">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4771:4816#L174">SetReadBuffer</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) SetReadBuffer(bytes <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetReadBuffer sets the size of the operating system&#39;s
+receive buffer associated with the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.SetReadDeadline">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4339:4388#L157">SetReadDeadline</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) SetReadDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetReadDeadline implements the Conn SetReadDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.SetWriteBuffer">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=5007:5053#L183">SetWriteBuffer</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) SetWriteBuffer(bytes <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetWriteBuffer sets the size of the operating system&#39;s
+transmit buffer associated with the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.SetWriteDeadline">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=4533:4583#L165">SetWriteDeadline</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) SetWriteDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetWriteDeadline implements the Conn SetWriteDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.Write">func (*UDPConn) <a href="http://golang.org/src/pkg/net/net.go?s=3586:3629#L117">Write</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) Write(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Write implements the Conn Write method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.WriteMsgUDP">func (*UDPConn) <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=4086:4170#L136">WriteMsgUDP</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) WriteMsgUDP(b, oob []<a href="../builtin/index.html#byte">byte</a>, addr *<a href="#UDPAddr">UDPAddr</a>) (n, oobn <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteMsgUDP writes a packet to addr via c, copying the payload from
+b and the associated out-of-band data from oob.  It returns the
+number of payload and out-of-band bytes written.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.WriteTo">func (*UDPConn) <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=3659:3718#L122">WriteTo</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) WriteTo(b []<a href="../builtin/index.html#byte">byte</a>, addr <a href="#Addr">Addr</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteTo implements the PacketConn WriteTo method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UDPConn.WriteToUDP">func (*UDPConn) <a href="http://golang.org/src/pkg/net/udpsock_posix.go?s=3259:3325#L107">WriteToUDP</a></h3>
+				<pre>func (c *<a href="#UDPConn">UDPConn</a>) WriteToUDP(b []<a href="../builtin/index.html#byte">byte</a>, addr *<a href="#UDPAddr">UDPAddr</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteToUDP writes a UDP packet to addr via c, copying the payload
+from b.
+</p>
+<p>
+WriteToUDP can be made to time out and return an error with
+Timeout() == true after a fixed time limit; see SetDeadline and
+SetWriteDeadline.  On packet-oriented connections, write timeouts
+are rare.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="UnixAddr">type <a href="http://golang.org/src/pkg/net/unixsock.go?s=244:294#L1">UnixAddr</a></h2>
+			<pre>type UnixAddr struct {
+        Name <a href="../builtin/index.html#string">string</a>
+        Net  <a href="../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+UnixAddr represents the address of a Unix domain socket end point.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ResolveUnixAddr">func <a href="http://golang.org/src/pkg/net/unixsock.go?s=785:842#L26">ResolveUnixAddr</a></h3>
+				<pre>func ResolveUnixAddr(net, addr <a href="../builtin/index.html#string">string</a>) (*<a href="#UnixAddr">UnixAddr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ResolveUnixAddr parses addr as a Unix domain socket address.
+The string net gives the network name, &#34;unix&#34;, &#34;unixgram&#34; or
+&#34;unixpacket&#34;.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="UnixAddr.Network">func (*UnixAddr) <a href="http://golang.org/src/pkg/net/unixsock.go?s=382:417#L5">Network</a></h3>
+				<pre>func (a *<a href="#UnixAddr">UnixAddr</a>) Network() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+Network returns the address&#39;s network name, &#34;unix&#34;, &#34;unixgram&#34; or
+&#34;unixpacket&#34;.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixAddr.String">func (*UnixAddr) <a href="http://golang.org/src/pkg/net/unixsock.go?s=437:471#L9">String</a></h3>
+				<pre>func (a *<a href="#UnixAddr">UnixAddr</a>) String() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="UnixConn">type <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=2452:2482#L101">UnixConn</a></h2>
+			<pre>type UnixConn struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+UnixConn is an implementation of the Conn interface for connections
+to Unix domain sockets.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="DialUnix">func <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=6119:6187#L222">DialUnix</a></h3>
+				<pre>func DialUnix(net <a href="../builtin/index.html#string">string</a>, laddr, raddr *<a href="#UnixAddr">UnixAddr</a>) (*<a href="#UnixConn">UnixConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+DialUnix connects to the remote address raddr on the network net,
+which must be &#34;unix&#34;, &#34;unixgram&#34; or &#34;unixpacket&#34;.  If laddr is not
+nil, it is used as the local address for the connection.
+</p>
+
+				
+			
+				
+				<h3 id="ListenUnixgram">func <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=9859:9926#L342">ListenUnixgram</a></h3>
+				<pre>func ListenUnixgram(net <a href="../builtin/index.html#string">string</a>, laddr *<a href="#UnixAddr">UnixAddr</a>) (*<a href="#UnixConn">UnixConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ListenUnixgram listens for incoming Unix datagram packets addressed
+to the local address laddr.  The network net must be &#34;unixgram&#34;.
+The returned connection&#39;s ReadFrom and WriteTo methods can be used
+to receive and send packets with per-packet addressing.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="UnixConn.Close">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=3733:3761#L125">Close</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) Close() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.CloseRead">func (*UnixConn) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=5590:5626#L203">CloseRead</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) CloseRead() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+CloseRead shuts down the reading side of the Unix domain connection.
+Most callers should just use Close.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.CloseWrite">func (*UnixConn) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=5810:5847#L212">CloseWrite</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) CloseWrite() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+CloseWrite shuts down the writing side of the Unix domain connection.
+Most callers should just use Close.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.File">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=5533:5578#L197">File</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) File() (f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+File sets the underlying os.File to blocking mode and returns a copy.
+It is the caller&#39;s responsibility to close f when finished.
+Closing c does not affect f, and closing f does not affect c.
+</p>
+<p>
+The returned os.File&#39;s file descriptor is different from the connection&#39;s.
+Attempting to change properties of the original using this duplicate
+may or may not have the desired effect.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.LocalAddr">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=3877:3908#L133">LocalAddr</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) LocalAddr() <a href="#Addr">Addr</a></pre>
+				<p>
+LocalAddr returns the local network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.Read">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=3430:3472#L109">Read</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) Read(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Read implements the Conn Read method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.ReadFrom">func (*UnixConn) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=3241:3297#L129">ReadFrom</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) ReadFrom(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="#Addr">Addr</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadFrom implements the PacketConn ReadFrom method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.ReadFromUnix">func (*UnixConn) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=2866:2942#L114">ReadFromUnix</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) ReadFromUnix(b []<a href="../builtin/index.html#byte">byte</a>) (n <a href="../builtin/index.html#int">int</a>, addr *<a href="#UnixAddr">UnixAddr</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadFromUnix reads a packet from c, copying the payload into b.  It
+returns the number of bytes copied into b and the source address of
+the packet.
+</p>
+<p>
+ReadFromUnix can be made to time out and return an error with
+Timeout() == true after a fixed time limit; see SetDeadline and
+SetReadDeadline.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.ReadMsgUnix">func (*UnixConn) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=3698:3791#L141">ReadMsgUnix</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) ReadMsgUnix(b, oob []<a href="../builtin/index.html#byte">byte</a>) (n, oobn, flags <a href="../builtin/index.html#int">int</a>, addr *<a href="#UnixAddr">UnixAddr</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ReadMsgUnix reads a packet from c, copying the payload into b and
+the associated out-of-band data into oob.  It returns the number of
+bytes copied into b, the number of bytes copied into oob, the flags
+that were set on the packet, and the source address of the packet.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.RemoteAddr">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=4013:4045#L141">RemoteAddr</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) RemoteAddr() <a href="#Addr">Addr</a></pre>
+				<p>
+RemoteAddr returns the remote network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.SetDeadline">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=4155:4200#L149">SetDeadline</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) SetDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetDeadline implements the Conn SetDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.SetReadBuffer">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=4771:4816#L174">SetReadBuffer</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) SetReadBuffer(bytes <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetReadBuffer sets the size of the operating system&#39;s
+receive buffer associated with the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.SetReadDeadline">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=4339:4388#L157">SetReadDeadline</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) SetReadDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetReadDeadline implements the Conn SetReadDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.SetWriteBuffer">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=5007:5053#L183">SetWriteBuffer</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) SetWriteBuffer(bytes <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetWriteBuffer sets the size of the operating system&#39;s
+transmit buffer associated with the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.SetWriteDeadline">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=4533:4583#L165">SetWriteDeadline</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) SetWriteDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+SetWriteDeadline implements the Conn SetWriteDeadline method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.Write">func (*UnixConn) <a href="http://golang.org/src/pkg/net/net.go?s=3586:3629#L117">Write</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) Write(b []<a href="../builtin/index.html#byte">byte</a>) (<a href="../builtin/index.html#int">int</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Write implements the Conn Write method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.WriteMsgUnix">func (*UnixConn) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=5116:5203#L187">WriteMsgUnix</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) WriteMsgUnix(b, oob []<a href="../builtin/index.html#byte">byte</a>, addr *<a href="#UnixAddr">UnixAddr</a>) (n, oobn <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteMsgUnix writes a packet to addr via c, copying the payload
+from b and the associated out-of-band data from oob.  It returns
+the number of payload and out-of-band bytes written.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.WriteTo">func (*UnixConn) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=4679:4745#L173">WriteTo</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) WriteTo(b []<a href="../builtin/index.html#byte">byte</a>, addr <a href="#Addr">Addr</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteTo implements the PacketConn WriteTo method.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixConn.WriteToUnix">func (*UnixConn) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=4348:4423#L161">WriteToUnix</a></h3>
+				<pre>func (c *<a href="#UnixConn">UnixConn</a>) WriteToUnix(b []<a href="../builtin/index.html#byte">byte</a>, addr *<a href="#UnixAddr">UnixAddr</a>) (n <a href="../builtin/index.html#int">int</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+WriteToUnix writes a packet to addr via c, copying the payload from b.
+</p>
+<p>
+WriteToUnix can be made to time out and return an error with
+Timeout() == true after a fixed time limit; see SetDeadline and
+SetWriteDeadline.  On packet-oriented connections, write timeouts
+are rare.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="UnixListener">type <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=6722:6776#L242">UnixListener</a></h2>
+			<pre>type UnixListener struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+UnixListener is a Unix domain socket listener.  Clients should
+typically use variables of type Listener instead of assuming Unix
+domain sockets.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ListenUnix">func <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=6915:6982#L249">ListenUnix</a></h3>
+				<pre>func ListenUnix(net <a href="../builtin/index.html#string">string</a>, laddr *<a href="#UnixAddr">UnixAddr</a>) (*<a href="#UnixListener">UnixListener</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+ListenUnix announces on the Unix domain socket laddr and returns a
+Unix listener.  The network net must be &#34;unix&#34; or &#34;unixpacket&#34;.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="UnixListener.Accept">func (*UnixListener) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=7925:7976#L286">Accept</a></h3>
+				<pre>func (l *<a href="#UnixListener">UnixListener</a>) Accept() (c <a href="#Conn">Conn</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+Accept implements the Accept method in the Listener interface; it
+waits for the next call and returns a generic Conn.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixListener.AcceptUnix">func (*UnixListener) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=7564:7618#L272">AcceptUnix</a></h3>
+				<pre>func (l *<a href="#UnixListener">UnixListener</a>) AcceptUnix() (*<a href="#UnixConn">UnixConn</a>, <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+AcceptUnix accepts the next incoming call and returns the new
+connection and the remote address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixListener.Addr">func (*UnixListener) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=8800:8834#L318">Addr</a></h3>
+				<pre>func (l *<a href="#UnixListener">UnixListener</a>) Addr() <a href="#Addr">Addr</a></pre>
+				<p>
+Addr returns the listener&#39;s network address.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixListener.Close">func (*UnixListener) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=8158:8194#L296">Close</a></h3>
+				<pre>func (l *<a href="#UnixListener">UnixListener</a>) Close() <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+Close stops listening on the Unix address.  Already accepted
+connections are not closed.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixListener.File">func (*UnixListener) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=9514:9567#L336">File</a></h3>
+				<pre>func (l *<a href="#UnixListener">UnixListener</a>) File() (f *<a href="../os/index.html">os</a>.<a href="../os/index.html#File">File</a>, err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+File returns a copy of the underlying os.File, set to blocking
+mode.  It is the caller&#39;s responsibility to close f when finished.
+Closing l does not affect f, and closing f does not affect l.
+</p>
+<p>
+The returned os.File&#39;s file descriptor is different from the
+connection&#39;s.  Attempting to change properties of the original
+using this duplicate may or may not have the desired effect.
+</p>
+
+				
+				
+			
+				
+				<h3 id="UnixListener.SetDeadline">func (*UnixListener) <a href="http://golang.org/src/pkg/net/unixsock_posix.go?s=8965:9024#L322">SetDeadline</a></h3>
+				<pre>func (l *<a href="#UnixListener">UnixListener</a>) SetDeadline(t <a href="../time/index.html">time</a>.<a href="../time/index.html#Time">Time</a>) (err <a href="../builtin/index.html#error">error</a>)</pre>
+				<p>
+SetDeadline sets the deadline associated with the listener.
+A zero time value disables the deadline.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="UnknownNetworkError">type <a href="http://golang.org/src/pkg/net/net.go?s=9740:9771#L357">UnknownNetworkError</a></h2>
+			<pre>type UnknownNetworkError <a href="../builtin/index.html#string">string</a></pre>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="UnknownNetworkError.Error">func (UnknownNetworkError) <a href="http://golang.org/src/pkg/net/net.go?s=9773:9816#L359">Error</a></h3>
+				<pre>func (e <a href="#UnknownNetworkError">UnknownNetworkError</a>) Error() <a href="../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="UnknownNetworkError.Temporary">func (UnknownNetworkError) <a href="http://golang.org/src/pkg/net/net.go?s=9861:9906#L360">Temporary</a></h3>
+				<pre>func (e <a href="#UnknownNetworkError">UnknownNetworkError</a>) Temporary() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="UnknownNetworkError.Timeout">func (UnknownNetworkError) <a href="http://golang.org/src/pkg/net/net.go?s=9924:9967#L361">Timeout</a></h3>
+				<pre>func (e <a href="#UnknownNetworkError">UnknownNetworkError</a>) Timeout() <a href="../builtin/index.html#bool">bool</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="../index.html">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="http/index.html">http</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package http provides HTTP client and server implementations.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http/cgi/index.html">cgi</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cgi implements CGI (Common Gateway Interface) as specified in RFC 3875.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http/cookiejar/index.html">cookiejar</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cookiejar implements an in-memory RFC 6265-compliant http.CookieJar.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http/fcgi/index.html">fcgi</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package fcgi implements the FastCGI protocol.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http/httptest/index.html">httptest</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package httptest provides utilities for HTTP testing.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http/httputil/index.html">httputil</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package httputil provides HTTP utility functions, complementing the more common ones in the net/http package.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http/pprof/index.html">pprof</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package pprof serves via its HTTP server runtime profiling data in the format expected by the pprof visualization tool.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="mail/index.html">mail</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package mail implements parsing of mail messages.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="rpc/index.html">rpc</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package rpc provides access to the exported methods of an object across a network or other I/O connection.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="rpc/jsonrpc/index.html">jsonrpc</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package jsonrpc implements a JSON-RPC ClientCodec and ServerCodec for the rpc package.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="smtp/index.html">smtp</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package smtp implements the Simple Mail Transfer Protocol as defined in RFC 5321.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="textproto/index.html">textproto</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package textproto implements generic support for text-based request/response protocols in the style of HTTP, NNTP, and SMTP.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="url/index.html">url</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package url parses URLs and implements query escaping.</td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=282&s_ttfb=298&id=1380993864749282', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/net/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

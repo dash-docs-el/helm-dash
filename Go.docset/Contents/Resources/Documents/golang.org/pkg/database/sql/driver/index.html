@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/database/sql/driver/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>driver</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package driver</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "database/sql/driver"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package driver defines interfaces to be implemented by database
+drivers as used by package sql.
+</p>
+<p>
+Most code should use package sql.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#IsScanValue">func IsScanValue(v interface{}) bool</a></dd>
+			
+				
+				<dd><a href="#IsValue">func IsValue(v interface{}) bool</a></dd>
+			
+			
+				
+				<dd><a href="#ColumnConverter">type ColumnConverter</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Conn">type Conn</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Driver">type Driver</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Execer">type Execer</a></dd>
+				
+				
+			
+				
+				<dd><a href="#NotNull">type NotNull</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NotNull.ConvertValue">func (n NotNull) ConvertValue(v interface{}) (Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#Null">type Null</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Null.ConvertValue">func (n Null) ConvertValue(v interface{}) (Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#Queryer">type Queryer</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Result">type Result</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Rows">type Rows</a></dd>
+				
+				
+			
+				
+				<dd><a href="#RowsAffected">type RowsAffected</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RowsAffected.LastInsertId">func (RowsAffected) LastInsertId() (int64, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#RowsAffected.RowsAffected">func (v RowsAffected) RowsAffected() (int64, error)</a></dd>
+				
+			
+				
+				<dd><a href="#Stmt">type Stmt</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Tx">type Tx</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Value">type Value</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ValueConverter">type ValueConverter</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Valuer">type Valuer</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/database/sql/driver/driver.go">driver.go</a>
+			
+				<a href="http://golang.org/src/pkg/database/sql/driver/types.go">types.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="Bool">Bool</span> boolType</pre>
+				<p>
+Bool is a ValueConverter that converts input values to bools.
+</p>
+<p>
+The conversion rules are:
+</p>
+<pre>- booleans are returned unchanged
+- for integer types,
+     1 is true
+     0 is false,
+     other integers are an error
+- for strings and []byte, same rules as strconv.ParseBool
+- all other types are an error
+</pre>
+
+			
+				<pre>var <span id="DefaultParameterConverter">DefaultParameterConverter</span> defaultConverter</pre>
+				<p>
+DefaultParameterConverter is the default implementation of
+ValueConverter that&#39;s used when a Stmt doesn&#39;t implement
+ColumnConverter.
+</p>
+<p>
+DefaultParameterConverter returns the given value directly if
+IsValue(value).  Otherwise integer type are converted to
+int64, floats to float64, and strings to []byte.  Other types are
+an error.
+</p>
+
+			
+				<pre>var <span id="ErrBadConn">ErrBadConn</span> = <a href="../../../errors/index.html">errors</a>.<a href="../../../errors/index.html#New">New</a>(&#34;driver: bad connection&#34;)</pre>
+				<p>
+ErrBadConn should be returned by a driver to signal to the sql
+package that a driver.Conn is in a bad state (such as the server
+having earlier closed the connection) and the sql package should
+retry on a new connection.
+</p>
+<p>
+To prevent duplicate operations, ErrBadConn should NOT be returned
+if there&#39;s a possibility that the database server might have
+performed the operation. Even if the server sends back an error,
+you shouldn&#39;t return ErrBadConn.
+</p>
+
+			
+				<pre>var <span id="ErrSkip">ErrSkip</span> = <a href="../../../errors/index.html">errors</a>.<a href="../../../errors/index.html#New">New</a>(&#34;driver: skip fast-path; continue as if unimplemented&#34;)</pre>
+				<p>
+ErrSkip may be returned by some optional interfaces&#39; methods to
+indicate at runtime that the fast path is unavailable and the sql
+package should continue as if the optional interface was not
+implemented. ErrSkip is only supported where explicitly
+documented.
+</p>
+
+			
+				<pre>var <span id="Int32">Int32</span> int32Type</pre>
+				<p>
+Int32 is a ValueConverter that converts input values to int64,
+respecting the limits of an int32 value.
+</p>
+
+			
+				<pre>var <span id="ResultNoRows">ResultNoRows</span> noRows</pre>
+				<p>
+ResultNoRows is a pre-defined Result for drivers to return when a DDL
+command (such as a CREATE TABLE) succeeds. It returns an error for both
+LastInsertId and RowsAffected.
+</p>
+
+			
+				<pre>var <span id="String">String</span> stringType</pre>
+				<p>
+String is a ValueConverter that converts its input to a string.
+If the value is already a string or []byte, it&#39;s unchanged.
+If the value is of another type, conversion to string is done
+with fmt.Sprintf(&#34;%v&#34;, v).
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="IsScanValue">func <a href="http://golang.org/src/pkg/database/sql/driver/types.go?s=5334:5370#L178">IsScanValue</a></h2>
+			<pre>func IsScanValue(v interface{}) <a href="../../../builtin/index.html#bool">bool</a></pre>
+			<p>
+IsScanValue reports whether v is a valid Value scan type.
+Unlike IsValue, IsScanValue does not permit the string type.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsValue">func <a href="http://golang.org/src/pkg/database/sql/driver/types.go?s=5072:5104#L166">IsValue</a></h2>
+			<pre>func IsValue(v interface{}) <a href="../../../builtin/index.html#bool">bool</a></pre>
+			<p>
+IsValue reports whether v is a valid Value parameter type.
+Unlike IsScanValue, IsValue permits the string type.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="ColumnConverter">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=4807:5090#L135">ColumnConverter</a></h2>
+			<pre>type ColumnConverter interface {
+        <span class="comment">// ColumnConverter returns a ValueConverter for the provided</span>
+        <span class="comment">// column index.  If the type of a specific column isn&#39;t known</span>
+        <span class="comment">// or shouldn&#39;t be handled specially, DefaultValueConverter</span>
+        <span class="comment">// can be returned.</span>
+        ColumnConverter(idx <a href="../../../builtin/index.html#int">int</a>) <a href="#ValueConverter">ValueConverter</a>
+}</pre>
+			<p>
+ColumnConverter may be optionally implemented by Stmt if the
+the statement is aware of its own columns&#39; types and can
+convert from any type to a driver Value.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Conn">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=2778:3359#L73">Conn</a></h2>
+			<pre>type Conn interface {
+        <span class="comment">// Prepare returns a prepared statement, bound to this connection.</span>
+        Prepare(query <a href="../../../builtin/index.html#string">string</a>) (<a href="#Stmt">Stmt</a>, <a href="../../../builtin/index.html#error">error</a>)
+
+        <span class="comment">// Close invalidates and potentially stops any current</span>
+        <span class="comment">// prepared statements and transactions, marking this</span>
+        <span class="comment">// connection as no longer in use.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Because the sql package maintains a free pool of</span>
+        <span class="comment">// connections and only calls Close when there&#39;s a surplus of</span>
+        <span class="comment">// idle connections, it shouldn&#39;t be necessary for drivers to</span>
+        <span class="comment">// do their own connection caching.</span>
+        Close() <a href="../../../builtin/index.html#error">error</a>
+
+        <span class="comment">// Begin starts and returns a new transaction.</span>
+        Begin() (<a href="#Tx">Tx</a>, <a href="../../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+Conn is a connection to a database. It is not used concurrently
+by multiple goroutines.
+</p>
+<p>
+Conn is assumed to be stateful.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Driver">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=667:1088#L16">Driver</a></h2>
+			<pre>type Driver interface {
+        <span class="comment">// Open returns a new connection to the database.</span>
+        <span class="comment">// The name is a string in a driver-specific format.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Open may return a cached connection (one previously</span>
+        <span class="comment">// closed), but doing so is unnecessary; the sql package</span>
+        <span class="comment">// maintains a pool of idle connections for efficient re-use.</span>
+        <span class="comment">//</span>
+        <span class="comment">// The returned connection is only used by one goroutine at a</span>
+        <span class="comment">// time.</span>
+        Open(name <a href="../../../builtin/index.html#string">string</a>) (<a href="#Conn">Conn</a>, <a href="../../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+Driver is the interface that must be implemented by a database
+driver.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Execer">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=2231:2306#L54">Execer</a></h2>
+			<pre>type Execer interface {
+        Exec(query <a href="../../../builtin/index.html#string">string</a>, args []<a href="#Value">Value</a>) (<a href="#Result">Result</a>, <a href="../../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+Execer is an optional interface that may be implemented by a Conn.
+</p>
+<p>
+If a Conn does not implement Execer, the sql package&#39;s DB.Exec will
+first prepare a query, execute the statement, and then close the
+statement.
+</p>
+<p>
+Exec may return ErrSkip.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="NotNull">type <a href="http://golang.org/src/pkg/database/sql/driver/types.go?s=4734:4783#L153">NotNull</a></h2>
+			<pre>type NotNull struct {
+        Converter <a href="#ValueConverter">ValueConverter</a>
+}</pre>
+			<p>
+NotNull is a type that implements ValueConverter by disallowing nil
+values but otherwise delegating to another ValueConverter.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NotNull.ConvertValue">func (NotNull) <a href="http://golang.org/src/pkg/database/sql/driver/types.go?s=4785:4844#L157">ConvertValue</a></h3>
+				<pre>func (n <a href="#NotNull">NotNull</a>) ConvertValue(v interface{}) (<a href="#Value">Value</a>, <a href="../../../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Null">type <a href="http://golang.org/src/pkg/database/sql/driver/types.go?s=4419:4465#L140">Null</a></h2>
+			<pre>type Null struct {
+        Converter <a href="#ValueConverter">ValueConverter</a>
+}</pre>
+			<p>
+Null is a type that implements ValueConverter by allowing nil
+values but otherwise delegating to another ValueConverter.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Null.ConvertValue">func (Null) <a href="http://golang.org/src/pkg/database/sql/driver/types.go?s=4467:4523#L144">ConvertValue</a></h3>
+				<pre>func (n <a href="#Null">Null</a>) ConvertValue(v interface{}) (<a href="#Value">Value</a>, <a href="../../../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Queryer">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=2569:2644#L65">Queryer</a></h2>
+			<pre>type Queryer interface {
+        Query(query <a href="../../../builtin/index.html#string">string</a>, args []<a href="#Value">Value</a>) (<a href="#Rows">Rows</a>, <a href="../../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+Queryer is an optional interface that may be implemented by a Conn.
+</p>
+<p>
+If a Conn does not implement Queryer, the sql package&#39;s DB.Query will
+first prepare a query, execute the statement, and then close the
+statement.
+</p>
+<p>
+Query may return ErrSkip.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Result">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=3407:3693#L92">Result</a></h2>
+			<pre>type Result interface {
+        <span class="comment">// LastInsertId returns the database&#39;s auto-generated ID</span>
+        <span class="comment">// after, for example, an INSERT into a table with primary</span>
+        <span class="comment">// key.</span>
+        LastInsertId() (<a href="../../../builtin/index.html#int64">int64</a>, <a href="../../../builtin/index.html#error">error</a>)
+
+        <span class="comment">// RowsAffected returns the number of rows affected by the</span>
+        <span class="comment">// query.</span>
+        RowsAffected() (<a href="../../../builtin/index.html#int64">int64</a>, <a href="../../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+Result is the result of a query execution.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Rows">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=5149:5864#L144">Rows</a></h2>
+			<pre>type Rows interface {
+        <span class="comment">// Columns returns the names of the columns. The number of</span>
+        <span class="comment">// columns of the result is inferred from the length of the</span>
+        <span class="comment">// slice.  If a particular column name isn&#39;t known, an empty</span>
+        <span class="comment">// string should be returned for that entry.</span>
+        Columns() []<a href="../../../builtin/index.html#string">string</a>
+
+        <span class="comment">// Close closes the rows iterator.</span>
+        Close() <a href="../../../builtin/index.html#error">error</a>
+
+        <span class="comment">// Next is called to populate the next row of data into</span>
+        <span class="comment">// the provided slice. The provided slice will be the same</span>
+        <span class="comment">// size as the Columns() are wide.</span>
+        <span class="comment">//</span>
+        <span class="comment">// The dest slice may be populated only with</span>
+        <span class="comment">// a driver Value type, but excluding string.</span>
+        <span class="comment">// All string values must be converted to []byte.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Next should return io.EOF when there are no more rows.</span>
+        Next(dest []<a href="#Value">Value</a>) <a href="../../../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+Rows is an iterator over an executed query&#39;s results.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="RowsAffected">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=6050:6073#L174">RowsAffected</a></h2>
+			<pre>type RowsAffected <a href="../../../builtin/index.html#int64">int64</a></pre>
+			<p>
+RowsAffected implements Result for an INSERT or UPDATE operation
+which mutates a number of rows.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="RowsAffected.LastInsertId">func (RowsAffected) <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=6107:6156#L178">LastInsertId</a></h3>
+				<pre>func (<a href="#RowsAffected">RowsAffected</a>) LastInsertId() (<a href="../../../builtin/index.html#int64">int64</a>, <a href="../../../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+				
+				<h3 id="RowsAffected.RowsAffected">func (RowsAffected) <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=6213:6264#L182">RowsAffected</a></h3>
+				<pre>func (v <a href="#RowsAffected">RowsAffected</a>) RowsAffected() (<a href="../../../builtin/index.html#int64">int64</a>, <a href="../../../builtin/index.html#error">error</a>)</pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Stmt">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=3803:4637#L105">Stmt</a></h2>
+			<pre>type Stmt interface {
+        <span class="comment">// Close closes the statement.</span>
+        <span class="comment">//</span>
+        <span class="comment">// As of Go 1.1, a Stmt will not be closed if it&#39;s in use</span>
+        <span class="comment">// by any queries.</span>
+        Close() <a href="../../../builtin/index.html#error">error</a>
+
+        <span class="comment">// NumInput returns the number of placeholder parameters.</span>
+        <span class="comment">//</span>
+        <span class="comment">// If NumInput returns &gt;= 0, the sql package will sanity check</span>
+        <span class="comment">// argument counts from callers and return errors to the caller</span>
+        <span class="comment">// before the statement&#39;s Exec or Query methods are called.</span>
+        <span class="comment">//</span>
+        <span class="comment">// NumInput may also return -1, if the driver doesn&#39;t know</span>
+        <span class="comment">// its number of placeholders. In that case, the sql package</span>
+        <span class="comment">// will not sanity check Exec or Query argument counts.</span>
+        NumInput() <a href="../../../builtin/index.html#int">int</a>
+
+        <span class="comment">// Exec executes a query that doesn&#39;t return rows, such</span>
+        <span class="comment">// as an INSERT or UPDATE.</span>
+        Exec(args []<a href="#Value">Value</a>) (<a href="#Result">Result</a>, <a href="../../../builtin/index.html#error">error</a>)
+
+        <span class="comment">// Exec executes a query that may return rows, such as a</span>
+        <span class="comment">// SELECT.</span>
+        Query(args []<a href="#Value">Value</a>) (<a href="#Rows">Rows</a>, <a href="../../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+Stmt is a prepared statement. It is bound to a Conn and not
+used by multiple goroutines concurrently.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Tx">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=5890:5945#L167">Tx</a></h2>
+			<pre>type Tx interface {
+        Commit() <a href="../../../builtin/index.html#error">error</a>
+        Rollback() <a href="../../../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+Tx is a transaction.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Value">type <a href="http://golang.org/src/pkg/database/sql/driver/driver.go?s=566:588#L12">Value</a></h2>
+			<pre>type Value interface{}</pre>
+			<p>
+Value is a value that drivers must be able to handle.
+It is either nil or an instance of one of these types:
+</p>
+<pre>int64
+float64
+bool
+[]byte
+string   [*] everywhere except from Rows.Next.
+time.Time
+</pre>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ValueConverter">type <a href="http://golang.org/src/pkg/database/sql/driver/types.go?s=928:1058#L20">ValueConverter</a></h2>
+			<pre>type ValueConverter interface {
+        <span class="comment">// ConvertValue converts a value to a driver Value.</span>
+        ConvertValue(v interface{}) (<a href="#Value">Value</a>, <a href="../../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+ValueConverter is the interface providing the ConvertValue method.
+</p>
+<p>
+Various implementations of ValueConverter are provided by the
+driver package to provide consistent implementations of conversions
+between drivers.  The ValueConverters have several uses:
+</p>
+<pre>* converting from the Value types as provided by the sql package
+  into a database table&#39;s specific column type and making sure it
+  fits, such as making sure a particular int64 fits in a
+  table&#39;s uint16 column.
+
+* converting a value as given from the database into one of the
+  driver Value types.
+
+* by the sql package, for converting from a driver&#39;s Value type
+  to a user&#39;s type in a scan.
+</pre>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Valuer">type <a href="http://golang.org/src/pkg/database/sql/driver/types.go?s=1210:1293#L29">Valuer</a></h2>
+			<pre>type Valuer interface {
+        <span class="comment">// Value returns a driver Value.</span>
+        Value() (<a href="#Value">Value</a>, <a href="../../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+Valuer is the interface providing the Value method.
+</p>
+<p>
+Types implementing Valuer interface are able to convert
+themselves to a driver Value.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=456&s_ttfb=465&id=1380993861951383', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/database/sql/driver/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

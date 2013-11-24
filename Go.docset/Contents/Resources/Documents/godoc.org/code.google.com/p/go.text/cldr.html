@@ -1,0 +1,1957 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/cldr by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:20 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>cldr</title>
+  
+    <meta name="twitter:title" content="Package cldr">
+    <meta property="og:title" content="Package cldr">
+    <meta name="description" content="Package cldr provides a parser for LDML and related XML formats.">
+    <meta name="twitter:description" content="Package cldr provides a parser for LDML and related XML formats.">
+    <meta property="og:description" content="Package cldr provides a parser for LDML and related XML formats.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=text"><strong>go.text:</strong></a>
+  <a href="index.html">code.google.com/p/go.text</a><span class="text-muted">/</span><span class="text-muted">cldr</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    <span class="text-muted">|</span> <a href="#pkg-examples">Examples</a>
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package cldr</h2>
+    <p><code>import "code.google.com/p/go.text/cldr"</code>
+    </p><p>
+Package cldr provides a parser for LDML and related XML formats.
+This package is inteded to be used by the table generation tools
+for the various internationalization-related packages.
+As the XML types are generated from the CLDR DTD, and as the CLDR standard
+is periodically amended, this package may change considerably over time.
+This mostly means that data may appear and disappear between versions.
+That is, old code should keep compiling for newer versions, but data
+may have moved or changed.
+CLDR version 22 is the first version supported by this package.
+Older versions may not work.
+</p>
+<p>
+Package cldr provides a parser for LDML and related XML formats.
+This package is inteded to be used by the table generation tools
+for the various internationalization-related packages.
+As the XML types are generated from the CLDR DTD, and as the CLDR standard
+is periodically amended, this package may change considerably over time.
+This mostly means that data may appear and disappear between versions.
+That is, old code should keep compiling for newer versions, but data
+may have moved or changed.
+CLDR version 22 is the first version supported by this package.
+Older versions may not work.</p>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    <li><a href="#pkg-constants">Constants</a>
+    
+    </li><li><a href="#Key">func Key(e Elem, exclude ...string) string</a>
+    
+      </li><li><a href="#CLDR">type CLDR</a>
+        <ul>
+        
+        <li><a href="#CLDR.BCP47">func (cldr *CLDR) BCP47() *LDMLBCP47</a></li><li><a href="#CLDR.LDML">func (cldr *CLDR) LDML(loc string) (*LDML, error)</a></li><li><a href="#CLDR.Locales">func (cldr *CLDR) Locales() []string</a></li><li><a href="#CLDR.RawLDML">func (cldr *CLDR) RawLDML(loc string) *LDML</a></li><li><a href="#CLDR.SetDraftLevel">func (cldr *CLDR) SetDraftLevel(lev Draft, preferDraft bool)</a></li><li><a href="#CLDR.Supplemental">func (cldr *CLDR) Supplemental() *SupplementalData</a>
+        </li></ul>
+    
+      </li><li><a href="#Calendar">type Calendar</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Collation">type Collation</a>
+        <ul>
+        
+        <li><a href="#Collation.Process">func (c Collation) Process(p RuleProcessor) (err error)</a>
+        </li></ul>
+    
+      </li><li><a href="#Common">type Common</a>
+        <ul>
+        
+        <li><a href="#Common.Data">func (e *Common) Data() string</a></li><li><a href="#Common.Default">func (e *Common) Default() string</a></li><li><a href="#Common.GetCommon">func (e *Common) GetCommon() *Common</a>
+        </li></ul>
+    
+      </li><li><a href="#Decoder">type Decoder</a>
+        <ul>
+        
+        <li><a href="#Decoder.Decode">func (d *Decoder) Decode(l Loader) (cldr *CLDR, err error)</a></li><li><a href="#Decoder.DecodePath">func (d *Decoder) DecodePath(path string) (cldr *CLDR, err error)</a></li><li><a href="#Decoder.DecodeZip">func (d *Decoder) DecodeZip(r io.Reader) (cldr *CLDR, err error)</a></li><li><a href="#Decoder.SetDirFilter">func (d *Decoder) SetDirFilter(dir ...string)</a></li><li><a href="#Decoder.SetSectionFilter">func (d *Decoder) SetSectionFilter(filter ...string)</a>
+        </li></ul>
+    
+      </li><li><a href="#Draft">type Draft</a>
+        <ul>
+        
+        <li><a href="#Draft.String">func (d Draft) String() string</a>
+        </li></ul>
+    
+      </li><li><a href="#Elem">type Elem</a>
+        <ul>
+        <li><a href="#Get">func Get(e Elem, path string) (res Elem, err error)</a>
+        
+        </li></ul>
+    
+      </li><li><a href="#LDML">type LDML</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#LDMLBCP47">type LDMLBCP47</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Loader">type Loader</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#LocaleDisplayNames">type LocaleDisplayNames</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Numbers">type Numbers</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#RuleProcessor">type RuleProcessor</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#Slice">type Slice</a>
+        <ul>
+        <li><a href="#MakeSlice">func MakeSlice(slicePtr interface{}) Slice</a>
+        </li><li><a href="#Slice.Filter">func (s Slice) Filter(fn func(e Elem) bool)</a></li><li><a href="#Slice.Group">func (s Slice) Group(fn func(e Elem) string) []Slice</a></li><li><a href="#Slice.SelectAnyOf">func (s Slice) SelectAnyOf(attr string, values ...string)</a></li><li><a href="#Slice.SelectDraft">func (s Slice) SelectDraft(d Draft)</a></li><li><a href="#Slice.SelectOnePerGroup">func (s Slice) SelectOnePerGroup(a string, v []string)</a></li><li><a href="#Slice.Value">func (s *Slice) Value() reflect.Value</a>
+        </li></ul>
+    
+      </li><li><a href="#SupplementalData">type SupplementalData</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#TimeZoneNames">type TimeZoneNames</a>
+        
+        
+        
+        
+    
+    </li></ul></div>
+
+    <h4 id="pkg-examples">Examples <a class="permalink" href="#pkg-examples">¶</a></h4><ul class="list-unstyled">
+    <li><a href="#example-Slice" onclick="$('#ex-Slice').addClass('in').removeClass('collapse').height('auto')">Slice</a>
+    </li></ul>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/cldr/?repo=text">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/cldr/base.go?repo=text">base.go</a> <a href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text">cldr.go</a> <a href="http://code.google.com/p/go/source/browse/cldr/collate.go?repo=text">collate.go</a> <a href="http://code.google.com/p/go/source/browse/cldr/decode.go?repo=text">decode.go</a> <a href="http://code.google.com/p/go/source/browse/cldr/resolve.go?repo=text">resolve.go</a> <a href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text">slice.go</a> <a href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text">xml.go</a> </p>
+
+    <h3 id="pkg-constants">Constants <a class="permalink" href="#pkg-constants">¶</a></h3><pre>const <span id="Version">Version</span> = "23"</pre>
+
+    
+
+    <h3 id="Key">func <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/resolve.go?repo=text#336">Key</a> <a class="permalink" href="#Key">¶</a></h3>
+    <pre class="funcdecl">func Key(e <a href="#Elem">Elem</a>, exclude ...<a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+Key returns a key for e derived from all distinguishing attributes
+except those specified by exclude.
+</p>
+
+    
+    
+
+   <h3 id="CLDR">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#22">CLDR</a> <a class="permalink" href="#CLDR">¶</a></h3>
+      <pre>type CLDR struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+CLDR provides access to parsed data of the Unicode Common Locale Data Repository.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="CLDR.BCP47">func (*CLDR) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#41">BCP47</a> <a class="permalink" href="#CLDR.BCP47">¶</a></h4>
+        <pre class="funcdecl">func (cldr *<a href="#CLDR">CLDR</a>) BCP47() *<a href="#LDMLBCP47">LDMLBCP47</a></pre><p>
+BCP47 returns the parsed BCP47 LDML data. If no such data was parsed, nil is returned.
+</p>
+
+        
+        <h4 id="CLDR.LDML">func (*CLDR) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#80">LDML</a> <a class="permalink" href="#CLDR.LDML">¶</a></h4>
+        <pre class="funcdecl">func (cldr *<a href="#CLDR">CLDR</a>) LDML(loc <a href="http://godoc.org/builtin/#string">string</a>) (*<a href="#LDML">LDML</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+LDML returns the fully resolved LDML XML for loc, which must be one of
+the strings returned by Locales.
+</p>
+
+        
+        <h4 id="CLDR.Locales">func (*CLDR) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#92">Locales</a> <a class="permalink" href="#CLDR.Locales">¶</a></h4>
+        <pre class="funcdecl">func (cldr *<a href="#CLDR">CLDR</a>) Locales() []<a href="http://godoc.org/builtin/#string">string</a></pre><p>
+Locales returns the locales for which there exist files.
+Valid sublocales for which there is no file are not included.
+</p>
+
+        
+        <h4 id="CLDR.RawLDML">func (*CLDR) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#74">RawLDML</a> <a class="permalink" href="#CLDR.RawLDML">¶</a></h4>
+        <pre class="funcdecl">func (cldr *<a href="#CLDR">CLDR</a>) RawLDML(loc <a href="http://godoc.org/builtin/#string">string</a>) *<a href="#LDML">LDML</a></pre><p>
+RawLDML returns the LDML XML for id in unresolved form.
+id must be one of the strings returned by Locales.
+</p>
+
+        
+        <h4 id="CLDR.SetDraftLevel">func (*CLDR) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#67">SetDraftLevel</a> <a class="permalink" href="#CLDR.SetDraftLevel">¶</a></h4>
+        <pre class="funcdecl">func (cldr *<a href="#CLDR">CLDR</a>) SetDraftLevel(lev <a href="#Draft">Draft</a>, preferDraft <a href="http://godoc.org/builtin/#bool">bool</a>)</pre><p>
+SetDraftLevel sets which draft levels to include in the evaluated LDML.
+Any draft element for which the draft level is higher than lev will be excluded.
+If multiple draft levels are available for a single element, the one with the
+lowest draft level will be selected, unless preferDraft is true, in which case
+the highest draft will be chosen.
+It is assumed that the underlying LDML is canonicalized.
+</p>
+
+        
+        <h4 id="CLDR.Supplemental">func (*CLDR) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#86">Supplemental</a> <a class="permalink" href="#CLDR.Supplemental">¶</a></h4>
+        <pre class="funcdecl">func (cldr *<a href="#CLDR">CLDR</a>) Supplemental() *<a href="#SupplementalData">SupplementalData</a></pre><p>
+Supplemental returns the parsed supplemental data. If no such data was parsed,
+nil is returned.
+</p>
+
+        
+        
+
+    <h3 id="Calendar">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text#777">Calendar</a> <a class="permalink" href="#Calendar">¶</a></h3>
+      <pre>type Calendar struct {
+    <a href="#Common">Common</a>
+    <span id="Calendar.Months">Months</span> *struct {
+        <a href="#Common">Common</a>
+        MonthContext []*struct {
+            <a href="#Common">Common</a>
+            MonthWidth []*struct {
+                <a href="#Common">Common</a>
+                Month []*struct {
+                    <a href="#Common">Common</a>
+                    Yeartype <a href="http://godoc.org/builtin/#string">string</a> `xml:"yeartype,attr"`
+                }   `xml:"month"`
+            }   `xml:"monthWidth"`
+        }   `xml:"monthContext"`
+    }   `xml:"months"`
+    <span id="Calendar.MonthNames">MonthNames</span> *struct {
+        <a href="#Common">Common</a>
+        Month []*struct {
+            <a href="#Common">Common</a>
+            Yeartype <a href="http://godoc.org/builtin/#string">string</a> `xml:"yeartype,attr"`
+        }   `xml:"month"`
+    }   `xml:"monthNames"`
+    <span id="Calendar.MonthAbbr">MonthAbbr</span> *struct {
+        <a href="#Common">Common</a>
+        Month []*struct {
+            <a href="#Common">Common</a>
+            Yeartype <a href="http://godoc.org/builtin/#string">string</a> `xml:"yeartype,attr"`
+        }   `xml:"month"`
+    }   `xml:"monthAbbr"`
+    <span id="Calendar.MonthPatterns">MonthPatterns</span> *struct {
+        <a href="#Common">Common</a>
+        MonthPatternContext []*struct {
+            <a href="#Common">Common</a>
+            MonthPatternWidth []*struct {
+                <a href="#Common">Common</a>
+                MonthPattern []*<a href="#Common">Common</a> `xml:"monthPattern"`
+            }   `xml:"monthPatternWidth"`
+        }   `xml:"monthPatternContext"`
+    }   `xml:"monthPatterns"`
+    <span id="Calendar.Days">Days</span> *struct {
+        <a href="#Common">Common</a>
+        DayContext []*struct {
+            <a href="#Common">Common</a>
+            DayWidth []*struct {
+                <a href="#Common">Common</a>
+                Day []*<a href="#Common">Common</a> `xml:"day"`
+            }   `xml:"dayWidth"`
+        }   `xml:"dayContext"`
+    }   `xml:"days"`
+    <span id="Calendar.DayNames">DayNames</span> *struct {
+        <a href="#Common">Common</a>
+        Day []*<a href="#Common">Common</a> `xml:"day"`
+    }   `xml:"dayNames"`
+    <span id="Calendar.DayAbbr">DayAbbr</span> *struct {
+        <a href="#Common">Common</a>
+        Day []*<a href="#Common">Common</a> `xml:"day"`
+    }   `xml:"dayAbbr"`
+    <span id="Calendar.Quarters">Quarters</span> *struct {
+        <a href="#Common">Common</a>
+        QuarterContext []*struct {
+            <a href="#Common">Common</a>
+            QuarterWidth []*struct {
+                <a href="#Common">Common</a>
+                Quarter []*<a href="#Common">Common</a> `xml:"quarter"`
+            }   `xml:"quarterWidth"`
+        }   `xml:"quarterContext"`
+    }   `xml:"quarters"`
+    <span id="Calendar.Week">Week</span> *struct {
+        <a href="#Common">Common</a>
+        MinDays []*struct {
+            <a href="#Common">Common</a>
+            Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+        }   `xml:"minDays"`
+        FirstDay []*struct {
+            <a href="#Common">Common</a>
+            Day <a href="http://godoc.org/builtin/#string">string</a> `xml:"day,attr"`
+        }   `xml:"firstDay"`
+        WeekendStart []*struct {
+            <a href="#Common">Common</a>
+            Day  <a href="http://godoc.org/builtin/#string">string</a> `xml:"day,attr"`
+            Time <a href="http://godoc.org/builtin/#string">string</a> `xml:"time,attr"`
+        }   `xml:"weekendStart"`
+        WeekendEnd []*struct {
+            <a href="#Common">Common</a>
+            Day  <a href="http://godoc.org/builtin/#string">string</a> `xml:"day,attr"`
+            Time <a href="http://godoc.org/builtin/#string">string</a> `xml:"time,attr"`
+        }   `xml:"weekendEnd"`
+    }   `xml:"week"`
+    <span id="Calendar.Am">Am</span>         []*<a href="#Common">Common</a> `xml:"am"`
+    <span id="Calendar.Pm">Pm</span>         []*<a href="#Common">Common</a> `xml:"pm"`
+    <span id="Calendar.DayPeriods">DayPeriods</span> *struct {
+        <a href="#Common">Common</a>
+        DayPeriodContext []*struct {
+            <a href="#Common">Common</a>
+            DayPeriodWidth []*struct {
+                <a href="#Common">Common</a>
+                DayPeriod []*<a href="#Common">Common</a> `xml:"dayPeriod"`
+            }   `xml:"dayPeriodWidth"`
+        }   `xml:"dayPeriodContext"`
+    }   `xml:"dayPeriods"`
+    <span id="Calendar.Eras">Eras</span> *struct {
+        <a href="#Common">Common</a>
+        EraNames *struct {
+            <a href="#Common">Common</a>
+            Era []*<a href="#Common">Common</a> `xml:"era"`
+        }   `xml:"eraNames"`
+        EraAbbr *struct {
+            <a href="#Common">Common</a>
+            Era []*<a href="#Common">Common</a> `xml:"era"`
+        }   `xml:"eraAbbr"`
+        EraNarrow *struct {
+            <a href="#Common">Common</a>
+            Era []*<a href="#Common">Common</a> `xml:"era"`
+        }   `xml:"eraNarrow"`
+    }   `xml:"eras"`
+    <span id="Calendar.CyclicNameSets">CyclicNameSets</span> *struct {
+        <a href="#Common">Common</a>
+        CyclicNameSet []*struct {
+            <a href="#Common">Common</a>
+            CyclicNameContext []*struct {
+                <a href="#Common">Common</a>
+                CyclicNameWidth []*struct {
+                    <a href="#Common">Common</a>
+                    CyclicName []*<a href="#Common">Common</a> `xml:"cyclicName"`
+                }   `xml:"cyclicNameWidth"`
+            }   `xml:"cyclicNameContext"`
+        }   `xml:"cyclicNameSet"`
+    }   `xml:"cyclicNameSets"`
+    <span id="Calendar.DateFormats">DateFormats</span> *struct {
+        <a href="#Common">Common</a>
+        DateFormatLength []*struct {
+            <a href="#Common">Common</a>
+            DateFormat []*struct {
+                <a href="#Common">Common</a>
+                Pattern []*struct {
+                    <a href="#Common">Common</a>
+                    Numbers <a href="http://godoc.org/builtin/#string">string</a> `xml:"numbers,attr"`
+                    Count   <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"pattern"`
+                DisplayName []*struct {
+                    <a href="#Common">Common</a>
+                    Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"displayName"`
+            }   `xml:"dateFormat"`
+        }   `xml:"dateFormatLength"`
+    }   `xml:"dateFormats"`
+    <span id="Calendar.TimeFormats">TimeFormats</span> *struct {
+        <a href="#Common">Common</a>
+        TimeFormatLength []*struct {
+            <a href="#Common">Common</a>
+            TimeFormat []*struct {
+                <a href="#Common">Common</a>
+                Pattern []*struct {
+                    <a href="#Common">Common</a>
+                    Numbers <a href="http://godoc.org/builtin/#string">string</a> `xml:"numbers,attr"`
+                    Count   <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"pattern"`
+                DisplayName []*struct {
+                    <a href="#Common">Common</a>
+                    Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"displayName"`
+            }   `xml:"timeFormat"`
+        }   `xml:"timeFormatLength"`
+    }   `xml:"timeFormats"`
+    <span id="Calendar.DateTimeFormats">DateTimeFormats</span> *struct {
+        <a href="#Common">Common</a>
+        DateTimeFormatLength []*struct {
+            <a href="#Common">Common</a>
+            DateTimeFormat []*struct {
+                <a href="#Common">Common</a>
+                Pattern []*struct {
+                    <a href="#Common">Common</a>
+                    Numbers <a href="http://godoc.org/builtin/#string">string</a> `xml:"numbers,attr"`
+                    Count   <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"pattern"`
+                DisplayName []*struct {
+                    <a href="#Common">Common</a>
+                    Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"displayName"`
+            }   `xml:"dateTimeFormat"`
+        }   `xml:"dateTimeFormatLength"`
+        AvailableFormats []*struct {
+            <a href="#Common">Common</a>
+            DateFormatItem []*struct {
+                <a href="#Common">Common</a>
+                Id  <a href="http://godoc.org/builtin/#string">string</a> `xml:"id,attr"`
+            }   `xml:"dateFormatItem"`
+        }   `xml:"availableFormats"`
+        AppendItems []*struct {
+            <a href="#Common">Common</a>
+            AppendItem []*struct {
+                <a href="#Common">Common</a>
+                Request <a href="http://godoc.org/builtin/#string">string</a> `xml:"request,attr"`
+            }   `xml:"appendItem"`
+        }   `xml:"appendItems"`
+        IntervalFormats []*struct {
+            <a href="#Common">Common</a>
+            IntervalFormatFallback []*<a href="#Common">Common</a> `xml:"intervalFormatFallback"`
+            IntervalFormatItem     []*struct {
+                <a href="#Common">Common</a>
+                Id                 <a href="http://godoc.org/builtin/#string">string</a> `xml:"id,attr"`
+                GreatestDifference []*struct {
+                    <a href="#Common">Common</a>
+                    Id  <a href="http://godoc.org/builtin/#string">string</a> `xml:"id,attr"`
+                }   `xml:"greatestDifference"`
+            }   `xml:"intervalFormatItem"`
+        }   `xml:"intervalFormats"`
+    }   `xml:"dateTimeFormats"`
+    <span id="Calendar.Fields">Fields</span> []*struct {
+        <a href="#Common">Common</a>
+        Field []*struct {
+            <a href="#Common">Common</a>
+            DisplayName []*struct {
+                <a href="#Common">Common</a>
+                Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+            }   `xml:"displayName"`
+            Relative []*<a href="#Common">Common</a> `xml:"relative"`
+        }   `xml:"field"`
+    }   `xml:"fields"`
+}</pre><p>
+Calendar specifies the fields used for formatting and parsing dates and times.
+The month and quarter names are identified numerically, starting at 1.
+The day (of the week) names are identified with short strings, since there is
+no universally-accepted numeric designation.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="Collation">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text#750">Collation</a> <a class="permalink" href="#Collation">¶</a></h3>
+      <pre>type Collation struct {
+    <a href="#Common">Common</a>
+    <span id="Collation.Visibility">Visibility</span> <a href="http://godoc.org/builtin/#string">string</a>  `xml:"visibility,attr"`
+    <span id="Collation.Base">Base</span>       *<a href="#Common">Common</a> `xml:"base"`
+    <span id="Collation.Settings">Settings</span>   *struct {
+        <a href="#Common">Common</a>
+        Strength           <a href="http://godoc.org/builtin/#string">string</a> `xml:"strength,attr"`
+        Alternate          <a href="http://godoc.org/builtin/#string">string</a> `xml:"alternate,attr"`
+        Backwards          <a href="http://godoc.org/builtin/#string">string</a> `xml:"backwards,attr"`
+        Normalization      <a href="http://godoc.org/builtin/#string">string</a> `xml:"normalization,attr"`
+        CaseLevel          <a href="http://godoc.org/builtin/#string">string</a> `xml:"caseLevel,attr"`
+        CaseFirst          <a href="http://godoc.org/builtin/#string">string</a> `xml:"caseFirst,attr"`
+        HiraganaQuaternary <a href="http://godoc.org/builtin/#string">string</a> `xml:"hiraganaQuaternary,attr"`
+        Numeric            <a href="http://godoc.org/builtin/#string">string</a> `xml:"numeric,attr"`
+        Private            <a href="http://godoc.org/builtin/#string">string</a> `xml:"private,attr"`
+        VariableTop        <a href="http://godoc.org/builtin/#string">string</a> `xml:"variableTop,attr"`
+        Reorder            <a href="http://godoc.org/builtin/#string">string</a> `xml:"reorder,attr"`
+    }   `xml:"settings"`
+    <span id="Collation.SuppressContractions">SuppressContractions</span> *<a href="#Common">Common</a> `xml:"suppress_contractions"`
+    <span id="Collation.Optimize">Optimize</span>             *<a href="#Common">Common</a> `xml:"optimize"`
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Collation contains rules that specify a certain sort-order,
+as a tailoring of the root order.
+The parsed rules are obtained by passing a RuleProcessor to Collation's
+Process method.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="Collation.Process">func (Collation) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/collate.go?repo=text#101">Process</a> <a class="permalink" href="#Collation.Process">¶</a></h4>
+        <pre class="funcdecl">func (c <a href="#Collation">Collation</a>) Process(p <a href="#RuleProcessor">RuleProcessor</a>) (err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Process parses the rules for the tailorings of this collation
+and calls the respective methods of p for each rule found.
+</p>
+
+        
+        
+
+    <h3 id="Common">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/base.go?repo=text#48">Common</a> <a class="permalink" href="#Common">¶</a></h3>
+      <pre>type Common struct {
+    <span id="Common.XMLName">XMLName</span> <a href="http://godoc.org/encoding/xml/#Name">xml.Name</a>
+
+    <span id="Common.Type">Type</span>            <a href="http://godoc.org/builtin/#string">string</a> `xml:"type,attr,omitempty"`
+    <span id="Common.Reference">Reference</span>       <a href="http://godoc.org/builtin/#string">string</a> `xml:"reference,attr,omitempty"`
+    <span id="Common.Alt">Alt</span>             <a href="http://godoc.org/builtin/#string">string</a> `xml:"alt,attr,omitempty"`
+    <span id="Common.ValidSubLocales">ValidSubLocales</span> <a href="http://godoc.org/builtin/#string">string</a> `xml:"validSubLocales,attr,omitempty"`
+    <span id="Common.Draft">Draft</span>           <a href="http://godoc.org/builtin/#string">string</a> `xml:"draft,attr,omitempty"`
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Common holds several of the most common attributes and sub elements
+of an XML element.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="Common.Data">func (*Common) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/base.go?repo=text#81">Data</a> <a class="permalink" href="#Common.Data">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#Common">Common</a>) Data() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+Data returns the character data accumulated for this element.
+</p>
+
+        
+        <h4 id="Common.Default">func (*Common) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/base.go?repo=text#62">Default</a> <a class="permalink" href="#Common.Default">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#Common">Common</a>) Default() <a href="http://godoc.org/builtin/#string">string</a></pre><p>
+Default returns the default type to select from the enclosed list
+or "" if no default value is specified.
+</p>
+
+        
+        <h4 id="Common.GetCommon">func (*Common) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/base.go?repo=text#76">GetCommon</a> <a class="permalink" href="#Common.GetCommon">¶</a></h4>
+        <pre class="funcdecl">func (e *<a href="#Common">Common</a>) GetCommon() *<a href="#Common">Common</a></pre><p>
+GetCommon returns e. It is provided such that Common implements Elem.
+</p>
+
+        
+        
+
+    <h3 id="Decoder">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/decode.go?repo=text#22">Decoder</a> <a class="permalink" href="#Decoder">¶</a></h3>
+      <pre>type Decoder struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+A Decoder loads an archive of CLDR data.
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="Decoder.Decode">func (*Decoder) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/decode.go?repo=text#54">Decode</a> <a class="permalink" href="#Decoder.Decode">¶</a></h4>
+        <pre class="funcdecl">func (d *<a href="#Decoder">Decoder</a>) Decode(l <a href="#Loader">Loader</a>) (cldr *<a href="#CLDR">CLDR</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Decode loads and decodes the files represented by l.
+</p>
+
+        
+        <h4 id="Decoder.DecodePath">func (*Decoder) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/decode.go?repo=text#134">DecodePath</a> <a class="permalink" href="#Decoder.DecodePath">¶</a></h4>
+        <pre class="funcdecl">func (d *<a href="#Decoder">Decoder</a>) DecodePath(path <a href="http://godoc.org/builtin/#string">string</a>) (cldr *<a href="#CLDR">CLDR</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+DecodePath loads CLDR data from the given path.
+</p>
+
+        
+        <h4 id="Decoder.DecodeZip">func (*Decoder) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/decode.go?repo=text#159">DecodeZip</a> <a class="permalink" href="#Decoder.DecodeZip">¶</a></h4>
+        <pre class="funcdecl">func (d *<a href="#Decoder">Decoder</a>) DecodeZip(r <a href="http://godoc.org/io/#Reader">io.Reader</a>) (cldr *<a href="#CLDR">CLDR</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+DecodeZip loads CLDR data from the zip archive for which r is the source.
+</p>
+
+        
+        <h4 id="Decoder.SetDirFilter">func (*Decoder) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/decode.go?repo=text#40">SetDirFilter</a> <a class="permalink" href="#Decoder.SetDirFilter">¶</a></h4>
+        <pre class="funcdecl">func (d *<a href="#Decoder">Decoder</a>) SetDirFilter(dir ...<a href="http://godoc.org/builtin/#string">string</a>)</pre><p>
+SetDirFilter limits the loading of LDML XML files of the specied directories.
+Note that sections may be split across directories differently for different CLDR versions.
+For more robust code, use SetSectionFilter.
+</p>
+
+        
+        <h4 id="Decoder.SetSectionFilter">func (*Decoder) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/decode.go?repo=text#32">SetSectionFilter</a> <a class="permalink" href="#Decoder.SetSectionFilter">¶</a></h4>
+        <pre class="funcdecl">func (d *<a href="#Decoder">Decoder</a>) SetSectionFilter(filter ...<a href="http://godoc.org/builtin/#string">string</a>)</pre><p>
+SetSectionFilter takes a list top-level LDML element names to which
+evaluation of LDML should be limited.  It automatically calls SetDirFilter.
+</p>
+
+        
+        
+
+    <h3 id="Draft">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#46">Draft</a> <a class="permalink" href="#Draft">¶</a></h3>
+      <pre>type Draft <a href="http://godoc.org/builtin/#int">int</a></pre><p>
+Draft indicates the draft level of an element.
+</p>
+
+      <pre>const (
+    <span id="Approved">Approved</span> <a href="#Draft">Draft</a> = <a href="http://godoc.org/builtin/#iota">iota</a>
+    <span id="Contributed">Contributed</span>
+    <span id="Provisional">Provisional</span>
+    <span id="Unconfirmed">Unconfirmed</span>
+)</pre>
+      
+      
+
+        
+
+        <h4 id="Draft.String">func (Draft) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#57">String</a> <a class="permalink" href="#Draft.String">¶</a></h4>
+        <pre class="funcdecl">func (d <a href="#Draft">Draft</a>) String() <a href="http://godoc.org/builtin/#string">string</a></pre>
+        
+        
+
+    <h3 id="Elem">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/base.go?repo=text#24">Elem</a> <a class="permalink" href="#Elem">¶</a></h3>
+      <pre>type Elem interface {
+    <span id="Elem.GetCommon">GetCommon</span>() *<a href="#Common">Common</a>
+    <span class="com">// contains filtered or unexported methods</span>
+}</pre><p>
+Elem is implemented by every XML element.
+</p>
+
+      
+      
+      
+
+        <h4 id="Get">func <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/cldr.go?repo=text#102">Get</a> <a class="permalink" href="#Get">¶</a></h4>
+        <pre class="funcdecl">func Get(e <a href="#Elem">Elem</a>, path <a href="http://godoc.org/builtin/#string">string</a>) (res <a href="#Elem">Elem</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Get fills in the fields of x based on the XPath path.
+</p>
+
+        
+        
+
+        
+
+    <h3 id="LDML">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text#556">LDML</a> <a class="permalink" href="#LDML">¶</a></h3>
+      <pre>type LDML struct {
+    <a href="#Common">Common</a>
+    <span id="LDML.Identity">Identity</span> *struct {
+        <a href="#Common">Common</a>
+        Version *struct {
+            <a href="#Common">Common</a>
+            Number <a href="http://godoc.org/builtin/#string">string</a> `xml:"number,attr"`
+        }   `xml:"version"`
+        Generation *struct {
+            <a href="#Common">Common</a>
+            Date <a href="http://godoc.org/builtin/#string">string</a> `xml:"date,attr"`
+        }   `xml:"generation"`
+        Language  *<a href="#Common">Common</a> `xml:"language"`
+        Script    *<a href="#Common">Common</a> `xml:"script"`
+        Territory *<a href="#Common">Common</a> `xml:"territory"`
+        Variant   *<a href="#Common">Common</a> `xml:"variant"`
+    }   `xml:"identity"`
+    <span id="LDML.LocaleDisplayNames">LocaleDisplayNames</span> *<a href="#LocaleDisplayNames">LocaleDisplayNames</a> `xml:"localeDisplayNames"`
+    <span id="LDML.Layout">Layout</span>             *struct {
+        <a href="#Common">Common</a>
+        Orientation []*struct {
+            <a href="#Common">Common</a>
+            Characters     <a href="http://godoc.org/builtin/#string">string</a>    `xml:"characters,attr"`
+            Lines          <a href="http://godoc.org/builtin/#string">string</a>    `xml:"lines,attr"`
+            CharacterOrder []*<a href="#Common">Common</a> `xml:"characterOrder"`
+            LineOrder      []*<a href="#Common">Common</a> `xml:"lineOrder"`
+        }   `xml:"orientation"`
+        InList []*struct {
+            <a href="#Common">Common</a>
+            Casing <a href="http://godoc.org/builtin/#string">string</a> `xml:"casing,attr"`
+        }   `xml:"inList"`
+        InText []*<a href="#Common">Common</a> `xml:"inText"`
+    }   `xml:"layout"`
+    <span id="LDML.ContextTransforms">ContextTransforms</span> *struct {
+        <a href="#Common">Common</a>
+        ContextTransformUsage []*struct {
+            <a href="#Common">Common</a>
+            ContextTransform []*<a href="#Common">Common</a> `xml:"contextTransform"`
+        }   `xml:"contextTransformUsage"`
+    }   `xml:"contextTransforms"`
+    <span id="LDML.Characters">Characters</span> *struct {
+        <a href="#Common">Common</a>
+        ExemplarCharacters []*<a href="#Common">Common</a> `xml:"exemplarCharacters"`
+        Ellipsis           []*<a href="#Common">Common</a> `xml:"ellipsis"`
+        MoreInformation    []*<a href="#Common">Common</a> `xml:"moreInformation"`
+        Stopwords          []*struct {
+            <a href="#Common">Common</a>
+            StopwordList []*<a href="#Common">Common</a> `xml:"stopwordList"`
+        }   `xml:"stopwords"`
+        IndexLabels []*struct {
+            <a href="#Common">Common</a>
+            IndexSeparator           []*<a href="#Common">Common</a> `xml:"indexSeparator"`
+            CompressedIndexSeparator []*<a href="#Common">Common</a> `xml:"compressedIndexSeparator"`
+            IndexRangePattern        []*<a href="#Common">Common</a> `xml:"indexRangePattern"`
+            IndexLabelBefore         []*<a href="#Common">Common</a> `xml:"indexLabelBefore"`
+            IndexLabelAfter          []*<a href="#Common">Common</a> `xml:"indexLabelAfter"`
+            IndexLabel               []*struct {
+                <a href="#Common">Common</a>
+                IndexSource <a href="http://godoc.org/builtin/#string">string</a> `xml:"indexSource,attr"`
+                Priority    <a href="http://godoc.org/builtin/#string">string</a> `xml:"priority,attr"`
+            }   `xml:"indexLabel"`
+        }   `xml:"indexLabels"`
+        Mapping []*struct {
+            <a href="#Common">Common</a>
+            Registry <a href="http://godoc.org/builtin/#string">string</a> `xml:"registry,attr"`
+        }   `xml:"mapping"`
+    }   `xml:"characters"`
+    <span id="LDML.Delimiters">Delimiters</span> *struct {
+        <a href="#Common">Common</a>
+        QuotationStart          []*<a href="#Common">Common</a> `xml:"quotationStart"`
+        QuotationEnd            []*<a href="#Common">Common</a> `xml:"quotationEnd"`
+        AlternateQuotationStart []*<a href="#Common">Common</a> `xml:"alternateQuotationStart"`
+        AlternateQuotationEnd   []*<a href="#Common">Common</a> `xml:"alternateQuotationEnd"`
+    }   `xml:"delimiters"`
+    <span id="LDML.Measurement">Measurement</span> *struct {
+        <a href="#Common">Common</a>
+        MeasurementSystem []*<a href="#Common">Common</a> `xml:"measurementSystem"`
+        PaperSize         []*struct {
+            <a href="#Common">Common</a>
+            Height []*<a href="#Common">Common</a> `xml:"height"`
+            Width  []*<a href="#Common">Common</a> `xml:"width"`
+        }   `xml:"paperSize"`
+    }   `xml:"measurement"`
+    <span id="LDML.Dates">Dates</span> *struct {
+        <a href="#Common">Common</a>
+        LocalizedPatternChars []*<a href="#Common">Common</a> `xml:"localizedPatternChars"`
+        DateRangePattern      []*<a href="#Common">Common</a> `xml:"dateRangePattern"`
+        Calendars             *struct {
+            <a href="#Common">Common</a>
+            Calendar []*<a href="#Calendar">Calendar</a> `xml:"calendar"`
+        }   `xml:"calendars"`
+        Fields *struct {
+            <a href="#Common">Common</a>
+            Field []*struct {
+                <a href="#Common">Common</a>
+                DisplayName []*struct {
+                    <a href="#Common">Common</a>
+                    Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"displayName"`
+                Relative []*<a href="#Common">Common</a> `xml:"relative"`
+            }   `xml:"field"`
+        }   `xml:"fields"`
+        TimeZoneNames *<a href="#TimeZoneNames">TimeZoneNames</a> `xml:"timeZoneNames"`
+    }   `xml:"dates"`
+    <span id="LDML.Numbers">Numbers</span> *<a href="#Numbers">Numbers</a> `xml:"numbers"`
+    <span id="LDML.Units">Units</span>   *struct {
+        <a href="#Common">Common</a>
+        Unit []*struct {
+            <a href="#Common">Common</a>
+            UnitPattern []*struct {
+                <a href="#Common">Common</a>
+                Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+            }   `xml:"unitPattern"`
+        }   `xml:"unit"`
+    }   `xml:"units"`
+    <span id="LDML.ListPatterns">ListPatterns</span> *struct {
+        <a href="#Common">Common</a>
+        ListPattern []*struct {
+            <a href="#Common">Common</a>
+            ListPatternPart []*<a href="#Common">Common</a> `xml:"listPatternPart"`
+        }   `xml:"listPattern"`
+    }   `xml:"listPatterns"`
+    <span id="LDML.Collations">Collations</span> *struct {
+        <a href="#Common">Common</a>
+        Version   <a href="http://godoc.org/builtin/#string">string</a>       `xml:"version,attr"`
+        Collation []*<a href="#Collation">Collation</a> `xml:"collation"`
+    }   `xml:"collations"`
+    <span id="LDML.Posix">Posix</span> *struct {
+        <a href="#Common">Common</a>
+        Messages []*struct {
+            <a href="#Common">Common</a>
+            Yesstr  []*<a href="#Common">Common</a> `xml:"yesstr"`
+            Nostr   []*<a href="#Common">Common</a> `xml:"nostr"`
+            Yesexpr []*<a href="#Common">Common</a> `xml:"yesexpr"`
+            Noexpr  []*<a href="#Common">Common</a> `xml:"noexpr"`
+        }   `xml:"messages"`
+    }   `xml:"posix"`
+    <span id="LDML.Segmentations">Segmentations</span> *struct {
+        <a href="#Common">Common</a>
+        Segmentation []*struct {
+            <a href="#Common">Common</a>
+            Variables *struct {
+                <a href="#Common">Common</a>
+                Variable []*struct {
+                    <a href="#Common">Common</a>
+                    Id  <a href="http://godoc.org/builtin/#string">string</a> `xml:"id,attr"`
+                }   `xml:"variable"`
+            }   `xml:"variables"`
+            SegmentRules *struct {
+                <a href="#Common">Common</a>
+                Rule []*struct {
+                    <a href="#Common">Common</a>
+                    Id  <a href="http://godoc.org/builtin/#string">string</a> `xml:"id,attr"`
+                }   `xml:"rule"`
+            }   `xml:"segmentRules"`
+        }   `xml:"segmentation"`
+    }   `xml:"segmentations"`
+    <span id="LDML.Rbnf">Rbnf</span> *struct {
+        <a href="#Common">Common</a>
+        RulesetGrouping []*struct {
+            <a href="#Common">Common</a>
+            Ruleset []*struct {
+                <a href="#Common">Common</a>
+                Access        <a href="http://godoc.org/builtin/#string">string</a> `xml:"access,attr"`
+                AllowsParsing <a href="http://godoc.org/builtin/#string">string</a> `xml:"allowsParsing,attr"`
+                Rbnfrule      []*struct {
+                    <a href="#Common">Common</a>
+                    Value  <a href="http://godoc.org/builtin/#string">string</a> `xml:"value,attr"`
+                    Radix  <a href="http://godoc.org/builtin/#string">string</a> `xml:"radix,attr"`
+                    Decexp <a href="http://godoc.org/builtin/#string">string</a> `xml:"decexp,attr"`
+                }   `xml:"rbnfrule"`
+            }   `xml:"ruleset"`
+        }   `xml:"rulesetGrouping"`
+    }   `xml:"rbnf"`
+    <span id="LDML.Metadata">Metadata</span> *struct {
+        <a href="#Common">Common</a>
+        CasingData *struct {
+            <a href="#Common">Common</a>
+            CasingItem []*<a href="#Common">Common</a> `xml:"casingItem"`
+        }   `xml:"casingData"`
+    }   `xml:"metadata"`
+    <span id="LDML.References">References</span> *struct {
+        <a href="#Common">Common</a>
+        Reference []*struct {
+            <a href="#Common">Common</a>
+            Uri <a href="http://godoc.org/builtin/#string">string</a> `xml:"uri,attr"`
+        }   `xml:"reference"`
+    }   `xml:"references"`
+}</pre><p>
+LDML is the top-level type for locale-specific data.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="LDMLBCP47">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text#8">LDMLBCP47</a> <a class="permalink" href="#LDMLBCP47">¶</a></h3>
+      <pre>type LDMLBCP47 struct {
+    <a href="#Common">Common</a>
+    <span id="LDMLBCP47.Version">Version</span> *struct {
+        <a href="#Common">Common</a>
+        Number <a href="http://godoc.org/builtin/#string">string</a> `xml:"number,attr"`
+    }   `xml:"version"`
+    <span id="LDMLBCP47.Generation">Generation</span> *struct {
+        <a href="#Common">Common</a>
+        Date <a href="http://godoc.org/builtin/#string">string</a> `xml:"date,attr"`
+    }   `xml:"generation"`
+    <span id="LDMLBCP47.Keyword">Keyword</span> []*struct {
+        <a href="#Common">Common</a>
+        Key []*struct {
+            <a href="#Common">Common</a>
+            Extension   <a href="http://godoc.org/builtin/#string">string</a> `xml:"extension,attr"`
+            Name        <a href="http://godoc.org/builtin/#string">string</a> `xml:"name,attr"`
+            Alias       <a href="http://godoc.org/builtin/#string">string</a> `xml:"alias,attr"`
+            Description <a href="http://godoc.org/builtin/#string">string</a> `xml:"description,attr"`
+            Since       <a href="http://godoc.org/builtin/#string">string</a> `xml:"since,attr"`
+            Deprecated  <a href="http://godoc.org/builtin/#string">string</a> `xml:"deprecated,attr"`
+            Type        []*struct {
+                <a href="#Common">Common</a>
+                Name        <a href="http://godoc.org/builtin/#string">string</a> `xml:"name,attr"`
+                Alias       <a href="http://godoc.org/builtin/#string">string</a> `xml:"alias,attr"`
+                Description <a href="http://godoc.org/builtin/#string">string</a> `xml:"description,attr"`
+                Since       <a href="http://godoc.org/builtin/#string">string</a> `xml:"since,attr"`
+                Deprecated  <a href="http://godoc.org/builtin/#string">string</a> `xml:"deprecated,attr"`
+            }   `xml:"type"`
+        }   `xml:"key"`
+    }   `xml:"keyword"`
+    <span id="LDMLBCP47.Attribute">Attribute</span> []*struct {
+        <a href="#Common">Common</a>
+        Name        <a href="http://godoc.org/builtin/#string">string</a> `xml:"name,attr"`
+        Description <a href="http://godoc.org/builtin/#string">string</a> `xml:"description,attr"`
+        Since       <a href="http://godoc.org/builtin/#string">string</a> `xml:"since,attr"`
+        Deprecated  <a href="http://godoc.org/builtin/#string">string</a> `xml:"deprecated,attr"`
+    }   `xml:"attribute"`
+}</pre><p>
+LDMLBCP47 holds information on allowable values for various variables in LDML.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="Loader">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/decode.go?repo=text#45">Loader</a> <a class="permalink" href="#Loader">¶</a></h3>
+      <pre>type Loader interface {
+    <span id="Loader.Len">Len</span>() <a href="http://godoc.org/builtin/#int">int</a>
+    <span id="Loader.Path">Path</span>(i <a href="http://godoc.org/builtin/#int">int</a>) <a href="http://godoc.org/builtin/#string">string</a>
+    <span id="Loader.Reader">Reader</span>(i <a href="http://godoc.org/builtin/#int">int</a>) (<a href="http://godoc.org/io/#ReadCloser">io.ReadCloser</a>, <a href="http://godoc.org/builtin/#error">error</a>)
+}</pre><p>
+A Loader provides access to the files of a CLDR archive.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="LocaleDisplayNames">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text#1055">LocaleDisplayNames</a> <a class="permalink" href="#LocaleDisplayNames">¶</a></h3>
+      <pre>type LocaleDisplayNames struct {
+    <a href="#Common">Common</a>
+    <span id="LocaleDisplayNames.LocaleDisplayPattern">LocaleDisplayPattern</span> *struct {
+        <a href="#Common">Common</a>
+        LocalePattern        []*<a href="#Common">Common</a> `xml:"localePattern"`
+        LocaleSeparator      []*<a href="#Common">Common</a> `xml:"localeSeparator"`
+        LocaleKeyTypePattern []*<a href="#Common">Common</a> `xml:"localeKeyTypePattern"`
+    }   `xml:"localeDisplayPattern"`
+    <span id="LocaleDisplayNames.Languages">Languages</span> *struct {
+        <a href="#Common">Common</a>
+        Language []*<a href="#Common">Common</a> `xml:"language"`
+    }   `xml:"languages"`
+    <span id="LocaleDisplayNames.Scripts">Scripts</span> *struct {
+        <a href="#Common">Common</a>
+        Script []*<a href="#Common">Common</a> `xml:"script"`
+    }   `xml:"scripts"`
+    <span id="LocaleDisplayNames.Territories">Territories</span> *struct {
+        <a href="#Common">Common</a>
+        Territory []*<a href="#Common">Common</a> `xml:"territory"`
+    }   `xml:"territories"`
+    <span id="LocaleDisplayNames.Variants">Variants</span> *struct {
+        <a href="#Common">Common</a>
+        Variant []*<a href="#Common">Common</a> `xml:"variant"`
+    }   `xml:"variants"`
+    <span id="LocaleDisplayNames.Keys">Keys</span> *struct {
+        <a href="#Common">Common</a>
+        Key []*<a href="#Common">Common</a> `xml:"key"`
+    }   `xml:"keys"`
+    <span id="LocaleDisplayNames.Types">Types</span> *struct {
+        <a href="#Common">Common</a>
+        Type []*struct {
+            <a href="#Common">Common</a>
+            Key <a href="http://godoc.org/builtin/#string">string</a> `xml:"key,attr"`
+        }   `xml:"type"`
+    }   `xml:"types"`
+    <span id="LocaleDisplayNames.TransformNames">TransformNames</span> *struct {
+        <a href="#Common">Common</a>
+        TransformName []*<a href="#Common">Common</a> `xml:"transformName"`
+    }   `xml:"transformNames"`
+    <span id="LocaleDisplayNames.MeasurementSystemNames">MeasurementSystemNames</span> *struct {
+        <a href="#Common">Common</a>
+        MeasurementSystemName []*<a href="#Common">Common</a> `xml:"measurementSystemName"`
+    }   `xml:"measurementSystemNames"`
+    <span id="LocaleDisplayNames.CodePatterns">CodePatterns</span> *struct {
+        <a href="#Common">Common</a>
+        CodePattern []*<a href="#Common">Common</a> `xml:"codePattern"`
+    }   `xml:"codePatterns"`
+}</pre><p>
+LocaleDisplayNames specifies localized display names for for scripts, languages,
+countries, currencies, and variants.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="Numbers">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text#1105">Numbers</a> <a class="permalink" href="#Numbers">¶</a></h3>
+      <pre>type Numbers struct {
+    <a href="#Common">Common</a>
+    <span id="Numbers.DefaultNumberingSystem">DefaultNumberingSystem</span> []*<a href="#Common">Common</a> `xml:"defaultNumberingSystem"`
+    <span id="Numbers.OtherNumberingSystems">OtherNumberingSystems</span>  []*struct {
+        <a href="#Common">Common</a>
+        Native      []*<a href="#Common">Common</a> `xml:"native"`
+        Traditional []*<a href="#Common">Common</a> `xml:"traditional"`
+        Finance     []*<a href="#Common">Common</a> `xml:"finance"`
+    }   `xml:"otherNumberingSystems"`
+    <span id="Numbers.Symbols">Symbols</span> []*struct {
+        <a href="#Common">Common</a>
+        NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        Decimal      []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"decimal"`
+        Group []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"group"`
+        List []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"list"`
+        PercentSign []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"percentSign"`
+        NativeZeroDigit []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"nativeZeroDigit"`
+        PatternDigit []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"patternDigit"`
+        PlusSign []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"plusSign"`
+        MinusSign []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"minusSign"`
+        Exponential []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"exponential"`
+        PerMille []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"perMille"`
+        Infinity []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"infinity"`
+        Nan []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"nan"`
+        CurrencyDecimal []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"currencyDecimal"`
+        CurrencyGroup []*struct {
+            <a href="#Common">Common</a>
+            NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        }   `xml:"currencyGroup"`
+    }   `xml:"symbols"`
+    <span id="Numbers.DecimalFormats">DecimalFormats</span> []*struct {
+        <a href="#Common">Common</a>
+        NumberSystem        <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        DecimalFormatLength []*struct {
+            <a href="#Common">Common</a>
+            DecimalFormat []*struct {
+                <a href="#Common">Common</a>
+                Pattern []*struct {
+                    <a href="#Common">Common</a>
+                    Numbers <a href="http://godoc.org/builtin/#string">string</a> `xml:"numbers,attr"`
+                    Count   <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"pattern"`
+            }   `xml:"decimalFormat"`
+        }   `xml:"decimalFormatLength"`
+    }   `xml:"decimalFormats"`
+    <span id="Numbers.ScientificFormats">ScientificFormats</span> []*struct {
+        <a href="#Common">Common</a>
+        NumberSystem           <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        ScientificFormatLength []*struct {
+            <a href="#Common">Common</a>
+            ScientificFormat []*struct {
+                <a href="#Common">Common</a>
+                Pattern []*struct {
+                    <a href="#Common">Common</a>
+                    Numbers <a href="http://godoc.org/builtin/#string">string</a> `xml:"numbers,attr"`
+                    Count   <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"pattern"`
+            }   `xml:"scientificFormat"`
+        }   `xml:"scientificFormatLength"`
+    }   `xml:"scientificFormats"`
+    <span id="Numbers.PercentFormats">PercentFormats</span> []*struct {
+        <a href="#Common">Common</a>
+        NumberSystem        <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        PercentFormatLength []*struct {
+            <a href="#Common">Common</a>
+            PercentFormat []*struct {
+                <a href="#Common">Common</a>
+                Pattern []*struct {
+                    <a href="#Common">Common</a>
+                    Numbers <a href="http://godoc.org/builtin/#string">string</a> `xml:"numbers,attr"`
+                    Count   <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"pattern"`
+            }   `xml:"percentFormat"`
+        }   `xml:"percentFormatLength"`
+    }   `xml:"percentFormats"`
+    <span id="Numbers.CurrencyFormats">CurrencyFormats</span> []*struct {
+        <a href="#Common">Common</a>
+        NumberSystem    <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+        CurrencySpacing []*struct {
+            <a href="#Common">Common</a>
+            BeforeCurrency []*struct {
+                <a href="#Common">Common</a>
+                CurrencyMatch    []*<a href="#Common">Common</a> `xml:"currencyMatch"`
+                SurroundingMatch []*<a href="#Common">Common</a> `xml:"surroundingMatch"`
+                InsertBetween    []*<a href="#Common">Common</a> `xml:"insertBetween"`
+            }   `xml:"beforeCurrency"`
+            AfterCurrency []*struct {
+                <a href="#Common">Common</a>
+                CurrencyMatch    []*<a href="#Common">Common</a> `xml:"currencyMatch"`
+                SurroundingMatch []*<a href="#Common">Common</a> `xml:"surroundingMatch"`
+                InsertBetween    []*<a href="#Common">Common</a> `xml:"insertBetween"`
+            }   `xml:"afterCurrency"`
+        }   `xml:"currencySpacing"`
+        CurrencyFormatLength []*struct {
+            <a href="#Common">Common</a>
+            CurrencyFormat []*struct {
+                <a href="#Common">Common</a>
+                Pattern []*struct {
+                    <a href="#Common">Common</a>
+                    Numbers <a href="http://godoc.org/builtin/#string">string</a> `xml:"numbers,attr"`
+                    Count   <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+                }   `xml:"pattern"`
+            }   `xml:"currencyFormat"`
+        }   `xml:"currencyFormatLength"`
+        UnitPattern []*struct {
+            <a href="#Common">Common</a>
+            Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+        }   `xml:"unitPattern"`
+    }   `xml:"currencyFormats"`
+    <span id="Numbers.Currencies">Currencies</span> *struct {
+        <a href="#Common">Common</a>
+        Currency []*struct {
+            <a href="#Common">Common</a>
+            Pattern []*struct {
+                <a href="#Common">Common</a>
+                Numbers <a href="http://godoc.org/builtin/#string">string</a> `xml:"numbers,attr"`
+                Count   <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+            }   `xml:"pattern"`
+            DisplayName []*struct {
+                <a href="#Common">Common</a>
+                Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+            }   `xml:"displayName"`
+            Symbol  []*<a href="#Common">Common</a> `xml:"symbol"`
+            Decimal []*struct {
+                <a href="#Common">Common</a>
+                NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+            }   `xml:"decimal"`
+            Group []*struct {
+                <a href="#Common">Common</a>
+                NumberSystem <a href="http://godoc.org/builtin/#string">string</a> `xml:"numberSystem,attr"`
+            }   `xml:"group"`
+        }   `xml:"currency"`
+    }   `xml:"currencies"`
+}</pre><p>
+Numbers supplies information for formatting and parsing numbers and currencies.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="RuleProcessor">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/collate.go?repo=text#16">RuleProcessor</a> <a class="permalink" href="#RuleProcessor">¶</a></h3>
+      <pre>type RuleProcessor interface {
+    <span id="RuleProcessor.Reset">Reset</span>(anchor <a href="http://godoc.org/builtin/#string">string</a>, before <a href="http://godoc.org/builtin/#int">int</a>) <a href="http://godoc.org/builtin/#error">error</a>
+    <span id="RuleProcessor.Insert">Insert</span>(level <a href="http://godoc.org/builtin/#int">int</a>, str, context, extend <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a>
+    <span id="RuleProcessor.Index">Index</span>(id <a href="http://godoc.org/builtin/#string">string</a>)
+}</pre><p>
+RuleProcessor can be passed to Collator's Process method, which
+parses the rules and calls the respective method for each rule found.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="Slice">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text#16">Slice</a> <a class="permalink" href="#Slice">¶</a></h3>
+      <pre>type Slice struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Slice provides utilities for modifying slices of elements.
+It can be wrapped around any slice of which the element type implements
+interface Elem.
+</p>
+
+      
+      
+      <div class="panel-group">
+<div class="panel panel-default" id="example-Slice">
+  <div class="panel-heading"><a class="accordion-toggle" data-toggle="collapse" href="#ex-Slice">Example</a></div>
+  <div id="ex-Slice" class="panel-collapse collapse"><div class="panel-body">
+    
+    <p>Code:<span class="pull-right"><a href="http://play.golang.org/p/5wBgG6p-tj">play</a>&nbsp;</span>
+    </p><pre>var dr *cldr.CLDR <span class="com">// assume this is initalized</span>
+
+x, _ := dr.LDML("en")
+cs := x.Collations.Collation
+<span class="com">// remove all but the default</span>
+cldr.MakeSlice(&amp;cs).Filter(func(e cldr.Elem) bool {
+    return e.GetCommon().Type != x.Collations.Default()
+})
+for i, c := range cs {
+    fmt.Println(i, c.Type)
+}
+</pre>
+    
+  </div></div>
+</div>
+
+</div>
+
+
+        <h4 id="MakeSlice">func <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text#30">MakeSlice</a> <a class="permalink" href="#MakeSlice">¶</a></h4>
+        <pre class="funcdecl">func MakeSlice(slicePtr interface{}) <a href="#Slice">Slice</a></pre><p>
+MakeSlice wraps a pointer to a slice of Elems.
+It replaces the array pointed to by the slice so that subsequent modifications
+do not alter the data in a CLDR type.
+It panics if an incorrect type is passed.
+</p>
+
+        
+        
+
+        <h4 id="Slice.Filter">func (Slice) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text#62">Filter</a> <a class="permalink" href="#Slice.Filter">¶</a></h4>
+        <pre class="funcdecl">func (s <a href="#Slice">Slice</a>) Filter(fn func(e <a href="#Elem">Elem</a>) <a href="http://godoc.org/builtin/#bool">bool</a>)</pre><p>
+Filter filters s to only include elements for which fn returns true.
+</p>
+
+        
+        <h4 id="Slice.Group">func (Slice) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text#77">Group</a> <a class="permalink" href="#Slice.Group">¶</a></h4>
+        <pre class="funcdecl">func (s <a href="#Slice">Slice</a>) Group(fn func(e <a href="#Elem">Elem</a>) <a href="http://godoc.org/builtin/#string">string</a>) []<a href="#Slice">Slice</a></pre><p>
+Group finds elements in s for which fn returns the same value and groups
+them in a new Slice.
+</p>
+
+        
+        <h4 id="Slice.SelectAnyOf">func (Slice) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text#101">SelectAnyOf</a> <a class="permalink" href="#Slice.SelectAnyOf">¶</a></h4>
+        <pre class="funcdecl">func (s <a href="#Slice">Slice</a>) SelectAnyOf(attr <a href="http://godoc.org/builtin/#string">string</a>, values ...<a href="http://godoc.org/builtin/#string">string</a>)</pre><p>
+SelectAnyOf filters s to contain only elements for which attr matches
+any of the values.
+</p>
+
+        
+        <h4 id="Slice.SelectDraft">func (Slice) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text#142">SelectDraft</a> <a class="permalink" href="#Slice.SelectDraft">¶</a></h4>
+        <pre class="funcdecl">func (s <a href="#Slice">Slice</a>) SelectDraft(d <a href="#Draft">Draft</a>)</pre><p>
+SelectDraft drops all elements from the list with a draft level smaller than d
+and selects the highest draft level of the remaining.
+This method assumes that the input CLDR is canonicalized.
+</p>
+
+        
+        <h4 id="Slice.SelectOnePerGroup">func (Slice) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text#114">SelectOnePerGroup</a> <a class="permalink" href="#Slice.SelectOnePerGroup">¶</a></h4>
+        <pre class="funcdecl">func (s <a href="#Slice">Slice</a>) SelectOnePerGroup(a <a href="http://godoc.org/builtin/#string">string</a>, v []<a href="http://godoc.org/builtin/#string">string</a>)</pre><p>
+SelectOnePerGroup filters s to include at most one element e per group of
+elements matching Key(attr), where e has an attribute a that matches any
+the values in v.
+If more than one element in a group matches a value in v preference
+is given to the element that matches the first value in v.
+</p>
+
+        
+        <h4 id="Slice.Value">func (*Slice) <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/slice.go?repo=text#22">Value</a> <a class="permalink" href="#Slice.Value">¶</a></h4>
+        <pre class="funcdecl">func (s *<a href="#Slice">Slice</a>) Value() <a href="http://godoc.org/reflect/#Value">reflect.Value</a></pre><p>
+Value returns the reflect.Value of the underlying slice.
+</p>
+
+        
+        
+
+    <h3 id="SupplementalData">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text#49">SupplementalData</a> <a class="permalink" href="#SupplementalData">¶</a></h3>
+      <pre>type SupplementalData struct {
+    <a href="#Common">Common</a>
+    <span id="SupplementalData.Version">Version</span> *struct {
+        <a href="#Common">Common</a>
+        Number <a href="http://godoc.org/builtin/#string">string</a> `xml:"number,attr"`
+    }   `xml:"version"`
+    <span id="SupplementalData.Generation">Generation</span> *struct {
+        <a href="#Common">Common</a>
+        Date <a href="http://godoc.org/builtin/#string">string</a> `xml:"date,attr"`
+    }   `xml:"generation"`
+    <span id="SupplementalData.CurrencyData">CurrencyData</span> *struct {
+        <a href="#Common">Common</a>
+        Fractions []*struct {
+            <a href="#Common">Common</a>
+            Info []*struct {
+                <a href="#Common">Common</a>
+                Iso4217      <a href="http://godoc.org/builtin/#string">string</a> `xml:"iso4217,attr"`
+                Digits       <a href="http://godoc.org/builtin/#string">string</a> `xml:"digits,attr"`
+                Rounding     <a href="http://godoc.org/builtin/#string">string</a> `xml:"rounding,attr"`
+                CashRounding <a href="http://godoc.org/builtin/#string">string</a> `xml:"cashRounding,attr"`
+            }   `xml:"info"`
+        }   `xml:"fractions"`
+        Region []*struct {
+            <a href="#Common">Common</a>
+            Iso3166  <a href="http://godoc.org/builtin/#string">string</a> `xml:"iso3166,attr"`
+            Currency []*struct {
+                <a href="#Common">Common</a>
+                Before       <a href="http://godoc.org/builtin/#string">string</a> `xml:"before,attr"`
+                From         <a href="http://godoc.org/builtin/#string">string</a> `xml:"from,attr"`
+                To           <a href="http://godoc.org/builtin/#string">string</a> `xml:"to,attr"`
+                Iso4217      <a href="http://godoc.org/builtin/#string">string</a> `xml:"iso4217,attr"`
+                Digits       <a href="http://godoc.org/builtin/#string">string</a> `xml:"digits,attr"`
+                Rounding     <a href="http://godoc.org/builtin/#string">string</a> `xml:"rounding,attr"`
+                CashRounding <a href="http://godoc.org/builtin/#string">string</a> `xml:"cashRounding,attr"`
+                Tender       <a href="http://godoc.org/builtin/#string">string</a> `xml:"tender,attr"`
+                Alternate    []*struct {
+                    <a href="#Common">Common</a>
+                    Iso4217 <a href="http://godoc.org/builtin/#string">string</a> `xml:"iso4217,attr"`
+                }   `xml:"alternate"`
+            }   `xml:"currency"`
+        }   `xml:"region"`
+    }   `xml:"currencyData"`
+    <span id="SupplementalData.TerritoryContainment">TerritoryContainment</span> *struct {
+        <a href="#Common">Common</a>
+        Group []*struct {
+            <a href="#Common">Common</a>
+            Contains <a href="http://godoc.org/builtin/#string">string</a> `xml:"contains,attr"`
+            Grouping <a href="http://godoc.org/builtin/#string">string</a> `xml:"grouping,attr"`
+            Status   <a href="http://godoc.org/builtin/#string">string</a> `xml:"status,attr"`
+        }   `xml:"group"`
+    }   `xml:"territoryContainment"`
+    <span id="SupplementalData.LanguageData">LanguageData</span> *struct {
+        <a href="#Common">Common</a>
+        Language []*struct {
+            <a href="#Common">Common</a>
+            Scripts     <a href="http://godoc.org/builtin/#string">string</a> `xml:"scripts,attr"`
+            Territories <a href="http://godoc.org/builtin/#string">string</a> `xml:"territories,attr"`
+            Variants    <a href="http://godoc.org/builtin/#string">string</a> `xml:"variants,attr"`
+        }   `xml:"language"`
+    }   `xml:"languageData"`
+    <span id="SupplementalData.TerritoryInfo">TerritoryInfo</span> *struct {
+        <a href="#Common">Common</a>
+        Territory []*struct {
+            <a href="#Common">Common</a>
+            Gdp                <a href="http://godoc.org/builtin/#string">string</a> `xml:"gdp,attr"`
+            LiteracyPercent    <a href="http://godoc.org/builtin/#string">string</a> `xml:"literacyPercent,attr"`
+            Population         <a href="http://godoc.org/builtin/#string">string</a> `xml:"population,attr"`
+            LanguagePopulation []*struct {
+                <a href="#Common">Common</a>
+                WritingPercent    <a href="http://godoc.org/builtin/#string">string</a> `xml:"writingPercent,attr"`
+                PopulationPercent <a href="http://godoc.org/builtin/#string">string</a> `xml:"populationPercent,attr"`
+                OfficialStatus    <a href="http://godoc.org/builtin/#string">string</a> `xml:"officialStatus,attr"`
+            }   `xml:"languagePopulation"`
+        }   `xml:"territory"`
+    }   `xml:"territoryInfo"`
+    <span id="SupplementalData.PostalCodeData">PostalCodeData</span> *struct {
+        <a href="#Common">Common</a>
+        PostCodeRegex []*struct {
+            <a href="#Common">Common</a>
+            TerritoryId <a href="http://godoc.org/builtin/#string">string</a> `xml:"territoryId,attr"`
+        }   `xml:"postCodeRegex"`
+    }   `xml:"postalCodeData"`
+    <span id="SupplementalData.CalendarData">CalendarData</span> *struct {
+        <a href="#Common">Common</a>
+        Calendar []*struct {
+            <a href="#Common">Common</a>
+            Territories    <a href="http://godoc.org/builtin/#string">string</a>  `xml:"territories,attr"`
+            CalendarSystem *<a href="#Common">Common</a> `xml:"calendarSystem"`
+            Eras           *struct {
+                <a href="#Common">Common</a>
+                Era []*struct {
+                    <a href="#Common">Common</a>
+                    Start <a href="http://godoc.org/builtin/#string">string</a> `xml:"start,attr"`
+                    End   <a href="http://godoc.org/builtin/#string">string</a> `xml:"end,attr"`
+                }   `xml:"era"`
+            }   `xml:"eras"`
+        }   `xml:"calendar"`
+    }   `xml:"calendarData"`
+    <span id="SupplementalData.CalendarPreferenceData">CalendarPreferenceData</span> *struct {
+        <a href="#Common">Common</a>
+        CalendarPreference []*struct {
+            <a href="#Common">Common</a>
+            Territories <a href="http://godoc.org/builtin/#string">string</a> `xml:"territories,attr"`
+            Ordering    <a href="http://godoc.org/builtin/#string">string</a> `xml:"ordering,attr"`
+        }   `xml:"calendarPreference"`
+    }   `xml:"calendarPreferenceData"`
+    <span id="SupplementalData.WeekData">WeekData</span> *struct {
+        <a href="#Common">Common</a>
+        MinDays []*struct {
+            <a href="#Common">Common</a>
+            Count       <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+            Territories <a href="http://godoc.org/builtin/#string">string</a> `xml:"territories,attr"`
+        }   `xml:"minDays"`
+        FirstDay []*struct {
+            <a href="#Common">Common</a>
+            Day         <a href="http://godoc.org/builtin/#string">string</a> `xml:"day,attr"`
+            Territories <a href="http://godoc.org/builtin/#string">string</a> `xml:"territories,attr"`
+        }   `xml:"firstDay"`
+        WeekendStart []*struct {
+            <a href="#Common">Common</a>
+            Day         <a href="http://godoc.org/builtin/#string">string</a> `xml:"day,attr"`
+            Territories <a href="http://godoc.org/builtin/#string">string</a> `xml:"territories,attr"`
+        }   `xml:"weekendStart"`
+        WeekendEnd []*struct {
+            <a href="#Common">Common</a>
+            Day         <a href="http://godoc.org/builtin/#string">string</a> `xml:"day,attr"`
+            Territories <a href="http://godoc.org/builtin/#string">string</a> `xml:"territories,attr"`
+        }   `xml:"weekendEnd"`
+    }   `xml:"weekData"`
+    <span id="SupplementalData.TimeData">TimeData</span> *struct {
+        <a href="#Common">Common</a>
+        Hours []*struct {
+            <a href="#Common">Common</a>
+            Preferred <a href="http://godoc.org/builtin/#string">string</a> `xml:"preferred,attr"`
+            Allowed   <a href="http://godoc.org/builtin/#string">string</a> `xml:"allowed,attr"`
+            Regions   <a href="http://godoc.org/builtin/#string">string</a> `xml:"regions,attr"`
+        }   `xml:"hours"`
+    }   `xml:"timeData"`
+    <span id="SupplementalData.MeasurementData">MeasurementData</span> *struct {
+        <a href="#Common">Common</a>
+        MeasurementSystem []*struct {
+            <a href="#Common">Common</a>
+            Territories <a href="http://godoc.org/builtin/#string">string</a> `xml:"territories,attr"`
+        }   `xml:"measurementSystem"`
+        PaperSize []*struct {
+            <a href="#Common">Common</a>
+            Territories <a href="http://godoc.org/builtin/#string">string</a> `xml:"territories,attr"`
+        }   `xml:"paperSize"`
+    }   `xml:"measurementData"`
+    <span id="SupplementalData.TimezoneData">TimezoneData</span> *struct {
+        <a href="#Common">Common</a>
+        MapTimezones []*struct {
+            <a href="#Common">Common</a>
+            TypeVersion  <a href="http://godoc.org/builtin/#string">string</a> `xml:"typeVersion,attr"`
+            OtherVersion <a href="http://godoc.org/builtin/#string">string</a> `xml:"otherVersion,attr"`
+            MapZone      []*struct {
+                <a href="#Common">Common</a>
+                Other     <a href="http://godoc.org/builtin/#string">string</a> `xml:"other,attr"`
+                Territory <a href="http://godoc.org/builtin/#string">string</a> `xml:"territory,attr"`
+            }   `xml:"mapZone"`
+        }   `xml:"mapTimezones"`
+        ZoneFormatting []*struct {
+            <a href="#Common">Common</a>
+            Multizone   <a href="http://godoc.org/builtin/#string">string</a> `xml:"multizone,attr"`
+            TzidVersion <a href="http://godoc.org/builtin/#string">string</a> `xml:"tzidVersion,attr"`
+            ZoneItem    []*struct {
+                <a href="#Common">Common</a>
+                Territory <a href="http://godoc.org/builtin/#string">string</a> `xml:"territory,attr"`
+                Aliases   <a href="http://godoc.org/builtin/#string">string</a> `xml:"aliases,attr"`
+            }   `xml:"zoneItem"`
+        }   `xml:"zoneFormatting"`
+    }   `xml:"timezoneData"`
+    <span id="SupplementalData.Characters">Characters</span> *struct {
+        <a href="#Common">Common</a>
+        CharacterFallback []*struct {
+            <a href="#Common">Common</a>
+            Character []*struct {
+                <a href="#Common">Common</a>
+                Value      <a href="http://godoc.org/builtin/#string">string</a>    `xml:"value,attr"`
+                Substitute []*<a href="#Common">Common</a> `xml:"substitute"`
+            }   `xml:"character"`
+        }   `xml:"character-fallback"`
+    }   `xml:"characters"`
+    <span id="SupplementalData.Transforms">Transforms</span> *struct {
+        <a href="#Common">Common</a>
+        Transform []*struct {
+            <a href="#Common">Common</a>
+            Source     <a href="http://godoc.org/builtin/#string">string</a>    `xml:"source,attr"`
+            Target     <a href="http://godoc.org/builtin/#string">string</a>    `xml:"target,attr"`
+            Variant    <a href="http://godoc.org/builtin/#string">string</a>    `xml:"variant,attr"`
+            Direction  <a href="http://godoc.org/builtin/#string">string</a>    `xml:"direction,attr"`
+            Visibility <a href="http://godoc.org/builtin/#string">string</a>    `xml:"visibility,attr"`
+            Comment    []*<a href="#Common">Common</a> `xml:"comment"`
+            TRule      []*<a href="#Common">Common</a> `xml:"tRule"`
+        }   `xml:"transform"`
+    }   `xml:"transforms"`
+    <span id="SupplementalData.Metadata">Metadata</span> *struct {
+        <a href="#Common">Common</a>
+        AttributeOrder *<a href="#Common">Common</a> `xml:"attributeOrder"`
+        ElementOrder   *<a href="#Common">Common</a> `xml:"elementOrder"`
+        SerialElements *<a href="#Common">Common</a> `xml:"serialElements"`
+        Suppress       *struct {
+            <a href="#Common">Common</a>
+            Attributes []*struct {
+                <a href="#Common">Common</a>
+                Element        <a href="http://godoc.org/builtin/#string">string</a> `xml:"element,attr"`
+                Attribute      <a href="http://godoc.org/builtin/#string">string</a> `xml:"attribute,attr"`
+                AttributeValue <a href="http://godoc.org/builtin/#string">string</a> `xml:"attributeValue,attr"`
+            }   `xml:"attributes"`
+        }   `xml:"suppress"`
+        Validity *struct {
+            <a href="#Common">Common</a>
+            Variable []*struct {
+                <a href="#Common">Common</a>
+                Id  <a href="http://godoc.org/builtin/#string">string</a> `xml:"id,attr"`
+            }   `xml:"variable"`
+            AttributeValues []*struct {
+                <a href="#Common">Common</a>
+                Elements   <a href="http://godoc.org/builtin/#string">string</a> `xml:"elements,attr"`
+                Attributes <a href="http://godoc.org/builtin/#string">string</a> `xml:"attributes,attr"`
+                Order      <a href="http://godoc.org/builtin/#string">string</a> `xml:"order,attr"`
+            }   `xml:"attributeValues"`
+        }   `xml:"validity"`
+        Alias *struct {
+            <a href="#Common">Common</a>
+            LanguageAlias []*struct {
+                <a href="#Common">Common</a>
+                Replacement <a href="http://godoc.org/builtin/#string">string</a> `xml:"replacement,attr"`
+                Reason      <a href="http://godoc.org/builtin/#string">string</a> `xml:"reason,attr"`
+            }   `xml:"languageAlias"`
+            ScriptAlias []*struct {
+                <a href="#Common">Common</a>
+                Replacement <a href="http://godoc.org/builtin/#string">string</a> `xml:"replacement,attr"`
+                Reason      <a href="http://godoc.org/builtin/#string">string</a> `xml:"reason,attr"`
+            }   `xml:"scriptAlias"`
+            TerritoryAlias []*struct {
+                <a href="#Common">Common</a>
+                Replacement <a href="http://godoc.org/builtin/#string">string</a> `xml:"replacement,attr"`
+                Reason      <a href="http://godoc.org/builtin/#string">string</a> `xml:"reason,attr"`
+            }   `xml:"territoryAlias"`
+            VariantAlias []*struct {
+                <a href="#Common">Common</a>
+                Replacement <a href="http://godoc.org/builtin/#string">string</a> `xml:"replacement,attr"`
+                Reason      <a href="http://godoc.org/builtin/#string">string</a> `xml:"reason,attr"`
+            }   `xml:"variantAlias"`
+            ZoneAlias []*struct {
+                <a href="#Common">Common</a>
+                Replacement <a href="http://godoc.org/builtin/#string">string</a> `xml:"replacement,attr"`
+                Reason      <a href="http://godoc.org/builtin/#string">string</a> `xml:"reason,attr"`
+            }   `xml:"zoneAlias"`
+        }   `xml:"alias"`
+        Deprecated *struct {
+            <a href="#Common">Common</a>
+            DeprecatedItems []*struct {
+                <a href="#Common">Common</a>
+                Elements   <a href="http://godoc.org/builtin/#string">string</a> `xml:"elements,attr"`
+                Attributes <a href="http://godoc.org/builtin/#string">string</a> `xml:"attributes,attr"`
+                Values     <a href="http://godoc.org/builtin/#string">string</a> `xml:"values,attr"`
+            }   `xml:"deprecatedItems"`
+        }   `xml:"deprecated"`
+        Distinguishing *struct {
+            <a href="#Common">Common</a>
+            DistinguishingItems []*struct {
+                <a href="#Common">Common</a>
+                Exclude    <a href="http://godoc.org/builtin/#string">string</a> `xml:"exclude,attr"`
+                Elements   <a href="http://godoc.org/builtin/#string">string</a> `xml:"elements,attr"`
+                Attributes <a href="http://godoc.org/builtin/#string">string</a> `xml:"attributes,attr"`
+            }   `xml:"distinguishingItems"`
+        }   `xml:"distinguishing"`
+        Blocking *struct {
+            <a href="#Common">Common</a>
+            BlockingItems []*struct {
+                <a href="#Common">Common</a>
+                Elements <a href="http://godoc.org/builtin/#string">string</a> `xml:"elements,attr"`
+            }   `xml:"blockingItems"`
+        }   `xml:"blocking"`
+        CoverageAdditions *struct {
+            <a href="#Common">Common</a>
+            LanguageCoverage []*struct {
+                <a href="#Common">Common</a>
+                Values <a href="http://godoc.org/builtin/#string">string</a> `xml:"values,attr"`
+            }   `xml:"languageCoverage"`
+            ScriptCoverage []*struct {
+                <a href="#Common">Common</a>
+                Values <a href="http://godoc.org/builtin/#string">string</a> `xml:"values,attr"`
+            }   `xml:"scriptCoverage"`
+            TerritoryCoverage []*struct {
+                <a href="#Common">Common</a>
+                Values <a href="http://godoc.org/builtin/#string">string</a> `xml:"values,attr"`
+            }   `xml:"territoryCoverage"`
+            CurrencyCoverage []*struct {
+                <a href="#Common">Common</a>
+                Values <a href="http://godoc.org/builtin/#string">string</a> `xml:"values,attr"`
+            }   `xml:"currencyCoverage"`
+            TimezoneCoverage []*struct {
+                <a href="#Common">Common</a>
+                Values <a href="http://godoc.org/builtin/#string">string</a> `xml:"values,attr"`
+            }   `xml:"timezoneCoverage"`
+        }   `xml:"coverageAdditions"`
+        SkipDefaultLocale *struct {
+            <a href="#Common">Common</a>
+            Services <a href="http://godoc.org/builtin/#string">string</a> `xml:"services,attr"`
+        }   `xml:"skipDefaultLocale"`
+        DefaultContent *struct {
+            <a href="#Common">Common</a>
+            Locales <a href="http://godoc.org/builtin/#string">string</a> `xml:"locales,attr"`
+        }   `xml:"defaultContent"`
+    }   `xml:"metadata"`
+    <span id="SupplementalData.CodeMappings">CodeMappings</span> *struct {
+        <a href="#Common">Common</a>
+        LanguageCodes []*struct {
+            <a href="#Common">Common</a>
+            Alpha3 <a href="http://godoc.org/builtin/#string">string</a> `xml:"alpha3,attr"`
+        }   `xml:"languageCodes"`
+        TerritoryCodes []*struct {
+            <a href="#Common">Common</a>
+            Numeric  <a href="http://godoc.org/builtin/#string">string</a> `xml:"numeric,attr"`
+            Alpha3   <a href="http://godoc.org/builtin/#string">string</a> `xml:"alpha3,attr"`
+            Fips10   <a href="http://godoc.org/builtin/#string">string</a> `xml:"fips10,attr"`
+            Internet <a href="http://godoc.org/builtin/#string">string</a> `xml:"internet,attr"`
+        }   `xml:"territoryCodes"`
+    }   `xml:"codeMappings"`
+    <span id="SupplementalData.ParentLocales">ParentLocales</span> *struct {
+        <a href="#Common">Common</a>
+        ParentLocale []*struct {
+            <a href="#Common">Common</a>
+            Parent  <a href="http://godoc.org/builtin/#string">string</a> `xml:"parent,attr"`
+            Locales <a href="http://godoc.org/builtin/#string">string</a> `xml:"locales,attr"`
+        }   `xml:"parentLocale"`
+    }   `xml:"parentLocales"`
+    <span id="SupplementalData.LikelySubtags">LikelySubtags</span> *struct {
+        <a href="#Common">Common</a>
+        LikelySubtag []*struct {
+            <a href="#Common">Common</a>
+            From <a href="http://godoc.org/builtin/#string">string</a> `xml:"from,attr"`
+            To   <a href="http://godoc.org/builtin/#string">string</a> `xml:"to,attr"`
+        }   `xml:"likelySubtag"`
+    }   `xml:"likelySubtags"`
+    <span id="SupplementalData.MetazoneInfo">MetazoneInfo</span> *struct {
+        <a href="#Common">Common</a>
+        Timezone []*struct {
+            <a href="#Common">Common</a>
+            UsesMetazone []*struct {
+                <a href="#Common">Common</a>
+                Mzone <a href="http://godoc.org/builtin/#string">string</a> `xml:"mzone,attr"`
+                From  <a href="http://godoc.org/builtin/#string">string</a> `xml:"from,attr"`
+                To    <a href="http://godoc.org/builtin/#string">string</a> `xml:"to,attr"`
+            }   `xml:"usesMetazone"`
+        }   `xml:"timezone"`
+    }   `xml:"metazoneInfo"`
+    <span id="SupplementalData.Plurals">Plurals</span> *struct {
+        <a href="#Common">Common</a>
+        PluralRules []*struct {
+            <a href="#Common">Common</a>
+            Locales    <a href="http://godoc.org/builtin/#string">string</a> `xml:"locales,attr"`
+            PluralRule []*struct {
+                <a href="#Common">Common</a>
+                Count <a href="http://godoc.org/builtin/#string">string</a> `xml:"count,attr"`
+            }   `xml:"pluralRule"`
+        }   `xml:"pluralRules"`
+    }   `xml:"plurals"`
+    <span id="SupplementalData.TelephoneCodeData">TelephoneCodeData</span> *struct {
+        <a href="#Common">Common</a>
+        CodesByTerritory []*struct {
+            <a href="#Common">Common</a>
+            Territory            <a href="http://godoc.org/builtin/#string">string</a> `xml:"territory,attr"`
+            TelephoneCountryCode []*struct {
+                <a href="#Common">Common</a>
+                Code <a href="http://godoc.org/builtin/#string">string</a> `xml:"code,attr"`
+                From <a href="http://godoc.org/builtin/#string">string</a> `xml:"from,attr"`
+                To   <a href="http://godoc.org/builtin/#string">string</a> `xml:"to,attr"`
+            }   `xml:"telephoneCountryCode"`
+        }   `xml:"codesByTerritory"`
+    }   `xml:"telephoneCodeData"`
+    <span id="SupplementalData.NumberingSystems">NumberingSystems</span> *struct {
+        <a href="#Common">Common</a>
+        NumberingSystem []*struct {
+            <a href="#Common">Common</a>
+            Id     <a href="http://godoc.org/builtin/#string">string</a> `xml:"id,attr"`
+            Radix  <a href="http://godoc.org/builtin/#string">string</a> `xml:"radix,attr"`
+            Digits <a href="http://godoc.org/builtin/#string">string</a> `xml:"digits,attr"`
+            Rules  <a href="http://godoc.org/builtin/#string">string</a> `xml:"rules,attr"`
+        }   `xml:"numberingSystem"`
+    }   `xml:"numberingSystems"`
+    <span id="SupplementalData.Bcp47KeywordMappings">Bcp47KeywordMappings</span> *struct {
+        <a href="#Common">Common</a>
+        MapKeys *struct {
+            <a href="#Common">Common</a>
+            KeyMap []*struct {
+                <a href="#Common">Common</a>
+                Bcp47 <a href="http://godoc.org/builtin/#string">string</a> `xml:"bcp47,attr"`
+            }   `xml:"keyMap"`
+        }   `xml:"mapKeys"`
+        MapTypes []*struct {
+            <a href="#Common">Common</a>
+            TypeMap []*struct {
+                <a href="#Common">Common</a>
+                Bcp47 <a href="http://godoc.org/builtin/#string">string</a> `xml:"bcp47,attr"`
+            }   `xml:"typeMap"`
+        }   `xml:"mapTypes"`
+    }   `xml:"bcp47KeywordMappings"`
+    <span id="SupplementalData.Gender">Gender</span> *struct {
+        <a href="#Common">Common</a>
+        PersonList []*struct {
+            <a href="#Common">Common</a>
+            Locales <a href="http://godoc.org/builtin/#string">string</a> `xml:"locales,attr"`
+        }   `xml:"personList"`
+    }   `xml:"gender"`
+    <span id="SupplementalData.References">References</span> *struct {
+        <a href="#Common">Common</a>
+        Reference []*struct {
+            <a href="#Common">Common</a>
+            Uri <a href="http://godoc.org/builtin/#string">string</a> `xml:"uri,attr"`
+        }   `xml:"reference"`
+    }   `xml:"references"`
+    <span id="SupplementalData.LanguageMatching">LanguageMatching</span> *struct {
+        <a href="#Common">Common</a>
+        LanguageMatches []*struct {
+            <a href="#Common">Common</a>
+            LanguageMatch []*struct {
+                <a href="#Common">Common</a>
+                Desired   <a href="http://godoc.org/builtin/#string">string</a> `xml:"desired,attr"`
+                Supported <a href="http://godoc.org/builtin/#string">string</a> `xml:"supported,attr"`
+                Percent   <a href="http://godoc.org/builtin/#string">string</a> `xml:"percent,attr"`
+                Oneway    <a href="http://godoc.org/builtin/#string">string</a> `xml:"oneway,attr"`
+            }   `xml:"languageMatch"`
+        }   `xml:"languageMatches"`
+    }   `xml:"languageMatching"`
+    <span id="SupplementalData.DayPeriodRuleSet">DayPeriodRuleSet</span> *struct {
+        <a href="#Common">Common</a>
+        DayPeriodRules []*struct {
+            <a href="#Common">Common</a>
+            Locales       <a href="http://godoc.org/builtin/#string">string</a> `xml:"locales,attr"`
+            DayPeriodRule []*struct {
+                <a href="#Common">Common</a>
+                At     <a href="http://godoc.org/builtin/#string">string</a> `xml:"at,attr"`
+                After  <a href="http://godoc.org/builtin/#string">string</a> `xml:"after,attr"`
+                From   <a href="http://godoc.org/builtin/#string">string</a> `xml:"from,attr"`
+                Before <a href="http://godoc.org/builtin/#string">string</a> `xml:"before,attr"`
+                To     <a href="http://godoc.org/builtin/#string">string</a> `xml:"to,attr"`
+            }   `xml:"dayPeriodRule"`
+        }   `xml:"dayPeriodRules"`
+    }   `xml:"dayPeriodRuleSet"`
+    <span id="SupplementalData.MetaZones">MetaZones</span> *struct {
+        <a href="#Common">Common</a>
+        MetazoneInfo *struct {
+            <a href="#Common">Common</a>
+            Timezone []*struct {
+                <a href="#Common">Common</a>
+                UsesMetazone []*struct {
+                    <a href="#Common">Common</a>
+                    Mzone <a href="http://godoc.org/builtin/#string">string</a> `xml:"mzone,attr"`
+                    From  <a href="http://godoc.org/builtin/#string">string</a> `xml:"from,attr"`
+                    To    <a href="http://godoc.org/builtin/#string">string</a> `xml:"to,attr"`
+                }   `xml:"usesMetazone"`
+            }   `xml:"timezone"`
+        }   `xml:"metazoneInfo"`
+        MapTimezones *struct {
+            <a href="#Common">Common</a>
+            TypeVersion  <a href="http://godoc.org/builtin/#string">string</a> `xml:"typeVersion,attr"`
+            OtherVersion <a href="http://godoc.org/builtin/#string">string</a> `xml:"otherVersion,attr"`
+            MapZone      []*struct {
+                <a href="#Common">Common</a>
+                Other     <a href="http://godoc.org/builtin/#string">string</a> `xml:"other,attr"`
+                Territory <a href="http://godoc.org/builtin/#string">string</a> `xml:"territory,attr"`
+            }   `xml:"mapZone"`
+        }   `xml:"mapTimezones"`
+    }   `xml:"metaZones"`
+    <span id="SupplementalData.PrimaryZones">PrimaryZones</span> *struct {
+        <a href="#Common">Common</a>
+        PrimaryZone []*struct {
+            <a href="#Common">Common</a>
+            Iso3166 <a href="http://godoc.org/builtin/#string">string</a> `xml:"iso3166,attr"`
+        }   `xml:"primaryZone"`
+    }   `xml:"primaryZones"`
+    <span id="SupplementalData.WindowsZones">WindowsZones</span> *struct {
+        <a href="#Common">Common</a>
+        MapTimezones *struct {
+            <a href="#Common">Common</a>
+            TypeVersion  <a href="http://godoc.org/builtin/#string">string</a> `xml:"typeVersion,attr"`
+            OtherVersion <a href="http://godoc.org/builtin/#string">string</a> `xml:"otherVersion,attr"`
+            MapZone      []*struct {
+                <a href="#Common">Common</a>
+                Other     <a href="http://godoc.org/builtin/#string">string</a> `xml:"other,attr"`
+                Territory <a href="http://godoc.org/builtin/#string">string</a> `xml:"territory,attr"`
+            }   `xml:"mapZone"`
+        }   `xml:"mapTimezones"`
+    }   `xml:"windowsZones"`
+    <span id="SupplementalData.CoverageLevels">CoverageLevels</span> *struct {
+        <a href="#Common">Common</a>
+        CoverageVariable []*struct {
+            <a href="#Common">Common</a>
+            Key   <a href="http://godoc.org/builtin/#string">string</a> `xml:"key,attr"`
+            Value <a href="http://godoc.org/builtin/#string">string</a> `xml:"value,attr"`
+        }   `xml:"coverageVariable"`
+        CoverageLevel []*struct {
+            <a href="#Common">Common</a>
+            InLanguage  <a href="http://godoc.org/builtin/#string">string</a> `xml:"inLanguage,attr"`
+            InScript    <a href="http://godoc.org/builtin/#string">string</a> `xml:"inScript,attr"`
+            InTerritory <a href="http://godoc.org/builtin/#string">string</a> `xml:"inTerritory,attr"`
+            Value       <a href="http://godoc.org/builtin/#string">string</a> `xml:"value,attr"`
+            Match       <a href="http://godoc.org/builtin/#string">string</a> `xml:"match,attr"`
+        }   `xml:"coverageLevel"`
+    }   `xml:"coverageLevels"`
+}</pre><p>
+SupplementalData holds information relevant for internationalization
+and proper use of CLDR, but that is not contained in the locale hierarchy.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="TimeZoneNames">type <a title="View Source" href="http://code.google.com/p/go/source/browse/cldr/xml.go?repo=text#997">TimeZoneNames</a> <a class="permalink" href="#TimeZoneNames">¶</a></h3>
+      <pre>type TimeZoneNames struct {
+    <a href="#Common">Common</a>
+    <span id="TimeZoneNames.HourFormat">HourFormat</span>           []*<a href="#Common">Common</a> `xml:"hourFormat"`
+    <span id="TimeZoneNames.HoursFormat">HoursFormat</span>          []*<a href="#Common">Common</a> `xml:"hoursFormat"`
+    <span id="TimeZoneNames.GmtFormat">GmtFormat</span>            []*<a href="#Common">Common</a> `xml:"gmtFormat"`
+    <span id="TimeZoneNames.GmtZeroFormat">GmtZeroFormat</span>        []*<a href="#Common">Common</a> `xml:"gmtZeroFormat"`
+    <span id="TimeZoneNames.RegionFormat">RegionFormat</span>         []*<a href="#Common">Common</a> `xml:"regionFormat"`
+    <span id="TimeZoneNames.FallbackFormat">FallbackFormat</span>       []*<a href="#Common">Common</a> `xml:"fallbackFormat"`
+    <span id="TimeZoneNames.FallbackRegionFormat">FallbackRegionFormat</span> []*<a href="#Common">Common</a> `xml:"fallbackRegionFormat"`
+    <span id="TimeZoneNames.AbbreviationFallback">AbbreviationFallback</span> []*<a href="#Common">Common</a> `xml:"abbreviationFallback"`
+    <span id="TimeZoneNames.PreferenceOrdering">PreferenceOrdering</span>   []*<a href="#Common">Common</a> `xml:"preferenceOrdering"`
+    <span id="TimeZoneNames.SingleCountries">SingleCountries</span>      []*struct {
+        <a href="#Common">Common</a>
+        List <a href="http://godoc.org/builtin/#string">string</a> `xml:"list,attr"`
+    }   `xml:"singleCountries"`
+    <span id="TimeZoneNames.Zone">Zone</span> []*struct {
+        <a href="#Common">Common</a>
+        Long []*struct {
+            <a href="#Common">Common</a>
+            Generic  []*<a href="#Common">Common</a> `xml:"generic"`
+            Standard []*<a href="#Common">Common</a> `xml:"standard"`
+            Daylight []*<a href="#Common">Common</a> `xml:"daylight"`
+        }   `xml:"long"`
+        Short []*struct {
+            <a href="#Common">Common</a>
+            Generic  []*<a href="#Common">Common</a> `xml:"generic"`
+            Standard []*<a href="#Common">Common</a> `xml:"standard"`
+            Daylight []*<a href="#Common">Common</a> `xml:"daylight"`
+        }   `xml:"short"`
+        CommonlyUsed []*struct {
+            <a href="#Common">Common</a>
+            Used <a href="http://godoc.org/builtin/#string">string</a> `xml:"used,attr"`
+        }   `xml:"commonlyUsed"`
+        ExemplarCity []*<a href="#Common">Common</a> `xml:"exemplarCity"`
+    }   `xml:"zone"`
+    <span id="TimeZoneNames.Metazone">Metazone</span> []*struct {
+        <a href="#Common">Common</a>
+        Long []*struct {
+            <a href="#Common">Common</a>
+            Generic  []*<a href="#Common">Common</a> `xml:"generic"`
+            Standard []*<a href="#Common">Common</a> `xml:"standard"`
+            Daylight []*<a href="#Common">Common</a> `xml:"daylight"`
+        }   `xml:"long"`
+        Short []*struct {
+            <a href="#Common">Common</a>
+            Generic  []*<a href="#Common">Common</a> `xml:"generic"`
+            Standard []*<a href="#Common">Common</a> `xml:"standard"`
+            Daylight []*<a href="#Common">Common</a> `xml:"daylight"`
+        }   `xml:"short"`
+        CommonlyUsed []*struct {
+            <a href="#Common">Common</a>
+            Used <a href="http://godoc.org/builtin/#string">string</a> `xml:"used,attr"`
+        }   `xml:"commonlyUsed"`
+    }   `xml:"metazone"`
+}</pre>
+      
+      
+      
+
+        
+
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.text/cldr"></form>
+  <p>Package cldr imports <a href="cldra687.html?imports">15 packages</a> (<a href="cldr75f0.html?import-graph">graph</a>).
+  Updated <span class="timeago" title="2013-10-05T07:42:40Z">2013-10-05</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/cldr by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:22 GMT -->
+
+</body>

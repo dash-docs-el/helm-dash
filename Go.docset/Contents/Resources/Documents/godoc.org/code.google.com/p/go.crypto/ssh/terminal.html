@@ -1,0 +1,318 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/ssh/terminal by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:00 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>terminal</title>
+  
+    <meta name="twitter:title" content="Package terminal">
+    <meta property="og:title" content="Package terminal">
+    <meta name="description" content="Package terminal provides support functions for dealing with terminals, as commonly found on UNIX systems.">
+    <meta name="twitter:description" content="Package terminal provides support functions for dealing with terminals, as commonly found on UNIX systems.">
+    <meta property="og:description" content="Package terminal provides support functions for dealing with terminals, as commonly found on UNIX systems.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@godocdotorg">
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=crypto"><strong>go.crypto:</strong></a>
+  <a href="../index.html">code.google.com/p/go.crypto</a><span class="text-muted">/</span><a href="index.html">ssh</a><span class="text-muted">/</span><span class="text-muted">terminal</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package terminal</h2>
+    <p><code>import "code.google.com/p/go.crypto/ssh/terminal"</code>
+    </p><p>
+Package terminal provides support functions for dealing with terminals, as
+commonly found on UNIX systems.
+</p>
+<p>
+Putting a terminal into raw mode is the most common requirement:
+</p>
+<pre>oldState, err := terminal.MakeRaw(0)
+if err != nil {
+        panic(err)
+}
+defer terminal.Restore(0, oldState)</pre>
+
+    
+
+    <h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    
+    <li><a href="#GetSize">func GetSize(fd int) (width, height int, err error)</a></li><li><a href="#IsTerminal">func IsTerminal(fd int) bool</a></li><li><a href="#ReadPassword">func ReadPassword(fd int) ([]byte, error)</a></li><li><a href="#Restore">func Restore(fd int, state *State) error</a>
+    
+      </li><li><a href="#EscapeCodes">type EscapeCodes</a>
+        
+        
+        
+        
+    
+      </li><li><a href="#State">type State</a>
+        <ul>
+        <li><a href="#GetState">func GetState(fd int) (*State, error)</a></li><li><a href="#MakeRaw">func MakeRaw(fd int) (*State, error)</a>
+        
+        </li></ul>
+    
+      </li><li><a href="#Terminal">type Terminal</a>
+        <ul>
+        <li><a href="#NewTerminal">func NewTerminal(c io.ReadWriter, prompt string) *Terminal</a>
+        </li><li><a href="#Terminal.ReadLine">func (t *Terminal) ReadLine() (line string, err error)</a></li><li><a href="#Terminal.ReadPassword">func (t *Terminal) ReadPassword(prompt string) (line string, err error)</a></li><li><a href="#Terminal.SetPrompt">func (t *Terminal) SetPrompt(prompt string)</a></li><li><a href="#Terminal.SetSize">func (t *Terminal) SetSize(width, height int)</a></li><li><a href="#Terminal.Write">func (t *Terminal) Write(buf []byte) (n int, err error)</a>
+        </li></ul>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/ssh/terminal/?repo=crypto">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto">terminal.go</a> <a href="http://code.google.com/p/go/source/browse/ssh/terminal/util.go?repo=crypto">util.go</a> <a href="http://code.google.com/p/go/source/browse/ssh/terminal/util_linux.go?repo=crypto">util_linux.go</a> </p>
+
+    
+
+    
+
+    <h3 id="GetSize">func <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/util.go?repo=crypto#75">GetSize</a> <a class="permalink" href="#GetSize">¶</a></h3>
+    <pre class="funcdecl">func GetSize(fd <a href="http://godoc.org/builtin/#int">int</a>) (width, height <a href="http://godoc.org/builtin/#int">int</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+GetSize returns the dimensions of the given terminal.
+</p>
+
+    
+    <h3 id="IsTerminal">func <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/util.go?repo=crypto#31">IsTerminal</a> <a class="permalink" href="#IsTerminal">¶</a></h3>
+    <pre class="funcdecl">func IsTerminal(fd <a href="http://godoc.org/builtin/#int">int</a>) <a href="http://godoc.org/builtin/#bool">bool</a></pre><p>
+IsTerminal returns true if the given file descriptor is a terminal.
+</p>
+
+    
+    <h3 id="ReadPassword">func <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/util.go?repo=crypto#87">ReadPassword</a> <a class="permalink" href="#ReadPassword">¶</a></h3>
+    <pre class="funcdecl">func ReadPassword(fd <a href="http://godoc.org/builtin/#int">int</a>) ([]<a href="http://godoc.org/builtin/#byte">byte</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ReadPassword reads a line of input from a terminal without local echo.  This
+is commonly used for inputting passwords and other sensitive data. The slice
+returned does not include the \n.
+</p>
+
+    
+    <h3 id="Restore">func <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/util.go?repo=crypto#69">Restore</a> <a class="permalink" href="#Restore">¶</a></h3>
+    <pre class="funcdecl">func Restore(fd <a href="http://godoc.org/builtin/#int">int</a>, state *<a href="#State">State</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Restore restores the terminal connected to the given file descriptor to a
+previous state.
+</p>
+
+    
+    
+
+   <h3 id="EscapeCodes">type <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto#15">EscapeCodes</a> <a class="permalink" href="#EscapeCodes">¶</a></h3>
+      <pre>type EscapeCodes struct {
+    <span class="com">// Foreground colors</span>
+    <span id="EscapeCodes.Black">Black</span>, <span id="EscapeCodes.Red">Red</span>, <span id="EscapeCodes.Green">Green</span>, <span id="EscapeCodes.Yellow">Yellow</span>, <span id="EscapeCodes.Blue">Blue</span>, <span id="EscapeCodes.Magenta">Magenta</span>, <span id="EscapeCodes.Cyan">Cyan</span>, <span id="EscapeCodes.White">White</span> []<a href="http://godoc.org/builtin/#byte">byte</a>
+
+    <span class="com">// Reset all attributes</span>
+    <span id="EscapeCodes.Reset">Reset</span> []<a href="http://godoc.org/builtin/#byte">byte</a>
+}</pre><p>
+EscapeCodes contains escape sequences that can be written to the terminal in
+order to achieve different styles of text.
+</p>
+
+      
+      
+      
+
+        
+
+        
+
+    <h3 id="State">type <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/util.go?repo=crypto#26">State</a> <a class="permalink" href="#State">¶</a></h3>
+      <pre>type State struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+State contains the state of a terminal.
+</p>
+
+      
+      
+      
+
+        <h4 id="GetState">func <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/util.go?repo=crypto#58">GetState</a> <a class="permalink" href="#GetState">¶</a></h4>
+        <pre class="funcdecl">func GetState(fd <a href="http://godoc.org/builtin/#int">int</a>) (*<a href="#State">State</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+GetState returns the current state of a terminal which may be useful to
+restore the terminal after a signal.
+</p>
+
+        
+        <h4 id="MakeRaw">func <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/util.go?repo=crypto#40">MakeRaw</a> <a class="permalink" href="#MakeRaw">¶</a></h4>
+        <pre class="funcdecl">func MakeRaw(fd <a href="http://godoc.org/builtin/#int">int</a>) (*<a href="#State">State</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+MakeRaw put the terminal connected to the given file descriptor into raw
+mode and returns the previous state of the terminal so that it can be
+restored.
+</p>
+
+        
+        
+
+        
+
+    <h3 id="Terminal">type <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto#38">Terminal</a> <a class="permalink" href="#Terminal">¶</a></h3>
+      <pre>type Terminal struct {
+    <span class="com">// AutoCompleteCallback, if non-null, is called for each keypress with</span>
+    <span class="com">// the full input line and the current position of the cursor (in</span>
+    <span class="com">// bytes, as an index into |line|). If it returns ok=false, the key</span>
+    <span class="com">// press is processed normally. Otherwise it returns a replacement line</span>
+    <span class="com">// and the new cursor position.</span>
+    <span id="Terminal.AutoCompleteCallback">AutoCompleteCallback</span> func(line <a href="http://godoc.org/builtin/#string">string</a>, pos <a href="http://godoc.org/builtin/#int">int</a>, key <a href="http://godoc.org/builtin/#rune">rune</a>) (newLine <a href="http://godoc.org/builtin/#string">string</a>, newPos <a href="http://godoc.org/builtin/#int">int</a>, ok <a href="http://godoc.org/builtin/#bool">bool</a>)
+
+    <span class="com">// Escape contains a pointer to the escape codes for this terminal.</span>
+    <span class="com">// It's always a valid pointer, although the escape codes themselves</span>
+    <span class="com">// may be empty if the terminal doesn't support them.</span>
+    <span id="Terminal.Escape">Escape</span> *<a href="#EscapeCodes">EscapeCodes</a>
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+Terminal contains the state for running a VT100 terminal that is capable of
+reading lines of input.
+</p>
+
+      
+      
+      
+
+        <h4 id="NewTerminal">func <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto#97">NewTerminal</a> <a class="permalink" href="#NewTerminal">¶</a></h4>
+        <pre class="funcdecl">func NewTerminal(c <a href="http://godoc.org/io/#ReadWriter">io.ReadWriter</a>, prompt <a href="http://godoc.org/builtin/#string">string</a>) *<a href="#Terminal">Terminal</a></pre><p>
+NewTerminal runs a VT100 terminal on the given ReadWriter. If the ReadWriter is
+a local terminal, that terminal must first have been put into raw mode.
+prompt is a string that is written at the start of each input line (i.e.
+"&gt; ").
+</p>
+
+        
+        
+
+        <h4 id="Terminal.ReadLine">func (*Terminal) <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto#581">ReadLine</a> <a class="permalink" href="#Terminal.ReadLine">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Terminal">Terminal</a>) ReadLine() (line <a href="http://godoc.org/builtin/#string">string</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ReadLine returns a line of input from the terminal.
+</p>
+
+        
+        <h4 id="Terminal.ReadPassword">func (*Terminal) <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto#564">ReadPassword</a> <a class="permalink" href="#Terminal.ReadPassword">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Terminal">Terminal</a>) ReadPassword(prompt <a href="http://godoc.org/builtin/#string">string</a>) (line <a href="http://godoc.org/builtin/#string">string</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+ReadPassword temporarily changes the prompt and reads a password, without
+echo, from the terminal.
+</p>
+
+        
+        <h4 id="Terminal.SetPrompt">func (*Terminal) <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto#647">SetPrompt</a> <a class="permalink" href="#Terminal.SetPrompt">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Terminal">Terminal</a>) SetPrompt(prompt <a href="http://godoc.org/builtin/#string">string</a>)</pre><p>
+SetPrompt sets the prompt to be used when reading subsequent lines.
+</p>
+
+        
+        <h4 id="Terminal.SetSize">func (*Terminal) <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto#654">SetSize</a> <a class="permalink" href="#Terminal.SetSize">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Terminal">Terminal</a>) SetSize(width, height <a href="http://godoc.org/builtin/#int">int</a>)</pre>
+        
+        <h4 id="Terminal.Write">func (*Terminal) <a title="View Source" href="http://code.google.com/p/go/source/browse/ssh/terminal/terminal.go?repo=crypto#514">Write</a> <a class="permalink" href="#Terminal.Write">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Terminal">Terminal</a>) Write(buf []<a href="http://godoc.org/builtin/#byte">byte</a>) (n <a href="http://godoc.org/builtin/#int">int</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre>
+        
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.crypto/ssh/terminal"></form>
+  <p>Package terminal imports <a href="terminala687.html?imports">5 packages</a> (<a href="terminal75f0.html?import-graph">graph</a>) and is imported by <a href="terminalefa9.html?importers">9 packages</a>.
+  Updated <span class="timeago" title="2013-10-04T13:32:24Z">2013-10-04</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.crypto/ssh/terminal by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:01 GMT -->
+
+</body>

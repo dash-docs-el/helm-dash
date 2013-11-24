@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/net/http/pprof/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>pprof</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package pprof</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "net/http/pprof"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package pprof serves via its HTTP server runtime profiling data
+in the format expected by the pprof visualization tool.
+For more information about pprof, see
+<a href="http://code.google.com/p/google-perftools/">http://code.google.com/p/google-perftools/</a>.
+</p>
+<p>
+The package is typically only imported for the side effect of
+registering its HTTP handlers.
+The handled paths all begin with /debug/pprof/.
+</p>
+<p>
+To use pprof, link this package into your program:
+</p>
+<pre>import _ &#34;net/http/pprof&#34;
+</pre>
+<p>
+If your application is not already running an http server, you
+need to start one.  Add &#34;net/http&#34; and &#34;log&#34; to your imports and
+the following code to your main function:
+</p>
+<pre>go func() {
+	log.Println(http.ListenAndServe(&#34;localhost:6060&#34;, nil))
+}()
+</pre>
+<p>
+Then use the pprof tool to look at the heap profile:
+</p>
+<pre>go tool pprof <a href="http://localhost:6060/debug/pprof/heap">http://localhost:6060/debug/pprof/heap</a>
+</pre>
+<p>
+Or to look at a 30-second CPU profile:
+</p>
+<pre>go tool pprof <a href="http://localhost:6060/debug/pprof/profile">http://localhost:6060/debug/pprof/profile</a>
+</pre>
+<p>
+Or to look at the goroutine blocking profile:
+</p>
+<pre>go tool pprof <a href="http://localhost:6060/debug/pprof/block">http://localhost:6060/debug/pprof/block</a>
+</pre>
+<p>
+To view all available profiles, open <a href="http://localhost:6060/debug/pprof/">http://localhost:6060/debug/pprof/</a>
+in your browser.
+</p>
+<p>
+For a study of the facility in action, visit
+</p>
+<pre><a href="http://blog.golang.org/2011/06/profiling-go-programs.html">http://blog.golang.org/2011/06/profiling-go-programs.html</a>
+</pre>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Cmdline">func Cmdline(w http.ResponseWriter, r *http.Request)</a></dd>
+			
+				
+				<dd><a href="#Handler">func Handler(name string) http.Handler</a></dd>
+			
+				
+				<dd><a href="#Index">func Index(w http.ResponseWriter, r *http.Request)</a></dd>
+			
+				
+				<dd><a href="#Profile">func Profile(w http.ResponseWriter, r *http.Request)</a></dd>
+			
+				
+				<dd><a href="#Symbol">func Symbol(w http.ResponseWriter, r *http.Request)</a></dd>
+			
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/net/http/pprof/pprof.go">pprof.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="Cmdline">func <a href="http://golang.org/src/pkg/net/http/pprof/pprof.go?s=2028:2080#L62">Cmdline</a></h2>
+			<pre>func Cmdline(w <a href="../index.html">http</a>.<a href="../index.html#ResponseWriter">ResponseWriter</a>, r *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>)</pre>
+			<p>
+Cmdline responds with the running program&#39;s
+command line, with arguments separated by NUL bytes.
+The package initialization registers it as /debug/pprof/cmdline.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Handler">func <a href="http://golang.org/src/pkg/net/http/pprof/pprof.go?s=4425:4463#L140">Handler</a></h2>
+			<pre>func Handler(name <a href="../../../builtin/index.html#string">string</a>) <a href="../index.html">http</a>.<a href="../index.html#Handler">Handler</a></pre>
+			<p>
+Handler returns an HTTP handler that serves the named profile.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Index">func <a href="http://golang.org/src/pkg/net/http/pprof/pprof.go?s=5094:5144#L163">Index</a></h2>
+			<pre>func Index(w <a href="../index.html">http</a>.<a href="../index.html#ResponseWriter">ResponseWriter</a>, r *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>)</pre>
+			<p>
+Index responds with the pprof-formatted profile named by the request.
+For example, &#34;/debug/pprof/heap&#34; serves the &#34;heap&#34; profile.
+Index responds to a request for &#34;/debug/pprof/&#34; with an HTML page
+listing the available profiles.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Profile">func <a href="http://golang.org/src/pkg/net/http/pprof/pprof.go?s=2320:2372#L69">Profile</a></h2>
+			<pre>func Profile(w <a href="../index.html">http</a>.<a href="../index.html#ResponseWriter">ResponseWriter</a>, r *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>)</pre>
+			<p>
+Profile responds with the pprof-formatted cpu profile.
+The package initialization registers it as /debug/pprof/profile.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Symbol">func <a href="http://golang.org/src/pkg/net/http/pprof/pprof.go?s=3249:3300#L94">Symbol</a></h2>
+			<pre>func Symbol(w <a href="../index.html">http</a>.<a href="../index.html#ResponseWriter">ResponseWriter</a>, r *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>)</pre>
+			<p>
+Symbol looks up the program counters listed in the request,
+responding with a table mapping program counters to function names.
+The package initialization registers it as /debug/pprof/symbol.
+</p>
+
+			
+		
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=266&id=1380993864962716', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/net/http/pprof/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

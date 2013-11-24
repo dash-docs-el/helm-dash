@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/regexp/syntax/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>syntax</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package syntax</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "regexp/syntax"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package syntax parses regular expressions into parse trees and compiles
+parse trees into programs. Most clients of regular expressions will use the
+facilities of package regexp (such as Compile and Match) instead of this package.
+</p>
+<h3 id="hdr-Syntax">Syntax</h3>
+<p>
+The regular expression syntax understood by this package when parsing with the Perl flag is as follows.
+Parts of the syntax can be disabled by passing alternate flags to Parse.
+</p>
+<p>
+Single characters:
+</p>
+<pre>.              any character, possibly including newline (flag s=true)
+[xyz]          character class
+[^xyz]         negated character class
+\d             Perl character class
+\D             negated Perl character class
+[:alpha:]      ASCII character class
+[:^alpha:]     negated ASCII character class
+\pN            Unicode character class (one-letter name)
+\p{Greek}      Unicode character class
+\PN            negated Unicode character class (one-letter name)
+\P{Greek}      negated Unicode character class
+</pre>
+<p>
+Composites:
+</p>
+<pre>xy             x followed by y
+x|y            x or y (prefer x)
+</pre>
+<p>
+Repetitions:
+</p>
+<pre>x*             zero or more x, prefer more
+x+             one or more x, prefer more
+x?             zero or one x, prefer one
+x{n,m}         n or n+1 or ... or m x, prefer more
+x{n,}          n or more x, prefer more
+x{n}           exactly n x
+x*?            zero or more x, prefer fewer
+x+?            one or more x, prefer fewer
+x??            zero or one x, prefer zero
+x{n,m}?        n or n+1 or ... or m x, prefer fewer
+x{n,}?         n or more x, prefer fewer
+x{n}?          exactly n x
+</pre>
+<p>
+Grouping:
+</p>
+<pre>(re)           numbered capturing group (submatch)
+(?P&lt;name&gt;re)   named &amp; numbered capturing group (submatch)
+(?:re)         non-capturing group (submatch)
+(?flags)       set flags within current group; non-capturing
+(?flags:re)    set flags during re; non-capturing
+
+Flag syntax is xyz (set) or -xyz (clear) or xy-z (set xy, clear z). The flags are:
+
+i              case-insensitive (default false)
+m              multi-line mode: ^ and $ match begin/end line in addition to begin/end text (default false)
+s              let . match \n (default false)
+U              ungreedy: swap meaning of x* and x*?, x+ and x+?, etc (default false)
+</pre>
+<p>
+Empty strings:
+</p>
+<pre>^              at beginning of text or line (flag m=true)
+$              at end of text (like \z not \Z) or line (flag m=true)
+\A             at beginning of text
+\b             at word boundary (\w on one side and \W, \A, or \z on the other)
+\B             not a word boundary
+\z             at end of text
+</pre>
+<p>
+Escape sequences:
+</p>
+<pre>\a             bell (== \007)
+\f             form feed (== \014)
+\t             horizontal tab (== \011)
+\n             newline (== \012)
+\r             carriage return (== \015)
+\v             vertical tab character (== \013)
+\*             literal *, for any punctuation character *
+\123           octal character code (up to three digits)
+\x7F           hex character code (exactly two digits)
+\x{10FFFF}     hex character code
+\Q...\E        literal text ... even if ... has punctuation
+</pre>
+<p>
+Character class elements:
+</p>
+<pre>x              single character
+A-Z            character range (inclusive)
+\d             Perl character class
+[:foo:]        ASCII character class foo
+\p{Foo}        Unicode character class Foo
+\pF            Unicode character class F (one-letter name)
+</pre>
+<p>
+Named character classes as character class elements:
+</p>
+<pre>[\d]           digits (== \d)
+[^\d]          not digits (== \D)
+[\D]           not digits (== \D)
+[^\D]          not not digits (== \d)
+[[:name:]]     named ASCII class inside character class (== [:name:])
+[^[:name:]]    named ASCII class inside negated character class (== [:^name:])
+[\p{Name}]     named Unicode property inside character class (== \p{Name})
+[^\p{Name}]    named Unicode property inside negated character class (== \P{Name})
+</pre>
+<p>
+Perl character classes:
+</p>
+<pre>\d             digits (== [0-9])
+\D             not digits (== [^0-9])
+\s             whitespace (== [\t\n\f\r ])
+\S             not whitespace (== [^\t\n\f\r ])
+\w             word characters (== [0-9A-Za-z_])
+\W             not word characters (== [^0-9A-Za-z_])
+</pre>
+<p>
+ASCII character classes:
+</p>
+<pre>[:alnum:]      alphanumeric (== [0-9A-Za-z])
+[:alpha:]      alphabetic (== [A-Za-z])
+[:ascii:]      ASCII (== [\x00-\x7F])
+[:blank:]      blank (== [\t ])
+[:cntrl:]      control (== [\x00-\x1F\x7F])
+[:digit:]      digits (== [0-9])
+[:graph:]      graphical (== [!-~] == [A-Za-z0-9!&#34;#$%&amp;&#39;()*+,\-./:;&lt;=&gt;?@[\\\]^_`{|}~])
+[:lower:]      lower case (== [a-z])
+[:print:]      printable (== [ -~] == [ [:graph:]])
+[:punct:]      punctuation (== [!-/:-@[-`{-~])
+[:space:]      whitespace (== [\t\n\v\f\r ])
+[:upper:]      upper case (== [A-Z])
+[:word:]       word characters (== [0-9A-Za-z_])
+[:xdigit:]     hex digit (== [0-9A-Fa-f])
+</pre>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#IsWordChar">func IsWordChar(r rune) bool</a></dd>
+			
+			
+				
+				<dd><a href="#EmptyOp">type EmptyOp</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#EmptyOpContext">func EmptyOpContext(r1, r2 rune) EmptyOp</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Error">type Error</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Error.Error">func (e *Error) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#ErrorCode">type ErrorCode</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ErrorCode.String">func (e ErrorCode) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Flags">type Flags</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Inst">type Inst</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Inst.MatchEmptyWidth">func (i *Inst) MatchEmptyWidth(before rune, after rune) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Inst.MatchRune">func (i *Inst) MatchRune(r rune) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Inst.String">func (i *Inst) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#InstOp">type InstOp</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Op">type Op</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Prog">type Prog</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Compile">func Compile(re *Regexp) (*Prog, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Prog.Prefix">func (p *Prog) Prefix() (prefix string, complete bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Prog.StartCond">func (p *Prog) StartCond() EmptyOp</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Prog.String">func (p *Prog) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Regexp">type Regexp</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Parse">func Parse(s string, flags Flags) (*Regexp, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Regexp.CapNames">func (re *Regexp) CapNames() []string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Regexp.Equal">func (x *Regexp) Equal(y *Regexp) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Regexp.MaxCap">func (re *Regexp) MaxCap() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Regexp.Simplify">func (re *Regexp) Simplify() *Regexp</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Regexp.String">func (re *Regexp) String() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/regexp/syntax/compile.go">compile.go</a>
+			
+				<a href="http://golang.org/src/pkg/regexp/syntax/doc.go">doc.go</a>
+			
+				<a href="http://golang.org/src/pkg/regexp/syntax/parse.go">parse.go</a>
+			
+				<a href="http://golang.org/src/pkg/regexp/syntax/perl_groups.go">perl_groups.go</a>
+			
+				<a href="http://golang.org/src/pkg/regexp/syntax/prog.go">prog.go</a>
+			
+				<a href="http://golang.org/src/pkg/regexp/syntax/regexp.go">regexp.go</a>
+			
+				<a href="http://golang.org/src/pkg/regexp/syntax/simplify.go">simplify.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="IsWordChar">func <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=1763:1791#L73">IsWordChar</a></h2>
+			<pre>func IsWordChar(r <a href="../../builtin/index.html#rune">rune</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+			<p>
+IsWordChar reports whether r is consider a &ldquo;word character&rdquo;
+during the evaluation of the \b and \B zero-width assertions.
+These assertions are ASCII-only: the word characters are [A-Za-z0-9_].
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="EmptyOp">type <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=765:783#L31">EmptyOp</a></h2>
+			<pre>type EmptyOp <a href="../../builtin/index.html#uint8">uint8</a></pre>
+			<p>
+An EmptyOp specifies a kind or mixture of zero-width assertions.
+</p>
+
+
+			
+				<pre>const (
+        <span id="EmptyBeginLine">EmptyBeginLine</span> <a href="#EmptyOp">EmptyOp</a> = 1 &lt;&lt; <a href="../../builtin/index.html#iota">iota</a>
+        <span id="EmptyEndLine">EmptyEndLine</span>
+        <span id="EmptyBeginText">EmptyBeginText</span>
+        <span id="EmptyEndText">EmptyEndText</span>
+        <span id="EmptyWordBoundary">EmptyWordBoundary</span>
+        <span id="EmptyNoWordBoundary">EmptyNoWordBoundary</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="EmptyOpContext">func <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=1188:1228#L48">EmptyOpContext</a></h3>
+				<pre>func EmptyOpContext(r1, r2 <a href="../../builtin/index.html#rune">rune</a>) <a href="#EmptyOp">EmptyOp</a></pre>
+				<p>
+EmptyOpContext returns the zero-width assertions
+satisfied at the position between the runes r1 and r2.
+Passing r1 == -1 indicates that the position is
+at the beginning of the text.
+Passing r2 == -1 indicates that the position is
+at the end of the text.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Error">type <a href="http://golang.org/src/pkg/regexp/syntax/parse.go?s=336:386#L6">Error</a></h2>
+			<pre>type Error struct {
+        Code <a href="#ErrorCode">ErrorCode</a>
+        Expr <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+An Error describes a failure to parse a regular expression
+and gives the offending expression.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Error.Error">func (*Error) <a href="http://golang.org/src/pkg/regexp/syntax/parse.go?s=388:418#L11">Error</a></h3>
+				<pre>func (e *<a href="#Error">Error</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ErrorCode">type <a href="http://golang.org/src/pkg/regexp/syntax/parse.go?s=565:586#L16">ErrorCode</a></h2>
+			<pre>type ErrorCode <a href="../../builtin/index.html#string">string</a></pre>
+			<p>
+An ErrorCode describes a failure to parse a regular expression.
+</p>
+
+
+			
+				<pre>const (
+        <span class="comment">// Unexpected error</span>
+        <span id="ErrInternalError">ErrInternalError</span> <a href="#ErrorCode">ErrorCode</a> = &#34;regexp/syntax: internal error&#34;
+
+        <span class="comment">// Parse errors</span>
+        <span id="ErrInvalidCharClass">ErrInvalidCharClass</span>      <a href="#ErrorCode">ErrorCode</a> = &#34;invalid character class&#34;
+        <span id="ErrInvalidCharRange">ErrInvalidCharRange</span>      <a href="#ErrorCode">ErrorCode</a> = &#34;invalid character class range&#34;
+        <span id="ErrInvalidEscape">ErrInvalidEscape</span>         <a href="#ErrorCode">ErrorCode</a> = &#34;invalid escape sequence&#34;
+        <span id="ErrInvalidNamedCapture">ErrInvalidNamedCapture</span>   <a href="#ErrorCode">ErrorCode</a> = &#34;invalid named capture&#34;
+        <span id="ErrInvalidPerlOp">ErrInvalidPerlOp</span>         <a href="#ErrorCode">ErrorCode</a> = &#34;invalid or unsupported Perl syntax&#34;
+        <span id="ErrInvalidRepeatOp">ErrInvalidRepeatOp</span>       <a href="#ErrorCode">ErrorCode</a> = &#34;invalid nested repetition operator&#34;
+        <span id="ErrInvalidRepeatSize">ErrInvalidRepeatSize</span>     <a href="#ErrorCode">ErrorCode</a> = &#34;invalid repeat count&#34;
+        <span id="ErrInvalidUTF8">ErrInvalidUTF8</span>           <a href="#ErrorCode">ErrorCode</a> = &#34;invalid UTF-8&#34;
+        <span id="ErrMissingBracket">ErrMissingBracket</span>        <a href="#ErrorCode">ErrorCode</a> = &#34;missing closing ]&#34;
+        <span id="ErrMissingParen">ErrMissingParen</span>          <a href="#ErrorCode">ErrorCode</a> = &#34;missing closing )&#34;
+        <span id="ErrMissingRepeatArgument">ErrMissingRepeatArgument</span> <a href="#ErrorCode">ErrorCode</a> = &#34;missing argument to repetition operator&#34;
+        <span id="ErrTrailingBackslash">ErrTrailingBackslash</span>     <a href="#ErrorCode">ErrorCode</a> = &#34;trailing backslash at end of expression&#34;
+        <span id="ErrUnexpectedParen">ErrUnexpectedParen</span>       <a href="#ErrorCode">ErrorCode</a> = &#34;unexpected )&#34;
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ErrorCode.String">func (ErrorCode) <a href="http://golang.org/src/pkg/regexp/syntax/parse.go?s=1554:1588#L38">String</a></h3>
+				<pre>func (e <a href="#ErrorCode">ErrorCode</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Flags">type <a href="http://golang.org/src/pkg/regexp/syntax/parse.go?s=1701:1718#L43">Flags</a></h2>
+			<pre>type Flags <a href="../../builtin/index.html#uint16">uint16</a></pre>
+			<p>
+Flags control the behavior of the parser and record information about regexp context.
+</p>
+
+
+			
+				<pre>const (
+        <span id="FoldCase">FoldCase</span>      <a href="#Flags">Flags</a> = 1 &lt;&lt; <a href="../../builtin/index.html#iota">iota</a> <span class="comment">// case-insensitive match</span>
+        <span id="Literal">Literal</span>                         <span class="comment">// treat pattern as literal string</span>
+        <span id="ClassNL">ClassNL</span>                         <span class="comment">// allow character classes like [^a-z] and [[:space:]] to match newline</span>
+        <span id="DotNL">DotNL</span>                           <span class="comment">// allow . to match newline</span>
+        <span id="OneLine">OneLine</span>                         <span class="comment">// treat ^ and $ as only matching at beginning and end of text</span>
+        <span id="NonGreedy">NonGreedy</span>                       <span class="comment">// make repetition operators default to non-greedy</span>
+        <span id="PerlX">PerlX</span>                           <span class="comment">// allow Perl extensions</span>
+        <span id="UnicodeGroups">UnicodeGroups</span>                   <span class="comment">// allow \p{Han}, \P{Han} for Unicode group and negation</span>
+        <span id="WasDollar">WasDollar</span>                       <span class="comment">// regexp OpEndText was $, not \z</span>
+        <span id="Simple">Simple</span>                          <span class="comment">// regexp contains no counted repetition</span>
+
+        <span id="MatchNL">MatchNL</span> = <a href="#ClassNL">ClassNL</a> | <a href="#DotNL">DotNL</a>
+
+        <span id="Perl">Perl</span>        = <a href="#ClassNL">ClassNL</a> | <a href="#OneLine">OneLine</a> | <a href="#PerlX">PerlX</a> | <a href="#UnicodeGroups">UnicodeGroups</a> <span class="comment">// as close to Perl as possible</span>
+        <span id="POSIX">POSIX</span> <a href="#Flags">Flags</a> = 0                                         <span class="comment">// POSIX syntax</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Inst">type <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=1954:2111#L78">Inst</a></h2>
+			<pre>type Inst struct {
+        Op   <a href="#InstOp">InstOp</a>
+        Out  <a href="../../builtin/index.html#uint32">uint32</a> <span class="comment">// all but InstMatch, InstFail</span>
+        Arg  <a href="../../builtin/index.html#uint32">uint32</a> <span class="comment">// InstAlt, InstAltMatch, InstCapture, InstEmptyWidth</span>
+        Rune []<a href="../../builtin/index.html#rune">rune</a>
+}</pre>
+			<p>
+An Inst is a single instruction in a regular expression program.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Inst.MatchEmptyWidth">func (*Inst) <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=5105:5165#L217">MatchEmptyWidth</a></h3>
+				<pre>func (i *<a href="#Inst">Inst</a>) MatchEmptyWidth(before <a href="../../builtin/index.html#rune">rune</a>, after <a href="../../builtin/index.html#rune">rune</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+MatchEmptyWidth returns true if the instruction matches
+an empty string between the runes before and after.
+It should only be called when i.Op == InstEmptyWidth.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Inst.MatchRune">func (*Inst) <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=3844:3881#L158">MatchRune</a></h3>
+				<pre>func (i *<a href="#Inst">Inst</a>) MatchRune(r <a href="../../builtin/index.html#rune">rune</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+MatchRune returns true if the instruction matches (and consumes) r.
+It should only be called when i.Op == InstRune.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Inst.String">func (*Inst) <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=5580:5610#L235">String</a></h3>
+				<pre>func (i *<a href="#Inst">Inst</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="InstOp">type <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=519:536#L14">InstOp</a></h2>
+			<pre>type InstOp <a href="../../builtin/index.html#uint8">uint8</a></pre>
+			<p>
+An InstOp is an instruction opcode.
+</p>
+
+
+			
+				<pre>const (
+        <span id="InstAlt">InstAlt</span> <a href="#InstOp">InstOp</a> = <a href="../../builtin/index.html#iota">iota</a>
+        <span id="InstAltMatch">InstAltMatch</span>
+        <span id="InstCapture">InstCapture</span>
+        <span id="InstEmptyWidth">InstEmptyWidth</span>
+        <span id="InstMatch">InstMatch</span>
+        <span id="InstFail">InstFail</span>
+        <span id="InstNop">InstNop</span>
+        <span id="InstRune">InstRune</span>
+        <span id="InstRune1">InstRune1</span>
+        <span id="InstRuneAny">InstRuneAny</span>
+        <span id="InstRuneAnyNotNL">InstRuneAnyNotNL</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Op">type <a href="http://golang.org/src/pkg/regexp/syntax/regexp.go?s=859:872#L21">Op</a></h2>
+			<pre>type Op <a href="../../builtin/index.html#uint8">uint8</a></pre>
+			<p>
+An Op is a single regular expression operator.
+</p>
+
+
+			
+				<pre>const (
+        <span id="OpNoMatch">OpNoMatch</span>        <a href="#Op">Op</a> = 1 + <a href="../../builtin/index.html#iota">iota</a> <span class="comment">// matches no strings</span>
+        <span id="OpEmptyMatch">OpEmptyMatch</span>                   <span class="comment">// matches empty string</span>
+        <span id="OpLiteral">OpLiteral</span>                      <span class="comment">// matches Runes sequence</span>
+        <span id="OpCharClass">OpCharClass</span>                    <span class="comment">// matches Runes interpreted as range pair list</span>
+        <span id="OpAnyCharNotNL">OpAnyCharNotNL</span>                 <span class="comment">// matches any character</span>
+        <span id="OpAnyChar">OpAnyChar</span>                      <span class="comment">// matches any character</span>
+        <span id="OpBeginLine">OpBeginLine</span>                    <span class="comment">// matches empty string at beginning of line</span>
+        <span id="OpEndLine">OpEndLine</span>                      <span class="comment">// matches empty string at end of line</span>
+        <span id="OpBeginText">OpBeginText</span>                    <span class="comment">// matches empty string at beginning of text</span>
+        <span id="OpEndText">OpEndText</span>                      <span class="comment">// matches empty string at end of text</span>
+        <span id="OpWordBoundary">OpWordBoundary</span>                 <span class="comment">// matches word boundary `\b`</span>
+        <span id="OpNoWordBoundary">OpNoWordBoundary</span>               <span class="comment">// matches word non-boundary `\B`</span>
+        <span id="OpCapture">OpCapture</span>                      <span class="comment">// capturing subexpression with index Cap, optional name Name</span>
+        <span id="OpStar">OpStar</span>                         <span class="comment">// matches Sub[0] zero or more times</span>
+        <span id="OpPlus">OpPlus</span>                         <span class="comment">// matches Sub[0] one or more times</span>
+        <span id="OpQuest">OpQuest</span>                        <span class="comment">// matches Sub[0] zero or one times</span>
+        <span id="OpRepeat">OpRepeat</span>                       <span class="comment">// matches Sub[0] at least Min times, at most Max (Max == -1 is no limit)</span>
+        <span id="OpConcat">OpConcat</span>                       <span class="comment">// matches concatenation of Subs</span>
+        <span id="OpAlternate">OpAlternate</span>                    <span class="comment">// matches alternation of Subs</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Prog">type <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=352:478#L7">Prog</a></h2>
+			<pre>type Prog struct {
+        Inst   []<a href="#Inst">Inst</a>
+        Start  <a href="../../builtin/index.html#int">int</a> <span class="comment">// index of start instruction</span>
+        NumCap <a href="../../builtin/index.html#int">int</a> <span class="comment">// number of InstCapture insts in re</span>
+}</pre>
+			<p>
+A Prog is a compiled regular expression program.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Compile">func <a href="http://golang.org/src/pkg/regexp/syntax/compile.go?s=1854:1893#L70">Compile</a></h3>
+				<pre>func Compile(re *<a href="#Regexp">Regexp</a>) (*<a href="#Prog">Prog</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Compile compiles the regexp into a program to be executed.
+The regexp should have been simplified already (returned from re.Simplify).
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Prog.Prefix">func (*Prog) <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=2795:2849#L115">Prefix</a></h3>
+				<pre>func (p *<a href="#Prog">Prog</a>) Prefix() (prefix <a href="../../builtin/index.html#string">string</a>, complete <a href="../../builtin/index.html#bool">bool</a>)</pre>
+				<p>
+Prefix returns a literal string that all matches for the
+regexp must start with.  Complete is true if the prefix
+is the entire match.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Prog.StartCond">func (*Prog) <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=3390:3424#L134">StartCond</a></h3>
+				<pre>func (p *<a href="#Prog">Prog</a>) StartCond() <a href="#EmptyOp">EmptyOp</a></pre>
+				<p>
+StartCond returns the leading empty-width conditions that must
+be true in any match.  It returns ^EmptyOp(0) if no matches are possible.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Prog.String">func (*Prog) <a href="http://golang.org/src/pkg/regexp/syntax/prog.go?s=2113:2143#L85">String</a></h3>
+				<pre>func (p *<a href="#Prog">Prog</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Regexp">type <a href="http://golang.org/src/pkg/regexp/syntax/regexp.go?s=383:807#L8">Regexp</a></h2>
+			<pre>type Regexp struct {
+        Op       <a href="#Op">Op</a> <span class="comment">// operator</span>
+        Flags    <a href="#Flags">Flags</a>
+        Sub      []*<a href="#Regexp">Regexp</a>  <span class="comment">// subexpressions, if any</span>
+        Sub0     [1]*<a href="#Regexp">Regexp</a> <span class="comment">// storage for short Sub</span>
+        Rune     []<a href="../../builtin/index.html#rune">rune</a>     <span class="comment">// matched runes, for OpLiteral, OpCharClass</span>
+        Rune0    [2]<a href="../../builtin/index.html#rune">rune</a>    <span class="comment">// storage for short Rune</span>
+        Min, Max <a href="../../builtin/index.html#int">int</a>        <span class="comment">// min, max for OpRepeat</span>
+        Cap      <a href="../../builtin/index.html#int">int</a>        <span class="comment">// capturing index, for OpCapture</span>
+        Name     <a href="../../builtin/index.html#string">string</a>     <span class="comment">// capturing name, for OpCapture</span>
+}</pre>
+			<p>
+A Regexp is a node in a regular expression syntax tree.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Parse">func <a href="http://golang.org/src/pkg/regexp/syntax/parse.go?s=17868:17918#L645">Parse</a></h3>
+				<pre>func Parse(s <a href="../../builtin/index.html#string">string</a>, flags <a href="#Flags">Flags</a>) (*<a href="#Regexp">Regexp</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Parse parses a regular expression string s, controlled by the specified
+Flags, and returns a regular expression parse tree. The syntax is
+described in the top-level comment for package regexp.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Regexp.CapNames">func (*Regexp) <a href="http://golang.org/src/pkg/regexp/syntax/regexp.go?s=7488:7525#L296">CapNames</a></h3>
+				<pre>func (re *<a href="#Regexp">Regexp</a>) CapNames() []<a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+CapNames walks the regexp to find the names of capturing groups.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Regexp.Equal">func (*Regexp) <a href="http://golang.org/src/pkg/regexp/syntax/regexp.go?s=2510:2548#L52">Equal</a></h3>
+				<pre>func (x *<a href="#Regexp">Regexp</a>) Equal(y *<a href="#Regexp">Regexp</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+Equal returns true if x and y have identical structure.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Regexp.MaxCap">func (*Regexp) <a href="http://golang.org/src/pkg/regexp/syntax/regexp.go?s=7247:7277#L282">MaxCap</a></h3>
+				<pre>func (re *<a href="#Regexp">Regexp</a>) MaxCap() <a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+MaxCap walks the regexp to find the maximum capture index.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Regexp.Simplify">func (*Regexp) <a href="http://golang.org/src/pkg/regexp/syntax/simplify.go?s=692:728#L4">Simplify</a></h3>
+				<pre>func (re *<a href="#Regexp">Regexp</a>) Simplify() *<a href="#Regexp">Regexp</a></pre>
+				<p>
+Simplify returns a regexp equivalent to re but without counted repetitions
+and with various other simplifications, such as rewriting /(?:a+)+/ to /a+/.
+The resulting regexp will execute correctly but its string representation
+will not produce the same parse tree, because capturing parentheses
+may have been duplicated or removed.  For example, the simplified form
+for /(x){1,2}/ is /(x)(x)?/ but both parentheses capture as $1.
+The returned regexp may share structure with or be the original.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Regexp.String">func (*Regexp) <a href="http://golang.org/src/pkg/regexp/syntax/regexp.go?s=6392:6425#L235">String</a></h3>
+				<pre>func (re *<a href="#Regexp">Regexp</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=197&s_ttfb=210&id=1380993865987030', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/regexp/syntax/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

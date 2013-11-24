@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/encoding/xml/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>xml</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package xml</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "encoding/xml"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package xml implements a simple XML 1.0 parser that
+understands XML name spaces.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#Escape">func Escape(w io.Writer, s []byte)</a></dd>
+			
+				
+				<dd><a href="#EscapeText">func EscapeText(w io.Writer, s []byte) error</a></dd>
+			
+				
+				<dd><a href="#Marshal">func Marshal(v interface{}) ([]byte, error)</a></dd>
+			
+				
+				<dd><a href="#MarshalIndent">func MarshalIndent(v interface{}, prefix, indent string) ([]byte, error)</a></dd>
+			
+				
+				<dd><a href="#Unmarshal">func Unmarshal(data []byte, v interface{}) error</a></dd>
+			
+			
+				
+				<dd><a href="#Attr">type Attr</a></dd>
+				
+				
+			
+				
+				<dd><a href="#CharData">type CharData</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CharData.Copy">func (c CharData) Copy() CharData</a></dd>
+				
+			
+				
+				<dd><a href="#Comment">type Comment</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Comment.Copy">func (c Comment) Copy() Comment</a></dd>
+				
+			
+				
+				<dd><a href="#Decoder">type Decoder</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewDecoder">func NewDecoder(r io.Reader) *Decoder</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Decoder.Decode">func (d *Decoder) Decode(v interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Decoder.DecodeElement">func (d *Decoder) DecodeElement(v interface{}, start *StartElement) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Decoder.RawToken">func (d *Decoder) RawToken() (Token, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Decoder.Skip">func (d *Decoder) Skip() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Decoder.Token">func (d *Decoder) Token() (t Token, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#Directive">type Directive</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Directive.Copy">func (d Directive) Copy() Directive</a></dd>
+				
+			
+				
+				<dd><a href="#Encoder">type Encoder</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewEncoder">func NewEncoder(w io.Writer) *Encoder</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoder.Encode">func (enc *Encoder) Encode(v interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoder.Indent">func (enc *Encoder) Indent(prefix, indent string)</a></dd>
+				
+			
+				
+				<dd><a href="#EndElement">type EndElement</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Name">type Name</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ProcInst">type ProcInst</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ProcInst.Copy">func (p ProcInst) Copy() ProcInst</a></dd>
+				
+			
+				
+				<dd><a href="#StartElement">type StartElement</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StartElement.Copy">func (e StartElement) Copy() StartElement</a></dd>
+				
+			
+				
+				<dd><a href="#SyntaxError">type SyntaxError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SyntaxError.Error">func (e *SyntaxError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#TagPathError">type TagPathError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#TagPathError.Error">func (e *TagPathError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Token">type Token</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CopyToken">func CopyToken(t Token) Token</a></dd>
+				
+				
+			
+				
+				<dd><a href="#UnmarshalError">type UnmarshalError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnmarshalError.Error">func (e UnmarshalError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#UnsupportedTypeError">type UnsupportedTypeError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnsupportedTypeError.Error">func (e *UnsupportedTypeError) Error() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Encoder">Encoder</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_MarshalIndent">MarshalIndent</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Unmarshal">Unmarshal</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/encoding/xml/marshal.go">marshal.go</a>
+			
+				<a href="http://golang.org/src/pkg/encoding/xml/read.go">read.go</a>
+			
+				<a href="http://golang.org/src/pkg/encoding/xml/typeinfo.go">typeinfo.go</a>
+			
+				<a href="http://golang.org/src/pkg/encoding/xml/xml.go">xml.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span class="comment">// A generic XML header suitable for use with the output of Marshal.</span>
+        <span class="comment">// This is not automatically added to any output of this package,</span>
+        <span class="comment">// it is provided as a convenience.</span>
+        <span id="Header">Header</span> = `&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;` + &#34;\n&#34;
+)</pre>
+				
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="HTMLAutoClose">HTMLAutoClose</span> = htmlAutoClose</pre>
+				<p>
+HTMLAutoClose is the set of HTML elements that
+should be considered to close automatically.
+</p>
+
+			
+				<pre>var <span id="HTMLEntity">HTMLEntity</span> = htmlEntity</pre>
+				<p>
+HTMLEntity is an entity map containing translations for the
+standard HTML entity characters.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Escape">func <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=40693:40727#L1774">Escape</a></h2>
+			<pre>func Escape(w <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Writer">Writer</a>, s []<a href="../../builtin/index.html#byte">byte</a>)</pre>
+			<p>
+Escape is like EscapeText but omits the error return value.
+It is provided for backwards compatibility with Go 1.0.
+Code targeting Go 1.1 or later should use EscapeText.
+</p>
+
+			
+		
+			
+			
+			<h2 id="EscapeText">func <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=39799:39843#L1727">EscapeText</a></h2>
+			<pre>func EscapeText(w <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Writer">Writer</a>, s []<a href="../../builtin/index.html#byte">byte</a>) <a href="../../builtin/index.html#error">error</a></pre>
+			<p>
+EscapeText writes to w the properly escaped XML equivalent
+of the plain text data s.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Marshal">func <a href="http://golang.org/src/pkg/encoding/xml/marshal.go?s=2864:2907#L60">Marshal</a></h2>
+			<pre>func Marshal(v interface{}) ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+Marshal returns the XML encoding of v.
+</p>
+<p>
+Marshal handles an array or slice by marshalling each of the elements.
+Marshal handles a pointer by marshalling the value it points at or, if the
+pointer is nil, by writing nothing.  Marshal handles an interface value by
+marshalling the value it contains or, if the interface value is nil, by
+writing nothing.  Marshal handles all other data by writing one or more XML
+elements containing the data.
+</p>
+<p>
+The name for the XML elements is taken from, in order of preference:
+</p>
+<pre>- the tag on the XMLName field, if the data is a struct
+- the value of the XMLName field of type xml.Name
+- the tag of the struct field used to obtain the data
+- the name of the struct field used to obtain the data
+- the name of the marshalled type
+</pre>
+<p>
+The XML element for a struct contains marshalled elements for each of the
+exported fields of the struct, with these exceptions:
+</p>
+<pre>- the XMLName field, described above, is omitted.
+- a field with tag &#34;-&#34; is omitted.
+- a field with tag &#34;name,attr&#34; becomes an attribute with
+  the given name in the XML element.
+- a field with tag &#34;,attr&#34; becomes an attribute with the
+  field name in the XML element.
+- a field with tag &#34;,chardata&#34; is written as character data,
+  not as an XML element.
+- a field with tag &#34;,innerxml&#34; is written verbatim, not subject
+  to the usual marshalling procedure.
+- a field with tag &#34;,comment&#34; is written as an XML comment, not
+  subject to the usual marshalling procedure. It must not contain
+  the &#34;--&#34; string within it.
+- a field with a tag including the &#34;omitempty&#34; option is omitted
+  if the field value is empty. The empty values are false, 0, any
+  nil pointer or interface value, and any array, slice, map, or
+  string of length zero.
+- an anonymous struct field is handled as if the fields of its
+  value were part of the outer struct.
+</pre>
+<p>
+If a field uses a tag &#34;a&gt;b&gt;c&#34;, then the element c will be nested inside
+parent elements a and b.  Fields that appear next to each other that name
+the same parent will be enclosed in one XML element.
+</p>
+<p>
+See MarshalIndent for an example.
+</p>
+<p>
+Marshal will return an error if asked to marshal a channel, function, or map.
+</p>
+
+			
+		
+			
+			
+			<h2 id="MarshalIndent">func <a href="http://golang.org/src/pkg/encoding/xml/marshal.go?s=3225:3297#L71">MarshalIndent</a></h2>
+			<pre>func MarshalIndent(v interface{}, prefix, indent <a href="../../builtin/index.html#string">string</a>) ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+MarshalIndent works like Marshal, but each XML element begins on a new
+indented line that starts with prefix and is followed by one or more
+copies of indent according to the nesting depth.
+</p>
+
+			<div id="example_MarshalIndent" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;encoding/xml&#34;
+	&#34;fmt&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	type Address struct {
+		City, State string
+	}
+	type Person struct {
+		XMLName   xml.Name `xml:&#34;person&#34;`
+		Id        int      `xml:&#34;id,attr&#34;`
+		FirstName string   `xml:&#34;name&gt;first&#34;`
+		LastName  string   `xml:&#34;name&gt;last&#34;`
+		Age       int      `xml:&#34;age&#34;`
+		Height    float32  `xml:&#34;height,omitempty&#34;`
+		Married   bool
+		Address
+		Comment string `xml:&#34;,comment&#34;`
+	}
+
+	v := &amp;Person{Id: 13, FirstName: &#34;John&#34;, LastName: &#34;Doe&#34;, Age: 42}
+	v.Comment = &#34; Need more details. &#34;
+	v.Address = Address{&#34;Hanga Roa&#34;, &#34;Easter Island&#34;}
+
+	output, err := xml.MarshalIndent(v, &#34;  &#34;, &#34;    &#34;)
+	if err != nil {
+		fmt.Printf(&#34;error: %v\n&#34;, err)
+	}
+
+	os.Stdout.Write(output)
+}
+</textarea></div>
+				<div class="output"><pre>  &lt;person id=&#34;13&#34;&gt;
+      &lt;name&gt;
+          &lt;first&gt;John&lt;/first&gt;
+          &lt;last&gt;Doe&lt;/last&gt;
+      &lt;/name&gt;
+      &lt;age&gt;42&lt;/age&gt;
+      &lt;Married&gt;false&lt;/Married&gt;
+      &lt;City&gt;Hanga Roa&lt;/City&gt;
+      &lt;State&gt;Easter Island&lt;/State&gt;
+      &lt;!-- Need more details. --&gt;
+  &lt;/person&gt;
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+			
+			
+			<h2 id="Unmarshal">func <a href="http://golang.org/src/pkg/encoding/xml/read.go?s=4813:4861#L103">Unmarshal</a></h2>
+			<pre>func Unmarshal(data []<a href="../../builtin/index.html#byte">byte</a>, v interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+			<p>
+Unmarshal parses the XML-encoded data and stores the result in
+the value pointed to by v, which must be an arbitrary struct,
+slice, or string. Well-formed data that does not fit into v is
+discarded.
+</p>
+<p>
+Because Unmarshal uses the reflect package, it can only assign
+to exported (upper case) fields.  Unmarshal uses a case-sensitive
+comparison to match XML element names to tag values and struct
+field names.
+</p>
+<p>
+Unmarshal maps an XML element to a struct using the following rules.
+In the rules, the tag of a field refers to the value associated with the
+key &#39;xml&#39; in the struct field&#39;s tag (see the example above).
+</p>
+<pre>* If the struct has a field of type []byte or string with tag
+   &#34;,innerxml&#34;, Unmarshal accumulates the raw XML nested inside the
+   element in that field.  The rest of the rules still apply.
+
+* If the struct has a field named XMLName of type xml.Name,
+   Unmarshal records the element name in that field.
+
+* If the XMLName field has an associated tag of the form
+   &#34;name&#34; or &#34;namespace-URL name&#34;, the XML element must have
+   the given name (and, optionally, name space) or else Unmarshal
+   returns an error.
+
+* If the XML element has an attribute whose name matches a
+   struct field name with an associated tag containing &#34;,attr&#34; or
+   the explicit name in a struct field tag of the form &#34;name,attr&#34;,
+   Unmarshal records the attribute value in that field.
+
+* If the XML element contains character data, that data is
+   accumulated in the first struct field that has tag &#34;chardata&#34;.
+   The struct field may have type []byte or string.
+   If there is no such field, the character data is discarded.
+
+* If the XML element contains comments, they are accumulated in
+   the first struct field that has tag &#34;,comments&#34;.  The struct
+   field may have type []byte or string.  If there is no such
+   field, the comments are discarded.
+
+* If the XML element contains a sub-element whose name matches
+   the prefix of a tag formatted as &#34;a&#34; or &#34;a&gt;b&gt;c&#34;, unmarshal
+   will descend into the XML structure looking for elements with the
+   given names, and will map the innermost elements to that struct
+   field. A tag starting with &#34;&gt;&#34; is equivalent to one starting
+   with the field name followed by &#34;&gt;&#34;.
+
+* If the XML element contains a sub-element whose name matches
+   a struct field&#39;s XMLName tag and the struct field has no
+   explicit name tag as per the previous rule, unmarshal maps
+   the sub-element to that struct field.
+
+* If the XML element contains a sub-element whose name matches a
+   field without any mode flags (&#34;,attr&#34;, &#34;,chardata&#34;, etc), Unmarshal
+   maps the sub-element to that struct field.
+
+* If the XML element contains a sub-element that hasn&#39;t matched any
+   of the above rules and the struct has a field with tag &#34;,any&#34;,
+   unmarshal maps the sub-element to that struct field.
+
+* An anonymous struct field is handled as if the fields of its
+   value were part of the outer struct.
+
+* A struct field with tag &#34;-&#34; is never unmarshalled into.
+</pre>
+<p>
+Unmarshal maps an XML element to a string or []byte by saving the
+concatenation of that element&#39;s character data in the string or
+[]byte. The saved []byte is never nil.
+</p>
+<p>
+Unmarshal maps an attribute value to a string or []byte by saving
+the value in the string or slice.
+</p>
+<p>
+Unmarshal maps an XML element to a slice by extending the length of
+the slice and mapping the element to the newly created value.
+</p>
+<p>
+Unmarshal maps an XML element or attribute value to a bool by
+setting it to the boolean value represented by the string.
+</p>
+<p>
+Unmarshal maps an XML element or attribute value to an integer or
+floating-point field by setting the field to the result of
+interpreting the string value in decimal.  There is no check for
+overflow.
+</p>
+<p>
+Unmarshal maps an XML element to an xml.Name by recording the
+element name.
+</p>
+<p>
+Unmarshal maps an XML element to a pointer by setting the pointer
+to a freshly allocated value and then mapping the element to that value.
+</p>
+
+			<div id="example_Unmarshal" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		<p>This example demonstrates unmarshaling an XML excerpt into a value with
+some preset fields. Note that the Phone field isn&#39;t modified and that
+the XML &lt;Company&gt; element is ignored. Also, the Groups field is assigned
+considering the element path provided in its tag.
+</p>
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;encoding/xml&#34;
+	&#34;fmt&#34;
+)
+
+func main() {
+	type Email struct {
+		Where string `xml:&#34;where,attr&#34;`
+		Addr  string
+	}
+	type Address struct {
+		City, State string
+	}
+	type Result struct {
+		XMLName xml.Name `xml:&#34;Person&#34;`
+		Name    string   `xml:&#34;FullName&#34;`
+		Phone   string
+		Email   []Email
+		Groups  []string `xml:&#34;Group&gt;Value&#34;`
+		Address
+	}
+	v := Result{Name: &#34;none&#34;, Phone: &#34;none&#34;}
+
+	data := `
+		&lt;Person&gt;
+			&lt;FullName&gt;Grace R. Emlin&lt;/FullName&gt;
+			&lt;Company&gt;Example Inc.&lt;/Company&gt;
+			&lt;Email where=&#34;home&#34;&gt;
+				&lt;Addr&gt;gre@example.com&lt;/Addr&gt;
+			&lt;/Email&gt;
+			&lt;Email where=&#39;work&#39;&gt;
+				&lt;Addr&gt;gre@work.com&lt;/Addr&gt;
+			&lt;/Email&gt;
+			&lt;Group&gt;
+				&lt;Value&gt;Friends&lt;/Value&gt;
+				&lt;Value&gt;Squash&lt;/Value&gt;
+			&lt;/Group&gt;
+			&lt;City&gt;Hanga Roa&lt;/City&gt;
+			&lt;State&gt;Easter Island&lt;/State&gt;
+		&lt;/Person&gt;
+	`
+	err := xml.Unmarshal([]byte(data), &amp;v)
+	if err != nil {
+		fmt.Printf(&#34;error: %v&#34;, err)
+		return
+	}
+	fmt.Printf(&#34;XMLName: %#v\n&#34;, v.XMLName)
+	fmt.Printf(&#34;Name: %q\n&#34;, v.Name)
+	fmt.Printf(&#34;Phone: %q\n&#34;, v.Phone)
+	fmt.Printf(&#34;Email: %v\n&#34;, v.Email)
+	fmt.Printf(&#34;Groups: %v\n&#34;, v.Groups)
+	fmt.Printf(&#34;Address: %v\n&#34;, v.Address)
+}
+</textarea></div>
+				<div class="output"><pre>XMLName: xml.Name{Space:&#34;&#34;, Local:&#34;Person&#34;}
+Name: &#34;Grace R. Emlin&#34;
+Phone: &#34;none&#34;
+Email: [{home gre@example.com} {work gre@work.com}]
+Groups: [Friends Squash]
+Address: {Hanga Roa Easter Island}
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+		
+		
+			
+			
+			<h2 id="Attr">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=1119:1165#L37">Attr</a></h2>
+			<pre>type Attr struct {
+        Name  <a href="#Name">Name</a>
+        Value <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+An Attr represents an attribute in an XML element (Name=Value).
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="CharData">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=1789:1809#L67">CharData</a></h2>
+			<pre>type CharData []<a href="../../builtin/index.html#byte">byte</a></pre>
+			<p>
+A CharData represents XML character data (raw text),
+in which XML escape sequences have been replaced by
+the characters they represent.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CharData.Copy">func (CharData) <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=1899:1932#L75">Copy</a></h3>
+				<pre>func (c <a href="#CharData">CharData</a>) Copy() <a href="#CharData">CharData</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Comment">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=2096:2115#L79">Comment</a></h2>
+			<pre>type Comment []<a href="../../builtin/index.html#byte">byte</a></pre>
+			<p>
+A Comment represents an XML comment of the form &lt;!--comment--&gt;.
+The bytes do not include the &lt;!-- and --&gt; comment markers.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Comment.Copy">func (Comment) <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=2117:2148#L81">Copy</a></h3>
+				<pre>func (c <a href="#Comment">Comment</a>) Copy() <a href="#Comment">Comment</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Decoder">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=3022:4985#L119">Decoder</a></h2>
+			<pre>type Decoder struct {
+        <span class="comment">// Strict defaults to true, enforcing the requirements</span>
+        <span class="comment">// of the XML specification.</span>
+        <span class="comment">// If set to false, the parser allows input containing common</span>
+        <span class="comment">// mistakes:</span>
+        <span class="comment">//	* If an element is missing an end tag, the parser invents</span>
+        <span class="comment">//	  end tags as necessary to keep the return values from Token</span>
+        <span class="comment">//	  properly balanced.</span>
+        <span class="comment">//	* In attribute values and character data, unknown or malformed</span>
+        <span class="comment">//	  character entities (sequences beginning with &amp;) are left alone.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Setting:</span>
+        <span class="comment">//</span>
+        <span class="comment">//	d.Strict = false;</span>
+        <span class="comment">//	d.AutoClose = HTMLAutoClose;</span>
+        <span class="comment">//	d.Entity = HTMLEntity</span>
+        <span class="comment">//</span>
+        <span class="comment">// creates a parser that can handle typical HTML.</span>
+        Strict <a href="../../builtin/index.html#bool">bool</a>
+
+        <span class="comment">// When Strict == false, AutoClose indicates a set of elements to</span>
+        <span class="comment">// consider closed immediately after they are opened, regardless</span>
+        <span class="comment">// of whether an end element is present.</span>
+        AutoClose []<a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// Entity can be used to map non-standard entity names to string replacements.</span>
+        <span class="comment">// The parser behaves as if these standard mappings are present in the map,</span>
+        <span class="comment">// regardless of the actual map content:</span>
+        <span class="comment">//</span>
+        <span class="comment">//	&#34;lt&#34;: &#34;&lt;&#34;,</span>
+        <span class="comment">//	&#34;gt&#34;: &#34;&gt;&#34;,</span>
+        <span class="comment">//	&#34;amp&#34;: &#34;&amp;&#34;,</span>
+        <span class="comment">//	&#34;apos&#34;: &#34;&#39;&#34;,</span>
+        <span class="comment">//	&#34;quot&#34;: `&#34;`,</span>
+        Entity map[<a href="../../builtin/index.html#string">string</a>]<a href="../../builtin/index.html#string">string</a>
+
+        <span class="comment">// CharsetReader, if non-nil, defines a function to generate</span>
+        <span class="comment">// charset-conversion readers, converting from the provided</span>
+        <span class="comment">// non-UTF-8 charset into UTF-8. If CharsetReader is nil or</span>
+        <span class="comment">// returns an error, parsing stops with an error. One of the</span>
+        <span class="comment">// the CharsetReader&#39;s result values must be non-nil.</span>
+        CharsetReader func(charset <a href="../../builtin/index.html#string">string</a>, input <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>) (<a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, <a href="../../builtin/index.html#error">error</a>)
+
+        <span class="comment">// DefaultSpace sets the default name space used for unadorned tags,</span>
+        <span class="comment">// as if the entire XML stream were wrapped in an element containing</span>
+        <span class="comment">// the attribute xmlns=&#34;DefaultSpace&#34;.</span>
+        DefaultSpace <a href="../../builtin/index.html#string">string</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Decoder represents an XML parser reading a particular input stream.
+The parser assumes that its input is encoded in UTF-8.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewDecoder">func <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=5042:5079#L182">NewDecoder</a></h3>
+				<pre>func NewDecoder(r <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>) *<a href="#Decoder">Decoder</a></pre>
+				<p>
+NewDecoder creates a new XML parser reading from r.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Decoder.Decode">func (*Decoder) <a href="http://golang.org/src/pkg/encoding/xml/read.go?s=5020:5065#L109">Decode</a></h3>
+				<pre>func (d *<a href="#Decoder">Decoder</a>) Decode(v interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Decode works like xml.Unmarshal, except it reads the decoder
+stream to find the start element.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Decoder.DecodeElement">func (*Decoder) <a href="http://golang.org/src/pkg/encoding/xml/read.go?s=5344:5417#L117">DecodeElement</a></h3>
+				<pre>func (d *<a href="#Decoder">Decoder</a>) DecodeElement(v interface{}, start *<a href="#StartElement">StartElement</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+DecodeElement works like xml.Unmarshal except that it takes
+a pointer to the start XML element to decode into v.
+It is useful when a client reads some raw XML tokens itself
+but also wants to defer to Unmarshal for some elements.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Decoder.RawToken">func (*Decoder) <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=11247:11290#L425">RawToken</a></h3>
+				<pre>func (d *<a href="#Decoder">Decoder</a>) RawToken() (<a href="#Token">Token</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+RawToken is like Token but does not verify that
+start and end elements match and does not translate
+name space prefixes to their corresponding URLs.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Decoder.Skip">func (*Decoder) <a href="http://golang.org/src/pkg/encoding/xml/read.go?s=14565:14595#L494">Skip</a></h3>
+				<pre>func (d *<a href="#Decoder">Decoder</a>) Skip() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Skip reads tokens until it has consumed the end element
+matching the most recent start element already consumed.
+It recurs if it encounters a start element, so it can be used to
+skip nested structures.
+It returns nil if it finds an end element matching the start
+element; otherwise it returns an error describing the problem.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Decoder.Token">func (*Decoder) <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=6225:6271#L215">Token</a></h3>
+				<pre>func (d *<a href="#Decoder">Decoder</a>) Token() (t <a href="#Token">Token</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Token returns the next XML token in the input stream.
+At the end of the input stream, Token returns nil, io.EOF.
+</p>
+<p>
+Slices of bytes in the returned token data refer to the
+parser&#39;s internal buffer and remain valid only until the next
+call to Token.  To acquire a copy of the bytes, call CopyToken
+or the token&#39;s Copy method.
+</p>
+<p>
+Token expands self-closing elements such as &lt;br/&gt;
+into separate start and end elements returned by successive calls.
+</p>
+<p>
+Token guarantees that the StartElement and EndElement
+tokens it returns are properly nested and matched:
+if Token encounters an unexpected end element,
+it will return an error.
+</p>
+<p>
+Token implements XML name spaces as described by
+<a href="http://www.w3.org/TR/REC-xml-names/">http://www.w3.org/TR/REC-xml-names/</a>.  Each of the
+Name structures contained in the Token has the Space
+set to the URL identifying its name space when known.
+If Token encounters an unrecognized name space prefix,
+it uses the prefix as the Space rather than report an error.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Directive">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=2511:2532#L96">Directive</a></h2>
+			<pre>type Directive []<a href="../../builtin/index.html#byte">byte</a></pre>
+			<p>
+A Directive represents an XML directive of the form &lt;!text&gt;.
+The bytes do not include the &lt;! and &gt; markers.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Directive.Copy">func (Directive) <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=2534:2569#L98">Copy</a></h3>
+				<pre>func (d <a href="#Directive">Directive</a>) Copy() <a href="#Directive">Directive</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Encoder">type <a href="http://golang.org/src/pkg/encoding/xml/marshal.go?s=3508:3540#L82">Encoder</a></h2>
+			<pre>type Encoder struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+An Encoder writes XML data to an output stream.
+</p>
+
+
+			
+
+			
+
+			<div id="example_Encoder" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;encoding/xml&#34;
+	&#34;fmt&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	type Address struct {
+		City, State string
+	}
+	type Person struct {
+		XMLName   xml.Name `xml:&#34;person&#34;`
+		Id        int      `xml:&#34;id,attr&#34;`
+		FirstName string   `xml:&#34;name&gt;first&#34;`
+		LastName  string   `xml:&#34;name&gt;last&#34;`
+		Age       int      `xml:&#34;age&#34;`
+		Height    float32  `xml:&#34;height,omitempty&#34;`
+		Married   bool
+		Address
+		Comment string `xml:&#34;,comment&#34;`
+	}
+
+	v := &amp;Person{Id: 13, FirstName: &#34;John&#34;, LastName: &#34;Doe&#34;, Age: 42}
+	v.Comment = &#34; Need more details. &#34;
+	v.Address = Address{&#34;Hanga Roa&#34;, &#34;Easter Island&#34;}
+
+	enc := xml.NewEncoder(os.Stdout)
+	enc.Indent(&#34;  &#34;, &#34;    &#34;)
+	if err := enc.Encode(v); err != nil {
+		fmt.Printf(&#34;error: %v\n&#34;, err)
+	}
+
+}
+</textarea></div>
+				<div class="output"><pre>  &lt;person id=&#34;13&#34;&gt;
+      &lt;name&gt;
+          &lt;first&gt;John&lt;/first&gt;
+          &lt;last&gt;Doe&lt;/last&gt;
+      &lt;/name&gt;
+      &lt;age&gt;42&lt;/age&gt;
+      &lt;Married&gt;false&lt;/Married&gt;
+      &lt;City&gt;Hanga Roa&lt;/City&gt;
+      &lt;State&gt;Easter Island&lt;/State&gt;
+      &lt;!-- Need more details. --&gt;
+  &lt;/person&gt;
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+			
+				
+				<h3 id="NewEncoder">func <a href="http://golang.org/src/pkg/encoding/xml/marshal.go?s=3596:3633#L87">NewEncoder</a></h3>
+				<pre>func NewEncoder(w <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Writer">Writer</a>) *<a href="#Encoder">Encoder</a></pre>
+				<p>
+NewEncoder returns a new encoder that writes to w.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Encoder.Encode">func (*Encoder) <a href="http://golang.org/src/pkg/encoding/xml/marshal.go?s=4146:4193#L103">Encode</a></h3>
+				<pre>func (enc *<a href="#Encoder">Encoder</a>) Encode(v interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Encode writes the XML encoding of v to the stream.
+</p>
+<p>
+See the documentation for Marshal for details about the conversion
+of Go values to XML.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Encoder.Indent">func (*Encoder) <a href="http://golang.org/src/pkg/encoding/xml/marshal.go?s=3898:3947#L94">Indent</a></h3>
+				<pre>func (enc *<a href="#Encoder">Encoder</a>) Indent(prefix, indent <a href="../../builtin/index.html#string">string</a>)</pre>
+				<p>
+Indent sets the encoder to generate XML in which each element
+begins on a new indented line that starts with prefix and is followed by
+one or more copies of indent according to the nesting depth.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="EndElement">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=1605:1642#L60">EndElement</a></h2>
+			<pre>type EndElement struct {
+        Name <a href="#Name">Name</a>
+}</pre>
+			<p>
+An EndElement represents an XML end element.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Name">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=1009:1050#L32">Name</a></h2>
+			<pre>type Name struct {
+        Space, Local <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+A Name represents an XML name (Local) annotated
+with a name space identifier (Space).
+In tokens returned by Decoder.Token, the Space identifier
+is given as a canonical URL, not the short prefix used
+in the document being parsed.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ProcInst">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=2265:2319#L84">ProcInst</a></h2>
+			<pre>type ProcInst struct {
+        Target <a href="../../builtin/index.html#string">string</a>
+        Inst   []<a href="../../builtin/index.html#byte">byte</a>
+}</pre>
+			<p>
+A ProcInst represents an XML processing instruction of the form &lt;?target inst?&gt;
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="ProcInst.Copy">func (ProcInst) <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=2321:2354#L89">Copy</a></h3>
+				<pre>func (p <a href="#ProcInst">ProcInst</a>) Copy() <a href="#ProcInst">ProcInst</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="StartElement">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=1373:1425#L47">StartElement</a></h2>
+			<pre>type StartElement struct {
+        Name <a href="#Name">Name</a>
+        Attr []<a href="#Attr">Attr</a>
+}</pre>
+			<p>
+A StartElement represents an XML start element.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="StartElement.Copy">func (StartElement) <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=1427:1468#L52">Copy</a></h3>
+				<pre>func (e <a href="#StartElement">StartElement</a>) Copy() <a href="#StartElement">StartElement</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SyntaxError">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=597:647#L18">SyntaxError</a></h2>
+			<pre>type SyntaxError struct {
+        Msg  <a href="../../builtin/index.html#string">string</a>
+        Line <a href="../../builtin/index.html#int">int</a>
+}</pre>
+			<p>
+A SyntaxError represents a syntax error in the XML input stream.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="SyntaxError.Error">func (*SyntaxError) <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=649:685#L23">Error</a></h3>
+				<pre>func (e *<a href="#SyntaxError">SyntaxError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="TagPathError">type <a href="http://golang.org/src/pkg/encoding/xml/typeinfo.go?s=8647:8744#L323">TagPathError</a></h2>
+			<pre>type TagPathError struct {
+        Struct       <a href="../../reflect/index.html">reflect</a>.<a href="../../reflect/index.html#Type">Type</a>
+        Field1, Tag1 <a href="../../builtin/index.html#string">string</a>
+        Field2, Tag2 <a href="../../builtin/index.html#string">string</a>
+}</pre>
+			<p>
+A TagPathError represents an error in the unmarshalling process
+caused by the use of field tags with conflicting paths.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="TagPathError.Error">func (*TagPathError) <a href="http://golang.org/src/pkg/encoding/xml/typeinfo.go?s=8746:8783#L329">Error</a></h3>
+				<pre>func (e *<a href="#TagPathError">TagPathError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Token">type <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=1298:1320#L44">Token</a></h2>
+			<pre>type Token interface{}</pre>
+			<p>
+A Token is an interface holding one of the token types:
+StartElement, EndElement, CharData, Comment, ProcInst, or Directive.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CopyToken">func <a href="http://golang.org/src/pkg/encoding/xml/xml.go?s=2645:2674#L101">CopyToken</a></h3>
+				<pre>func CopyToken(t <a href="#Token">Token</a>) <a href="#Token">Token</a></pre>
+				<p>
+CopyToken returns a copy of a Token.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="UnmarshalError">type <a href="http://golang.org/src/pkg/encoding/xml/read.go?s=5650:5676#L126">UnmarshalError</a></h2>
+			<pre>type UnmarshalError <a href="../../builtin/index.html#string">string</a></pre>
+			<p>
+An UnmarshalError represents an error in the unmarshalling process.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="UnmarshalError.Error">func (UnmarshalError) <a href="http://golang.org/src/pkg/encoding/xml/read.go?s=5678:5716#L128">Error</a></h3>
+				<pre>func (e <a href="#UnmarshalError">UnmarshalError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="UnsupportedTypeError">type <a href="http://golang.org/src/pkg/encoding/xml/marshal.go?s=14802:14857#L526">UnsupportedTypeError</a></h2>
+			<pre>type UnsupportedTypeError struct {
+        Type <a href="../../reflect/index.html">reflect</a>.<a href="../../reflect/index.html#Type">Type</a>
+}</pre>
+			<p>
+A MarshalXMLError is returned when Marshal encounters a type
+that cannot be converted into XML.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="UnsupportedTypeError.Error">func (*UnsupportedTypeError) <a href="http://golang.org/src/pkg/encoding/xml/marshal.go?s=14859:14904#L530">Error</a></h3>
+				<pre>func (e *<a href="#UnsupportedTypeError">UnsupportedTypeError</a>) Error() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=189&s_ttfb=198&id=1380993862833447', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/encoding/xml/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

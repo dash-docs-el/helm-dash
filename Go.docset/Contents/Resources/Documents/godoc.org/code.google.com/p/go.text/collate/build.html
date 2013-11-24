@@ -1,0 +1,309 @@
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/collate/build by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:23 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../../../-/sitebf4e.css?v=e29480d76d0fbcc74fd414b3e86faef0" rel="stylesheet">
+  
+  <title>build</title>
+  
+  
+
+</head>
+<body style="">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="http://godoc.org/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="http://godoc.org/">Home</a></li>
+        <li><a href="http://godoc.org/-/index">Index</a></li>
+        <li><a href="http://godoc.org/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="http://godoc.org/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://code.google.com/p/go/source/browse?repo=text"><strong>go.text:</strong></a>
+  <a href="../index.html">code.google.com/p/go.text</a><span class="text-muted">/</span><a href="index.html">collate</a><span class="text-muted">/</span><span class="text-muted">build</span>
+  
+  <span class="pull-right">
+    <a href="#_index">Index</a>
+    
+    <span class="text-muted">|</span> <a href="#pkg-files">Files</a>
+    
+  </span>
+  
+</div>
+  
+    <h2>package build</h2>
+    <p><code>import "code.google.com/p/go.text/collate/build"</code>
+    
+    
+
+    </p><h3 id="_index">Index <a class="permalink" href="#_index">¶</a></h3>
+    
+
+    <div><ul class="list-unstyled">
+    
+    
+    
+    
+      <li><a href="#Builder">type Builder</a>
+        <ul>
+        <li><a href="#NewBuilder">func NewBuilder() *Builder</a>
+        </li><li><a href="#Builder.Add">func (b *Builder) Add(runes []rune, colelems [][]int, variables []int) error</a></li><li><a href="#Builder.Build">func (b *Builder) Build() (colltab.Weigher, error)</a></li><li><a href="#Builder.Print">func (b *Builder) Print(w io.Writer) (n int, err error)</a></li><li><a href="#Builder.Tailoring">func (b *Builder) Tailoring(loc language.Tag) *Tailoring</a>
+        </li></ul>
+    
+      </li><li><a href="#Tailoring">type Tailoring</a>
+        <ul>
+        
+        <li><a href="#Tailoring.Build">func (t *Tailoring) Build() (colltab.Weigher, error)</a></li><li><a href="#Tailoring.Insert">func (t *Tailoring) Insert(level colltab.Level, str, extend string) error</a></li><li><a href="#Tailoring.SetAnchor">func (t *Tailoring) SetAnchor(anchor string) error</a></li><li><a href="#Tailoring.SetAnchorBefore">func (t *Tailoring) SetAnchorBefore(anchor string) error</a>
+        </li></ul>
+    
+    </li></ul></div>
+
+    <span id="pkg-examples"></span>
+
+    <h4 id="pkg-files"><a href="http://code.google.com/p/go/source/browse/collate/build/?repo=text">Package Files</a> <a class="permalink" href="#pkg-files">¶</a></h4>
+    <p><a href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text">builder.go</a> <a href="http://code.google.com/p/go/source/browse/collate/build/colelem.go?repo=text">colelem.go</a> <a href="http://code.google.com/p/go/source/browse/collate/build/contract.go?repo=text">contract.go</a> <a href="http://code.google.com/p/go/source/browse/collate/build/order.go?repo=text">order.go</a> <a href="http://code.google.com/p/go/source/browse/collate/build/table.go?repo=text">table.go</a> <a href="http://code.google.com/p/go/source/browse/collate/build/trie.go?repo=text">trie.go</a> </p>
+
+    
+
+    
+
+    
+
+   <h3 id="Builder">type <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#37">Builder</a> <a class="permalink" href="#Builder">¶</a></h3>
+      <pre>type Builder struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+A Builder builds a root collation table.  The user must specify the
+collation elements for each entry.  A common use will be to base the weights
+on those specified in the allkeys* file as provided by the UCA or CLDR.
+</p>
+
+      
+      
+      
+
+        <h4 id="NewBuilder">func <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#69">NewBuilder</a> <a class="permalink" href="#NewBuilder">¶</a></h4>
+        <pre class="funcdecl">func NewBuilder() *<a href="#Builder">Builder</a></pre><p>
+NewBuilder returns a new Builder.
+</p>
+
+        
+        
+
+        <h4 id="Builder.Add">func (*Builder) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#101">Add</a> <a class="permalink" href="#Builder.Add">¶</a></h4>
+        <pre class="funcdecl">func (b *<a href="#Builder">Builder</a>) Add(runes []<a href="http://godoc.org/builtin/#rune">rune</a>, colelems [][]<a href="http://godoc.org/builtin/#int">int</a>, variables []<a href="http://godoc.org/builtin/#int">int</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Add adds an entry to the collation element table, mapping
+a slice of runes to a sequence of collation elements.
+A collation element is specified as list of weights: []int{primary, secondary, ...}.
+The entries are typically obtained from a collation element table
+as defined in <a href="http://www.unicode.org/reports/tr10/#Data_Table_Format">http://www.unicode.org/reports/tr10/#Data_Table_Format</a>.
+Note that the collation elements specified by colelems are only used
+as a guide.  The actual weights generated by Builder may differ.
+The argument variables is a list of indices into colelems that should contain
+a value for each colelem that is a variable. (See the reference above.)
+</p>
+
+        
+        <h4 id="Builder.Build">func (*Builder) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#468">Build</a> <a class="permalink" href="#Builder.Build">¶</a></h4>
+        <pre class="funcdecl">func (b *<a href="#Builder">Builder</a>) Build() (<a href="colltab/index.html#Weigher">colltab.Weigher</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Build builds the root Collator.
+TODO: return Weigher instead
+</p>
+
+        
+        <h4 id="Builder.Print">func (*Builder) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#488">Print</a> <a class="permalink" href="#Builder.Print">¶</a></h4>
+        <pre class="funcdecl">func (b *<a href="#Builder">Builder</a>) Print(w <a href="http://godoc.org/io/#Writer">io.Writer</a>) (n <a href="http://godoc.org/builtin/#int">int</a>, err <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Print prints the tables for b and all its Tailorings as a Go file
+that can be included in the Collate package.
+</p>
+
+        
+        <h4 id="Builder.Tailoring">func (*Builder) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#81">Tailoring</a> <a class="permalink" href="#Builder.Tailoring">¶</a></h4>
+        <pre class="funcdecl">func (b *<a href="#Builder">Builder</a>) Tailoring(loc <a href="../language/index.html#Tag">language.Tag</a>) *<a href="#Tailoring">Tailoring</a></pre><p>
+Tailoring returns a Tailoring for the given locale.  One should
+have completed all calls to Add before calling Tailoring.
+</p>
+
+        
+        
+
+    <h3 id="Tailoring">type <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#59">Tailoring</a> <a class="permalink" href="#Tailoring">¶</a></h3>
+      <pre>type Tailoring struct {
+    <span class="com">// contains filtered or unexported fields</span>
+}</pre><p>
+A Tailoring builds a collation table based on another collation table.
+The table is defined by specifying tailorings to the underlying table.
+See <a href="http://unicode.org/reports/tr35/">http://unicode.org/reports/tr35/</a> for an overview of tailoring
+collation tables.  The CLDR contains pre-defined tailorings for a variety
+of languages (See <a href="http://www.unicode.org/Public/cldr/">http://www.unicode.org/Public/cldr/</a>&lt;version&gt;/core.zip.)
+</p>
+
+      
+      
+      
+
+        
+
+        <h4 id="Tailoring.Build">func (*Tailoring) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#481">Build</a> <a class="permalink" href="#Tailoring.Build">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Tailoring">Tailoring</a>) Build() (<a href="colltab/index.html#Weigher">colltab.Weigher</a>, <a href="http://godoc.org/builtin/#error">error</a>)</pre><p>
+Build builds a Collator for Tailoring t.
+</p>
+
+        
+        <h4 id="Tailoring.Insert">func (*Tailoring) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#248">Insert</a> <a class="permalink" href="#Tailoring.Insert">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Tailoring">Tailoring</a>) Insert(level <a href="colltab/index.html#Level">colltab.Level</a>, str, extend <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+Insert sets the ordering of str relative to the entry set by the previous
+call to SetAnchor or Insert.  The argument extend corresponds
+to the extend elements as defined in LDML.  A non-empty value for extend
+will cause the collation elements corresponding to extend to be appended
+to the collation elements generated for the entry added by Insert.
+This has the same net effect as sorting str after the string anchor+extend.
+See <a href="http://www.unicode.org/reports/tr10/#Tailoring_Example">http://www.unicode.org/reports/tr10/#Tailoring_Example</a> for details
+on parametric tailoring and <a href="http://unicode.org/reports/tr35/#Collation_Elements">http://unicode.org/reports/tr35/#Collation_Elements</a>
+for full details on LDML.
+</p>
+<p>
+Examples: create a tailoring for Swedish, where "ä" is ordered after "z"
+at the primary sorting level:
+</p>
+<pre>     t := b.Tailoring("se")
+		t.SetAnchor("z")
+		t.Insert(colltab.Primary, "ä", "")
+</pre>
+<p>
+Order "ü" after "ue" at the secondary sorting level:
+</p>
+<pre>t.SetAnchor("ue")
+t.Insert(colltab.Secondary, "ü","")
+</pre>
+<p>
+or
+</p>
+<pre>t.SetAnchor("u")
+t.Insert(colltab.Secondary, "ü", "e")
+</pre>
+<p>
+Order "q" afer "ab" at the secondary level and "Q" after "q"
+at the tertiary level:
+</p>
+<pre>t.SetAnchor("ab")
+t.Insert(colltab.Secondary, "q", "")
+t.Insert(colltab.Tertiary, "Q", "")
+</pre>
+<p>
+Order "b" before "a":
+</p>
+<pre>t.SetAnchorBefore("a")
+t.Insert(colltab.Primary, "b", "")
+</pre>
+<p>
+Order "0" after the last primary ignorable:
+</p>
+<pre>t.SetAnchor("&lt;last_primary_ignorable/&gt;")
+t.Insert(colltab.Primary, "0", "")
+</pre>
+
+        
+        <h4 id="Tailoring.SetAnchor">func (*Tailoring) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#198">SetAnchor</a> <a class="permalink" href="#Tailoring.SetAnchor">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Tailoring">Tailoring</a>) SetAnchor(anchor <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+SetAnchor sets the point after which elements passed in subsequent calls to
+Insert will be inserted.  It is equivalent to the reset directive in an LDML
+specification.  See Insert for an example.
+SetAnchor supports the following logical reset positions:
+&lt;first_tertiary_ignorable/&gt;, &lt;last_teriary_ignorable/&gt;, &lt;first_primary_ignorable/&gt;,
+and &lt;last_non_ignorable/&gt;.
+</p>
+
+        
+        <h4 id="Tailoring.SetAnchorBefore">func (*Tailoring) <a title="View Source" href="http://code.google.com/p/go/source/browse/collate/build/builder.go?repo=text#208">SetAnchorBefore</a> <a class="permalink" href="#Tailoring.SetAnchorBefore">¶</a></h4>
+        <pre class="funcdecl">func (t *<a href="#Tailoring">Tailoring</a>) SetAnchorBefore(anchor <a href="http://godoc.org/builtin/#string">string</a>) <a href="http://godoc.org/builtin/#error">error</a></pre><p>
+SetAnchorBefore is similar to SetAnchor, except that subsequent calls to
+Insert will insert entries before the anchor.
+</p>
+
+        
+        
+
+    
+
+    
+
+  
+
+
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="http://godoc.org/-/refresh"><input type="hidden" name="path" value="code.google.com/p/go.text/collate/build"></form>
+  <p>Package build imports <a href="builda687.html?imports">12 packages</a> (<a href="build75f0.html?import-graph">graph</a>).
+  Updated <span class="timeago" title="2013-10-05T07:45:16Z">2013-10-05</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh</a>.
+
+
+</p></div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="mailto:info@godoc.org">Feedback</a>
+    <span class="text-muted">|</span> <a href="https://github.com/garyburd/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tbody><tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </tbody></table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="../../../../../ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="../../../../-/siteaf0c.js?v=9454ce9ab820c54788d67ec1c4872e67"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30722414-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+<!-- Mirrored from godoc.org/code.google.com/p/go.text/collate/build by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:26:24 GMT -->
+
+</body>

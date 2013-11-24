@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/math/big/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>big</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package big</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "math/big"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package big implements multi-precision arithmetic (big numbers).
+The following numeric types are supported:
+</p>
+<pre>- Int	signed integers
+- Rat	rational numbers
+</pre>
+<p>
+Methods are typically of the form:
+</p>
+<pre>func (z *Int) Op(x, y *Int) *Int	(similar for *Rat)
+</pre>
+<p>
+and implement operations z = x Op y with the result as receiver; if it
+is one of the operands it may be overwritten (and its memory reused).
+To enable chaining of operations, the result is also returned. Methods
+returning a result other than *Int or *Rat take one of the operands as
+the receiver.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+			
+				
+				<dd><a href="#Int">type Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewInt">func NewInt(x int64) *Int</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Abs">func (z *Int) Abs(x *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Add">func (z *Int) Add(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.And">func (z *Int) And(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.AndNot">func (z *Int) AndNot(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Binomial">func (z *Int) Binomial(n, k int64) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Bit">func (x *Int) Bit(i int) uint</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.BitLen">func (x *Int) BitLen() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Bits">func (x *Int) Bits() []Word</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Bytes">func (x *Int) Bytes() []byte</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Cmp">func (x *Int) Cmp(y *Int) (r int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Div">func (z *Int) Div(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.DivMod">func (z *Int) DivMod(x, y, m *Int) (*Int, *Int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Exp">func (z *Int) Exp(x, y, m *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Format">func (x *Int) Format(s fmt.State, ch rune)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.GCD">func (z *Int) GCD(x, y, a, b *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.GobDecode">func (z *Int) GobDecode(buf []byte) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.GobEncode">func (x *Int) GobEncode() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Int64">func (x *Int) Int64() int64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Lsh">func (z *Int) Lsh(x *Int, n uint) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.MarshalJSON">func (x *Int) MarshalJSON() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Mod">func (z *Int) Mod(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.ModInverse">func (z *Int) ModInverse(g, p *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Mul">func (z *Int) Mul(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.MulRange">func (z *Int) MulRange(a, b int64) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Neg">func (z *Int) Neg(x *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Not">func (z *Int) Not(x *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Or">func (z *Int) Or(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.ProbablyPrime">func (x *Int) ProbablyPrime(n int) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Quo">func (z *Int) Quo(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.QuoRem">func (z *Int) QuoRem(x, y, r *Int) (*Int, *Int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Rand">func (z *Int) Rand(rnd *rand.Rand, n *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Rem">func (z *Int) Rem(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Rsh">func (z *Int) Rsh(x *Int, n uint) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Scan">func (z *Int) Scan(s fmt.ScanState, ch rune) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Set">func (z *Int) Set(x *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.SetBit">func (z *Int) SetBit(x *Int, i int, b uint) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.SetBits">func (z *Int) SetBits(abs []Word) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.SetBytes">func (z *Int) SetBytes(buf []byte) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.SetInt64">func (z *Int) SetInt64(x int64) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.SetString">func (z *Int) SetString(s string, base int) (*Int, bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.SetUint64">func (z *Int) SetUint64(x uint64) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Sign">func (x *Int) Sign() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.String">func (x *Int) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Sub">func (z *Int) Sub(x, y *Int) *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Uint64">func (x *Int) Uint64() uint64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.UnmarshalJSON">func (z *Int) UnmarshalJSON(x []byte) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Int.Xor">func (z *Int) Xor(x, y *Int) *Int</a></dd>
+				
+			
+				
+				<dd><a href="#Rat">type Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewRat">func NewRat(a, b int64) *Rat</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Abs">func (z *Rat) Abs(x *Rat) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Add">func (z *Rat) Add(x, y *Rat) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Cmp">func (x *Rat) Cmp(y *Rat) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Denom">func (x *Rat) Denom() *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Float64">func (x *Rat) Float64() (f float64, exact bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.FloatString">func (x *Rat) FloatString(prec int) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.GobDecode">func (z *Rat) GobDecode(buf []byte) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.GobEncode">func (x *Rat) GobEncode() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Inv">func (z *Rat) Inv(x *Rat) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.IsInt">func (x *Rat) IsInt() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Mul">func (z *Rat) Mul(x, y *Rat) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Neg">func (z *Rat) Neg(x *Rat) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Num">func (x *Rat) Num() *Int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Quo">func (z *Rat) Quo(x, y *Rat) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.RatString">func (x *Rat) RatString() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Scan">func (z *Rat) Scan(s fmt.ScanState, ch rune) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Set">func (z *Rat) Set(x *Rat) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.SetFloat64">func (z *Rat) SetFloat64(f float64) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.SetFrac">func (z *Rat) SetFrac(a, b *Int) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.SetFrac64">func (z *Rat) SetFrac64(a, b int64) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.SetInt">func (z *Rat) SetInt(x *Int) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.SetInt64">func (z *Rat) SetInt64(x int64) *Rat</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.SetString">func (z *Rat) SetString(s string) (*Rat, bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Sign">func (x *Rat) Sign() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.String">func (x *Rat) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rat.Sub">func (z *Rat) Sub(x, y *Rat) *Rat</a></dd>
+				
+			
+				
+				<dd><a href="#Word">type Word</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Int_Scan">Int.Scan</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Int_SetString">Int.SetString</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Rat_Scan">Rat.Scan</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Rat_SetString">Rat.SetString</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/math/big/arith.go">arith.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/big/arith_decl.go">arith_decl.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/big/int.go">int.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/big/nat.go">nat.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/big/rat.go">rat.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const <span id="MaxBase">MaxBase</span> = &#39;z&#39; - &#39;a&#39; + 10 + 1 <span class="comment">// = hexValue(&#39;z&#39;) + 1</span>
+</pre>
+				<p>
+MaxBase is the largest number base accepted for string conversions.
+</p>
+
+			
+		
+		
+		
+		
+			
+			
+			<h2 id="Int">type <a href="http://golang.org/src/pkg/math/big/int.go?s=398:478#L9">Int</a></h2>
+			<pre>type Int struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+An Int represents a signed multi-precision integer.
+The zero value for an Int represents the value 0.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewInt">func <a href="http://golang.org/src/pkg/math/big/int.go?s=1068:1093#L52">NewInt</a></h3>
+				<pre>func NewInt(x <a href="../../builtin/index.html#int64">int64</a>) *<a href="#Int">Int</a></pre>
+				<p>
+NewInt allocates and returns a new Int set to x.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Int.Abs">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=2134:2164#L86">Abs</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Abs(x *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Abs sets z to |x| (the absolute value of x) and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Add">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=2391:2424#L100">Add</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Add(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Add sets z to the sum x+y and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.And">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=19556:19589#L802">And</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) And(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+And sets z = x &amp; y and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.AndNot">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=20237:20273#L832">AndNot</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) AndNot(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+AndNot sets z = x &amp;^ y and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Binomial">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=4137:4176#L176">Binomial</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Binomial(n, k <a href="../../builtin/index.html#int64">int64</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Binomial sets z to the binomial coefficient of (n, k) and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Bit">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=18668:18697#L762">Bit</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) Bit(i <a href="../../builtin/index.html#int">int</a>) <a href="../../builtin/index.html#uint">uint</a></pre>
+				<p>
+Bit returns the value of the i&#39;th bit of x. That is, it
+returns (x&gt;&gt;i)&amp;1. The bit index i must be &gt;= 0.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.BitLen">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=14567:14593#L564">BitLen</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) BitLen() <a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+BitLen returns the length of the absolute value of z in bits.
+The bit length of 0 is 0.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Bits">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=1582:1609#L70">Bits</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) Bits() []<a href="#Word">Word</a></pre>
+				<p>
+Bits provides raw (unchecked but fast) access to x by returning its
+absolute value as a little-endian Word slice. The result and x share
+the same underlying array.
+Bits is intended to support implementation of missing low-level Int
+functionality outside this package; it should be avoided otherwise.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Bytes">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=14372:14400#L557">Bytes</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) Bytes() []<a href="../../builtin/index.html#byte">byte</a></pre>
+				<p>
+Bytes returns the absolute value of z as a big-endian byte slice.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Cmp">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=7350:7383#L295">Cmp</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) Cmp(y *<a href="#Int">Int</a>) (r <a href="../../builtin/index.html#int">int</a>)</pre>
+				<p>
+Cmp compares x and y and returns:
+</p>
+<pre>-1 if x &lt;  y
+ 0 if x == y
++1 if x &gt;  y
+</pre>
+
+				
+				
+			
+				
+				<h3 id="Int.Div">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=5766:5799#L222">Div</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Div(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Div sets z to the quotient x/y for y != 0 and returns z.
+If y == 0, a division-by-zero run-time panic occurs.
+Div implements Euclidean division (unlike Go); see DivMod for more details.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.DivMod">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=6971:7018#L271">DivMod</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) DivMod(x, y, m *<a href="#Int">Int</a>) (*<a href="#Int">Int</a>, *<a href="#Int">Int</a>)</pre>
+				<p>
+DivMod sets z to the quotient x div y and m to the modulus x mod y
+and returns the pair (z, m) for y != 0.
+If y == 0, a division-by-zero run-time panic occurs.
+</p>
+<p>
+DivMod implements Euclidean division and modulus (unlike Go):
+</p>
+<pre>q = x div y  such that
+m = x - y*q  with 0 &lt;= m &lt; |q|
+</pre>
+<p>
+(See Raymond T. Boute, &ldquo;The Euclidean definition of the functions
+div and mod&rdquo;. ACM Transactions on Programming Languages and
+Systems (TOPLAS), 14(2):127-144, New York, NY, USA, 4/1992.
+ACM press.)
+See QuoRem for T-division and modulus (like Go).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Exp">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=14802:14838#L571">Exp</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Exp(x, y, m *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Exp sets z = x**y mod |m| (i.e. the sign of m is ignored), and returns z.
+If y &lt;= 0, the result is 1; if m == nil or m == 0, z = x**y.
+See Knuth, volume 2, section 4.6.3.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Format">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=8825:8867#L361">Format</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) Format(s <a href="../../fmt/index.html">fmt</a>.<a href="../../fmt/index.html#State">State</a>, ch <a href="../../builtin/index.html#rune">rune</a>)</pre>
+				<p>
+Format is a support routine for fmt.Formatter. It accepts
+the formats &#39;b&#39; (binary), &#39;o&#39; (octal), &#39;d&#39; (decimal), &#39;x&#39;
+(lowercase hexadecimal), and &#39;X&#39; (uppercase hexadecimal).
+Also supported are the full suite of package fmt&#39;s format
+verbs for integral types, including &#39;+&#39;, &#39;-&#39;, and &#39; &#39;
+for sign control, &#39;#&#39; for leading zero in octal and for
+hexadecimal, a leading &#34;0x&#34; or &#34;0X&#34; for &#34;%#x&#34; and &#34;%#X&#34;
+respectively, specification of minimum digits precision,
+output field width, space or zero padding, and left or
+right justification.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.GCD">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=15338:15377#L591">GCD</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) GCD(x, y, a, b *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+GCD sets z to the greatest common divisor of a and b, which both must
+be &gt; 0, and returns z.
+If x and y are not nil, GCD sets x and y such that z = a*x + b*y.
+If either a or b is &lt;= 0, GCD sets z = x = y = 0.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.GobDecode">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=23270:23311#L955">GobDecode</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) GobDecode(buf []<a href="../../builtin/index.html#byte">byte</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+GobDecode implements the gob.GobDecoder interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.GobEncode">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=22922:22963#L943">GobEncode</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) GobEncode() ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+GobEncode implements the gob.GobEncoder interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Int64">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=12905:12932#L505">Int64</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) Int64() <a href="../../builtin/index.html#int64">int64</a></pre>
+				<p>
+Int64 returns the int64 representation of x.
+If x cannot be represented in an int64, the result is undefined.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Lsh">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=18066:18104#L738">Lsh</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Lsh(x *<a href="#Int">Int</a>, n <a href="../../builtin/index.html#uint">uint</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Lsh sets z = x &lt;&lt; n and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.MarshalJSON">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=23640:23683#L969">MarshalJSON</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) MarshalJSON() ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+MarshalJSON implements the json.Marshaler interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Mod">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=6165:6198#L239">Mod</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Mod(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Mod sets z to the modulus x%y for y != 0 and returns z.
+If y == 0, a division-by-zero run-time panic occurs.
+Mod implements Euclidean modulus (unlike Go); see DivMod for more details.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.ModInverse">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=17764:17804#L726">ModInverse</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) ModInverse(g, p *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+ModInverse sets z to the multiplicative inverse of g in the group ℤ/pℤ (where
+p is a prime) and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Mul">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=3342:3375#L142">Mul</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Mul(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Mul sets z to the product x*y and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.MulRange">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=3721:3760#L155">MulRange</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) MulRange(a, b <a href="../../builtin/index.html#int64">int64</a>) *<a href="#Int">Int</a></pre>
+				<p>
+MulRange sets z to the product of all integers
+in the range [a, b] inclusively and returns z.
+If a &gt; b (empty range), the result is 1.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Neg">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=2240:2270#L93">Neg</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Neg(x *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Neg sets z to -x and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Not">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=22498:22528#L925">Not</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Not(x *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Not sets z = ^x and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Or">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=21051:21083#L865">Or</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Or(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Or sets z = x | y and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.ProbablyPrime">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=17300:17339#L709">ProbablyPrime</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) ProbablyPrime(n <a href="../../builtin/index.html#int">int</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+ProbablyPrime performs n Miller-Rabin tests to check whether x is prime.
+If it returns true, x is prime with probability 1 - 1/4^n.
+If it returns false, x is not prime.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Quo">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=4451:4484#L186">Quo</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Quo(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Quo sets z to the quotient x/y for y != 0 and returns z.
+If y == 0, a division-by-zero run-time panic occurs.
+Quo implements truncated division (like Go); see QuoRem for more details.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.QuoRem">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=5367:5414#L213">QuoRem</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) QuoRem(x, y, r *<a href="#Int">Int</a>) (*<a href="#Int">Int</a>, *<a href="#Int">Int</a>)</pre>
+				<p>
+QuoRem sets z to the quotient x/y and r to the remainder x%y
+and returns the pair (z, r) for y != 0.
+If y == 0, a division-by-zero run-time panic occurs.
+</p>
+<p>
+QuoRem implements T-division and modulus (like Go):
+</p>
+<pre>q = x/y      with the result truncated to zero
+r = x - y*q
+</pre>
+<p>
+(See Daan Leijen, &ldquo;Division and Modulus for Computer Scientists&rdquo;.)
+See DivMod for Euclidean division and modulus (unlike Go).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Rand">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=17452:17499#L714">Rand</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Rand(rnd *<a href="../rand/index.html">rand</a>.<a href="../rand/index.html#Rand">Rand</a>, n *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Rand sets z to a pseudo-random number in [0, n) and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Rem">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=4793:4826#L195">Rem</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Rem(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Rem sets z to the remainder x%y for y != 0 and returns z.
+If y == 0, a division-by-zero run-time panic occurs.
+Rem implements truncated modulus (like Go); see QuoRem for more details.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Rsh">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=18202:18240#L745">Rsh</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Rsh(x *<a href="#Int">Int</a>, n <a href="../../builtin/index.html#uint">uint</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Rsh sets z = x &gt;&gt; n and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Scan">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=12416:12466#L482">Scan</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Scan(s <a href="../../fmt/index.html">fmt</a>.<a href="../../fmt/index.html#ScanState">ScanState</a>, ch <a href="../../builtin/index.html#rune">rune</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Scan is a support routine for fmt.Scanner; it sets z to the value of
+the scanned number. It accepts the formats &#39;b&#39; (binary), &#39;o&#39; (octal),
+&#39;d&#39; (decimal), &#39;x&#39; (lowercase hexadecimal), and &#39;X&#39; (uppercase hexadecimal).
+</p>
+
+				
+				<div id="example_Int_Scan" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;math/big&#34;
+)
+
+func main() {
+	// The Scan function is rarely used directly;
+	// the fmt package recognizes it as an implementation of fmt.Scanner.
+	i := new(big.Int)
+	_, err := fmt.Sscan(&#34;18446744073709551617&#34;, i)
+	if err != nil {
+		log.Println(&#34;error scanning value:&#34;, err)
+	} else {
+		fmt.Println(i)
+	}
+}
+</textarea></div>
+				<div class="output"><pre>18446744073709551617
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="Int.Set">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=1162:1192#L57">Set</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Set(x *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Set sets z to x and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.SetBit">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=19212:19260#L785">SetBit</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) SetBit(x *<a href="#Int">Int</a>, i <a href="../../builtin/index.html#int">int</a>, b <a href="../../builtin/index.html#uint">uint</a>) *<a href="#Int">Int</a></pre>
+				<p>
+SetBit sets z to x, with x&#39;s i&#39;th bit set to b (0 or 1).
+That is, if b is 1 SetBit sets z = x | (1 &lt;&lt; i);
+if b is 0 SetBit sets z = x &amp;^ (1 &lt;&lt; i). If b is not 0 or 1,
+SetBit will panic.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.SetBits">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=1978:2016#L79">SetBits</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) SetBits(abs []<a href="#Word">Word</a>) *<a href="#Int">Int</a></pre>
+				<p>
+SetBits provides raw (unchecked but fast) access to z by setting its
+value to abs, interpreted as a little-endian Word slice, and returning
+z. The result and abs share the same underlying array.
+SetBits is intended to support implementation of missing low-level Int
+functionality outside this package; it should be avoided otherwise.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.SetBytes">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=14204:14243#L550">SetBytes</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) SetBytes(buf []<a href="../../builtin/index.html#byte">byte</a>) *<a href="#Int">Int</a></pre>
+				<p>
+SetBytes interprets buf as the bytes of a big-endian unsigned
+integer, sets z to that value, and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.SetInt64">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=727:763#L33">SetInt64</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) SetInt64(x <a href="../../builtin/index.html#int64">int64</a>) *<a href="#Int">Int</a></pre>
+				<p>
+SetInt64 sets z to x and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.SetString">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=13803:13859#L535">SetString</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) SetString(s <a href="../../builtin/index.html#string">string</a>, base <a href="../../builtin/index.html#int">int</a>) (*<a href="#Int">Int</a>, <a href="../../builtin/index.html#bool">bool</a>)</pre>
+				<p>
+SetString sets z to the value of s, interpreted in the given base,
+and returns z and a boolean indicating success. If SetString fails,
+the value of z is undefined but the returned value is nil.
+</p>
+<p>
+The base argument must be 0 or a value from 2 through MaxBase. If the base
+is 0, the string prefix determines the actual conversion base. A prefix of
+&ldquo;0x&rdquo; or &ldquo;0X&rdquo; selects base 16; the &ldquo;0&rdquo; prefix selects base 8, and a
+&ldquo;0b&rdquo; or &ldquo;0B&rdquo; prefix selects base 2. Otherwise the selected base is 10.
+</p>
+
+				
+				<div id="example_Int_SetString" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;math/big&#34;
+)
+
+func main() {
+	i := new(big.Int)
+	i.SetString(&#34;644&#34;, 8) // octal
+	fmt.Println(i)
+}
+</textarea></div>
+				<div class="output"><pre>420
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="Int.SetUint64">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=919:957#L45">SetUint64</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) SetUint64(x <a href="../../builtin/index.html#uint64">uint64</a>) *<a href="#Int">Int</a></pre>
+				<p>
+SetUint64 sets z to x and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Sign">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=585:609#L22">Sign</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) Sign() <a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+Sign returns:
+</p>
+<pre>-1 if x &lt;  0
+ 0 if x == 0
++1 if x &gt;  0
+</pre>
+
+				
+				
+			
+				
+				<h3 id="Int.String">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=7617:7646#L314">String</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Int.Sub">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=2868:2901#L121">Sub</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Sub(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Sub sets z to the difference x-y and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Uint64">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=13114:13143#L515">Uint64</a></h3>
+				<pre>func (x *<a href="#Int">Int</a>) Uint64() <a href="../../builtin/index.html#uint64">uint64</a></pre>
+				<p>
+Uint64 returns the uint64 representation of x.
+If x cannot be represented in a uint64, the result is undefined.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.UnmarshalJSON">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=23837:23880#L975">UnmarshalJSON</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) UnmarshalJSON(x []<a href="../../builtin/index.html#byte">byte</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+UnmarshalJSON implements the json.Unmarshaler interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Int.Xor">func (*Int) <a href="http://golang.org/src/pkg/math/big/int.go?s=21821:21854#L895">Xor</a></h3>
+				<pre>func (z *<a href="#Int">Int</a>) Xor(x, y *<a href="#Int">Int</a>) *<a href="#Int">Int</a></pre>
+				<p>
+Xor sets z = x ^ y and returns z.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Rat">type <a href="http://golang.org/src/pkg/math/big/rat.go?s=410:610#L9">Rat</a></h2>
+			<pre>type Rat struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Rat represents a quotient a/b of arbitrary precision.
+The zero value for a Rat represents the value 0.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewRat">func <a href="http://golang.org/src/pkg/math/big/rat.go?s=676:704#L17">NewRat</a></h3>
+				<pre>func NewRat(a, b <a href="../../builtin/index.html#int64">int64</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+NewRat creates a new Rat with numerator a and denominator b.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Rat.Abs">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=5731:5761#L224">Abs</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Abs(x *<a href="#Rat">Rat</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+Abs sets z to |x| (the absolute value of x) and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Add">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=8645:8678#L353">Add</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Add(x, y *<a href="#Rat">Rat</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+Add sets z to the sum x+y and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Cmp">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=8501:8530#L348">Cmp</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) Cmp(y *<a href="#Rat">Rat</a>) <a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+Cmp compares x and y and returns:
+</p>
+<pre>-1 if x &lt;  y
+ 0 if x == y
++1 if x &gt;  y
+</pre>
+
+				
+				
+			
+				
+				<h3 id="Rat.Denom">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=7006:7032#L281">Denom</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) Denom() *<a href="#Int">Int</a></pre>
+				<p>
+Denom returns the denominator of x; it is always &gt; 0.
+The result is a reference to x&#39;s denominator; it
+may change if a new value is assigned to x, and vice versa.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Float64">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=4439:4486#L159">Float64</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) Float64() (f <a href="../../builtin/index.html#float64">float64</a>, exact <a href="../../builtin/index.html#bool">bool</a>)</pre>
+				<p>
+Float64 returns the nearest float64 value for x and a bool indicating
+whether f represents x exactly. The sign of f always matches the sign
+of x, even if f == 0.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.FloatString">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=12052:12094#L489">FloatString</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) FloatString(prec <a href="../../builtin/index.html#int">int</a>) <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+FloatString returns a string representation of z in decimal form with prec
+digits of precision after the decimal point and the last digit rounded.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.GobDecode">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=13569:13610#L557">GobDecode</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) GobDecode(buf []<a href="../../builtin/index.html#byte">byte</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+GobDecode implements the gob.GobDecoder interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.GobEncode">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=12978:13019#L537">GobEncode</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) GobEncode() ([]<a href="../../builtin/index.html#byte">byte</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+GobEncode implements the gob.GobEncoder interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Inv">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=5988:6018#L238">Inv</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Inv(x *<a href="#Rat">Rat</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+Inv sets z to 1/x and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.IsInt">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=6482:6508#L266">IsInt</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) IsInt() <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+IsInt returns true if the denominator of x is 1.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Mul">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=9116:9149#L371">Mul</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Mul(x, y *<a href="#Rat">Rat</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+Mul sets z to the product x*y and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Neg">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=5839:5869#L231">Neg</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Neg(x *<a href="#Rat">Rat</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+Neg sets z to -x and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Num">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=6791:6815#L274">Num</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) Num() *<a href="#Int">Int</a></pre>
+				<p>
+Num returns the numerator of x; it may be &lt;= 0.
+The result is a reference to x&#39;s numerator; it
+may change if a new value is assigned to x, and vice versa.
+The sign of the numerator corresponds to the sign of x.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Quo">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=9345:9378#L379">Quo</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Quo(x, y *<a href="#Rat">Rat</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+Quo sets z to the quotient x/y and returns z.
+If y == 0, a division-by-zero run-time panic occurs.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.RatString">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=11801:11833#L480">RatString</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) RatString() <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+RatString returns a string representation of z in the form &#34;a/b&#34; if b != 1,
+and in the form &#34;a&#34; if b == 1.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Scan">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=9805:9855#L397">Scan</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Scan(s <a href="../../fmt/index.html">fmt</a>.<a href="../../fmt/index.html#ScanState">ScanState</a>, ch <a href="../../builtin/index.html#rune">rune</a>) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Scan is a support routine for fmt.Scanner. It accepts the formats
+&#39;e&#39;, &#39;E&#39;, &#39;f&#39;, &#39;F&#39;, &#39;g&#39;, &#39;G&#39;, and &#39;v&#39;. All formats are equivalent.
+</p>
+
+				
+				<div id="example_Rat_Scan" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;math/big&#34;
+)
+
+func main() {
+	// The Scan function is rarely used directly;
+	// the fmt package recognizes it as an implementation of fmt.Scanner.
+	r := new(big.Rat)
+	_, err := fmt.Sscan(&#34;1.5000&#34;, r)
+	if err != nil {
+		log.Println(&#34;error scanning value:&#34;, err)
+	} else {
+		fmt.Println(r)
+	}
+}
+</textarea></div>
+				<div class="output"><pre>3/2
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="Rat.Set">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=5575:5605#L215">Set</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Set(x *<a href="#Rat">Rat</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+Set sets z to x (by making a copy of x) and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.SetFloat64">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=837:877#L23">SetFloat64</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) SetFloat64(f <a href="../../builtin/index.html#float64">float64</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+SetFloat64 sets z to exactly f and returns z.
+If f is not finite, SetFloat returns nil.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.SetFrac">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=4684:4721#L172">SetFrac</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) SetFrac(a, b *<a href="#Int">Int</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+SetFrac sets z to a/b and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.SetFrac64">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=5024:5064#L187">SetFrac64</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) SetFrac64(a, b <a href="../../builtin/index.html#int64">int64</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+SetFrac64 sets z to a/b and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.SetInt">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=5294:5327#L201">SetInt</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) SetInt(x *<a href="#Int">Int</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+SetInt sets z to x (by making a copy of x) and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.SetInt64">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=5421:5457#L208">SetInt64</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) SetInt64(x <a href="../../builtin/index.html#int64">int64</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+SetInt64 sets z to x and returns z.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.SetString">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=10409:10455#L415">SetString</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) SetString(s <a href="../../builtin/index.html#string">string</a>) (*<a href="#Rat">Rat</a>, <a href="../../builtin/index.html#bool">bool</a>)</pre>
+				<p>
+SetString sets z to the value of s and returns z and a boolean indicating
+success. s can be given as a fraction &#34;a/b&#34; or as a floating-point number
+optionally followed by an exponent. If the operation failed, the value of
+z is undefined but the returned value is nil.
+</p>
+
+				
+				<div id="example_Rat_SetString" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;math/big&#34;
+)
+
+func main() {
+	r := new(big.Rat)
+	r.SetString(&#34;355/113&#34;)
+	fmt.Println(r.FloatString(3))
+}
+</textarea></div>
+				<div class="output"><pre>3.142
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="Rat.Sign">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=6381:6405#L261">Sign</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) Sign() <a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+Sign returns:
+</p>
+<pre>-1 if x &lt;  0
+ 0 if x == 0
++1 if x &gt;  0
+</pre>
+
+				
+				
+			
+				
+				<h3 id="Rat.String">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=11554:11583#L470">String</a></h3>
+				<pre>func (x *<a href="#Rat">Rat</a>) String() <a href="../../builtin/index.html#string">string</a></pre>
+				<p>
+String returns a string representation of z in the form &#34;a/b&#34; (even if b == 1).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rat.Sub">func (*Rat) <a href="http://golang.org/src/pkg/math/big/rat.go?s=8882:8915#L362">Sub</a></h3>
+				<pre>func (z *<a href="#Rat">Rat</a>) Sub(x, y *<a href="#Rat">Rat</a>) *<a href="#Rat">Rat</a></pre>
+				<p>
+Sub sets z to the difference x-y and returns z.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Word">type <a href="http://golang.org/src/pkg/math/big/arith.go?s=438:455#L2">Word</a></h2>
+			<pre>type Word <a href="../../builtin/index.html#uintptr">uintptr</a></pre>
+			<p>
+A Word represents a single digit of a multi-precision unsigned integer.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=258&s_ttfb=265&id=1380993864515795', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/math/big/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

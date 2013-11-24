@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/ref/mem by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:19 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>The Go Memory Model</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+<style>p.rule{font-style:italic}span.event{font-style:italic}</style></head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../pkg/index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>The Go Memory Model</h1>
+
+
+  <h2>Version of March 6, 2012</h2>
+
+
+
+<div id="nav"></div>
+
+
+
+
+
+
+<h2>Introduction</h2>
+
+<p>
+The Go memory model specifies the conditions under which
+reads of a variable in one goroutine can be guaranteed to
+observe values produced by writes to the same variable in a different goroutine.
+</p>
+
+<h2>Happens Before</h2>
+
+<p>
+Within a single goroutine, reads and writes must behave
+as if they executed in the order specified by the program.
+That is, compilers and processors may reorder the reads and writes
+executed within a single goroutine only when the reordering
+does not change the behavior within that goroutine
+as defined by the language specification.
+Because of this reordering, the execution order observed
+by one goroutine may differ from the order perceived
+by another.  For example, if one goroutine
+executes <code>a = 1; b = 2;</code>, another might observe
+the updated value of <code>b</code> before the updated value of <code>a</code>.
+</p>
+
+<p>
+To specify the requirements of reads and writes, we define
+<i>happens before</i>, a partial order on the execution
+of memory operations in a Go program.  If event <span class="event">e<sub>1</sub></span> happens
+before event <span class="event">e<sub>2</sub></span>, then we say that <span class="event">e<sub>2</sub></span> happens after <span class="event">e<sub>1</sub></span>.
+Also, if <span class="event">e<sub>1</sub></span> does not happen before <span class="event">e<sub>2</sub></span> and does not happen
+after <span class="event">e<sub>2</sub></span>, then we say that <span class="event">e<sub>1</sub></span> and <span class="event">e<sub>2</sub></span> happen concurrently.
+</p>
+
+<p class="rule">
+Within a single goroutine, the happens-before order is the
+order expressed by the program.
+</p>
+
+<p>
+A read <span class="event">r</span> of a variable <code>v</code> is <i>allowed</i> to observe a write <span class="event">w</span> to <code>v</code>
+if both of the following hold:
+</p>
+
+<ol>
+<li><span class="event">r</span> does not happen before <span class="event">w</span>.</li>
+<li>There is no other write <span class="event">w'</span> to <code>v</code> that happens
+    after <span class="event">w</span> but before <span class="event">r</span>.</li>
+</ol>
+
+<p>
+To guarantee that a read <span class="event">r</span> of a variable <code>v</code> observes a
+particular write <span class="event">w</span> to <code>v</code>, ensure that <span class="event">w</span> is the only
+write <span class="event">r</span> is allowed to observe.
+That is, <span class="event">r</span> is <i>guaranteed</i> to observe <span class="event">w</span> if both of the following hold:
+</p>
+
+<ol>
+<li><span class="event">w</span> happens before <span class="event">r</span>.</li>
+<li>Any other write to the shared variable <code>v</code>
+either happens before <span class="event">w</span> or after <span class="event">r</span>.</li>
+</ol>
+
+<p>
+This pair of conditions is stronger than the first pair;
+it requires that there are no other writes happening
+concurrently with <span class="event">w</span> or <span class="event">r</span>.
+</p>
+
+<p>
+Within a single goroutine,
+there is no concurrency, so the two definitions are equivalent:
+a read <span class="event">r</span> observes the value written by the most recent write <span class="event">w</span> to <code>v</code>.
+When multiple goroutines access a shared variable <code>v</code>,
+they must use synchronization events to establish
+happens-before conditions that ensure reads observe the
+desired writes.
+</p>
+
+<p>
+The initialization of variable <code>v</code> with the zero value
+for <code>v</code>'s type behaves as a write in the memory model.
+</p>
+
+<p>
+Reads and writes of values larger than a single machine word
+behave as multiple machine-word-sized operations in an
+unspecified order.
+</p>
+
+<h2>Synchronization</h2>
+
+<h3>Initialization</h3>
+
+<p>
+Program initialization runs in a single goroutine,
+but that goroutine may create other goroutines,
+which run concurrently.
+</p>
+
+<p class="rule">
+If a package <code>p</code> imports package <code>q</code>, the completion of
+<code>q</code>'s <code>init</code> functions happens before the start of any of <code>p</code>'s.
+</p>
+
+<p class="rule">
+The start of the function <code>main.main</code> happens after
+all <code>init</code> functions have finished.
+</p>
+
+<h3>Goroutine creation</h3>
+
+<p class="rule">
+The <code>go</code> statement that starts a new goroutine
+happens before the goroutine's execution begins.
+</p>
+
+<p>
+For example, in this program:
+</p>
+
+<pre>
+var a string
+
+func f() {
+	print(a)
+}
+
+func hello() {
+	a = "hello, world"
+	go f()
+}
+</pre>
+
+<p>
+calling <code>hello</code> will print <code>"hello, world"</code>
+at some point in the future (perhaps after <code>hello</code> has returned).
+</p>
+
+<h3>Goroutine destruction</h3>
+
+<p>
+The exit of a goroutine is not guaranteed to happen before
+any event in the program.  For example, in this program:
+</p>
+
+<pre>
+var a string
+
+func hello() {
+	go func() { a = "hello" }()
+	print(a)
+}
+</pre>
+
+<p>
+the assignment to <code>a</code> is not followed by
+any synchronization event, so it is not guaranteed to be
+observed by any other goroutine.
+In fact, an aggressive compiler might delete the entire <code>go</code> statement.
+</p>
+
+<p>
+If the effects of a goroutine must be observed by another goroutine,
+use a synchronization mechanism such as a lock or channel
+communication to establish a relative ordering.
+</p>
+
+<h3>Channel communication</h3>
+
+<p>
+Channel communication is the main method of synchronization
+between goroutines.  Each send on a particular channel
+is matched to a corresponding receive from that channel,
+usually in a different goroutine.
+</p>
+
+<p class="rule">
+A send on a channel happens before the corresponding
+receive from that channel completes.
+</p>
+
+<p>
+This program:
+</p>
+
+<pre>
+var c = make(chan int, 10)
+var a string
+
+func f() {
+	a = "hello, world"
+	c &lt;- 0
+}
+
+func main() {
+	go f()
+	&lt;-c
+	print(a)
+}
+</pre>
+
+<p>
+is guaranteed to print <code>"hello, world"</code>.  The write to <code>a</code>
+happens before the send on <code>c</code>, which happens before
+the corresponding receive on <code>c</code> completes, which happens before
+the <code>print</code>.
+</p>
+
+<p class="rule">
+The closing of a channel happens before a receive that returns a zero value
+because the channel is closed.
+</p>
+
+<p>
+In the previous example, replacing
+<code>c &lt;- 0</code> with <code>close(c)</code>
+yields a program with the same guaranteed behavior.
+</p>
+
+<p class="rule">
+A receive from an unbuffered channel happens before
+the send on that channel completes.
+</p>
+
+<p>
+This program (as above, but with the send and receive statements swapped and
+using an unbuffered channel):
+</p>
+
+<pre>
+var c = make(chan int)
+var a string
+
+func f() {
+	a = "hello, world"
+	&lt;-c
+}
+</pre>
+
+<pre>
+func main() {
+	go f()
+	c &lt;- 0
+	print(a)
+}
+</pre>
+
+<p>
+is also guaranteed to print <code>"hello, world"</code>.  The write to <code>a</code>
+happens before the receive on <code>c</code>, which happens before
+the corresponding send on <code>c</code> completes, which happens
+before the <code>print</code>.
+</p>
+
+<p>
+If the channel were buffered (e.g., <code>c = make(chan int, 1)</code>)
+then the program would not be guaranteed to print
+<code>"hello, world"</code>.  (It might print the empty string,
+crash, or do something else.)
+</p>
+
+<h3>Locks</h3>
+
+<p>
+The <code>sync</code> package implements two lock data types,
+<code>sync.Mutex</code> and <code>sync.RWMutex</code>.
+</p>
+
+<p class="rule">
+For any <code>sync.Mutex</code> or <code>sync.RWMutex</code> variable <code>l</code> and <i>n</i> &lt; <i>m</i>,
+call <i>n</i> of <code>l.Unlock()</code> happens before call <i>m</i> of <code>l.Lock()</code> returns.
+</p>
+
+<p>
+This program:
+</p>
+
+<pre>
+var l sync.Mutex
+var a string
+
+func f() {
+	a = "hello, world"
+	l.Unlock()
+}
+
+func main() {
+	l.Lock()
+	go f()
+	l.Lock()
+	print(a)
+}
+</pre>
+
+<p>
+is guaranteed to print <code>"hello, world"</code>.
+The first call to <code>l.Unlock()</code> (in <code>f</code>) happens
+before the second call to <code>l.Lock()</code> (in <code>main</code>) returns,
+which happens before the <code>print</code>.
+</p>
+
+<p class="rule">
+For any call to <code>l.RLock</code> on a <code>sync.RWMutex</code> variable <code>l</code>,
+there is an <i>n</i> such that the <code>l.RLock</code> happens (returns) after call <i>n</i> to
+<code>l.Unlock</code> and the matching <code>l.RUnlock</code> happens
+before call <i>n</i>+1 to <code>l.Lock</code>.
+</p>
+
+<h3>Once</h3>
+
+<p>
+The <code>sync</code> package provides a safe mechanism for
+initialization in the presence of multiple goroutines
+through the use of the <code>Once</code> type.
+Multiple threads can execute <code>once.Do(f)</code> for a particular <code>f</code>,
+but only one will run <code>f()</code>, and the other calls block
+until <code>f()</code> has returned.
+</p>
+
+<p class="rule">
+A single call of <code>f()</code> from <code>once.Do(f)</code> happens (returns) before any call of <code>once.Do(f)</code> returns.
+</p>
+
+<p>
+In this program:
+</p>
+
+<pre>
+var a string
+var once sync.Once
+
+func setup() {
+	a = "hello, world"
+}
+
+func doprint() {
+	once.Do(setup)
+	print(a)
+}
+
+func twoprint() {
+	go doprint()
+	go doprint()
+}
+</pre>
+
+<p>
+calling <code>twoprint</code> causes <code>"hello, world"</code> to be printed twice.
+The first call to <code>twoprint</code> runs <code>setup</code> once.
+</p>
+
+<h2>Incorrect synchronization</h2>
+
+<p>
+Note that a read <span class="event">r</span> may observe the value written by a write <span class="event">w</span>
+that happens concurrently with <span class="event">r</span>.
+Even if this occurs, it does not imply that reads happening after <span class="event">r</span>
+will observe writes that happened before <span class="event">w</span>.
+</p>
+
+<p>
+In this program:
+</p>
+
+<pre>
+var a, b int
+
+func f() {
+	a = 1
+	b = 2
+}
+
+func g() {
+	print(b)
+	print(a)
+}
+
+func main() {
+	go f()
+	g()
+}
+</pre>
+
+<p>
+it can happen that <code>g</code> prints <code>2</code> and then <code>0</code>.
+</p>
+
+<p>
+This fact invalidates a few common idioms.
+</p>
+
+<p>
+Double-checked locking is an attempt to avoid the overhead of synchronization.
+For example, the <code>twoprint</code> program might be
+incorrectly written as:
+</p>
+
+<pre>
+var a string
+var done bool
+
+func setup() {
+	a = "hello, world"
+	done = true
+}
+
+func doprint() {
+	if !done {
+		once.Do(setup)
+	}
+	print(a)
+}
+
+func twoprint() {
+	go doprint()
+	go doprint()
+}
+</pre>
+
+<p>
+but there is no guarantee that, in <code>doprint</code>, observing the write to <code>done</code>
+implies observing the write to <code>a</code>.  This
+version can (incorrectly) print an empty string
+instead of <code>"hello, world"</code>.
+</p>
+
+<p>
+Another incorrect idiom is busy waiting for a value, as in:
+</p>
+
+<pre>
+var a string
+var done bool
+
+func setup() {
+	a = "hello, world"
+	done = true
+}
+
+func main() {
+	go setup()
+	for !done {
+	}
+	print(a)
+}
+</pre>
+
+<p>
+As before, there is no guarantee that, in <code>main</code>,
+observing the write to <code>done</code>
+implies observing the write to <code>a</code>, so this program could
+print an empty string too.
+Worse, there is no guarantee that the write to <code>done</code> will ever
+be observed by <code>main</code>, since there are no synchronization
+events between the two threads.  The loop in <code>main</code> is not
+guaranteed to finish.
+</p>
+
+<p>
+There are subtler variants on this theme, such as this program.
+</p>
+
+<pre>
+type T struct {
+	msg string
+}
+
+var g *T
+
+func setup() {
+	t := new(T)
+	t.msg = "hello, world"
+	g = t
+}
+
+func main() {
+	go setup()
+	for g == nil {
+	}
+	print(g.msg)
+}
+</pre>
+
+<p>
+Even if <code>main</code> observes <code>g != nil</code> and exits its loop,
+there is no guarantee that it will observe the initialized
+value for <code>g.msg</code>.
+</p>
+
+<p>
+In all these examples, the solution is the same:
+use explicit synchronization.
+</p>
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=127&id=1380993856015286', 'mem.html');</script></body>
+
+<!-- Mirrored from golang.org/ref/mem by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:19 GMT -->
+</html>
+

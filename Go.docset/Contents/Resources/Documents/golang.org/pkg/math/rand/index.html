@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/math/rand/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>rand</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package rand</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "math/rand"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package rand implements pseudo-random number generators.
+</p>
+
+			</div>
+		</div>
+		<div id="example_" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		<p>This example shows the use of each of the methods on a *Rand.
+The use of the global functions is the same, without the receiver.
+</p>
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;math/rand&#34;
+	&#34;os&#34;
+	&#34;text/tabwriter&#34;
+)
+
+func main() {
+	// Create and seed the generator.
+	// Typically a non-fixed seed should be used, such as time.Now().UnixNano().
+	// Using a fixed seed will produce the same output on every run.
+	r := rand.New(rand.NewSource(99))
+
+	// The tabwriter here helps us generate aligned output.
+	w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, &#39; &#39;, 0)
+	defer w.Flush()
+	show := func(name string, v1, v2, v3 interface{}) {
+		fmt.Fprintf(w, &#34;%s\t%v\t%v\t%v\n&#34;, name, v1, v2, v3)
+	}
+
+	// Float32 and Float64 values are in [0, 1).
+	show(&#34;Float32&#34;, r.Float32(), r.Float32(), r.Float32())
+	show(&#34;Float64&#34;, r.Float64(), r.Float64(), r.Float64())
+
+	// ExpFloat64 values have an average of 1 but decay exponentially.
+	show(&#34;ExpFloat64&#34;, r.ExpFloat64(), r.ExpFloat64(), r.ExpFloat64())
+
+	// NormFloat64 values have an average of 0 and a standard deviation of 1.
+	show(&#34;NormFloat64&#34;, r.NormFloat64(), r.NormFloat64(), r.NormFloat64())
+
+	// Int31, Int63, and Uint32 generate values of the given width.
+	// The Int method (not shown) is like either Int31 or Int63
+	// depending on the size of &#39;int&#39;.
+	show(&#34;Int31&#34;, r.Int31(), r.Int31(), r.Int31())
+	show(&#34;Int63&#34;, r.Int63(), r.Int63(), r.Int63())
+	show(&#34;Uint32&#34;, r.Int63(), r.Int63(), r.Int63())
+
+	// Intn, Int31n, and Int63n limit their output to be &lt; n.
+	// They do so more carefully than using r.Int()%n.
+	show(&#34;Intn(10)&#34;, r.Intn(10), r.Intn(10), r.Intn(10))
+	show(&#34;Int31n(10)&#34;, r.Int31n(10), r.Int31n(10), r.Int31n(10))
+	show(&#34;Int63n(10)&#34;, r.Int63n(10), r.Int63n(10), r.Int63n(10))
+
+	// Perm generates a random permutation of the numbers [0, n).
+	show(&#34;Perm&#34;, r.Perm(5), r.Perm(5), r.Perm(5))
+}
+</textarea></div>
+				<div class="output"><pre>Float32     0.2635776           0.6358173           0.6718283
+Float64     0.628605430454327   0.4504798828572669  0.9562755949377957
+ExpFloat64  0.3362240648200941  1.4256072328483647  0.24354758816173044
+NormFloat64 0.17233959114940064 1.577014951434847   0.04259129641113857
+Int31       1501292890          1486668269          182840835
+Int63       3546343826724305832 5724354148158589552 5239846799706671610
+Uint32      5927547564735367388 637072299495207830  4128311955958246186
+Intn(10)    1                   2                   5
+Int31n(10)  4                   7                   8
+Int63n(10)  7                   6                   3
+Perm        [1 4 2 3 0]         [4 2 1 3 0]         [1 2 4 0 3]
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#ExpFloat64">func ExpFloat64() float64</a></dd>
+			
+				
+				<dd><a href="#Float32">func Float32() float32</a></dd>
+			
+				
+				<dd><a href="#Float64">func Float64() float64</a></dd>
+			
+				
+				<dd><a href="#Int">func Int() int</a></dd>
+			
+				
+				<dd><a href="#Int31">func Int31() int32</a></dd>
+			
+				
+				<dd><a href="#Int31n">func Int31n(n int32) int32</a></dd>
+			
+				
+				<dd><a href="#Int63">func Int63() int64</a></dd>
+			
+				
+				<dd><a href="#Int63n">func Int63n(n int64) int64</a></dd>
+			
+				
+				<dd><a href="#Intn">func Intn(n int) int</a></dd>
+			
+				
+				<dd><a href="#NormFloat64">func NormFloat64() float64</a></dd>
+			
+				
+				<dd><a href="#Perm">func Perm(n int) []int</a></dd>
+			
+				
+				<dd><a href="#Seed">func Seed(seed int64)</a></dd>
+			
+				
+				<dd><a href="#Uint32">func Uint32() uint32</a></dd>
+			
+			
+				
+				<dd><a href="#Rand">type Rand</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#New">func New(src Source) *Rand</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.ExpFloat64">func (r *Rand) ExpFloat64() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Float32">func (r *Rand) Float32() float32</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Float64">func (r *Rand) Float64() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Int">func (r *Rand) Int() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Int31">func (r *Rand) Int31() int32</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Int31n">func (r *Rand) Int31n(n int32) int32</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Int63">func (r *Rand) Int63() int64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Int63n">func (r *Rand) Int63n(n int64) int64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Intn">func (r *Rand) Intn(n int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.NormFloat64">func (r *Rand) NormFloat64() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Perm">func (r *Rand) Perm(n int) []int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Seed">func (r *Rand) Seed(seed int64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rand.Uint32">func (r *Rand) Uint32() uint32</a></dd>
+				
+			
+				
+				<dd><a href="#Source">type Source</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewSource">func NewSource(seed int64) Source</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Zipf">type Zipf</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewZipf">func NewZipf(r *Rand, s float64, v float64, imax uint64) *Zipf</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Zipf.Uint64">func (z *Zipf) Uint64() uint64</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_">Package</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/math/rand/exp.go">exp.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/rand/normal.go">normal.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/rand/rand.go">rand.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/rand/rng.go">rng.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/rand/zipf.go">zipf.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="ExpFloat64">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=5338:5363#L162">ExpFloat64</a></h2>
+			<pre>func ExpFloat64() <a href="../../builtin/index.html#float64">float64</a></pre>
+			<p>
+ExpFloat64 returns an exponentially distributed float64 in the range
+(0, +math.MaxFloat64] with an exponential distribution whose rate parameter
+(lambda) is 1 and whose mean is 1/lambda (1).
+To produce a distribution with a different rate parameter,
+callers can adjust the output using:
+</p>
+<pre>sample = ExpFloat64() / desiredRateParameter
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Float32">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=4399:4421#L139">Float32</a></h2>
+			<pre>func Float32() <a href="../../builtin/index.html#float32">float32</a></pre>
+			<p>
+Float32 returns, as a float32, a pseudo-random number in [0.0,1.0).
+</p>
+
+			
+		
+			
+			
+			<h2 id="Float64">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=4272:4294#L136">Float64</a></h2>
+			<pre>func Float64() <a href="../../builtin/index.html#float64">float64</a></pre>
+			<p>
+Float64 returns, as a float64, a pseudo-random number in [0.0,1.0).
+</p>
+
+			
+		
+			
+			
+			<h2 id="Int">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=3683:3697#L121">Int</a></h2>
+			<pre>func Int() <a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+Int returns a non-negative pseudo-random int.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Int31">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=3584:3602#L118">Int31</a></h2>
+			<pre>func Int31() <a href="../../builtin/index.html#int32">int32</a></pre>
+			<p>
+Int31 returns a non-negative pseudo-random 31-bit integer as an int32.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Int31n">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=3991:4017#L129">Int31n</a></h2>
+			<pre>func Int31n(n <a href="../../builtin/index.html#int32">int32</a>) <a href="../../builtin/index.html#int32">int32</a></pre>
+			<p>
+Int31n returns, as an int32, a non-negative pseudo-random number in [0,n).
+It panics if n &lt;= 0.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Int63">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=3347:3365#L112">Int63</a></h2>
+			<pre>func Int63() <a href="../../builtin/index.html#int64">int64</a></pre>
+			<p>
+Int63 returns a non-negative pseudo-random 63-bit integer as an int64.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Int63n">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=3829:3855#L125">Int63n</a></h2>
+			<pre>func Int63n(n <a href="../../builtin/index.html#int64">int64</a>) <a href="../../builtin/index.html#int64">int64</a></pre>
+			<p>
+Int63n returns, as an int64, a non-negative pseudo-random number in [0,n).
+It panics if n &lt;= 0.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Intn">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=4149:4169#L133">Intn</a></h2>
+			<pre>func Intn(n <a href="../../builtin/index.html#int">int</a>) <a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+Intn returns, as an int, a non-negative pseudo-random number in [0,n).
+It panics if n &lt;= 0.
+</p>
+
+			
+		
+			
+			
+			<h2 id="NormFloat64">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=4917:4943#L152">NormFloat64</a></h2>
+			<pre>func NormFloat64() <a href="../../builtin/index.html#float64">float64</a></pre>
+			<p>
+NormFloat64 returns a normally distributed float64 in the range
+[-math.MaxFloat64, +math.MaxFloat64] with
+standard normal distribution (mean = 0, stddev = 1).
+To produce a different normal distribution, callers can
+adjust the output using:
+</p>
+<pre>sample = NormFloat64() * desiredStdDev + desiredMean
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Perm">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=4545:4567#L142">Perm</a></h2>
+			<pre>func Perm(n <a href="../../builtin/index.html#int">int</a>) []<a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+Perm returns, as a slice of n ints, a pseudo-random permutation of the integers [0,n).
+</p>
+
+			
+		
+			
+			
+			<h2 id="Seed">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=3224:3245#L109">Seed</a></h2>
+			<pre>func Seed(seed <a href="../../builtin/index.html#int64">int64</a>)</pre>
+			<p>
+Seed uses the provided seed value to initialize the generator to a
+deterministic state. If Seed is not called, the generator behaves as
+if seeded by Seed(1).
+</p>
+
+			
+		
+			
+			
+			<h2 id="Uint32">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=3457:3477#L115">Uint32</a></h2>
+			<pre>func Uint32() <a href="../../builtin/index.html#uint32">uint32</a></pre>
+			<p>
+Uint32 returns a pseudo-random 32-bit value as a uint32.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Rand">type <a href="http://golang.org/src/pkg/math/rand/rand.go?s=626:658#L15">Rand</a></h2>
+			<pre>type Rand struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Rand is a source of random numbers.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="New">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=755:781#L21">New</a></h3>
+				<pre>func New(src <a href="#Source">Source</a>) *<a href="#Rand">Rand</a></pre>
+				<p>
+New returns a new Rand that uses random values from src
+to generate other random values.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Rand.ExpFloat64">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/exp.go?s=765:800#L21">ExpFloat64</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) ExpFloat64() <a href="../../builtin/index.html#float64">float64</a></pre>
+				<p>
+ExpFloat64 returns an exponentially distributed float64 in the range
+(0, +math.MaxFloat64] with an exponential distribution whose rate parameter
+(lambda) is 1 and whose mean is 1/lambda (1).
+To produce a distribution with a different rate parameter,
+callers can adjust the output using:
+</p>
+<pre>sample = ExpFloat64() / desiredRateParameter
+</pre>
+
+				
+				
+			
+				
+				<h3 id="Rand.Float32">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=2617:2649#L85">Float32</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Float32() <a href="../../builtin/index.html#float32">float32</a></pre>
+				<p>
+Float32 returns, as a float32, a pseudo-random number in [0.0,1.0).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Float64">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=2470:2502#L82">Float64</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Float64() <a href="../../builtin/index.html#float64">float64</a></pre>
+				<p>
+Float64 returns, as a float64, a pseudo-random number in [0.0,1.0).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Int">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=1393:1417#L36">Int</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Int() <a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+Int returns a non-negative pseudo-random int.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Int31">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=1280:1308#L33">Int31</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Int31() <a href="../../builtin/index.html#int32">int32</a></pre>
+				<p>
+Int31 returns a non-negative pseudo-random 31-bit integer as an int32.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Int31n">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=1917:1953#L57">Int31n</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Int31n(n <a href="../../builtin/index.html#int32">int32</a>) <a href="../../builtin/index.html#int32">int32</a></pre>
+				<p>
+Int31n returns, as an int32, a non-negative pseudo-random number in [0,n).
+It panics if n &lt;= 0.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Int63">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=1024:1052#L27">Int63</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Int63() <a href="../../builtin/index.html#int64">int64</a></pre>
+				<p>
+Int63 returns a non-negative pseudo-random 63-bit integer as an int64.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Int63n">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=1606:1642#L43">Int63n</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Int63n(n <a href="../../builtin/index.html#int64">int64</a>) <a href="../../builtin/index.html#int64">int64</a></pre>
+				<p>
+Int63n returns, as an int64, a non-negative pseudo-random number in [0,n).
+It panics if n &lt;= 0.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Intn">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=2224:2254#L71">Intn</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Intn(n <a href="../../builtin/index.html#int">int</a>) <a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+Intn returns, as an int, a non-negative pseudo-random number in [0,n).
+It panics if n &lt;= 0.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.NormFloat64">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/normal.go?s=804:840#L28">NormFloat64</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) NormFloat64() <a href="../../builtin/index.html#float64">float64</a></pre>
+				<p>
+NormFloat64 returns a normally distributed float64 in the range
+[-math.MaxFloat64, +math.MaxFloat64] with
+standard normal distribution (mean = 0, stddev = 1).
+To produce a different normal distribution, callers can
+adjust the output using:
+</p>
+<pre>sample = NormFloat64() * desiredStdDev + desiredMean
+</pre>
+
+				
+				
+			
+				
+				<h3 id="Rand.Perm">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=2773:2805#L88">Perm</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Perm(n <a href="../../builtin/index.html#int">int</a>) []<a href="../../builtin/index.html#int">int</a></pre>
+				<p>
+Perm returns, as a slice of n ints, a pseudo-random permutation of the integers [0,n).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Seed">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=896:927#L24">Seed</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Seed(seed <a href="../../builtin/index.html#int64">int64</a>)</pre>
+				<p>
+Seed uses the provided seed value to initialize the generator to a deterministic state.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rand.Uint32">func (*Rand) <a href="http://golang.org/src/pkg/math/rand/rand.go?s=1139:1169#L30">Uint32</a></h3>
+				<pre>func (r *<a href="#Rand">Rand</a>) Uint32() <a href="../../builtin/index.html#uint32">uint32</a></pre>
+				<p>
+Uint32 returns a pseudo-random 32-bit value as a uint32.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Source">type <a href="http://golang.org/src/pkg/math/rand/rand.go?s=361:419#L2">Source</a></h2>
+			<pre>type Source interface {
+        Int63() <a href="../../builtin/index.html#int64">int64</a>
+        Seed(seed <a href="../../builtin/index.html#int64">int64</a>)
+}</pre>
+			<p>
+A Source represents a source of uniformly-distributed
+pseudo-random int64 values in the range [0, 1&lt;&lt;63).
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewSource">func <a href="http://golang.org/src/pkg/math/rand/rand.go?s=498:531#L8">NewSource</a></h3>
+				<pre>func NewSource(seed <a href="../../builtin/index.html#int64">int64</a>) <a href="#Source">Source</a></pre>
+				<p>
+NewSource returns a new pseudo-random Source seeded with the given value.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Zipf">type <a href="http://golang.org/src/pkg/math/rand/zipf.go?s=411:627#L5">Zipf</a></h2>
+			<pre>type Zipf struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Zipf generates Zipf distributed variates.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewZipf">func <a href="http://golang.org/src/pkg/math/rand/zipf.go?s=965:1027#L27">NewZipf</a></h3>
+				<pre>func NewZipf(r *<a href="#Rand">Rand</a>, s <a href="../../builtin/index.html#float64">float64</a>, v <a href="../../builtin/index.html#float64">float64</a>, imax <a href="../../builtin/index.html#uint64">uint64</a>) *<a href="#Zipf">Zipf</a></pre>
+				<p>
+NewZipf returns a Zipf generating variates p(k) on [0, imax]
+proportional to (v+k)**(-s) where s&gt;1 and k&gt;=0, and v&gt;=1.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Zipf.Uint64">func (*Zipf) <a href="http://golang.org/src/pkg/math/rand/zipf.go?s=1458:1488#L46">Uint64</a></h3>
+				<pre>func (z *<a href="#Zipf">Zipf</a>) Uint64() <a href="../../builtin/index.html#uint64">uint64</a></pre>
+				<p>
+Uint64 returns a value drawn from the Zipf distribution described
+by the Zipf object.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=164&s_ttfb=172&id=1380993864638094', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/math/rand/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

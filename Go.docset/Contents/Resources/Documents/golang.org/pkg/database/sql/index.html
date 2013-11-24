@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/database/sql/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>sql</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package sql</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "database/sql"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package sql provides a generic interface around SQL (or SQL-like)
+databases.
+</p>
+<p>
+The sql package must be used in conjunction with a database driver.
+See <a href="http://golang.org/s/sqldrivers">http://golang.org/s/sqldrivers</a> for a list of drivers.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#Register">func Register(name string, driver driver.Driver)</a></dd>
+			
+			
+				
+				<dd><a href="#DB">type DB</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Open">func Open(driverName, dataSourceName string) (*DB, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Begin">func (db *DB) Begin() (*Tx, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Close">func (db *DB) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Driver">func (db *DB) Driver() driver.Driver</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Exec">func (db *DB) Exec(query string, args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Ping">func (db *DB) Ping() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Prepare">func (db *DB) Prepare(query string) (*Stmt, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.Query">func (db *DB) Query(query string, args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.QueryRow">func (db *DB) QueryRow(query string, args ...interface{}) *Row</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DB.SetMaxIdleConns">func (db *DB) SetMaxIdleConns(n int)</a></dd>
+				
+			
+				
+				<dd><a href="#NullBool">type NullBool</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullBool.Scan">func (n *NullBool) Scan(value interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullBool.Value">func (n NullBool) Value() (driver.Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#NullFloat64">type NullFloat64</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullFloat64.Scan">func (n *NullFloat64) Scan(value interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullFloat64.Value">func (n NullFloat64) Value() (driver.Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#NullInt64">type NullInt64</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullInt64.Scan">func (n *NullInt64) Scan(value interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullInt64.Value">func (n NullInt64) Value() (driver.Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#NullString">type NullString</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullString.Scan">func (ns *NullString) Scan(value interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NullString.Value">func (ns NullString) Value() (driver.Value, error)</a></dd>
+				
+			
+				
+				<dd><a href="#RawBytes">type RawBytes</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Result">type Result</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Row">type Row</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Row.Scan">func (r *Row) Scan(dest ...interface{}) error</a></dd>
+				
+			
+				
+				<dd><a href="#Rows">type Rows</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Close">func (rs *Rows) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Columns">func (rs *Rows) Columns() ([]string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Err">func (rs *Rows) Err() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Next">func (rs *Rows) Next() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Rows.Scan">func (rs *Rows) Scan(dest ...interface{}) error</a></dd>
+				
+			
+				
+				<dd><a href="#Scanner">type Scanner</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Stmt">type Stmt</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.Close">func (s *Stmt) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.Exec">func (s *Stmt) Exec(args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.Query">func (s *Stmt) Query(args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Stmt.QueryRow">func (s *Stmt) QueryRow(args ...interface{}) *Row</a></dd>
+				
+			
+				
+				<dd><a href="#Tx">type Tx</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Commit">func (tx *Tx) Commit() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Exec">func (tx *Tx) Exec(query string, args ...interface{}) (Result, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Prepare">func (tx *Tx) Prepare(query string) (*Stmt, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Query">func (tx *Tx) Query(query string, args ...interface{}) (*Rows, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.QueryRow">func (tx *Tx) QueryRow(query string, args ...interface{}) *Row</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Rollback">func (tx *Tx) Rollback() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Tx.Stmt">func (tx *Tx) Stmt(stmt *Stmt) *Stmt</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_DB_Query">DB.Query</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_DB_QueryRow">DB.QueryRow</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/database/sql/convert.go">convert.go</a>
+			
+				<a href="http://golang.org/src/pkg/database/sql/sql.go">sql.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrNoRows">ErrNoRows</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;sql: no rows in result set&#34;)</pre>
+				<p>
+ErrNoRows is returned by Scan when QueryRow doesn&#39;t return a
+row. In such a case, QueryRow returns a placeholder *Row value that
+defers this error until a Scan.
+</p>
+
+			
+				<pre>var <span id="ErrTxDone">ErrTxDone</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;sql: Transaction has already been committed or rolled back&#34;)</pre>
+				
+			
+		
+		
+			
+			
+			<h2 id="Register">func <a href="http://golang.org/src/pkg/database/sql/sql.go?s=667:715#L16">Register</a></h2>
+			<pre>func Register(name <a href="../../builtin/index.html#string">string</a>, driver <a href="driver/index.html">driver</a>.<a href="driver/index.html#Driver">Driver</a>)</pre>
+			<p>
+Register makes a database driver available by the provided name.
+If Register is called twice with the same name or if driver is nil,
+it panics.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="DB">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=5116:5457#L181">DB</a></h2>
+			<pre>type DB struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+DB is a database handle. It&#39;s safe for concurrent use by multiple
+goroutines.
+</p>
+<p>
+The sql package creates and frees connections automatically; it
+also maintains a free pool of idle connections. If the database has
+a concept of per-connection state, such state can only be reliably
+observed within a transaction. Once DB.Begin is called, the
+returned Tx is bound to a single connection. Once Commit or
+Rollback is called on the transaction, that transaction&#39;s
+connection is returned to DB&#39;s idle connection pool. The pool size
+can be controlled with SetMaxIdleConns.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Open">func <a href="http://golang.org/src/pkg/database/sql/sql.go?s=10535:10592#L378">Open</a></h3>
+				<pre>func Open(driverName, dataSourceName <a href="../../builtin/index.html#string">string</a>) (*<a href="#DB">DB</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Open opens a database specified by its database driver name and a
+driver-specific data source name, usually consisting of at least a
+database name and connection information.
+</p>
+<p>
+Most users will open a database via a driver-specific connection
+helper function that returns a *DB. No database drivers are included
+in the Go standard library. See <a href="http://golang.org/s/sqldrivers">http://golang.org/s/sqldrivers</a> for
+a list of third-party drivers.
+</p>
+<p>
+Open may just validate its arguments without creating a connection
+to the database. To verify that the data source name is valid, call
+Ping.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="DB.Begin">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=19891:19925#L775">Begin</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) Begin() (*<a href="#Tx">Tx</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Begin starts a transaction. The isolation level is dependent on
+the driver.
+</p>
+
+				
+				
+			
+				
+				<h3 id="DB.Close">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=11270:11297#L406">Close</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) Close() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes the database, releasing any open resources.
+</p>
+
+				
+				
+			
+				
+				<h3 id="DB.Driver">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=20397:20433#L807">Driver</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) Driver() <a href="driver/index.html">driver</a>.<a href="driver/index.html#Driver">Driver</a></pre>
+				<p>
+Driver returns the database&#39;s underlying driver.
+</p>
+
+				
+				
+			
+				
+				<h3 id="DB.Exec">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=16717:16786#L636">Exec</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) Exec(query <a href="../../builtin/index.html#string">string</a>, args ...interface{}) (<a href="#Result">Result</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Exec executes a query without returning any rows.
+The args are for any placeholder parameters in the query.
+</p>
+
+				
+				
+			
+				
+				<h3 id="DB.Ping">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=10954:10980#L393">Ping</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) Ping() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Ping verifies a connection to the database is still alive,
+establishing a connection if necessary.
+</p>
+
+				
+				
+			
+				
+				<h3 id="DB.Prepare">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=15664:15714#L594">Prepare</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) Prepare(query <a href="../../builtin/index.html#string">string</a>) (*<a href="#Stmt">Stmt</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Prepare creates a prepared statement for later queries or executions.
+Multiple queries or executions may be run concurrently from the
+returned statement.
+</p>
+
+				
+				
+			
+				
+				<h3 id="DB.Query">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=17767:17836#L685">Query</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) Query(query <a href="../../builtin/index.html#string">string</a>, args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Query executes a query that returns rows, typically a SELECT.
+The args are for any placeholder parameters in the query.
+</p>
+
+				
+				<div id="example_DB_Query" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code">
+    age := 27
+    rows, err := db.Query(&#34;SELECT name FROM users WHERE age=?&#34;, age)
+    if err != nil {
+            log.Fatal(err)
+    }
+    for rows.Next() {
+            var name string
+            if err := rows.Scan(&amp;name); err != nil {
+                    log.Fatal(err)
+            }
+            fmt.Printf(&#34;%s is %d\n&#34;, name, age)
+    }
+    if err := rows.Err(); err != nil {
+            log.Fatal(err)
+    }
+</pre>
+			
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="DB.QueryRow">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=19667:19729#L768">QueryRow</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) QueryRow(query <a href="../../builtin/index.html#string">string</a>, args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRow executes a query that is expected to return at most one row.
+QueryRow always return a non-nil value. Errors are deferred until
+Row&#39;s Scan method is called.
+</p>
+
+				
+				<div id="example_DB_QueryRow" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code">
+    id := 123
+    var username string
+    err := db.QueryRow(&#34;SELECT username FROM users WHERE id=?&#34;, id).Scan(&amp;username)
+    switch {
+    case err == sql.ErrNoRows:
+            log.Printf(&#34;No user with that ID.&#34;)
+    case err != nil:
+            log.Fatal(err)
+    default:
+            fmt.Printf(&#34;Username is %s\n&#34;, username)
+    }
+</pre>
+			
+		
+	</div>
+</div>
+
+			
+				
+				<h3 id="DB.SetMaxIdleConns">func (*DB) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=11914:11950#L440">SetMaxIdleConns</a></h3>
+				<pre>func (db *<a href="#DB">DB</a>) SetMaxIdleConns(n <a href="../../builtin/index.html#int">int</a>)</pre>
+				<p>
+SetMaxIdleConns sets the maximum number of connections in the idle
+connection pool.
+</p>
+<p>
+If n &lt;= 0, no idle connections are retained.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="NullBool">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=3382:3467#L122">NullBool</a></h2>
+			<pre>type NullBool struct {
+        Bool  <a href="../../builtin/index.html#bool">bool</a>
+        Valid <a href="../../builtin/index.html#bool">bool</a> <span class="comment">// Valid is true if Bool is not NULL</span>
+}</pre>
+			<p>
+NullBool represents a bool that may be null.
+NullBool implements the Scanner interface so
+it can be used as a scan destination, similar to NullString.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NullBool.Scan">func (*NullBool) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=3511:3559#L128">Scan</a></h3>
+				<pre>func (n *<a href="#NullBool">NullBool</a>) Scan(value interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Scan implements the Scanner interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NullBool.Value">func (NullBool) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=3736:3783#L138">Value</a></h3>
+				<pre>func (n <a href="#NullBool">NullBool</a>) Value() (<a href="driver/index.html">driver</a>.<a href="driver/index.html#Value">Value</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Value implements the driver Valuer interface.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="NullFloat64">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=2735:2833#L96">NullFloat64</a></h2>
+			<pre>type NullFloat64 struct {
+        Float64 <a href="../../builtin/index.html#float64">float64</a>
+        Valid   <a href="../../builtin/index.html#bool">bool</a> <span class="comment">// Valid is true if Float64 is not NULL</span>
+}</pre>
+			<p>
+NullFloat64 represents a float64 that may be null.
+NullFloat64 implements the Scanner interface so
+it can be used as a scan destination, similar to NullString.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NullFloat64.Scan">func (*NullFloat64) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=2877:2928#L102">Scan</a></h3>
+				<pre>func (n *<a href="#NullFloat64">NullFloat64</a>) Scan(value interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Scan implements the Scanner interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NullFloat64.Value">func (NullFloat64) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=3107:3157#L112">Value</a></h3>
+				<pre>func (n <a href="#NullFloat64">NullFloat64</a>) Value() (<a href="driver/index.html">driver</a>.<a href="driver/index.html#Value">Value</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Value implements the driver Valuer interface.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="NullInt64">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=2099:2187#L70">NullInt64</a></h2>
+			<pre>type NullInt64 struct {
+        Int64 <a href="../../builtin/index.html#int64">int64</a>
+        Valid <a href="../../builtin/index.html#bool">bool</a> <span class="comment">// Valid is true if Int64 is not NULL</span>
+}</pre>
+			<p>
+NullInt64 represents an int64 that may be null.
+NullInt64 implements the Scanner interface so
+it can be used as a scan destination, similar to NullString.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NullInt64.Scan">func (*NullInt64) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=2231:2280#L76">Scan</a></h3>
+				<pre>func (n *<a href="#NullInt64">NullInt64</a>) Scan(value interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Scan implements the Scanner interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NullInt64.Value">func (NullInt64) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=2455:2503#L86">Value</a></h3>
+				<pre>func (n <a href="#NullInt64">NullInt64</a>) Value() (<a href="driver/index.html">driver</a>.<a href="driver/index.html#Value">Value</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Value implements the driver Valuer interface.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="NullString">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=1449:1542#L44">NullString</a></h2>
+			<pre>type NullString struct {
+        String <a href="../../builtin/index.html#string">string</a>
+        Valid  <a href="../../builtin/index.html#bool">bool</a> <span class="comment">// Valid is true if String is not NULL</span>
+}</pre>
+			<p>
+NullString represents a string that may be null.
+NullString implements the Scanner interface so
+it can be used as a scan destination:
+</p>
+<pre>var s NullString
+err := db.QueryRow(&#34;SELECT name FROM foo WHERE id=?&#34;, id).Scan(&amp;s)
+...
+if s.Valid {
+   // use s.String
+} else {
+   // NULL value
+}
+</pre>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NullString.Scan">func (*NullString) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=1586:1637#L50">Scan</a></h3>
+				<pre>func (ns *<a href="#NullString">NullString</a>) Scan(value interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Scan implements the Scanner interface.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NullString.Value">func (NullString) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=1819:1869#L60">Value</a></h3>
+				<pre>func (ns <a href="#NullString">NullString</a>) Value() (<a href="driver/index.html">driver</a>.<a href="driver/index.html#Value">Value</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Value implements the driver Valuer interface.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="RawBytes">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=1098:1118#L29">RawBytes</a></h2>
+			<pre>type RawBytes []<a href="../../builtin/index.html#byte">byte</a></pre>
+			<p>
+RawBytes is a byte slice that holds a reference to memory owned by
+the database itself. After a Scan into a RawBytes, the slice is only
+valid until the next call to Next, Scan, or Close.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Result">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=36361:36448#L1426">Result</a></h2>
+			<pre>type Result interface {
+        LastInsertId() (<a href="../../builtin/index.html#int64">int64</a>, <a href="../../builtin/index.html#error">error</a>)
+        RowsAffected() (<a href="../../builtin/index.html#int64">int64</a>, <a href="../../builtin/index.html#error">error</a>)
+}</pre>
+			<p>
+A Result summarizes an executed SQL command.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Row">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=34857:34974#L1379">Row</a></h2>
+			<pre>type Row struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Row is the result of calling QueryRow to select a single row.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Row.Scan">func (*Row) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=35211:35256#L1389">Scan</a></h3>
+				<pre>func (r *<a href="#Row">Row</a>) Scan(dest ...interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Scan copies the columns from the matched row into the values
+pointed at by dest.  If more than one row matches the query,
+Scan uses the first row and discards the rest.  If no row matches
+the query, Scan returns ErrNoRows.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Rows">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=31905:32181#L1275">Rows</a></h2>
+			<pre>type Rows struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Rows is the result of a query. Its cursor starts before the first row
+of the result set. Use Next to advance through the rows:
+</p>
+<pre>rows, err := db.Query(&#34;SELECT ...&#34;)
+...
+for rows.Next() {
+    var id int
+    var name string
+    err = rows.Scan(&amp;id, &amp;name)
+    ...
+}
+err = rows.Err() // get any error encountered during iteration
+...
+</pre>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Rows.Close">func (*Rows) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=34597:34626#L1365">Close</a></h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Close() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes the Rows, preventing further enumeration. If the
+end is encountered, the Rows are closed automatically. Close
+is idempotent.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rows.Columns">func (*Rows) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=33039:33082#L1318">Columns</a></h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Columns() ([]<a href="../../builtin/index.html#string">string</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Columns returns the column names.
+Columns returns an error if the rows are closed, or if the rows
+are from QueryRow and there was a deferred error.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rows.Err">func (*Rows) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=32787:32814#L1308">Err</a></h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Err() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Err returns the error, if any, that was encountered during iteration.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rows.Next">func (*Rows) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=32405:32432#L1290">Next</a></h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Next() <a href="../../builtin/index.html#bool">bool</a></pre>
+				<p>
+Next prepares the next result row for reading with the Scan method.
+It returns true on success, false if there is no next result row.
+Every call to Scan, even the first one, must be preceded by a call
+to Next.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Rows.Scan">func (*Rows) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=33878:33925#L1340">Scan</a></h3>
+				<pre>func (rs *<a href="#Rows">Rows</a>) Scan(dest ...interface{}) <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Scan copies the columns in the current row into the values pointed
+at by dest.
+</p>
+<p>
+If an argument has type *[]byte, Scan saves in that argument a copy
+of the corresponding data. The copy is owned by the caller and can
+be modified and held indefinitely. The copy can be avoided by using
+an argument of type *RawBytes instead; see the documentation for
+RawBytes for restrictions on its use.
+</p>
+<p>
+If an argument has type *interface{}, Scan copies the value
+provided by the underlying driver without conversion. If the value
+is of type []byte, a copy is made and the caller owns the result.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Scanner">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=3886:4291#L146">Scanner</a></h2>
+			<pre>type Scanner interface {
+        <span class="comment">// Scan assigns a value from a database driver.</span>
+        <span class="comment">//</span>
+        <span class="comment">// The src value will be of one of the following restricted</span>
+        <span class="comment">// set of types:</span>
+        <span class="comment">//</span>
+        <span class="comment">//    int64</span>
+        <span class="comment">//    float64</span>
+        <span class="comment">//    bool</span>
+        <span class="comment">//    []byte</span>
+        <span class="comment">//    string</span>
+        <span class="comment">//    time.Time</span>
+        <span class="comment">//    nil - for NULL values</span>
+        <span class="comment">//</span>
+        <span class="comment">// An error should be returned if the value can not be stored</span>
+        <span class="comment">// without loss of information.</span>
+        Scan(src interface{}) <a href="../../builtin/index.html#error">error</a>
+}</pre>
+			<p>
+Scanner is an interface used by Scan.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Stmt">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=25627:26277#L1013">Stmt</a></h2>
+			<pre>type Stmt struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Stmt is a prepared statement. Stmt is safe for concurrent use by multiple goroutines.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Stmt.Close">func (*Stmt) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=31012:31040#L1230">Close</a></h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) Close() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes the statement.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Stmt.Exec">func (*Stmt) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=26407:26463#L1037">Exec</a></h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) Exec(args ...interface{}) (<a href="#Result">Result</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Exec executes a prepared statement with the given arguments and
+returns a Result summarizing the effect of the statement.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Stmt.Query">func (*Stmt) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=29115:29171#L1153">Query</a></h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) Query(args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Query executes a prepared query statement with the given arguments
+and returns the query results as a *Rows.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Stmt.QueryRow">func (*Stmt) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=30826:30875#L1221">QueryRow</a></h3>
+				<pre>func (s *<a href="#Stmt">Stmt</a>) QueryRow(args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRow executes a prepared query statement with the given arguments.
+If an error occurs during the execution of the statement, that error will
+be returned by a call to Scan on the returned *Row, which is always non-nil.
+If the query selects no rows, the *Row&#39;s Scan will return ErrNoRows.
+Otherwise, the *Row&#39;s Scan scans the first selected row and discards
+the rest.
+</p>
+<p>
+Example usage:
+</p>
+<pre>var name string
+err := nameByUseridStmt.QueryRow(id).Scan(&amp;name)
+</pre>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Tx">type <a href="http://golang.org/src/pkg/database/sql/sql.go?s=20667:20971#L817">Tx</a></h2>
+			<pre>type Tx struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Tx is an in-progress database transaction.
+</p>
+<p>
+A transaction must end with a call to Commit or Rollback.
+</p>
+<p>
+After a call to Commit or Rollback, all operations on the
+transaction fail with ErrTxDone.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Tx.Commit">func (*Tx) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=21365:21393#L851">Commit</a></h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Commit() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Commit commits the transaction.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Tx.Exec">func (*Tx) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=24167:24236#L955">Exec</a></h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Exec(query <a href="../../builtin/index.html#string">string</a>, args ...interface{}) (<a href="#Result">Result</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Exec executes a query that doesn&#39;t return rows.
+For example: an INSERT and UPDATE.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Tx.Prepare">func (*Tx) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=21995:22045#L878">Prepare</a></h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Prepare(query <a href="../../builtin/index.html#string">string</a>) (*<a href="#Stmt">Stmt</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Prepare creates a prepared statement for use within a transaction.
+</p>
+<p>
+The returned statement operates within the transaction and can no longer
+be used once the transaction has been committed or rolled back.
+</p>
+<p>
+To use an existing prepared statement on this transaction, see Tx.Stmt.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Tx.Query">func (*Tx) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=24876:24945#L989">Query</a></h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Query(query <a href="../../builtin/index.html#string">string</a>, args ...interface{}) (*<a href="#Rows">Rows</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Query executes a query that returns rows, typically a SELECT.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Tx.QueryRow">func (*Tx) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=25274:25336#L1001">QueryRow</a></h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) QueryRow(query <a href="../../builtin/index.html#string">string</a>, args ...interface{}) *<a href="#Row">Row</a></pre>
+				<p>
+QueryRow executes a query that is expected to return at most one row.
+QueryRow always return a non-nil value. Errors are deferred until
+Row&#39;s Scan method is called.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Tx.Rollback">func (*Tx) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=21549:21579#L862">Rollback</a></h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Rollback() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Rollback aborts the transaction.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Tx.Stmt">func (*Tx) <a href="http://golang.org/src/pkg/database/sql/sql.go?s=23402:23438#L925">Stmt</a></h3>
+				<pre>func (tx *<a href="#Tx">Tx</a>) Stmt(stmt *<a href="#Stmt">Stmt</a>) *<a href="#Stmt">Stmt</a></pre>
+				<p>
+Stmt returns a transaction-specific prepared statement from
+an existing statement.
+</p>
+<p>
+Example:
+</p>
+<pre>updateMoney, err := db.Prepare(&#34;UPDATE balance SET money=money+? WHERE id=?&#34;)
+...
+tx, err := db.Begin()
+...
+res, err := tx.Stmt(updateMoney).Exec(123.45, 98293203)
+</pre>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="../index.html">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="driver/index.html">driver</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package driver defines interfaces to be implemented by database drivers as used by package sql.</td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=550&s_ttfb=570&id=1380993861910825', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/database/sql/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+

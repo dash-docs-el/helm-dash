@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/log/syslog/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>syslog</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package syslog</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "log/syslog"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package syslog provides a simple interface to the system log
+service. It can send messages to the syslog daemon using UNIX
+domain sockets, UDP or TCP.
+</p>
+<p>
+Only one call to Dial is necessary. On write failures,
+the syslog client will attempt to reconnect to the server
+and write again.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#NewLogger">func NewLogger(p Priority, logFlag int) (*log.Logger, error)</a></dd>
+			
+			
+				
+				<dd><a href="#Priority">type Priority</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Dial">func Dial(network, raddr string, priority Priority, tag string) (*Writer, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#New">func New(priority Priority, tag string) (w *Writer, err error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Alert">func (w *Writer) Alert(m string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Close">func (w *Writer) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Crit">func (w *Writer) Crit(m string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Debug">func (w *Writer) Debug(m string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Emerg">func (w *Writer) Emerg(m string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Err">func (w *Writer) Err(m string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Info">func (w *Writer) Info(m string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Notice">func (w *Writer) Notice(m string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Warning">func (w *Writer) Warning(m string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Write">func (w *Writer) Write(b []byte) (int, error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/log/syslog/syslog.go">syslog.go</a>
+			
+				<a href="http://golang.org/src/pkg/log/syslog/syslog_unix.go">syslog_unix.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+		
+			
+			
+			<h2 id="NewLogger">func <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=6109:6169#L261">NewLogger</a></h2>
+			<pre>func NewLogger(p <a href="#Priority">Priority</a>, logFlag <a href="../../builtin/index.html#int">int</a>) (*<a href="../index.html">log</a>.<a href="../index.html#Logger">Logger</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+NewLogger creates a log.Logger whose output is written to
+the system log service with the specified priority. The logFlag
+argument is the flag set passed through to log.New to create
+the Logger.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Priority">type <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=817:834#L21">Priority</a></h2>
+			<pre>type Priority <a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+The Priority is a combination of the syslog facility and
+severity. For example, LOG_ALERT | LOG_FTP sends an alert severity
+message from the FTP facility. The default severity is LOG_EMERG;
+the default facility is LOG_KERN.
+</p>
+
+
+			
+				<pre>const (
+
+        <span class="comment">// From /usr/include/sys/syslog.h.</span>
+        <span class="comment">// These are the same on Linux, BSD, and OS X.</span>
+        <span id="LOG_EMERG">LOG_EMERG</span> <a href="#Priority">Priority</a> = <a href="../../builtin/index.html#iota">iota</a>
+        <span id="LOG_ALERT">LOG_ALERT</span>
+        <span id="LOG_CRIT">LOG_CRIT</span>
+        <span id="LOG_ERR">LOG_ERR</span>
+        <span id="LOG_WARNING">LOG_WARNING</span>
+        <span id="LOG_NOTICE">LOG_NOTICE</span>
+        <span id="LOG_INFO">LOG_INFO</span>
+        <span id="LOG_DEBUG">LOG_DEBUG</span>
+)</pre>
+				
+			
+				<pre>const (
+
+        <span class="comment">// From /usr/include/sys/syslog.h.</span>
+        <span class="comment">// These are the same up to LOG_FTP on Linux, BSD, and OS X.</span>
+        <span id="LOG_KERN">LOG_KERN</span> <a href="#Priority">Priority</a> = <a href="../../builtin/index.html#iota">iota</a> &lt;&lt; 3
+        <span id="LOG_USER">LOG_USER</span>
+        <span id="LOG_MAIL">LOG_MAIL</span>
+        <span id="LOG_DAEMON">LOG_DAEMON</span>
+        <span id="LOG_AUTH">LOG_AUTH</span>
+        <span id="LOG_SYSLOG">LOG_SYSLOG</span>
+        <span id="LOG_LPR">LOG_LPR</span>
+        <span id="LOG_NEWS">LOG_NEWS</span>
+        <span id="LOG_UUCP">LOG_UUCP</span>
+        <span id="LOG_CRON">LOG_CRON</span>
+        <span id="LOG_AUTHPRIV">LOG_AUTHPRIV</span>
+        <span id="LOG_FTP">LOG_FTP</span>
+
+        <span id="LOG_LOCAL0">LOG_LOCAL0</span>
+        <span id="LOG_LOCAL1">LOG_LOCAL1</span>
+        <span id="LOG_LOCAL2">LOG_LOCAL2</span>
+        <span id="LOG_LOCAL3">LOG_LOCAL3</span>
+        <span id="LOG_LOCAL4">LOG_LOCAL4</span>
+        <span id="LOG_LOCAL5">LOG_LOCAL5</span>
+        <span id="LOG_LOCAL6">LOG_LOCAL6</span>
+        <span id="LOG_LOCAL7">LOG_LOCAL7</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Writer">type <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=1569:1726#L73">Writer</a></h2>
+			<pre>type Writer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Writer is a connection to a syslog server.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Dial">func <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=2198:2278#L95">Dial</a></h3>
+				<pre>func Dial(network, raddr <a href="../../builtin/index.html#string">string</a>, priority <a href="#Priority">Priority</a>, tag <a href="../../builtin/index.html#string">string</a>) (*<a href="#Writer">Writer</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Dial establishes a connection to a log daemon by connecting to
+address raddr on the network net.  Each write to the returned
+writer sends a log message with the given facility, severity and
+tag.
+</p>
+
+				
+			
+				
+				<h3 id="New">func <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=1887:1949#L87">New</a></h3>
+				<pre>func New(priority <a href="#Priority">Priority</a>, tag <a href="../../builtin/index.html#string">string</a>) (w *<a href="#Writer">Writer</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+New establishes a new connection to the system log daemon.  Each
+write to the returned writer sends a log message with the given
+priority and prefix.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Writer.Alert">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=3876:3920#L177">Alert</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Alert(m <a href="../../builtin/index.html#string">string</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Alert logs a message with severity LOG_ALERT, ignoring the severity
+passed to New.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Close">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=3438:3468#L156">Close</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Close() <a href="../../builtin/index.html#error">error</a></pre>
+				<p>
+Close closes a connection to the syslog daemon.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Crit">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=4065:4108#L184">Crit</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Crit(m <a href="../../builtin/index.html#string">string</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Crit logs a message with severity LOG_CRIT, ignoring the severity
+passed to New.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Debug">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=5018:5062#L219">Debug</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Debug(m <a href="../../builtin/index.html#string">string</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Debug logs a message with severity LOG_DEBUG, ignoring the severity
+passed to New.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Emerg">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=3685:3729#L170">Emerg</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Emerg(m <a href="../../builtin/index.html#string">string</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Emerg logs a message with severity LOG_EMERG, ignoring the severity
+passed to New.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Err">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=4250:4292#L191">Err</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Err(m <a href="../../builtin/index.html#string">string</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Err logs a message with severity LOG_ERR, ignoring the severity
+passed to New.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Info">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=4829:4872#L212">Info</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Info(m <a href="../../builtin/index.html#string">string</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Info logs a message with severity LOG_INFO, ignoring the severity
+passed to New.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Notice">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=4638:4683#L205">Notice</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Notice(m <a href="../../builtin/index.html#string">string</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Notice logs a message with severity LOG_NOTICE, ignoring the
+severity passed to New.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Warning">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=4441:4487#L198">Warning</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Warning(m <a href="../../builtin/index.html#string">string</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Wanring logs a message with severity LOG_WARNING, ignoring the
+severity passed to New.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Writer.Write">func (*Writer) <a href="http://golang.org/src/pkg/log/syslog/syslog.go?s=3289:3334#L151">Write</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Write(b []<a href="../../builtin/index.html#byte">byte</a>) (<a href="../../builtin/index.html#int">int</a>, <a href="../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Write sends a log message to the syslog daemon.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=197&id=1380993864410907', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/log/syslog/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

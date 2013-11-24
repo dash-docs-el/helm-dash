@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/math/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>math</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package math</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "math"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package math provides basic constants and mathematical functions.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="#Abs">func Abs(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Acos">func Acos(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Acosh">func Acosh(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Asin">func Asin(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Asinh">func Asinh(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Atan">func Atan(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Atan2">func Atan2(y, x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Atanh">func Atanh(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Cbrt">func Cbrt(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Ceil">func Ceil(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Copysign">func Copysign(x, y float64) float64</a></dd>
+			
+				
+				<dd><a href="#Cos">func Cos(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Cosh">func Cosh(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Dim">func Dim(x, y float64) float64</a></dd>
+			
+				
+				<dd><a href="#Erf">func Erf(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Erfc">func Erfc(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Exp">func Exp(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Exp2">func Exp2(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Expm1">func Expm1(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Float32bits">func Float32bits(f float32) uint32</a></dd>
+			
+				
+				<dd><a href="#Float32frombits">func Float32frombits(b uint32) float32</a></dd>
+			
+				
+				<dd><a href="#Float64bits">func Float64bits(f float64) uint64</a></dd>
+			
+				
+				<dd><a href="#Float64frombits">func Float64frombits(b uint64) float64</a></dd>
+			
+				
+				<dd><a href="#Floor">func Floor(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Frexp">func Frexp(f float64) (frac float64, exp int)</a></dd>
+			
+				
+				<dd><a href="#Gamma">func Gamma(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Hypot">func Hypot(p, q float64) float64</a></dd>
+			
+				
+				<dd><a href="#Ilogb">func Ilogb(x float64) int</a></dd>
+			
+				
+				<dd><a href="#Inf">func Inf(sign int) float64</a></dd>
+			
+				
+				<dd><a href="#IsInf">func IsInf(f float64, sign int) bool</a></dd>
+			
+				
+				<dd><a href="#IsNaN">func IsNaN(f float64) (is bool)</a></dd>
+			
+				
+				<dd><a href="#J0">func J0(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#J1">func J1(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Jn">func Jn(n int, x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Ldexp">func Ldexp(frac float64, exp int) float64</a></dd>
+			
+				
+				<dd><a href="#Lgamma">func Lgamma(x float64) (lgamma float64, sign int)</a></dd>
+			
+				
+				<dd><a href="#Log">func Log(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Log10">func Log10(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Log1p">func Log1p(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Log2">func Log2(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Logb">func Logb(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Max">func Max(x, y float64) float64</a></dd>
+			
+				
+				<dd><a href="#Min">func Min(x, y float64) float64</a></dd>
+			
+				
+				<dd><a href="#Mod">func Mod(x, y float64) float64</a></dd>
+			
+				
+				<dd><a href="#Modf">func Modf(f float64) (int float64, frac float64)</a></dd>
+			
+				
+				<dd><a href="#NaN">func NaN() float64</a></dd>
+			
+				
+				<dd><a href="#Nextafter">func Nextafter(x, y float64) (r float64)</a></dd>
+			
+				
+				<dd><a href="#Pow">func Pow(x, y float64) float64</a></dd>
+			
+				
+				<dd><a href="#Pow10">func Pow10(e int) float64</a></dd>
+			
+				
+				<dd><a href="#Remainder">func Remainder(x, y float64) float64</a></dd>
+			
+				
+				<dd><a href="#Signbit">func Signbit(x float64) bool</a></dd>
+			
+				
+				<dd><a href="#Sin">func Sin(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Sincos">func Sincos(x float64) (sin, cos float64)</a></dd>
+			
+				
+				<dd><a href="#Sinh">func Sinh(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Sqrt">func Sqrt(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Tan">func Tan(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Tanh">func Tanh(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Trunc">func Trunc(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Y0">func Y0(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Y1">func Y1(x float64) float64</a></dd>
+			
+				
+				<dd><a href="#Yn">func Yn(n int, x float64) float64</a></dd>
+			
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/math/abs.go">abs.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/acosh.go">acosh.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/asin.go">asin.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/asinh.go">asinh.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/atan.go">atan.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/atan2.go">atan2.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/atanh.go">atanh.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/bits.go">bits.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/cbrt.go">cbrt.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/const.go">const.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/copysign.go">copysign.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/dim.go">dim.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/erf.go">erf.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/exp.go">exp.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/expm1.go">expm1.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/floor.go">floor.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/frexp.go">frexp.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/gamma.go">gamma.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/hypot.go">hypot.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/j0.go">j0.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/j1.go">j1.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/jn.go">jn.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/ldexp.go">ldexp.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/lgamma.go">lgamma.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/log.go">log.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/log10.go">log10.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/log1p.go">log1p.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/logb.go">logb.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/mod.go">mod.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/modf.go">modf.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/nextafter.go">nextafter.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/pow.go">pow.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/pow10.go">pow10.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/remainder.go">remainder.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/signbit.go">signbit.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/sin.go">sin.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/sincos.go">sincos.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/sinh.go">sinh.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/sqrt.go">sqrt.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/tan.go">tan.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/tanh.go">tanh.go</a>
+			
+				<a href="http://golang.org/src/pkg/math/unsafe.go">unsafe.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="E">E</span>   = 2.71828182845904523536028747135266249775724709369995957496696763 <span class="comment">// A001113</span>
+        <span id="Pi">Pi</span>  = 3.14159265358979323846264338327950288419716939937510582097494459 <span class="comment">// A000796</span>
+        <span id="Phi">Phi</span> = 1.61803398874989484820458683436563811772030917980576286213544862 <span class="comment">// A001622</span>
+
+        <span id="Sqrt2">Sqrt2</span>   = 1.41421356237309504880168872420969807856967187537694807317667974 <span class="comment">// A002193</span>
+        <span id="SqrtE">SqrtE</span>   = 1.64872127070012814684865078781416357165377610071014801157507931 <span class="comment">// A019774</span>
+        <span id="SqrtPi">SqrtPi</span>  = 1.77245385090551602729816748334114518279754945612238712821380779 <span class="comment">// A002161</span>
+        <span id="SqrtPhi">SqrtPhi</span> = 1.27201964951406896425242246173749149171560804184009624861664038 <span class="comment">// A139339</span>
+
+        <span id="Ln2">Ln2</span>    = 0.693147180559945309417232121458176568075500134360255254120680009 <span class="comment">// A002162</span>
+        <span id="Log2E">Log2E</span>  = 1 / <a href="#Ln2">Ln2</a>
+        <span id="Ln10">Ln10</span>   = 2.30258509299404568401799145468436420760110148862877297603332790 <span class="comment">// A002392</span>
+        <span id="Log10E">Log10E</span> = 1 / <a href="#Ln10">Ln10</a>
+)</pre>
+				<p>
+Mathematical constants.
+Reference: <a href="http://oeis.org/Axxxxxx">http://oeis.org/Axxxxxx</a>
+</p>
+
+			
+				<pre>const (
+        <span id="MaxFloat32">MaxFloat32</span>             = 3.40282346638528859811704183484516925440e+38  <span class="comment">// 2**127 * (2**24 - 1) / 2**23</span>
+        <span id="SmallestNonzeroFloat32">SmallestNonzeroFloat32</span> = 1.401298464324817070923729583289916131280e-45 <span class="comment">// 1 / 2**(127 - 1 + 23)</span>
+
+        <span id="MaxFloat64">MaxFloat64</span>             = 1.797693134862315708145274237317043567981e+308 <span class="comment">// 2**1023 * (2**53 - 1) / 2**52</span>
+        <span id="SmallestNonzeroFloat64">SmallestNonzeroFloat64</span> = 4.940656458412465441765687928682213723651e-324 <span class="comment">// 1 / 2**(1023 - 1 + 52)</span>
+)</pre>
+				<p>
+Floating-point limit values.
+Max is the largest finite value representable by the type.
+SmallestNonzero is the smallest positive, non-zero value representable by the type.
+</p>
+
+			
+				<pre>const (
+        <span id="MaxInt8">MaxInt8</span>   = 1&lt;&lt;7 - 1
+        <span id="MinInt8">MinInt8</span>   = -1 &lt;&lt; 7
+        <span id="MaxInt16">MaxInt16</span>  = 1&lt;&lt;15 - 1
+        <span id="MinInt16">MinInt16</span>  = -1 &lt;&lt; 15
+        <span id="MaxInt32">MaxInt32</span>  = 1&lt;&lt;31 - 1
+        <span id="MinInt32">MinInt32</span>  = -1 &lt;&lt; 31
+        <span id="MaxInt64">MaxInt64</span>  = 1&lt;&lt;63 - 1
+        <span id="MinInt64">MinInt64</span>  = -1 &lt;&lt; 63
+        <span id="MaxUint8">MaxUint8</span>  = 1&lt;&lt;8 - 1
+        <span id="MaxUint16">MaxUint16</span> = 1&lt;&lt;16 - 1
+        <span id="MaxUint32">MaxUint32</span> = 1&lt;&lt;32 - 1
+        <span id="MaxUint64">MaxUint64</span> = 1&lt;&lt;64 - 1
+)</pre>
+				<p>
+Integer limit values.
+</p>
+
+			
+		
+		
+		
+			
+			
+			<h2 id="Abs">func <a href="http://golang.org/src/pkg/math/abs.go?s=278:305#L2">Abs</a></h2>
+			<pre>func Abs(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Abs returns the absolute value of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Abs(±Inf) = +Inf
+Abs(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Acos">func <a href="http://golang.org/src/pkg/math/asin.go?s=871:899#L41">Acos</a></h2>
+			<pre>func Acos(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Acos returns the arccosine of x.
+</p>
+<p>
+Special case is:
+</p>
+<pre>Acos(x) = NaN if x &lt; -1 or x &gt; 1
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Acosh">func <a href="http://golang.org/src/pkg/math/acosh.go?s=1295:1324#L32">Acosh</a></h2>
+			<pre>func Acosh(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Acosh returns the inverse hyperbolic cosine of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Acosh(+Inf) = +Inf
+Acosh(x) = NaN if x &lt; 1
+Acosh(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Asin">func <a href="http://golang.org/src/pkg/math/asin.go?s=421:449#L9">Asin</a></h2>
+			<pre>func Asin(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Asin returns the arcsine of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Asin(±0) = ±0
+Asin(x) = NaN if x &lt; -1 or x &gt; 1
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Asinh">func <a href="http://golang.org/src/pkg/math/asinh.go?s=1229:1258#L29">Asinh</a></h2>
+			<pre>func Asinh(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Asinh returns the inverse hyperbolic sine of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Asinh(±0) = ±0
+Asinh(±Inf) = ±Inf
+Asinh(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Atan">func <a href="http://golang.org/src/pkg/math/atan.go?s=2888:2916#L85">Atan</a></h2>
+			<pre>func Atan(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Atan returns the arctangent of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Atan(±0) = ±0
+Atan(±Inf) = ±Pi/2
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Atan2">func <a href="http://golang.org/src/pkg/math/atan2.go?s=770:802#L19">Atan2</a></h2>
+			<pre>func Atan2(y, x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Atan2 returns the arc tangent of y/x, using
+the signs of the two to determine the quadrant
+of the return value.
+</p>
+<p>
+Special cases are (in order):
+</p>
+<pre>Atan2(y, NaN) = NaN
+Atan2(NaN, x) = NaN
+Atan2(+0, x&gt;=0) = +0
+Atan2(-0, x&gt;=0) = -0
+Atan2(+0, x&lt;=-0) = +Pi
+Atan2(-0, x&lt;=-0) = -Pi
+Atan2(y&gt;0, 0) = +Pi/2
+Atan2(y&lt;0, 0) = -Pi/2
+Atan2(+Inf, +Inf) = +Pi/4
+Atan2(-Inf, +Inf) = -Pi/4
+Atan2(+Inf, -Inf) = 3Pi/4
+Atan2(-Inf, -Inf) = -3Pi/4
+Atan2(y, +Inf) = 0
+Atan2(y&gt;0, -Inf) = +Pi
+Atan2(y&lt;0, -Inf) = -Pi
+Atan2(+Inf, x) = +Pi/2
+Atan2(-Inf, x) = -Pi/2
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Atanh">func <a href="http://golang.org/src/pkg/math/atanh.go?s=1451:1480#L37">Atanh</a></h2>
+			<pre>func Atanh(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Atanh returns the inverse hyperbolic tangent of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Atanh(1) = +Inf
+Atanh(±0) = ±0
+Atanh(-1) = -Inf
+Atanh(x) = NaN if x &lt; -1 or x &gt; 1
+Atanh(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Cbrt">func <a href="http://golang.org/src/pkg/math/cbrt.go?s=577:605#L11">Cbrt</a></h2>
+			<pre>func Cbrt(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Cbrt returns the cube root of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Cbrt(±0) = ±0
+Cbrt(±Inf) = ±Inf
+Cbrt(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Ceil">func <a href="http://golang.org/src/pkg/math/floor.go?s=725:753#L26">Ceil</a></h2>
+			<pre>func Ceil(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Ceil returns the least integer value greater than or equal to x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Ceil(±0) = ±0
+Ceil(±Inf) = ±Inf
+Ceil(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Copysign">func <a href="http://golang.org/src/pkg/math/copysign.go?s=248:283#L1">Copysign</a></h2>
+			<pre>func Copysign(x, y <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Copysign returns a value with the magnitude
+of x and the sign of y.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Cos">func <a href="http://golang.org/src/pkg/math/sin.go?s=3677:3704#L107">Cos</a></h2>
+			<pre>func Cos(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Cos returns the cosine of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Cos(±Inf) = NaN
+Cos(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Cosh">func <a href="http://golang.org/src/pkg/math/sinh.go?s=1411:1439#L59">Cosh</a></h2>
+			<pre>func Cosh(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Cosh returns the hyperbolic cosine of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Cosh(±0) = 1
+Cosh(±Inf) = +Inf
+Cosh(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Dim">func <a href="http://golang.org/src/pkg/math/dim.go?s=324:354#L3">Dim</a></h2>
+			<pre>func Dim(x, y <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Dim returns the maximum of x-y or 0.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Dim(+Inf, +Inf) = NaN
+Dim(-Inf, -Inf) = NaN
+Dim(x, NaN) = Dim(NaN, x) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Erf">func <a href="http://golang.org/src/pkg/math/erf.go?s=8275:8302#L178">Erf</a></h2>
+			<pre>func Erf(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Erf returns the error function of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Erf(+Inf) = 1
+Erf(-Inf) = -1
+Erf(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Erfc">func <a href="http://golang.org/src/pkg/math/erf.go?s=10020:10048#L255">Erfc</a></h2>
+			<pre>func Erfc(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Erfc returns the complementary error function of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Erfc(+Inf) = 0
+Erfc(-Inf) = 2
+Erfc(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Exp">func <a href="http://golang.org/src/pkg/math/exp.go?s=368:395#L4">Exp</a></h2>
+			<pre>func Exp(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Exp returns e**x, the base-e exponential of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Exp(+Inf) = +Inf
+Exp(NaN) = NaN
+</pre>
+<p>
+Very large values overflow to 0 or +Inf.
+Very small values underflow to 1.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Exp2">func <a href="http://golang.org/src/pkg/math/exp.go?s=4062:4090#L125">Exp2</a></h2>
+			<pre>func Exp2(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Exp2 returns 2**x, the base-2 exponential of x.
+</p>
+<p>
+Special cases are the same as Exp.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Expm1">func <a href="http://golang.org/src/pkg/math/expm1.go?s=5196:5225#L114">Expm1</a></h2>
+			<pre>func Expm1(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Expm1 returns e**x - 1, the base-e exponential of x minus 1.
+It is more accurate than Exp(x) - 1 when x is near zero.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Expm1(+Inf) = +Inf
+Expm1(-Inf) = -1
+Expm1(NaN) = NaN
+</pre>
+<p>
+Very large values overflow to -1 or +Inf.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Float32bits">func <a href="http://golang.org/src/pkg/math/unsafe.go?s=255:289#L1">Float32bits</a></h2>
+			<pre>func Float32bits(f <a href="../builtin/index.html#float32">float32</a>) <a href="../builtin/index.html#uint32">uint32</a></pre>
+			<p>
+Float32bits returns the IEEE 754 binary representation of f.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Float32frombits">func <a href="http://golang.org/src/pkg/math/unsafe.go?s=444:482#L4">Float32frombits</a></h2>
+			<pre>func Float32frombits(b <a href="../builtin/index.html#uint32">uint32</a>) <a href="../builtin/index.html#float32">float32</a></pre>
+			<p>
+Float32frombits returns the floating point number corresponding
+to the IEEE 754 binary representation b.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Float64bits">func <a href="http://golang.org/src/pkg/math/unsafe.go?s=591:625#L7">Float64bits</a></h2>
+			<pre>func Float64bits(f <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#uint64">uint64</a></pre>
+			<p>
+Float64bits returns the IEEE 754 binary representation of f.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Float64frombits">func <a href="http://golang.org/src/pkg/math/unsafe.go?s=777:815#L11">Float64frombits</a></h2>
+			<pre>func Float64frombits(b <a href="../builtin/index.html#uint64">uint64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Float64frombits returns the floating point number corresponding
+the IEEE 754 binary representation b.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Floor">func <a href="http://golang.org/src/pkg/math/floor.go?s=337:366#L3">Floor</a></h2>
+			<pre>func Floor(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Floor returns the greatest integer value less than or equal to x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Floor(±0) = ±0
+Floor(±Inf) = ±Inf
+Floor(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Frexp">func <a href="http://golang.org/src/pkg/math/frexp.go?s=469:514#L6">Frexp</a></h2>
+			<pre>func Frexp(f <a href="../builtin/index.html#float64">float64</a>) (frac <a href="../builtin/index.html#float64">float64</a>, exp <a href="../builtin/index.html#int">int</a>)</pre>
+			<p>
+Frexp breaks f into a normalized fraction
+and an integral power of two.
+It returns frac and exp satisfying f == frac × 2**exp,
+with the absolute value of frac in the interval [½, 1).
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Frexp(±0) = ±0, 0
+Frexp(±Inf) = ±Inf, 0
+Frexp(NaN) = NaN, 0
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Gamma">func <a href="http://golang.org/src/pkg/math/gamma.go?s=3626:3655#L112">Gamma</a></h2>
+			<pre>func Gamma(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Gamma returns the Gamma function of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Gamma(+Inf) = +Inf
+Gamma(+0) = +Inf
+Gamma(-0) = -Inf
+Gamma(x) = NaN for integer x &lt; 0
+Gamma(-Inf) = NaN
+Gamma(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Hypot">func <a href="http://golang.org/src/pkg/math/hypot.go?s=464:496#L9">Hypot</a></h2>
+			<pre>func Hypot(p, q <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Hypot returns Sqrt(p*p + q*q), taking care to avoid
+unnecessary overflow and underflow.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Hypot(±Inf, q) = +Inf
+Hypot(p, ±Inf) = +Inf
+Hypot(NaN, q) = NaN
+Hypot(p, NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Ilogb">func <a href="http://golang.org/src/pkg/math/logb.go?s=641:666#L22">Ilogb</a></h2>
+			<pre>func Ilogb(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+Ilogb returns the binary exponent of x as an integer.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Ilogb(±Inf) = MaxInt32
+Ilogb(0) = MinInt32
+Ilogb(NaN) = MaxInt32
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Inf">func <a href="http://golang.org/src/pkg/math/bits.go?s=415:441#L7">Inf</a></h2>
+			<pre>func Inf(sign <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Inf returns positive infinity if sign &gt;= 0, negative infinity if sign &lt; 0.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsInf">func <a href="http://golang.org/src/pkg/math/bits.go?s=1213:1249#L33">IsInf</a></h2>
+			<pre>func IsInf(f <a href="../builtin/index.html#float64">float64</a>, sign <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+			<p>
+IsInf returns whether f is an infinity, according to sign.
+If sign &gt; 0, IsInf returns whether f is positive infinity.
+If sign &lt; 0, IsInf returns whether f is negative infinity.
+If sign == 0, IsInf returns whether f is either infinity.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsNaN">func <a href="http://golang.org/src/pkg/math/bits.go?s=715:746#L21">IsNaN</a></h2>
+			<pre>func IsNaN(f <a href="../builtin/index.html#float64">float64</a>) (is <a href="../builtin/index.html#bool">bool</a>)</pre>
+			<p>
+IsNaN returns whether f is an IEEE 754 &ldquo;not-a-number&rdquo; value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="J0">func <a href="http://golang.org/src/pkg/math/j0.go?s=2893:2919#L66">J0</a></h2>
+			<pre>func J0(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+J0 returns the order-zero Bessel function of the first kind.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>J0(±Inf) = 0
+J0(0) = 1
+J0(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="J1">func <a href="http://golang.org/src/pkg/math/j1.go?s=2946:2972#L64">J1</a></h2>
+			<pre>func J1(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+J1 returns the order-one Bessel function of the first kind.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>J1(±Inf) = 0
+J1(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Jn">func <a href="http://golang.org/src/pkg/math/jn.go?s=1827:1860#L43">Jn</a></h2>
+			<pre>func Jn(n <a href="../builtin/index.html#int">int</a>, x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Jn returns the order-n Bessel function of the first kind.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Jn(n, ±Inf) = 0
+Jn(n, NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Ldexp">func <a href="http://golang.org/src/pkg/math/ldexp.go?s=342:383#L4">Ldexp</a></h2>
+			<pre>func Ldexp(frac <a href="../builtin/index.html#float64">float64</a>, exp <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Ldexp is the inverse of Frexp.
+It returns frac × 2**exp.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Ldexp(±0, exp) = ±0
+Ldexp(±Inf, exp) = ±Inf
+Ldexp(NaN, exp) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Lgamma">func <a href="http://golang.org/src/pkg/math/lgamma.go?s=6985:7034#L164">Lgamma</a></h2>
+			<pre>func Lgamma(x <a href="../builtin/index.html#float64">float64</a>) (lgamma <a href="../builtin/index.html#float64">float64</a>, sign <a href="../builtin/index.html#int">int</a>)</pre>
+			<p>
+Lgamma returns the natural logarithm and sign (-1 or +1) of Gamma(x).
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Lgamma(+Inf) = +Inf
+Lgamma(0) = +Inf
+Lgamma(-integer) = +Inf
+Lgamma(-Inf) = -Inf
+Lgamma(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Log">func <a href="http://golang.org/src/pkg/math/log.go?s=2810:2837#L70">Log</a></h2>
+			<pre>func Log(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Log returns the natural logarithm of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Log(+Inf) = +Inf
+Log(0) = -Inf
+Log(x &lt; 0) = NaN
+Log(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Log10">func <a href="http://golang.org/src/pkg/math/log10.go?s=265:294#L1">Log10</a></h2>
+			<pre>func Log10(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Log10 returns the decimal logarithm of x.
+The special cases are the same as for Log.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Log1p">func <a href="http://golang.org/src/pkg/math/log1p.go?s=3723:3752#L85">Log1p</a></h2>
+			<pre>func Log1p(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Log1p returns the natural logarithm of 1 plus its argument x.
+It is more accurate than Log(1 + x) when x is near zero.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Log1p(+Inf) = +Inf
+Log1p(±0) = ±0
+Log1p(-1) = -Inf
+Log1p(x &lt; -1) = NaN
+Log1p(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Log2">func <a href="http://golang.org/src/pkg/math/log10.go?s=448:476#L7">Log2</a></h2>
+			<pre>func Log2(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Log2 returns the binary logarithm of x.
+The special cases are the same as for Log.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Logb">func <a href="http://golang.org/src/pkg/math/logb.go?s=300:328#L3">Logb</a></h2>
+			<pre>func Logb(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Logb returns the binary exponent of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Logb(±Inf) = +Inf
+Logb(0) = -Inf
+Logb(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Max">func <a href="http://golang.org/src/pkg/math/dim.go?s=603:633#L16">Max</a></h2>
+			<pre>func Max(x, y <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Max returns the larger of x or y.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Max(x, +Inf) = Max(+Inf, x) = +Inf
+Max(x, NaN) = Max(NaN, x) = NaN
+Max(+0, ±0) = Max(±0, +0) = +0
+Max(-0, -0) = -0
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Min">func <a href="http://golang.org/src/pkg/math/dim.go?s=1072:1102#L43">Min</a></h2>
+			<pre>func Min(x, y <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Min returns the smaller of x or y.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Min(x, -Inf) = Min(-Inf, x) = -Inf
+Min(x, NaN) = Min(NaN, x) = NaN
+Min(-0, ±0) = Min(±0, -0) = -0
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Mod">func <a href="http://golang.org/src/pkg/math/mod.go?s=483:513#L11">Mod</a></h2>
+			<pre>func Mod(x, y <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Mod returns the floating-point remainder of x/y.
+The magnitude of the result is less than y and its
+sign agrees with that of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Mod(±Inf, y) = NaN
+Mod(NaN, y) = NaN
+Mod(x, 0) = NaN
+Mod(x, ±Inf) = x
+Mod(x, NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Modf">func <a href="http://golang.org/src/pkg/math/modf.go?s=369:417#L3">Modf</a></h2>
+			<pre>func Modf(f <a href="../builtin/index.html#float64">float64</a>) (int <a href="../builtin/index.html#float64">float64</a>, frac <a href="../builtin/index.html#float64">float64</a>)</pre>
+			<p>
+Modf returns integer and fractional floating-point numbers
+that sum to f.  Both values have the same sign as f.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Modf(±Inf) = ±Inf, NaN
+Modf(NaN) = NaN, NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="NaN">func <a href="http://golang.org/src/pkg/math/bits.go?s=595:613#L18">NaN</a></h2>
+			<pre>func NaN() <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+NaN returns an IEEE 754 &ldquo;not-a-number&rdquo; value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Nextafter">func <a href="http://golang.org/src/pkg/math/nextafter.go?s=366:406#L3">Nextafter</a></h2>
+			<pre>func Nextafter(x, y <a href="../builtin/index.html#float64">float64</a>) (r <a href="../builtin/index.html#float64">float64</a>)</pre>
+			<p>
+Nextafter returns the next representable value after x towards y.
+If x == y, then x is returned.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Nextafter(NaN, y) = NaN
+Nextafter(x, NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Pow">func <a href="http://golang.org/src/pkg/math/pow.go?s=1186:1216#L28">Pow</a></h2>
+			<pre>func Pow(x, y <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Pow returns x**y, the base-x exponential of y.
+</p>
+<p>
+Special cases are (in order):
+</p>
+<pre>Pow(x, ±0) = 1 for any x
+Pow(1, y) = 1 for any y
+Pow(x, 1) = x for any x
+Pow(NaN, y) = NaN
+Pow(x, NaN) = NaN
+Pow(±0, y) = ±Inf for y an odd integer &lt; 0
+Pow(±0, -Inf) = +Inf
+Pow(±0, +Inf) = +0
+Pow(±0, y) = +Inf for finite y &lt; 0 and not an odd integer
+Pow(±0, y) = ±0 for y an odd integer &gt; 0
+Pow(±0, y) = +0 for finite y &gt; 0 and not an odd integer
+Pow(-1, ±Inf) = 1
+Pow(x, +Inf) = +Inf for |x| &gt; 1
+Pow(x, -Inf) = +0 for |x| &gt; 1
+Pow(x, +Inf) = +0 for |x| &lt; 1
+Pow(x, -Inf) = +Inf for |x| &lt; 1
+Pow(+Inf, y) = +Inf for y &gt; 0
+Pow(+Inf, y) = +0 for y &lt; 0
+Pow(-Inf, y) = Pow(-0, -y)
+Pow(x, y) = NaN for finite x &lt; 0 and finite non-integer y
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Pow10">func <a href="http://golang.org/src/pkg/math/pow10.go?s=445:470#L6">Pow10</a></h2>
+			<pre>func Pow10(e <a href="../builtin/index.html#int">int</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Pow10 returns 10**e, the base-10 exponential of e.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Pow10(e) = +Inf for e &gt; 309
+Pow10(e) = 0 for e &lt; -324
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Remainder">func <a href="http://golang.org/src/pkg/math/remainder.go?s=1284:1320#L27">Remainder</a></h2>
+			<pre>func Remainder(x, y <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Remainder returns the IEEE 754 floating-point remainder of x/y.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Remainder(±Inf, y) = NaN
+Remainder(NaN, y) = NaN
+Remainder(x, 0) = NaN
+Remainder(x, ±Inf) = x
+Remainder(x, NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Signbit">func <a href="http://golang.org/src/pkg/math/signbit.go?s=233:261#L1">Signbit</a></h2>
+			<pre>func Signbit(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#bool">bool</a></pre>
+			<p>
+Signbit returns true if x is negative or negative zero.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Sin">func <a href="http://golang.org/src/pkg/math/sin.go?s=5051:5078#L164">Sin</a></h2>
+			<pre>func Sin(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Sin returns the sine of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Sin(±0) = ±0
+Sin(±Inf) = NaN
+Sin(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Sincos">func <a href="http://golang.org/src/pkg/math/sincos.go?s=376:417#L5">Sincos</a></h2>
+			<pre>func Sincos(x <a href="../builtin/index.html#float64">float64</a>) (sin, cos <a href="../builtin/index.html#float64">float64</a>)</pre>
+			<p>
+Sincos returns Sin(x), Cos(x).
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Sincos(±0) = ±0, 1
+Sincos(±Inf) = NaN, NaN
+Sincos(NaN) = NaN, NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Sinh">func <a href="http://golang.org/src/pkg/math/sinh.go?s=564:592#L15">Sinh</a></h2>
+			<pre>func Sinh(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Sinh returns the hyperbolic sine of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Sinh(±0) = ±0
+Sinh(±Inf) = ±Inf
+Sinh(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Sqrt">func <a href="http://golang.org/src/pkg/math/sqrt.go?s=3708:3736#L82">Sqrt</a></h2>
+			<pre>func Sqrt(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Sqrt returns the square root of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Sqrt(+Inf) = +Inf
+Sqrt(±0) = ±0
+Sqrt(x &lt; 0) = NaN
+Sqrt(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Tan">func <a href="http://golang.org/src/pkg/math/tan.go?s=2574:2601#L72">Tan</a></h2>
+			<pre>func Tan(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Tan returns the tangent of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Tan(±0) = ±0
+Tan(±Inf) = NaN
+Tan(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Tanh">func <a href="http://golang.org/src/pkg/math/tanh.go?s=2211:2239#L64">Tanh</a></h2>
+			<pre>func Tanh(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Tanh returns the hyperbolic tangent of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Tanh(±0) = ±0
+Tanh(±Inf) = ±1
+Tanh(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Trunc">func <a href="http://golang.org/src/pkg/math/floor.go?s=938:967#L38">Trunc</a></h2>
+			<pre>func Trunc(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Trunc returns the integer value of x.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Trunc(±0) = ±0
+Trunc(±Inf) = ±Inf
+Trunc(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Y0">func <a href="http://golang.org/src/pkg/math/j0.go?s=4812:4838#L146">Y0</a></h2>
+			<pre>func Y0(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Y0 returns the order-zero Bessel function of the second kind.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Y0(+Inf) = 0
+Y0(0) = -Inf
+Y0(x &lt; 0) = NaN
+Y0(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Y1">func <a href="http://golang.org/src/pkg/math/j1.go?s=4736:4762#L144">Y1</a></h2>
+			<pre>func Y1(x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Y1 returns the order-one Bessel function of the second kind.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Y1(+Inf) = 0
+Y1(0) = -Inf
+Y1(x &lt; 0) = NaN
+Y1(NaN) = NaN
+</pre>
+
+			
+		
+			
+			
+			<h2 id="Yn">func <a href="http://golang.org/src/pkg/math/jn.go?s=6127:6160#L225">Yn</a></h2>
+			<pre>func Yn(n <a href="../builtin/index.html#int">int</a>, x <a href="../builtin/index.html#float64">float64</a>) <a href="../builtin/index.html#float64">float64</a></pre>
+			<p>
+Yn returns the order-n Bessel function of the second kind.
+</p>
+<p>
+Special cases are:
+</p>
+<pre>Yn(n, +Inf) = 0
+Yn(n &gt; 0, 0) = -Inf
+Yn(n &lt; 0, 0) = +Inf if n is odd, -Inf if n is even
+Y1(n, x &lt; 0) = NaN
+Y1(n, NaN) = NaN
+</pre>
+
+			
+		
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="../index.html">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="big/index.html">big</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package big implements multi-precision arithmetic (big numbers).</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="cmplx/index.html">cmplx</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package cmplx provides basic constants and mathematical functions for complex numbers.</td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="rand/index.html">rand</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package rand implements pseudo-random number generators.</td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=287&s_ttfb=301&id=1380993864411191', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/math/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

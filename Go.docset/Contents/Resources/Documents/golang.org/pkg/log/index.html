@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/log/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>log</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package log</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "log"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package log implements a simple logging package. It defines a type, Logger,
+with methods for formatting output. It also has a predefined &#39;standard&#39;
+Logger accessible through helper functions Print[f|ln], Fatal[f|ln], and
+Panic[f|ln], which are easier to use than creating a Logger manually.
+That logger writes to standard error and prints the date and time
+of each logged message.
+The Fatal functions call os.Exit(1) after writing the log message.
+The Panic functions call panic after writing the log message.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="#Fatal">func Fatal(v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#Fatalf">func Fatalf(format string, v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#Fatalln">func Fatalln(v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#Flags">func Flags() int</a></dd>
+			
+				
+				<dd><a href="#Panic">func Panic(v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#Panicf">func Panicf(format string, v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#Panicln">func Panicln(v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#Prefix">func Prefix() string</a></dd>
+			
+				
+				<dd><a href="#Print">func Print(v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#Printf">func Printf(format string, v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#Println">func Println(v ...interface{})</a></dd>
+			
+				
+				<dd><a href="#SetFlags">func SetFlags(flag int)</a></dd>
+			
+				
+				<dd><a href="#SetOutput">func SetOutput(w io.Writer)</a></dd>
+			
+				
+				<dd><a href="#SetPrefix">func SetPrefix(prefix string)</a></dd>
+			
+			
+				
+				<dd><a href="#Logger">type Logger</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#New">func New(out io.Writer, prefix string, flag int) *Logger</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Fatal">func (l *Logger) Fatal(v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Fatalf">func (l *Logger) Fatalf(format string, v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Fatalln">func (l *Logger) Fatalln(v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Flags">func (l *Logger) Flags() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Output">func (l *Logger) Output(calldepth int, s string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Panic">func (l *Logger) Panic(v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Panicf">func (l *Logger) Panicf(format string, v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Panicln">func (l *Logger) Panicln(v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Prefix">func (l *Logger) Prefix() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Print">func (l *Logger) Print(v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Printf">func (l *Logger) Printf(format string, v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.Println">func (l *Logger) Println(v ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.SetFlags">func (l *Logger) SetFlags(flag int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Logger.SetPrefix">func (l *Logger) SetPrefix(prefix string)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/log/log.go">log.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span class="comment">// Bits or&#39;ed together to control what&#39;s printed. There is no control over the</span>
+        <span class="comment">// order they appear (the order listed here) or the format they present (as</span>
+        <span class="comment">// described in the comments).  A colon appears after these items:</span>
+        <span class="comment">//	2009/01/23 01:23:23.123123 /a/b/c/d.go:23: message</span>
+        <span id="Ldate">Ldate</span>         = 1 &lt;&lt; <a href="../builtin/index.html#iota">iota</a>     <span class="comment">// the date: 2009/01/23</span>
+        <span id="Ltime">Ltime</span>                         <span class="comment">// the time: 01:23:23</span>
+        <span id="Lmicroseconds">Lmicroseconds</span>                 <span class="comment">// microsecond resolution: 01:23:23.123123.  assumes Ltime.</span>
+        <span id="Llongfile">Llongfile</span>                     <span class="comment">// full file name and line number: /a/b/c/d.go:23</span>
+        <span id="Lshortfile">Lshortfile</span>                    <span class="comment">// final file name element and line number: d.go:23. overrides Llongfile</span>
+        <span id="LstdFlags">LstdFlags</span>     = <a href="#Ldate">Ldate</a> | <a href="#Ltime">Ltime</a> <span class="comment">// initial values for the standard logger</span>
+)</pre>
+				<p>
+These flags define which text to prefix to each log entry generated by the Logger.
+</p>
+
+			
+		
+		
+		
+			
+			
+			<h2 id="Fatal">func <a href="http://golang.org/src/pkg/log/log.go?s=8456:8484#L276">Fatal</a></h2>
+			<pre>func Fatal(v ...interface{})</pre>
+			<p>
+Fatal is equivalent to Print() followed by a call to os.Exit(1).
+</p>
+
+			
+		
+			
+			
+			<h2 id="Fatalf">func <a href="http://golang.org/src/pkg/log/log.go?s=8605:8649#L282">Fatalf</a></h2>
+			<pre>func Fatalf(format <a href="../builtin/index.html#string">string</a>, v ...interface{})</pre>
+			<p>
+Fatalf is equivalent to Printf() followed by a call to os.Exit(1).
+</p>
+
+			
+		
+			
+			
+			<h2 id="Fatalln">func <a href="http://golang.org/src/pkg/log/log.go?s=8781:8811#L288">Fatalln</a></h2>
+			<pre>func Fatalln(v ...interface{})</pre>
+			<p>
+Fatalln is equivalent to Println() followed by a call to os.Exit(1).
+</p>
+
+			
+		
+			
+			
+			<h2 id="Flags">func <a href="http://golang.org/src/pkg/log/log.go?s=7401:7417#L236">Flags</a></h2>
+			<pre>func Flags() <a href="../builtin/index.html#int">int</a></pre>
+			<p>
+Flags returns the output flags for the standard logger.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Panic">func <a href="http://golang.org/src/pkg/log/log.go?s=8929:8957#L294">Panic</a></h2>
+			<pre>func Panic(v ...interface{})</pre>
+			<p>
+Panic is equivalent to Print() followed by a call to panic().
+</p>
+
+			
+		
+			
+			
+			<h2 id="Panicf">func <a href="http://golang.org/src/pkg/log/log.go?s=9081:9125#L301">Panicf</a></h2>
+			<pre>func Panicf(format <a href="../builtin/index.html#string">string</a>, v ...interface{})</pre>
+			<p>
+Panicf is equivalent to Printf() followed by a call to panic().
+</p>
+
+			
+		
+			
+			
+			<h2 id="Panicln">func <a href="http://golang.org/src/pkg/log/log.go?s=9260:9290#L308">Panicln</a></h2>
+			<pre>func Panicln(v ...interface{})</pre>
+			<p>
+Panicln is equivalent to Println() followed by a call to panic().
+</p>
+
+			
+		
+			
+			
+			<h2 id="Prefix">func <a href="http://golang.org/src/pkg/log/log.go?s=7612:7632#L246">Prefix</a></h2>
+			<pre>func Prefix() <a href="../builtin/index.html#string">string</a></pre>
+			<p>
+Prefix returns the output prefix for the standard logger.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Print">func <a href="http://golang.org/src/pkg/log/log.go?s=7936:7964#L259">Print</a></h2>
+			<pre>func Print(v ...interface{})</pre>
+			<p>
+Print calls Output to print to the standard logger.
+Arguments are handled in the manner of fmt.Print.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Printf">func <a href="http://golang.org/src/pkg/log/log.go?s=8113:8157#L265">Printf</a></h2>
+			<pre>func Printf(format <a href="../builtin/index.html#string">string</a>, v ...interface{})</pre>
+			<p>
+Printf calls Output to print to the standard logger.
+Arguments are handled in the manner of fmt.Printf.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Println">func <a href="http://golang.org/src/pkg/log/log.go?s=8317:8347#L271">Println</a></h2>
+			<pre>func Println(v ...interface{})</pre>
+			<p>
+Println calls Output to print to the standard logger.
+Arguments are handled in the manner of fmt.Println.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SetFlags">func <a href="http://golang.org/src/pkg/log/log.go?s=7502:7525#L241">SetFlags</a></h2>
+			<pre>func SetFlags(flag <a href="../builtin/index.html#int">int</a>)</pre>
+			<p>
+SetFlags sets the output flags for the standard logger.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SetOutput">func <a href="http://golang.org/src/pkg/log/log.go?s=7258:7285#L229">SetOutput</a></h2>
+			<pre>func SetOutput(w <a href="../io/index.html">io</a>.<a href="../io/index.html#Writer">Writer</a>)</pre>
+			<p>
+SetOutput sets the output destination for the standard logger.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SetPrefix">func <a href="http://golang.org/src/pkg/log/log.go?s=7720:7749#L251">SetPrefix</a></h2>
+			<pre>func SetPrefix(prefix <a href="../builtin/index.html#string">string</a>)</pre>
+			<p>
+SetPrefix sets the output prefix for the standard logger.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Logger">type <a href="http://golang.org/src/pkg/log/log.go?s=1890:2182#L32">Logger</a></h2>
+			<pre>type Logger struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Logger represents an active logging object that generates lines of
+output to an io.Writer.  Each logging operation makes a single call to
+the Writer&#39;s Write method.  A Logger can be used simultaneously from
+multiple goroutines; it guarantees to serialize access to the Writer.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="New">func <a href="http://golang.org/src/pkg/log/log.go?s=2411:2467#L44">New</a></h3>
+				<pre>func New(out <a href="../io/index.html">io</a>.<a href="../io/index.html#Writer">Writer</a>, prefix <a href="../builtin/index.html#string">string</a>, flag <a href="../builtin/index.html#int">int</a>) *<a href="#Logger">Logger</a></pre>
+				<p>
+New creates a new Logger.   The out variable sets the
+destination to which log data will be written.
+The prefix appears at the beginning of each generated log line.
+The flag argument defines the logging properties.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="Logger.Fatal">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=5663:5703#L162">Fatal</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Fatal(v ...interface{})</pre>
+				<p>
+Fatal is equivalent to l.Print() followed by a call to os.Exit(1).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Fatalf">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=5824:5880#L168">Fatalf</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Fatalf(format <a href="../builtin/index.html#string">string</a>, v ...interface{})</pre>
+				<p>
+Fatalf is equivalent to l.Printf() followed by a call to os.Exit(1).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Fatalln">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=6012:6054#L174">Fatalln</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Fatalln(v ...interface{})</pre>
+				<p>
+Fatalln is equivalent to l.Println() followed by a call to os.Exit(1).
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Flags">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=6676:6704#L201">Flags</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Flags() <a href="../builtin/index.html#int">int</a></pre>
+				<p>
+Flags returns the output flags for the logger.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Output">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=4418:4472#L120">Output</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Output(calldepth <a href="../builtin/index.html#int">int</a>, s <a href="../builtin/index.html#string">string</a>) <a href="../builtin/index.html#error">error</a></pre>
+				<p>
+Output writes the output for a logging event.  The string s contains
+the text to print after the prefix specified by the flags of the
+Logger.  A newline is appended if the last character of s is not
+already a newline.  Calldepth is used to recover the PC and is
+provided for generality, although at the moment on all pre-defined
+paths it will be 2.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Panic">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=6172:6212#L180">Panic</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Panic(v ...interface{})</pre>
+				<p>
+Panic is equivalent to l.Print() followed by a call to panic().
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Panicf">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=6336:6392#L187">Panicf</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Panicf(format <a href="../builtin/index.html#string">string</a>, v ...interface{})</pre>
+				<p>
+Panicf is equivalent to l.Printf() followed by a call to panic().
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Panicln">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=6527:6569#L194">Panicln</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Panicln(v ...interface{})</pre>
+				<p>
+Panicln is equivalent to l.Println() followed by a call to panic().
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Prefix">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=6951:6983#L215">Prefix</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Prefix() <a href="../builtin/index.html#string">string</a></pre>
+				<p>
+Prefix returns the output prefix for the logger.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Print">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=5332:5372#L155">Print</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Print(v ...interface{})</pre>
+				<p>
+Print calls l.Output to print to the logger.
+Arguments are handled in the manner of fmt.Print.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Printf">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=5129:5185#L149">Printf</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Printf(format <a href="../builtin/index.html#string">string</a>, v ...interface{})</pre>
+				<p>
+Printf calls l.Output to print to the logger.
+Arguments are handled in the manner of fmt.Printf.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.Println">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=5513:5555#L159">Println</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) Println(v ...interface{})</pre>
+				<p>
+Println calls l.Output to print to the logger.
+Arguments are handled in the manner of fmt.Println.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.SetFlags">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=6809:6844#L208">SetFlags</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) SetFlags(flag <a href="../builtin/index.html#int">int</a>)</pre>
+				<p>
+SetFlags sets the output flags for the logger.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Logger.SetPrefix">func (*Logger) <a href="http://golang.org/src/pkg/log/log.go?s=7092:7133#L222">SetPrefix</a></h3>
+				<pre>func (l *<a href="#Logger">Logger</a>) SetPrefix(prefix <a href="../builtin/index.html#string">string</a>)</pre>
+				<p>
+SetPrefix sets the output prefix for the logger.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="../index.html">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="syslog/index.html">syslog</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto">Package syslog provides a simple interface to the system log service.</td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=358&id=1380993864275199', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/log/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

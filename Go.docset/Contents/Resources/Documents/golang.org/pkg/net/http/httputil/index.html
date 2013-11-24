@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/net/http/httputil/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>httputil</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package httputil</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "net/http/httputil"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package httputil provides HTTP utility functions, complementing the
+more common ones in the net/http package.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#DumpRequest">func DumpRequest(req *http.Request, body bool) (dump []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#DumpRequestOut">func DumpRequestOut(req *http.Request, body bool) ([]byte, error)</a></dd>
+			
+				
+				<dd><a href="#DumpResponse">func DumpResponse(resp *http.Response, body bool) (dump []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#NewChunkedReader">func NewChunkedReader(r io.Reader) io.Reader</a></dd>
+			
+				
+				<dd><a href="#NewChunkedWriter">func NewChunkedWriter(w io.Writer) io.WriteCloser</a></dd>
+			
+			
+				
+				<dd><a href="#ClientConn">type ClientConn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewClientConn">func NewClientConn(c net.Conn, r *bufio.Reader) *ClientConn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewProxyClientConn">func NewProxyClientConn(c net.Conn, r *bufio.Reader) *ClientConn</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ClientConn.Close">func (cc *ClientConn) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ClientConn.Do">func (cc *ClientConn) Do(req *http.Request) (resp *http.Response, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ClientConn.Hijack">func (cc *ClientConn) Hijack() (c net.Conn, r *bufio.Reader)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ClientConn.Pending">func (cc *ClientConn) Pending() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ClientConn.Read">func (cc *ClientConn) Read(req *http.Request) (resp *http.Response, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ClientConn.Write">func (cc *ClientConn) Write(req *http.Request) (err error)</a></dd>
+				
+			
+				
+				<dd><a href="#ReverseProxy">type ReverseProxy</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewSingleHostReverseProxy">func NewSingleHostReverseProxy(target *url.URL) *ReverseProxy</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ReverseProxy.ServeHTTP">func (p *ReverseProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request)</a></dd>
+				
+			
+				
+				<dd><a href="#ServerConn">type ServerConn</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewServerConn">func NewServerConn(c net.Conn, r *bufio.Reader) *ServerConn</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ServerConn.Close">func (sc *ServerConn) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ServerConn.Hijack">func (sc *ServerConn) Hijack() (c net.Conn, r *bufio.Reader)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ServerConn.Pending">func (sc *ServerConn) Pending() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ServerConn.Read">func (sc *ServerConn) Read() (req *http.Request, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ServerConn.Write">func (sc *ServerConn) Write(req *http.Request, resp *http.Response) error</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/net/http/httputil/chunked.go">chunked.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/http/httputil/dump.go">dump.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/http/httputil/persist.go">persist.go</a>
+			
+				<a href="http://golang.org/src/pkg/net/http/httputil/reverseproxy.go">reverseproxy.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+        <span id="ErrPersistEOF">ErrPersistEOF</span> = &amp;<a href="../index.html">http</a>.<a href="../index.html#ProtocolError">ProtocolError</a>{<a href="#ErrorString">ErrorString</a>: &#34;persistent connection closed&#34;}
+        <span id="ErrClosed">ErrClosed</span>     = &amp;<a href="../index.html">http</a>.<a href="../index.html#ProtocolError">ProtocolError</a>{<a href="#ErrorString">ErrorString</a>: &#34;connection closed by user&#34;}
+        <span id="ErrPipeline">ErrPipeline</span>   = &amp;<a href="../index.html">http</a>.<a href="../index.html#ProtocolError">ProtocolError</a>{<a href="#ErrorString">ErrorString</a>: &#34;pipeline error&#34;}
+)</pre>
+				
+			
+				<pre>var <span id="ErrLineTooLong">ErrLineTooLong</span> = <a href="../../../errors/index.html">errors</a>.<a href="../../../errors/index.html#New">New</a>(&#34;header line too long&#34;)</pre>
+				
+			
+		
+		
+			
+			
+			<h2 id="DumpRequest">func <a href="http://golang.org/src/pkg/net/http/httputil/dump.go?s=4253:4324#L138">DumpRequest</a></h2>
+			<pre>func DumpRequest(req *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>, body <a href="../../../builtin/index.html#bool">bool</a>) (dump []<a href="../../../builtin/index.html#byte">byte</a>, err <a href="../../../builtin/index.html#error">error</a>)</pre>
+			<p>
+DumpRequest returns the as-received wire representation of req,
+optionally including the request body, for debugging.
+DumpRequest is semantically a no-op, but in order to
+dump the body, it reads the body data into memory and
+changes req.Body to refer to the in-memory copy.
+The documentation for http.Request.Write details which fields
+of req are used.
+</p>
+
+			
+		
+			
+			
+			<h2 id="DumpRequestOut">func <a href="http://golang.org/src/pkg/net/http/httputil/dump.go?s=1501:1566#L41">DumpRequestOut</a></h2>
+			<pre>func DumpRequestOut(req *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>, body <a href="../../../builtin/index.html#bool">bool</a>) ([]<a href="../../../builtin/index.html#byte">byte</a>, <a href="../../../builtin/index.html#error">error</a>)</pre>
+			<p>
+DumpRequestOut is like DumpRequest but includes
+headers that the standard http.Transport adds,
+such as User-Agent.
+</p>
+
+			
+		
+			
+			
+			<h2 id="DumpResponse">func <a href="http://golang.org/src/pkg/net/http/httputil/dump.go?s=5517:5591#L198">DumpResponse</a></h2>
+			<pre>func DumpResponse(resp *<a href="../index.html">http</a>.<a href="../index.html#Response">Response</a>, body <a href="../../../builtin/index.html#bool">bool</a>) (dump []<a href="../../../builtin/index.html#byte">byte</a>, err <a href="../../../builtin/index.html#error">error</a>)</pre>
+			<p>
+DumpResponse is like DumpRequest but dumps a response.
+</p>
+
+			
+		
+			
+			
+			<h2 id="NewChunkedReader">func <a href="http://golang.org/src/pkg/net/http/httputil/chunked.go?s=930:974#L21">NewChunkedReader</a></h2>
+			<pre>func NewChunkedReader(r <a href="../../../io/index.html">io</a>.<a href="../../../io/index.html#Reader">Reader</a>) <a href="../../../io/index.html">io</a>.<a href="../../../io/index.html#Reader">Reader</a></pre>
+			<p>
+NewChunkedReader returns a new chunkedReader that translates the data read from r
+out of HTTP &#34;chunked&#34; format before returning it.
+The chunkedReader returns io.EOF when the final 0-length chunk is read.
+</p>
+<p>
+NewChunkedReader is not needed by normal applications. The http package
+automatically decodes chunking when reading response bodies.
+</p>
+
+			
+		
+			
+			
+			<h2 id="NewChunkedWriter">func <a href="http://golang.org/src/pkg/net/http/httputil/chunked.go?s=3374:3423#L119">NewChunkedWriter</a></h2>
+			<pre>func NewChunkedWriter(w <a href="../../../io/index.html">io</a>.<a href="../../../io/index.html#Writer">Writer</a>) <a href="../../../io/index.html">io</a>.<a href="../../../io/index.html#WriteCloser">WriteCloser</a></pre>
+			<p>
+NewChunkedWriter returns a new chunkedWriter that translates writes into HTTP
+&#34;chunked&#34; format before writing them to w. Closing the returned chunkedWriter
+sends the final 0-length chunk that marks the end of the stream.
+</p>
+<p>
+NewChunkedWriter is not needed by normal applications. The http
+package adds chunking automatically if handlers don&#39;t set a
+Content-Length header. Using NewChunkedWriter inside a handler
+would result in double chunking or chunking with a Content-Length
+length, both of which are wrong.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="ClientConn">type <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=6230:6598#L218">ClientConn</a></h2>
+			<pre>type ClientConn struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A ClientConn sends request and receives headers over an underlying
+connection, while respecting the HTTP keepalive logic. ClientConn
+supports hijacking the connection calling Hijack to
+regain control of the underlying net.Conn and deal with it as desired.
+</p>
+<p>
+ClientConn is low-level and should not be needed by most applications.
+See Client.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewClientConn">func <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=6726:6785#L233">NewClientConn</a></h3>
+				<pre>func NewClientConn(c <a href="../../index.html">net</a>.<a href="../../index.html#Conn">Conn</a>, r *<a href="../../../bufio/index.html">bufio</a>.<a href="../../../bufio/index.html#Reader">Reader</a>) *<a href="#ClientConn">ClientConn</a></pre>
+				<p>
+NewClientConn returns a new ClientConn reading and writing c.  If r is not
+nil, it is the buffer to use when reading c.
+</p>
+
+				
+			
+				
+				<h3 id="NewProxyClientConn">func <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=7070:7134#L247">NewProxyClientConn</a></h3>
+				<pre>func NewProxyClientConn(c <a href="../../index.html">net</a>.<a href="../../index.html#Conn">Conn</a>, r *<a href="../../../bufio/index.html">bufio</a>.<a href="../../../bufio/index.html#Reader">Reader</a>) *<a href="#ClientConn">ClientConn</a></pre>
+				<p>
+NewProxyClientConn works like NewClientConn but writes Requests
+using Request&#39;s WriteProxy method.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="ClientConn.Close">func (*ClientConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=7751:7786#L268">Close</a></h3>
+				<pre>func (cc *<a href="#ClientConn">ClientConn</a>) Close() <a href="../../../builtin/index.html#error">error</a></pre>
+				<p>
+Close calls Hijack and then also closes the underlying connection
+</p>
+
+				
+				
+			
+				
+				<h3 id="ClientConn.Do">func (*ClientConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=11069:11145#L406">Do</a></h3>
+				<pre>func (cc *<a href="#ClientConn">ClientConn</a>) Do(req *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>) (resp *<a href="../index.html">http</a>.<a href="../index.html#Response">Response</a>, err <a href="../../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Do is convenience method that writes a request and reads a response.
+</p>
+
+				
+				
+			
+				
+				<h3 id="ClientConn.Hijack">func (*ClientConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=7528:7588#L257">Hijack</a></h3>
+				<pre>func (cc *<a href="#ClientConn">ClientConn</a>) Hijack() (c <a href="../../index.html">net</a>.<a href="../../index.html#Conn">Conn</a>, r *<a href="../../../bufio/index.html">bufio</a>.<a href="../../../bufio/index.html#Reader">Reader</a>)</pre>
+				<p>
+Hijack detaches the ClientConn and returns the underlying connection as well
+as the read-side bufio which may have some left over data. Hijack may be
+called before the user or Read have signaled the end of the keep-alive
+logic. The user should not call Hijack while Read or Write is in progress.
+</p>
+
+				
+				
+			
+				
+				<h3 id="ClientConn.Pending">func (*ClientConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=9342:9377#L334">Pending</a></h3>
+				<pre>func (cc *<a href="#ClientConn">ClientConn</a>) Pending() <a href="../../../builtin/index.html#int">int</a></pre>
+				<p>
+Pending returns the number of unanswered requests
+that have been sent on the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="ClientConn.Read">func (*ClientConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=9722:9800#L344">Read</a></h3>
+				<pre>func (cc *<a href="#ClientConn">ClientConn</a>) Read(req *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>) (resp *<a href="../index.html">http</a>.<a href="../index.html#Response">Response</a>, err <a href="../../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Read reads the next response from the wire. A valid response might be
+returned together with an ErrPersistEOF, which means that the remote
+requested that this be the last request serviced. Read can be called
+concurrently with Write, but not with another Read.
+</p>
+
+				
+				
+			
+				
+				<h3 id="ClientConn.Write">func (*ClientConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=8251:8309#L281">Write</a></h3>
+				<pre>func (cc *<a href="#ClientConn">ClientConn</a>) Write(req *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>) (err <a href="../../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Write writes a request. An ErrPersistEOF error is returned if the connection
+has been closed in an HTTP keepalive sense. If req.Close equals true, the
+keepalive connection is logically closed after this request and the opposing
+server is informed. An ErrUnexpectedEOF indicates the remote closed the
+underlying TCP connection, which is usually considered as graceful close.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="ReverseProxy">type <a href="http://golang.org/src/pkg/net/http/httputil/reverseproxy.go?s=564:1115#L17">ReverseProxy</a></h2>
+			<pre>type ReverseProxy struct {
+        <span class="comment">// Director must be a function which modifies</span>
+        <span class="comment">// the request into a new request to be sent</span>
+        <span class="comment">// using Transport. Its response is then copied</span>
+        <span class="comment">// back to the original client unmodified.</span>
+        Director func(*<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>)
+
+        <span class="comment">// The transport used to perform proxy requests.</span>
+        <span class="comment">// If nil, http.DefaultTransport is used.</span>
+        Transport <a href="../index.html">http</a>.<a href="../index.html#RoundTripper">RoundTripper</a>
+
+        <span class="comment">// FlushInterval specifies the flush interval</span>
+        <span class="comment">// to flush to the client while copying the</span>
+        <span class="comment">// response body.</span>
+        <span class="comment">// If zero, no periodic flushing is done.</span>
+        FlushInterval <a href="../../../time/index.html">time</a>.<a href="../../../time/index.html#Duration">Duration</a>
+}</pre>
+			<p>
+ReverseProxy is an HTTP Handler that takes an incoming request and
+sends it to another server, proxying the response back to the
+client.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewSingleHostReverseProxy">func <a href="http://golang.org/src/pkg/net/http/httputil/reverseproxy.go?s=1611:1672#L51">NewSingleHostReverseProxy</a></h3>
+				<pre>func NewSingleHostReverseProxy(target *<a href="../../url/index.html">url</a>.<a href="../../url/index.html#URL">URL</a>) *<a href="#ReverseProxy">ReverseProxy</a></pre>
+				<p>
+NewSingleHostReverseProxy returns a new ReverseProxy that rewrites
+URLs to the scheme, host, and base path provided in target. If the
+target&#39;s path is &#34;/base&#34; and the incoming request was for &#34;/dir&#34;,
+the target request will be for /base/dir.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="ReverseProxy.ServeHTTP">func (*ReverseProxy) <a href="http://golang.org/src/pkg/net/http/httputil/reverseproxy.go?s=2534:2609#L87">ServeHTTP</a></h3>
+				<pre>func (p *<a href="#ReverseProxy">ReverseProxy</a>) ServeHTTP(rw <a href="../index.html">http</a>.<a href="../index.html#ResponseWriter">ResponseWriter</a>, req *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>)</pre>
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ServerConn">type <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=1291:1608#L28">ServerConn</a></h2>
+			<pre>type ServerConn struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A ServerConn reads requests and sends responses over an underlying
+connection, until the HTTP keepalive logic commands an end. ServerConn
+also allows hijacking the underlying connection by calling Hijack
+to regain control over the connection. ServerConn supports pipe-lining,
+i.e. requests can be read out of sync (but in the same order) while the
+respective responses are sent.
+</p>
+<p>
+ServerConn is low-level and should not be needed by most applications.
+See Server.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewServerConn">func <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=1736:1795#L42">NewServerConn</a></h3>
+				<pre>func NewServerConn(c <a href="../../index.html">net</a>.<a href="../../index.html#Conn">Conn</a>, r *<a href="../../../bufio/index.html">bufio</a>.<a href="../../../bufio/index.html#Reader">Reader</a>) *<a href="#ServerConn">ServerConn</a></pre>
+				<p>
+NewServerConn returns a new ServerConn reading and writing c.  If r is not
+nil, it is the buffer to use when reading c.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="ServerConn.Close">func (*ServerConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=2433:2468#L64">Close</a></h3>
+				<pre>func (sc *<a href="#ServerConn">ServerConn</a>) Close() <a href="../../../builtin/index.html#error">error</a></pre>
+				<p>
+Close calls Hijack and then also closes the underlying connection
+</p>
+
+				
+				
+			
+				
+				<h3 id="ServerConn.Hijack">func (*ServerConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=2210:2270#L53">Hijack</a></h3>
+				<pre>func (sc *<a href="#ServerConn">ServerConn</a>) Hijack() (c <a href="../../index.html">net</a>.<a href="../../index.html#Conn">Conn</a>, r *<a href="../../../bufio/index.html">bufio</a>.<a href="../../../bufio/index.html#Reader">Reader</a>)</pre>
+				<p>
+Hijack detaches the ServerConn and returns the underlying connection as well
+as the read-side bufio which may have some left over data. Hijack may be
+called before Read has signaled the end of the keep-alive logic. The user
+should not call Hijack while Read or Write is in progress.
+</p>
+
+				
+				
+			
+				
+				<h3 id="ServerConn.Pending">func (*ServerConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=4525:4560#L152">Pending</a></h3>
+				<pre>func (sc *<a href="#ServerConn">ServerConn</a>) Pending() <a href="../../../builtin/index.html#int">int</a></pre>
+				<p>
+Pending returns the number of unanswered requests
+that have been received on the connection.
+</p>
+
+				
+				
+			
+				
+				<h3 id="ServerConn.Read">func (*ServerConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=2803:2862#L76">Read</a></h3>
+				<pre>func (sc *<a href="#ServerConn">ServerConn</a>) Read() (req *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>, err <a href="../../../builtin/index.html#error">error</a>)</pre>
+				<p>
+Read returns the next request on the wire. An ErrPersistEOF is returned if
+it is gracefully determined that there are no more requests (e.g. after the
+first request on an HTTP/1.0 connection, or after a Connection:close on a
+HTTP/1.1 connection).
+</p>
+
+				
+				
+			
+				
+				<h3 id="ServerConn.Write">func (*ServerConn) <a href="http://golang.org/src/pkg/net/http/httputil/persist.go?s=4872:4945#L161">Write</a></h3>
+				<pre>func (sc *<a href="#ServerConn">ServerConn</a>) Write(req *<a href="../index.html">http</a>.<a href="../index.html#Request">Request</a>, resp *<a href="../index.html">http</a>.<a href="../index.html#Response">Response</a>) <a href="../../../builtin/index.html#error">error</a></pre>
+				<p>
+Write writes resp in response to req. To close the connection gracefully, set the
+Response.Close field to true. Write should be considered operational until
+it returns an error, regardless of any errors returned on the Read side.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=260&s_ttfb=268&id=1380993864961430', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/net/http/httputil/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:46 GMT -->
+</html>
+

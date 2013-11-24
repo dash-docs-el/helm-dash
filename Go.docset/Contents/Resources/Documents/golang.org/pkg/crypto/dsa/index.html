@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from golang.org/pkg/crypto/dsa/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>dsa</title>
+
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="http://golang.org/opensearch.xml"/>
+
+<script type="text/javascript">window.initFuncs=[];</script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11222381-2"]);_gaq.push(["_trackPageview"]);</script>
+</head>
+<body>
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="http://golang.org/search">
+<div id="menu">
+<a href="http://golang.org/doc/">Documents</a>
+<a href="../../index.html">Packages</a>
+<a href="http://golang.org/project/">The Project</a>
+<a href="http://golang.org/help/">Help</a>
+<a href="http://golang.org/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="http://golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <div id="plusone"><g:plusone size="small" annotation="none"></g:plusone></div>
+  <h1>Package dsa</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "crypto/dsa"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#_index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package dsa implements the Digital Signature Algorithm, as defined in FIPS 186-3.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="_index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#GenerateKey">func GenerateKey(priv *PrivateKey, rand io.Reader) error</a></dd>
+			
+				
+				<dd><a href="#GenerateParameters">func GenerateParameters(params *Parameters, rand io.Reader, sizes ParameterSizes) (err error)</a></dd>
+			
+				
+				<dd><a href="#Sign">func Sign(rand io.Reader, priv *PrivateKey, hash []byte) (r, s *big.Int, err error)</a></dd>
+			
+				
+				<dd><a href="#Verify">func Verify(pub *PublicKey, hash []byte, r, s *big.Int) bool</a></dd>
+			
+			
+				
+				<dd><a href="#ParameterSizes">type ParameterSizes</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Parameters">type Parameters</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PrivateKey">type PrivateKey</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PublicKey">type PublicKey</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://golang.org/src/pkg/crypto/dsa/dsa.go">dsa.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #_index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrInvalidPublicKey">ErrInvalidPublicKey</span> = <a href="../../errors/index.html">errors</a>.<a href="../../errors/index.html#New">New</a>(&#34;crypto/dsa: invalid public key&#34;)</pre>
+				<p>
+ErrInvalidPublicKey results when a public key is not usable by this code.
+FIPS is quite strict about the format of DSA keys, but other code may be
+less so. Thus, when using keys which may have been generated by other code,
+this error must be handled.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="GenerateKey">func <a href="http://golang.org/src/pkg/crypto/dsa/dsa.go?s=3303:3359#L141">GenerateKey</a></h2>
+			<pre>func GenerateKey(priv *<a href="#PrivateKey">PrivateKey</a>, rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>) <a href="../../builtin/index.html#error">error</a></pre>
+			<p>
+GenerateKey generates a public&amp;private key pair. The Parameters of the
+PrivateKey must already be valid (see GenerateParameters).
+</p>
+
+			
+		
+			
+			
+			<h2 id="GenerateParameters">func <a href="http://golang.org/src/pkg/crypto/dsa/dsa.go?s=1573:1666#L45">GenerateParameters</a></h2>
+			<pre>func GenerateParameters(params *<a href="#Parameters">Parameters</a>, rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, sizes <a href="#ParameterSizes">ParameterSizes</a>) (err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+GenerateParameters puts a random, valid set of DSA parameters into params.
+This function takes many seconds, even on fast machines.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Sign">func <a href="http://golang.org/src/pkg/crypto/dsa/dsa.go?s=4230:4313#L174">Sign</a></h2>
+			<pre>func Sign(rand <a href="../../io/index.html">io</a>.<a href="../../io/index.html#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, hash []<a href="../../builtin/index.html#byte">byte</a>) (r, s *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a>, err <a href="../../builtin/index.html#error">error</a>)</pre>
+			<p>
+Sign signs an arbitrary length hash (which should be the result of hashing a
+larger message) using the private key, priv. It returns the signature as a
+pair of integers. The security of the private key depends on the entropy of
+rand.
+</p>
+<p>
+Note that FIPS 186-3 section 4.6 specifies that the hash should be truncated
+to the byte-length of the subgroup. This function does not perform that
+truncation itself.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Verify">func <a href="http://golang.org/src/pkg/crypto/dsa/dsa.go?s=5269:5329#L229">Verify</a></h2>
+			<pre>func Verify(pub *<a href="#PublicKey">PublicKey</a>, hash []<a href="../../builtin/index.html#byte">byte</a>, r, s *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a>) <a href="../../builtin/index.html#bool">bool</a></pre>
+			<p>
+Verify verifies the signature in r, s of hash using the public key, pub. It
+reports whether the signature is valid.
+</p>
+<p>
+Note that FIPS 186-3 section 4.6 specifies that the hash should be truncated
+to the byte-length of the subgroup. This function does not perform that
+truncation itself.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="ParameterSizes">type <a href="http://golang.org/src/pkg/crypto/dsa/dsa.go?s=1161:1184#L30">ParameterSizes</a></h2>
+			<pre>type ParameterSizes <a href="../../builtin/index.html#int">int</a></pre>
+			<p>
+ParameterSizes is a enumeration of the acceptable bit lengths of the primes
+in a set of DSA parameters. See FIPS 186-3, section 4.2.
+</p>
+
+
+			
+				<pre>const (
+        <span id="L1024N160">L1024N160</span> <a href="#ParameterSizes">ParameterSizes</a> = <a href="../../builtin/index.html#iota">iota</a>
+        <span id="L2048N224">L2048N224</span>
+        <span id="L2048N256">L2048N256</span>
+        <span id="L3072N256">L3072N256</span>
+)</pre>
+				
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Parameters">type <a href="http://golang.org/src/pkg/crypto/dsa/dsa.go?s=453:497#L6">Parameters</a></h2>
+			<pre>type Parameters struct {
+        P, Q, G *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a>
+}</pre>
+			<p>
+Parameters represents the domain parameters for a key. These parameters can
+be shared across many keys. The bit length of Q must be a multiple of 8.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PrivateKey">type <a href="http://golang.org/src/pkg/crypto/dsa/dsa.go?s=636:685#L17">PrivateKey</a></h2>
+			<pre>type PrivateKey struct {
+        <a href="#PublicKey">PublicKey</a>
+        X *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a>
+}</pre>
+			<p>
+PrivateKey represents a DSA private key.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PublicKey">type <a href="http://golang.org/src/pkg/crypto/dsa/dsa.go?s=541:590#L11">PublicKey</a></h2>
+			<pre>type PublicKey struct {
+        <a href="#Parameters">Parameters</a>
+        Y *<a href="../../math/big/index.html">big</a>.<a href="../../math/big/index.html#Int">Int</a>
+}</pre>
+			<p>
+PublicKey represents a DSA public key.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.1.2.<br>
+Except as <a href="http://code.google.com/policies.html#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://golang.org/LICENSE">BSD license</a>.<br>
+<a href="http://golang.org/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<script type="text/javascript" src="../../../../ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s);})();</script>
+<script pagespeed_no_defer="">(function(){var e=window,f=Math,g="round",h="performance",k="&rit_script=",r="&rit_link=",y="&rit_img=",z="&rit_css=",A="&nttfb=",B="&nfd=",C="&ndt=",D="&nct=",E="&nbt=",F="&mfd=",G="&attfb=",H="&afd=",I="&adt=",J="&act=",K="&abt=",L="";e.pagespeed=e.pagespeed||{};var M=e.pagespeed;
+M.getResourceTimingData=function(){if(e[h]&&(e[h].getEntries||e[h].webkitGetEntries)){for(var s=0,t=0,l=0,u=0,m=0,v=0,n=0,w=0,p=0,x=0,q=0,c={},d=e[h].getEntries?e[h].getEntries():e[h].webkitGetEntries(),b=0;b<d.length;b++){var a=d[b].duration;0<a&&(s+=a,++l,t=f.max(t,a));a=d[b].connectEnd-d[b].connectStart;0<a&&(v+=a,++n);a=d[b].domainLookupEnd-d[b].domainLookupStart;0<a&&(u+=a,++m);a=d[b].initiatorType;c[a]?++c[a]:c[a]=1;a=d[b].requestStart-d[b].fetchStart;0<a&&(x+=a,++q);a=d[b].responseStart-d[b].requestStart;
+0<a&&(w+=a,++p)}return H+(l?f[g](s/l):0)+B+l+F+f[g](t)+J+(n?f[g](v/n):0)+D+n+I+(m?f[g](u/m):0)+C+m+K+(q?f[g](x/q):0)+E+q+G+(p?f[g](w/p):0)+A+p+(c.css?z+c.css:L)+(c.link?r+c.link:L)+(c.script?k+c.script:L)+(c.img?y+c.img:L)}return L};M.getResourceTimingData=M.getResourceTimingData;})();
+(function(){var c=encodeURIComponent,f=window,h="performance",k="unload:",l="on",m="load:",n="load",p="ets=",q="beforeunload",r="EventStart",s="?",t="=",u="&url=",v="&ttfb=",w="&req_start=",x="&ref=",y="&r",z="&nt=",A="&nrp=",B="&nav=",C="&ifr=1",D="&ifr=0",E="&htmlAt=",F="&fp=",G="&dwld=",H="&dom_c=",I="&dns=",J="&connect=",K="&ccul=",L="&ccrl=",M="&ccos=",N="&ccis=",O="&cces=",P="&b_csi=",Q="&",R="";f.pagespeed=f.pagespeed||{};var S=f.pagespeed,T=function(a,d,b,e){this.d=a;this.a=d;this.b=b;this.e=e};S.beaconUrl=R;
+T.prototype.c=function(){var a=this.d,d=f.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf(s)?s:Q),a=a+p+(this.a==n?m:k),a=a+b;if(this.a!=q||!f.mod_pagespeed_loaded){a+=y+this.a+t;if(f[h]){var b=f[h].timing,e=b.navigationStart,g=b.requestStart,a=a+(b[this.a+r]-e),a=a+(B+(b.fetchStart-e)),a=a+(I+(b.domainLookupEnd-b.domainLookupStart)),a=a+(J+(b.connectEnd-b.connectStart)),a=a+(w+(g-e)),a=a+(v+(b.responseStart-g)),a=a+(G+(b.responseEnd-b.responseStart)),a=a+(H+(b.domContentLoadedEventStart-
+e));f[h].navigation&&(a+=z+f[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:f.chrome&&f.chrome.loadTimes&&(e=Math.floor(1E3*f.chrome.loadTimes().firstPaintTime));e-=g;0<=e&&(a+=F+e)}else a+=b;S.getResourceTimingData&&f.parent==f&&(a+=S.getResourceTimingData());a+=f.parent!=f?C:D;this.a==n&&(f.mod_pagespeed_loaded=!0,(b=f.mod_pagespeed_num_resources_prefetched)&&(a+=A+b),(b=f.mod_pagespeed_prefetch_start)&&(a+=E+(d-b)));S.panelLoader&&(d=S.panelLoader.getCsiTimingsString(),d!=R&&(a+=P+d));
+S.criticalCss&&(d=S.criticalCss,a+=N+d.total_critical_inlined_size+O+d.total_original_external_size+M+d.total_overhead_size+L+d.num_replaced_links+K+d.num_unreplaced_links);this.b!=R&&(a+=this.b);document.referrer&&(a+=x+c(document.referrer));a+=u+c(this.e);S.beaconUrl=a;(new Image).src=a}};S.f=function(a,d,b,e){var g=new T(a,d,b,e);f.addEventListener?f.addEventListener(d,function(){g.c()},!1):f.attachEvent(l+d,function(){g.c()})};S.addInstrumentationInit=S.f;})();
+
+pagespeed.addInstrumentationInit('http://1-ps.googleusercontent.com/beacon?org=110_1_sn', 'load', '&ft=472&id=1380993860668725', 'index.html');</script></body>
+
+<!-- Mirrored from golang.org/pkg/crypto/dsa/ by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 05 Oct 2013 17:24:45 GMT -->
+</html>
+
