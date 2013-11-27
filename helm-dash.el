@@ -54,16 +54,26 @@
               helm-dash-active-docsets))
 
 (defun helm-dash-search ()
-  "Iterates every connection looking for the `helm-pattern'."
+  "Iterates every `helm-dash-connections' looking for the
+`helm-pattern'."
   (let ((db "searchIndex")
         (full-res (list)))
     (dolist (docset helm-dash-connections)
+      (message (format "ini: %s => %s" (current-time) (car docset)))
       (let ((res
-             (sqlite-query (cdr docset)
-                           (format
-                            "SELECT t.type, t.name, t.path FROM %s t WHERE \"name\" like \"%%%s%%\" order by lower(t.name)"
-                            db helm-pattern))))
+             (and
+              ;; hack to avoid sqlite hanging (timeouting) because of no results
+              (< 0 (string-to-number (caadr (sqlite-query (cdr docset)
+                                                                  (format
+                                                                   "SELECT COUNT(*) FROM %s t WHERE \"name\" like \"%%%s%%\""
+                                                                   db helm-pattern)))))
+              (sqlite-query (cdr docset)
+                            (format
+                             "SELECT t.type, t.name, t.path FROM %s t WHERE \"name\" like \"%%%s%%\" order by lower(t.name)"
+                             db helm-pattern)))))
+
         ;; how to do the appending properly?
+        (message (format "mid: %s => %s" (current-time) (car docset)))
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
@@ -72,7 +82,8 @@
                                                        helm-dash-docsets-path
                                                        (format "%s.docset/Contents/Resources/Documents/" (car docset))
                                                        (caddr x))))
-                              res)))))
+                              res))))
+        (message (format "fin: %s => %s" (current-time) (car docset))))
     full-res))
 
 ;; (defun helm-dash-browse-webdoc (webdoc)
@@ -88,7 +99,6 @@
     (requires-pattern . 3)
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
-
 ;;;###autoload
 (defun helm-dash ()
   "Bring up a Spotify search interface in helm."

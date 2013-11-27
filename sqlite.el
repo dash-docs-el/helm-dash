@@ -283,10 +283,14 @@ The result is a \"table\" like the following:
       (error "SQLite process buffer doesn't exist!"))
     (with-current-buffer sqlite-output-buffer
       (erase-buffer)
+      (message (format "  inside-query  INI: %s" (current-time)))
+
       (comint-redirect-send-command-to-process
        (sqlite-prepare-query sql-command) ;; Sometimes developers don't want to add a ";" in the query...
        sqlite-output-buffer (get-buffer-process process-buffer) nil t)
+      (message (format "  inside-query  FIN: %s" (current-time)))
       (accept-process-output (get-buffer-process process-buffer) 1)  ;need to wait to obtain results
+      (message (format "  inside-query  AFT: %s" (current-time)))
       (let ((result (sqlite-parse-result))) ;; we want to return the result! not the erase-buffer return value
 	(erase-buffer)
 	result)
