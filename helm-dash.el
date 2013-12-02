@@ -53,6 +53,24 @@
                 (cons x (connect-to-docset x)))
               helm-dash-active-docsets))
 
+(setq dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master")
+(defun helm-dash-install-docset (name)
+  "Download docset with specified NAME and move its stuff to docsets-path."
+  (interactive "sDocset to install: ")
+  (let ((feed-url (format "%s/%s.xml" dash-docsets-url-path name))
+        (docset-tmp-path (format "/tmp/%s-docset.tgz" name))
+        (feed-tmp-path (format "/tmp/%s-feed.xml" name)))
+    (url-copy-file feed-url feed-tmp-path t)
+    (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
+    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path helm-dash-docsets-path))))
+
+(defun helm-dash-get-docset-url (feed-path)
+  ""
+  (let* ((xml (xml-parse-file feed-path))
+         (urls (car xml))
+         (url (xml-get-children urls 'url)))
+    (caddr (first url))))
+
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the
 `helm-pattern'."
