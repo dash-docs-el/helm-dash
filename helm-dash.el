@@ -38,6 +38,8 @@
 
 (require 'helm)
 (require 'sqlite)
+(require 'json)
+(require 'ido)
 
 (defcustom helm-dash-docsets-path "/home/kidd/programmingStuff/d/" "Default path for docsets.")
 (defcustom helm-dash-active-docsets '( "Go" "HttpLuaModule") ".")
@@ -53,13 +55,34 @@
                 (cons x (connect-to-docset x)))
               helm-dash-active-docsets))
 
+(defun helm-dash-search-all-docsets ()
+  (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
+    (with-current-buffer
+        (url-retrieve-synchronously url)
+      (goto-char url-http-end-of-headers)
+      (json-read))))
+
+(defun helm-dash-available-docsets ()
+  ""
+  (delq nil (mapcar (lambda (docset)
+            (let ((name (assoc-default 'name (cdr docset))))
+              (unless (member name '(".gitignore" ".DS_Store" "price.txt"))
+                (substring  name 0 -4)
+                  )             
+              )
+            )
+          (helm-dash-search-all-docsets))))
+
 (setq dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master")
-(defun helm-dash-install-docset (name)
+(defun helm-dash-install-docset ()
   "Download docset with specified NAME and move its stuff to docsets-path."
-  (interactive "sDocset to install: ")
-  (let ((feed-url (format "%s/%s.xml" dash-docsets-url-path name))
-        (docset-tmp-path (format "/tmp/%s-docset.tgz" name))
-        (feed-tmp-path (format "/tmp/%s-feed.xml" name)))
+
+  (interactive)
+  (let* ((docset-name (ido-completing-read "Install docset: " (helm-dash-available-docsets)))
+        (feed-url (format "%s/%s.xml" dash-docsets-url-path docset-name))
+        (docset-tmp-path (format "/tmp/%s-docset.tgz" docset-name))
+        (feed-tmp-path (format "/tmp/%s-feed.xml" docset-name))
+        )
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
     (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path helm-dash-docsets-path))))
@@ -119,7 +142,7 @@
     (action-transformer . helm-dash-actions)))
 ;;;###autoload
 (defun helm-dash ()
-  "Bring up a Spotify search interface in helm."
+  "Bring up a Dash search interface in helm."
   (interactive)
   (helm :sources '(helm-source-dash-search)
 	:buffer "*helm-dash*"))
