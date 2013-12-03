@@ -41,19 +41,28 @@
 (require 'json)
 (require 'ido)
 
-(defcustom helm-dash-docsets-path "/home/kidd/programmingStuff/d/" "Default path for docsets.")
+(defgroup helm-dash nil
+  "Experimental task management."
+  :prefix "helm-dash-"
+  :group 'applications)
+
+(defcustom helm-dash-docsets-path "/home/kidd/programmingStuff/d/" "Default path for docsets."
+  :group 'helm-dash)
 (defcustom helm-dash-active-docsets '( "Go" "HttpLuaModule") ".")
+
+(defcustom  dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master"
+  "Foo." :group 'helm-dash)
 
 (defun connect-to-docset (docset)
       (sqlite-init (format
                     "%s.docset/Contents/Resources/docSet.dsidx"
                     docset)))
 
+(defvar  helm-dash-connections
 ;;; create conses like ("Go" . connection)
-(setq helm-dash-connections
-      (mapcar (lambda (x)
-                (cons x (connect-to-docset x)))
-              helm-dash-active-docsets))
+  (mapcar (lambda (x)
+            (cons x (connect-to-docset x)))
+          helm-dash-active-docsets))
 
 (defun helm-dash-search-all-docsets ()
   (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
@@ -65,24 +74,21 @@
 (defun helm-dash-available-docsets ()
   ""
   (delq nil (mapcar (lambda (docset)
-            (let ((name (assoc-default 'name (cdr docset))))
-              (unless (member name '(".gitignore" ".DS_Store" "price.txt"))
-                (substring  name 0 -4)
-                  )             
-              )
-            )
-          (helm-dash-search-all-docsets))))
+                      (let ((name (assoc-default 'name (cdr docset))))
+                        (unless (member name '(".gitignore" ".DS_Store" "price.txt"))
+                          (substring  name 0 -4))))
+                    (helm-dash-search-all-docsets))))
 
-(setq dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master")
+
+
 (defun helm-dash-install-docset ()
   "Download docset with specified NAME and move its stuff to docsets-path."
-
   (interactive)
   (let* ((docset-name (ido-completing-read "Install docset: " (helm-dash-available-docsets)))
-        (feed-url (format "%s/%s.xml" dash-docsets-url-path docset-name))
-        (docset-tmp-path (format "/tmp/%s-docset.tgz" docset-name))
-        (feed-tmp-path (format "/tmp/%s-feed.xml" docset-name))
-        )
+         (feed-url (format "%s/%s.xml" dash-docsets-url-path docset-name))
+         (docset-tmp-path (format "/tmp/%s-docset.tgz" docset-name))
+         (feed-tmp-path (format "/tmp/%s-feed.xml" docset-name))
+         )
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
     (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path helm-dash-docsets-path))))
@@ -136,10 +142,10 @@
   '((name . "Dash")
     (volatile)
     (delayed)
-    (multiline)
     (requires-pattern . 3)
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
+
 ;;;###autoload
 (defun helm-dash ()
   "Bring up a Dash search interface in helm."
