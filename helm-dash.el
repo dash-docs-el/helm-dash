@@ -124,11 +124,11 @@
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (cadr x) (format "%s%s%s%s"
-                                                       "file://"
-                                                       helm-dash-docsets-path
-                                                       (format "%s.docset/Contents/Resources/Documents/" (car docset))
-                                                       (caddr x))))
+                                (cons (format "%s - %s"  (car docset) (cadr x)) (format "%s%s%s%s"
+                                                          "file://"
+                                                          helm-dash-docsets-path
+                                                          (format "%s.docset/Contents/Resources/Documents/" (car docset))
+                                                          (caddr x))))
                               res))))
         (message (format "fin: %s => %s" (current-time) (car docset))))
     full-res))
