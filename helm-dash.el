@@ -46,8 +46,11 @@
   :prefix "helm-dash-"
   :group 'applications)
 
-(defcustom helm-dash-docsets-path "/home/kidd/programmingStuff/d/" "Default path for docsets."
+(defcustom helm-dash-docsets-path
+  "/home/kidd/programmingStuff/d/"
+  "Default path for docsets."
   :group 'helm-dash)
+
 (defcustom helm-dash-active-docsets '( "Go" "HttpLuaModule") ".")
 
 (defcustom  dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master"
@@ -58,11 +61,15 @@
                     "%s.docset/Contents/Resources/docSet.dsidx"
                     docset)))
 
-(defvar  helm-dash-connections
+(defvar helm-dash-connections nil
 ;;; create conses like ("Go" . connection)
-  (mapcar (lambda (x)
-            (cons x (connect-to-docset x)))
-          helm-dash-active-docsets))
+)
+
+(defun helm-dash-create-connections ()
+  (setq helm-dash-connections
+        (mapcar (lambda (x)
+                  (cons x (connect-to-docset x)))
+                helm-dash-active-docsets)))
 
 (defun helm-dash-search-all-docsets ()
   (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
@@ -150,6 +157,7 @@
 (defun helm-dash ()
   "Bring up a Dash search interface in helm."
   (interactive)
+  (helm-dash-create-connections)
   (helm :sources '(helm-source-dash-search)
 	:buffer "*helm-dash*"))
 
