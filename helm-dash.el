@@ -66,10 +66,11 @@
 )
 
 (defun helm-dash-create-connections ()
-  (setq helm-dash-connections
-        (mapcar (lambda (x)
-                  (cons x (connect-to-docset x)))
-                helm-dash-active-docsets)))
+  (when (not helm-dash-connections)
+    (setq helm-dash-connections
+          (mapcar (lambda (x)
+                    (cons x (connect-to-docset x)))
+                  helm-dash-active-docsets))))
 
 (defun helm-dash-search-all-docsets ()
   (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
