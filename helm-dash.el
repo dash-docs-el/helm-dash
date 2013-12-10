@@ -72,6 +72,12 @@
                     (cons x (connect-to-docset x)))
                   helm-dash-active-docsets))))
 
+(defun helm-dash-reset-connections ()
+  (interactive)
+  (dolist (i helm-dash-connections)
+    (sqlite-bye (cdr i)))
+  (setq helm-dash-connections nil))
+
 (defun helm-dash-search-all-docsets ()
   (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
     (with-current-buffer
