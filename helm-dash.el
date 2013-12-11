@@ -53,13 +53,13 @@
 
 (defcustom helm-dash-active-docsets '( "Go" "HttpLuaModule") ".")
 
-(defcustom  dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master"
+(defcustom dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master"
   "Foo." :group 'helm-dash)
 
 (defun connect-to-docset (docset)
       (sqlite-init (format
-                    "%s.docset/Contents/Resources/docSet.dsidx"
-                    docset)))
+                    "%s%s.docset/Contents/Resources/docSet.dsidx"
+                    helm-dash-docsets-path docset)))
 
 (defvar helm-dash-connections nil
 ;;; create conses like ("Go" . connection)
