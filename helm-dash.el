@@ -44,11 +44,15 @@
   :group 'applications)
 
 (defcustom helm-dash-docsets-path
-  "/home/kidd/programmingStuff/d/"
+  (let* ((home (getenv "HOME"))
+         (docdir (format "%s/.docsets" home))
+         (mkdir docdir)
+         docdir))
   "Default path for docsets."
   :group 'helm-dash)
 
-(defcustom helm-dash-active-docsets '( "Go" "HttpLuaModule") ".")
+(defcustom helm-dash-active-docsets
+  '( "Common Lisp" "HttpLuaModule") "List of Docsets to search.")
 
 (defcustom dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master"
   "Foo." :group 'helm-dash)
