@@ -126,21 +126,19 @@
         (where-query (helm-dash-where-query helm-pattern))             ;let the magic happen with spaces
         )
     (dolist (docset helm-dash-connections)
-      (message (format "ini: %s => %s" (current-time) (car docset)))
       (let ((res
              (and
               ;; hack to avoid sqlite hanging (timeouting) because of no results
               (< 0 (string-to-number (caadr (sqlite-query (cdr docset)
-                                                                  (format
-                                                                   "SELECT COUNT(*) FROM %s t %s"
-                                                                   db where-query)))))
+                                                          (format
+                                                           "SELECT COUNT(*) FROM %s %s"
+                                                           db where-query)))))
               (sqlite-query (cdr docset)
                             (format
                              "SELECT t.type, t.name, t.path FROM %s t %s order by lower(t.name)"
                              db where-query)))))
 
         ;; how to do the appending properly?
-        (message (format "mid: %s => %s" (current-time) (car docset)))
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
@@ -149,8 +147,7 @@
                                                           helm-dash-docsets-path
                                                           (format "%s.docset/Contents/Resources/Documents/" (car docset))
                                                           (caddr x))))
-                              res))))
-        (message (format "fin: %s => %s" (current-time) (car docset))))
+                              res)))))
     full-res))
 
 ;; (defun helm-dash-browse-webdoc (webdoc)
