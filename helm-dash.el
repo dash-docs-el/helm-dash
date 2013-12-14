@@ -44,10 +44,7 @@
   :group 'applications)
 
 (defcustom helm-dash-docsets-path
-  (let* ((home (getenv "HOME"))
-         (docdir (format "%s/.docsets" home))
-         (mkdir docdir)
-         docdir))
+  (format "%s/.docsets"  (getenv "HOME"))
   "Default path for docsets."
   :group 'helm-dash)
 
