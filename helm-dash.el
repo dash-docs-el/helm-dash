@@ -113,12 +113,21 @@
          (url (xml-get-children urls 'url)))
     (caddr (first url))))
 
+(defun helm-dash-where-query (pattern)
+  ""
+  (let ((conditions
+         (mapcar (lambda (word)
+                   (format "\"name\" like \"%%%s%%\"" word))
+                 (split-string pattern " "))
+         ))
+    (format " WHERE %s" (mapconcat 'identity conditions " AND "))))
+
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the
 `helm-pattern'."
   (let ((db "searchIndex")
         (full-res (list))
-        (where-query (format " WHERE \"name\" like \"%%%s%%\"" helm-pattern))  ;let the magic happen with spaces
+        (where-query (helm-dash-where-query helm-pattern))             ;let the magic happen with spaces
         )
     (dolist (docset helm-dash-connections)
       (message (format "ini: %s => %s" (current-time) (car docset)))
