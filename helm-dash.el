@@ -30,13 +30,10 @@
 
 
 
-(provide 'helm-dash)
-;;; helm-dash.el ends here
-
-
 (load-file "sqlite.el")
 
 (require 'helm)
+(require 'helm-match-plugin)
 (require 'sqlite)
 (require 'json)
 (require 'ido)
@@ -118,8 +115,7 @@
   (let ((conditions
          (mapcar (lambda (word)
                    (format "\"name\" like \"%%%s%%\"" word))
-                 (split-string pattern " "))
-         ))
+                 (split-string pattern " "))))
     (format " WHERE %s" (mapconcat 'identity conditions " AND "))))
 
 (defun helm-dash-search ()
