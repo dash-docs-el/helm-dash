@@ -47,7 +47,7 @@
   :group 'helm-dash)
 
 (defcustom helm-dash-active-docsets
-  '( "Common Lisp" "HttpLuaModule") "List of Docsets to search.")
+  '() "List of Docsets to search.")
 
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/raw/master"
   "Foo." :group 'helm-dash)
