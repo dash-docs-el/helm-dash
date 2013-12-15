@@ -2,7 +2,7 @@
 
 ## What's it
 
-This package uses dash docsets inside emacs to browse documentation. It's inspired by the great app [dash](http://www.google.com).
+This package uses dash docsets inside emacs to browse documentation. It's inspired by the great app [Dash](http://www.kapeli.com/dash).
 
 ## What's not
 
