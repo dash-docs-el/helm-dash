@@ -25,12 +25,10 @@
 ;; When We have many active-docsets and the result is only from one
 ;; of those, the result is super slow.  have to investigate
 
+;; You must load sqlite.el before load helm-dash.
+;; (load-file "~/.emacs.d/helm-dash/sqlite.el")
 
-;;; Code:
-
-
-
-(load-file "sqlite.el")
+;; Code:
 
 (require 'helm)
 (require 'helm-match-plugin)
@@ -51,10 +49,10 @@
 (defcustom helm-dash-active-docsets
   '( "Common Lisp" "HttpLuaModule") "List of Docsets to search.")
 
-(defcustom dash-docsets-url-path "https://github.com/Kapeli/feeds/raw/master"
+(defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/raw/master"
   "Foo." :group 'helm-dash)
 
-(defun connect-to-docset (docset)
+(defun helm-dash-connect-to-docset (docset)
       (sqlite-init (format
                     "%s%s.docset/Contents/Resources/docSet.dsidx"
                     helm-dash-docsets-path docset)))
@@ -67,7 +65,7 @@
   (when (not helm-dash-connections)
     (setq helm-dash-connections
           (mapcar (lambda (x)
-                    (cons x (connect-to-docset x)))
+                    (cons x (helm-dash-connect-to-docset x)))
                   helm-dash-active-docsets))))
 
 (defun helm-dash-reset-connections ()
@@ -87,17 +85,15 @@
   ""
   (delq nil (mapcar (lambda (docset)
                       (let ((name (assoc-default 'name (cdr docset))))
-                        (unless (member name '(".gitignore" ".DS_Store" "price.txt"))
+                        (unless (member name '(".gitignore" ".DS_Store" "price.txt" "zzz"))
                           (substring  name 0 -4))))
                     (helm-dash-search-all-docsets))))
-
-
 
 (defun helm-dash-install-docset ()
   "Download docset with specified NAME and move its stuff to docsets-path."
   (interactive)
   (let* ((docset-name (ido-completing-read "Install docset: " (helm-dash-available-docsets)))
-         (feed-url (format "%s/%s.xml" dash-docsets-url-path docset-name))
+         (feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
          (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
     (url-copy-file feed-url feed-tmp-path t)
@@ -150,9 +146,6 @@
                                                           (caddr x))))
                               res)))))
     full-res))
-
-;; (defun helm-dash-browse-webdoc (webdoc)
-;;   (browse-url-chromium  (format "%s/Go.docset/Contents/Resources/Documents/godoc.org/code.google.com/p/go.crypto/ssh.html#VDSUSP" default-directory)))
 
 (defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
 
