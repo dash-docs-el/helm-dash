@@ -49,12 +49,12 @@
 (defcustom helm-dash-active-docsets
   '() "List of Docsets to search.")
 
-(defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/raw/master"
+(defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
   "Foo." :group 'helm-dash)
 
 (defun helm-dash-connect-to-docset (docset)
       (sqlite-init (format
-                    "%s%s.docset/Contents/Resources/docSet.dsidx"
+                    "%s/%s.docset/Contents/Resources/docSet.dsidx"
                     helm-dash-docsets-path docset)))
 
 (defvar helm-dash-connections nil
@@ -142,7 +142,7 @@
                                 (cons (format "%s - %s"  (car docset) (cadr x)) (format "%s%s%s%s"
                                                           "file://"
                                                           helm-dash-docsets-path
-                                                          (format "%s.docset/Contents/Resources/Documents/" (car docset))
+                                                          (format "/%s.docset/Contents/Resources/Documents/" (car docset))
                                                           (caddr x))))
                               res)))))
     full-res))
