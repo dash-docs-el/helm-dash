@@ -312,3 +312,5 @@ The result is a \"table\" like the following:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; sqlite.el ends here
+
+(provide 'sqlite)
