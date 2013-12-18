@@ -142,7 +142,8 @@
                                 (cons (format "%s - %s"  (car docset) (cadr x)) (format "%s%s%s%s"
                                                           "file://"
                                                           helm-dash-docsets-path
-                                                          (format "/%s.docset/Contents/Resources/Documents/" (car docset))
+                                                          (format "/%s.docset/Contents/Resources/Documents/"
+																																	(car docset))
                                                           (caddr x))))
                               res)))))
     full-res))
