@@ -4,6 +4,8 @@
 
 This package uses dash docsets inside emacs to browse documentation. It's inspired by the great app [Dash](http://www.kapeli.com/dash).
 
+![](https://raw.github.com/areina/helm-dash/master/misc/helm-dash.gif)
+
 ## What's not
 
 If you're looking for dash.el, the list library, please go to [dash.el](http://www.github.com/magnars/dash.el)
