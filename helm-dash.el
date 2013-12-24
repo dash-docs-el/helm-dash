@@ -89,6 +89,11 @@
                           (substring  name 0 -4))))
                     (helm-dash-search-all-docsets))))
 
+(defun helm-dash-activate-docset (docset)
+  (add-to-list 'helm-dash-active-docsets docset)
+  (custom-set-variables `(helm-dash-active-docsets ,helm-dash-active-docsets t))
+  (custom-save-all))
+
 (defun helm-dash-install-docset ()
   "Download docset with specified NAME and move its stuff to docsets-path."
   (interactive)
@@ -98,7 +103,10 @@
          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
-    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path helm-dash-docsets-path))))
+    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path helm-dash-docsets-path))
+    (helm-dash-activate-docset docset-name)
+    (message (format "Installed docset %s. run `helm-dash-reset-connections' to activate it
+in current session" docset-name))))
 
 (defun helm-dash-get-docset-url (feed-path)
   ""
