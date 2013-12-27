@@ -52,6 +52,16 @@
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
   "Foo." :group 'helm-dash)
 
+(defcustom helm-dash-completing-read-func 'ido-completing-read
+  "Completion function to be used when installing docsets.
+
+Suggested possible values are:
+ * `completing-read':       built-in completion method.
+ * `ido-completing-read':   dynamic completion within the minibuffer."
+  :type 'function
+  :options '(completing-read ido-completing-read)
+  :group 'helm-dash)
+
 (defun helm-dash-connect-to-docset (docset)
       (sqlite-init (format
                     "%s/%s.docset/Contents/Resources/docSet.dsidx"
@@ -97,7 +107,8 @@
 (defun helm-dash-install-docset ()
   "Download docset with specified NAME and move its stuff to docsets-path."
   (interactive)
-  (let* ((docset-name (ido-completing-read "Install docset: " (helm-dash-available-docsets)))
+  (let* ((docset-name (funcall helm-dash-completing-read-func
+                               "Install docset: " (helm-dash-available-docsets)))
          (feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
          (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
