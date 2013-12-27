@@ -25,9 +25,6 @@
 ;; When We have many active-docsets and the result is only from one
 ;; of those, the result is super slow.  have to investigate
 
-;; You must load sqlite.el before load helm-dash.
-;; (load-file "~/.emacs.d/helm-dash/sqlite.el")
-
 ;; Code:
 
 (require 'helm)
