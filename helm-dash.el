@@ -6,7 +6,7 @@
 ;; Author: Raimon Grau <raimonster@gmail.com>
 ;;         Toni Reina  <areina0@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: ((sqlite "0.1"))
+;; Package-Requires: ((sqlite "0.1") (helm "0.0.0"))
 ;; Keywords: docs
 
 ;; This program is free software; you can redistribute it and/or modify
