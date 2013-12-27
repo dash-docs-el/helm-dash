@@ -5,6 +5,8 @@
 
 ;; Author: Raimon Grau <raimonster@gmail.com>
 ;;         Toni Reina  <areina0@gmail.com>
+;; Version: 0.1
+;; Package-Requires: ((sqlite "0.1"))
 ;; Keywords: docs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -22,8 +24,10 @@
 
 ;;; Commentary:
 
-;; When We have many active-docsets and the result is only from one
-;; of those, the result is super slow.  have to investigate
+;; Clone the functionality of dash using helm foundation. Browse
+;; documentation via dash docsets.
+;;
+;; More info in the project site https://github.com/areina/helm-dash
 
 ;; Code:
 
