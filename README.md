@@ -11,12 +11,16 @@ This package uses dash docsets inside emacs to browse documentation. It's inspir
 If you're looking for dash.el, the list library, please go to [dash.el](http://www.github.com/magnars/dash.el)
 
 
+## Requirements
+
+- [helm]
+- [sqlite]
 
 ## Installation
 
-- Put sqlite.el in your load path (in this same repo).
-- Install helm.
-- Install helm-dash.
+It's available on [MELPA](http://melpa.milkbox.net).
+
+`m-x package-install helm-dash RET`
 
 ## Usage
 
