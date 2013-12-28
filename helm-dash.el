@@ -104,6 +104,7 @@ Suggested possible values are:
   (add-to-list 'helm-dash-active-docsets docset)
   (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets))
 
+;;;###autoload
 (defun helm-dash-install-docset ()
   "Download docset with specified NAME and move its stuff to docsets-path."
   (interactive)
