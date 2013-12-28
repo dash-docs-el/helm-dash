@@ -21,15 +21,15 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+;;
 ;;; Commentary:
-
+;;
 ;; Clone the functionality of dash using helm foundation. Browse
 ;; documentation via dash docsets.
 ;;
 ;; More info in the project site https://github.com/areina/helm-dash
-
-;; Code:
+;;
+;;; Code:
 
 (require 'helm)
 (require 'helm-match-plugin)
