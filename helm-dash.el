@@ -100,7 +100,27 @@ Suggested possible values are:
                           (substring  name 0 -4))))
                     (helm-dash-search-all-docsets))))
 
+(defun helm-dash-installed-docsets ()
+  "Return a list of installed docsets."
+  (let ((docsets (directory-files helm-dash-docsets-path nil ".docset$")))
+    (mapcar '(lambda (name)
+               (cond ((string-match "[^.]+" name) (match-string 0 name))
+                     (t name)))
+            docsets)))
+
+;;;###autoload
+(defun helm-dash-deactivate-docset (docset)
+  "Deactivate DOCSET.  If called interactively prompts for the docset name."
+  (interactive (list (funcall helm-dash-completing-read-func
+                         "Deactivate docset: " helm-dash-active-docsets)))
+  (setq helm-dash-active-docsets (remove docset helm-dash-active-docsets))
+  (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets))
+
+;;;###autoload
 (defun helm-dash-activate-docset (docset)
+  "Activate DOCSET.  If called interactively prompts for the docset name."
+  (interactive (list (funcall helm-dash-completing-read-func
+                              "Activate docset: " (helm-dash-installed-docsets))))
   (add-to-list 'helm-dash-active-docsets docset)
   (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets))
 
