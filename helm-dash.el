@@ -100,9 +100,33 @@ Suggested possible values are:
                           (substring  name 0 -4))))
                     (helm-dash-search-all-docsets))))
 
+(defun helm-dash-installed-docsets ()
+  "Return a list of installed docsets."
+  (let ((docsets (directory-files helm-dash-docsets-path nil ".docset$")))
+    (mapcar '(lambda (name)
+               (cond ((string-match "[^.]+" name) (match-string 0 name))
+                     (t name)))
+            docsets)))
+
+;;;###autoload
+(defun helm-dash-deactivate-docset (docset)
+  "Deactivate DOCSET.  If called interactively prompts for the docset name."
+  (interactive (list (funcall helm-dash-completing-read-func
+                              "Deactivate docset: " helm-dash-active-docsets
+                              nil t)))
+  (setq helm-dash-active-docsets (remove docset helm-dash-active-docsets))
+  (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets)
+  (helm-dash-reset-connections))
+
+;;;###autoload
 (defun helm-dash-activate-docset (docset)
+  "Activate DOCSET.  If called interactively prompts for the docset name."
+  (interactive (list (funcall helm-dash-completing-read-func
+                              "Activate docset: " (helm-dash-installed-docsets)
+                              nil t)))
   (add-to-list 'helm-dash-active-docsets docset)
-  (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets))
+  (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets)
+  (helm-dash-reset-connections))
 
 ;;;###autoload
 (defun helm-dash-install-docset ()
@@ -117,8 +141,7 @@ Suggested possible values are:
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
     (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path helm-dash-docsets-path))
     (helm-dash-activate-docset docset-name)
-    (message (format "Installed docset %s. run `helm-dash-reset-connections' to activate it
-in current session" docset-name))))
+    (message (format "Installed docset %s." docset-name))))
 
 (defun helm-dash-get-docset-url (feed-path)
   ""
