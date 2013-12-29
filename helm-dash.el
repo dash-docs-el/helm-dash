@@ -112,7 +112,8 @@ Suggested possible values are:
 (defun helm-dash-deactivate-docset (docset)
   "Deactivate DOCSET.  If called interactively prompts for the docset name."
   (interactive (list (funcall helm-dash-completing-read-func
-                         "Deactivate docset: " helm-dash-active-docsets)))
+                              "Deactivate docset: " helm-dash-active-docsets
+                              nil t)))
   (setq helm-dash-active-docsets (remove docset helm-dash-active-docsets))
   (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets)
   (helm-dash-reset-connections))
@@ -121,7 +122,8 @@ Suggested possible values are:
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
   (interactive (list (funcall helm-dash-completing-read-func
-                              "Activate docset: " (helm-dash-installed-docsets))))
+                              "Activate docset: " (helm-dash-installed-docsets)
+                              nil t)))
   (add-to-list 'helm-dash-active-docsets docset)
   (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets)
   (helm-dash-reset-connections))
