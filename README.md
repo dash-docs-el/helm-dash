@@ -30,6 +30,22 @@ It's available on [MELPA](http://melpa.milkbox.net).
 - Install new docsets with m-x helm-dash-install-docset
 - After installing a new docset, add the name of the docset to `helm-dash-active-docsets'
 
+## Sets of Docsets
+
+Different subsets of docsets can be activated depending on the
+buffer. For the moment (it may change in the future) we decided it's a
+plain local variable you should setup for every different
+filetype. This way you can also do fancier things like project-wise
+docsets sets.
+
+``` elisp
+(defun go-doc ()
+  (interactive)
+  (setq-local helm-dash-docsets '("Go")))
+
+(add-hook 'go-mode-hook 'go-doc)
+```
+
 
 ## Caveats
 

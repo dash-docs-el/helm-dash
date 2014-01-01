@@ -63,12 +63,6 @@ Suggested possible values are:
   :options '(completing-read ido-completing-read)
   :group 'helm-dash)
 
-(defcustom helm-dash-connections-filters nil
-  "Alist of connections per mode to filter.
-`((mode-name . (\"Connection Name\"))
-  (mode-name2 . (\"Connection Name\")))'"
-  :group 'helm-dash)
-
 (defun helm-dash-connect-to-docset (docset)
       (sqlite-init (format
                     "%s/%s.docset/Contents/Resources/docSet.dsidx"
@@ -80,15 +74,13 @@ Suggested possible values are:
 
 (defun helm-dash-filter-connections ()
   "Filter connections using `helm-dash-connections-filters'."
-  (let* ((mode (with-current-buffer helm-current-buffer major-mode))
-         (mode-connections (cdr (assoc mode helm-dash-connections-filters)))
-         (connections nil))
-    (if mode-connections
-        (progn
-          (dolist (conn mode-connections)
-            (push (assoc conn helm-dash-connections) connections))
-          (delq nil connections))
-      helm-dash-connections)))
+  (let ((docsets (with-current-buffer helm-current-buffer
+                   (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
+                       helm-dash-active-docsets)))
+        (connections nil))
+    (mapcar (lambda (y) (assoc y helm-dash-connections))
+     (remove-if-not (lambda (x) (member x helm-dash-active-docsets))
+                    docsets))))
 
 (defun helm-dash-create-connections ()
   (when (not helm-dash-connections)
@@ -121,20 +113,10 @@ Suggested possible values are:
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
   (let ((docsets (directory-files helm-dash-docsets-path nil ".docset$")))
-    (mapcar '(lambda (name)
+    (mapcar #'(lambda (name)
                (cond ((string-match "[^.]+" name) (match-string 0 name))
                      (t name)))
             docsets)))
-
-;;;###autoload
-(defun helm-dash-deactivate-docset (docset)
-  "Deactivate DOCSET.  If called interactively prompts for the docset name."
-  (interactive (list (funcall helm-dash-completing-read-func
-                              "Deactivate docset: " helm-dash-active-docsets
-                              nil t)))
-  (setq helm-dash-active-docsets (remove docset helm-dash-active-docsets))
-  (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets)
-  (helm-dash-reset-connections))
 
 ;;;###autoload
 (defun helm-dash-activate-docset (docset)
@@ -182,8 +164,7 @@ Suggested possible values are:
   (let ((db "searchIndex")
         (full-res (list))
         (where-query (helm-dash-where-query helm-pattern))             ;let the magic happen with spaces
-        (connections (helm-dash-filter-connections))
-        )
+        (connections (helm-dash-filter-connections)))
     (dolist (docset connections)
       (let ((res
              (and
