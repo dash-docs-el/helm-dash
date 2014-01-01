@@ -63,6 +63,12 @@ Suggested possible values are:
   :options '(completing-read ido-completing-read)
   :group 'helm-dash)
 
+(defcustom helm-dash-connections-filters nil
+  "Alist of connections per mode to filter.
+`((mode-name . (\"Connection Name\"))
+  (mode-name2 . (\"Connection Name\")))'"
+  :group 'helm-dash)
+
 (defun helm-dash-connect-to-docset (docset)
       (sqlite-init (format
                     "%s/%s.docset/Contents/Resources/docSet.dsidx"
@@ -71,6 +77,18 @@ Suggested possible values are:
 (defvar helm-dash-connections nil
 ;;; create conses like ("Go" . connection)
 )
+
+(defun helm-dash-filter-connections ()
+  "Filter connections using `helm-dash-connections-filters'."
+  (let* ((mode (with-current-buffer helm-current-buffer major-mode))
+         (mode-connections (cdr (assoc mode helm-dash-connections-filters)))
+         (connections nil))
+    (if mode-connections
+        (progn
+          (dolist (conn mode-connections)
+            (push (assoc conn helm-dash-connections) connections))
+          (delq nil connections))
+      helm-dash-connections)))
 
 (defun helm-dash-create-connections ()
   (when (not helm-dash-connections)
@@ -164,8 +182,9 @@ Suggested possible values are:
   (let ((db "searchIndex")
         (full-res (list))
         (where-query (helm-dash-where-query helm-pattern))             ;let the magic happen with spaces
+        (connections (helm-dash-filter-connections))
         )
-    (dolist (docset helm-dash-connections)
+    (dolist (docset connections)
       (let ((res
              (and
               ;; hack to avoid sqlite hanging (timeouting) because of no results
