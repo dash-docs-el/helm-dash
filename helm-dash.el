@@ -92,12 +92,20 @@ Suggested possible values are:
       (goto-char url-http-end-of-headers)
       (json-read))))
 
+(defvar helm-dash-ignored-docsets
+  '("Bootstrap" "Drupal" "Zend_Framework" "Ruby_Installed_Gems" "Man_Pages")
+  "Return a list of ignored docsets.
+These docsets are not available to install.
+See here the reason: https://github.com/areina/helm-dash/issues/17.")
+
 (defun helm-dash-available-docsets ()
   ""
   (delq nil (mapcar (lambda (docset)
                       (let ((name (assoc-default 'name (cdr docset))))
-                        (unless (member name '(".gitignore" ".DS_Store" "price.txt" "zzz"))
-                          (substring  name 0 -4))))
+                        (if (and (equal (file-name-extension name) "xml")
+                                 (not
+                                  (member (file-name-sans-extension name) helm-dash-ignored-docsets)))
+                            (file-name-sans-extension name))))
                     (helm-dash-search-all-docsets))))
 
 (defun helm-dash-installed-docsets ()
