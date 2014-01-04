@@ -76,22 +76,31 @@ Suggested possible values are:
 
 (defun helm-dash-filter-connections ()
   "Filter connections using `helm-dash-connections-filters'."
-  (let ((docsets (with-current-buffer helm-current-buffer
-                   (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
-                      '())))
+  (let ((docsets (helm-dash-buffer-local-docsets))
         (connections nil))
     (setq docsets (append docsets helm-dash-common-docsets))
-    (mapcar (lambda (y) (assoc y helm-dash-connections))
-            (remove-if-not (lambda (x)
-                             (member x helm-dash-common-docsets))
-                           docsets))))
+    (delq nil (mapcar (lambda (y)
+                        (assoc y helm-dash-connections))
+             docsets))))
 
-(defun helm-dash-create-connections ()
+(defun helm-dash-buffer-local-docsets ()
+ (with-current-buffer helm-current-buffer
+                   (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
+                      '())))
+
+(defun helm-dash-create-common-connections ()
   (when (not helm-dash-connections)
     (setq helm-dash-connections
           (mapcar (lambda (x)
                     (cons x (helm-dash-connect-to-docset x)))
                   helm-dash-common-docsets))))
+
+(defun helm-dash-create-buffer-connections ()
+  (mapc (lambda (x) (when (not (assoc x helm-dash-connections))
+                      (push (cons x (helm-dash-connect-to-docset x))
+                            helm-dash-connections)))
+        (helm-dash-buffer-local-docsets)
+        ))
 
 (defun helm-dash-reset-connections ()
   (interactive)
@@ -126,7 +135,7 @@ Suggested possible values are:
   "Activate DOCSET.  If called interactively prompts for the docset name."
   (interactive (list (funcall helm-dash-completing-read-func
                               "Activate docset: " (helm-dash-installed-docsets)
-                              nil t)))
+                              ninl t)))
   (add-to-list 'helm-dash-common-docsets docset)
   (helm-dash-reset-connections))
 
@@ -207,7 +216,8 @@ Suggested possible values are:
 (defun helm-dash ()
   "Bring up a Dash search interface in helm."
   (interactive)
-  (helm-dash-create-connections)
+  (helm-dash-create-common-connections)
+  (helm-dash-create-buffer-connections)
   (helm :sources '(helm-source-dash-search)
 	:buffer "*helm-dash*"))
 
