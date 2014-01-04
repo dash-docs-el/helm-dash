@@ -30,6 +30,7 @@
 ;; More info in the project site https://github.com/areina/helm-dash
 ;;
 ;;; Code:
+(eval-when-compile (require 'cl))
 
 (require 'helm)
 (require 'helm-match-plugin)
@@ -38,7 +39,7 @@
 (require 'ido)
 
 (defgroup helm-dash nil
-  "Experimental task management."
+  "Search Dash docsets using helm."
   :prefix "helm-dash-"
   :group 'applications)
 
@@ -46,9 +47,6 @@
   (format "%s/.docsets"  (getenv "HOME"))
   "Default path for docsets."
   :group 'helm-dash)
-
-(defcustom helm-dash-active-docsets
-  '() "List of Docsets to search.")
 
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
   "Foo." :group 'helm-dash)
@@ -63,6 +61,10 @@ Suggested possible values are:
   :options '(completing-read ido-completing-read)
   :group 'helm-dash)
 
+
+(defvar helm-dash-common-docsets
+  '() "List of Docsets to search.")
+
 (defun helm-dash-connect-to-docset (docset)
       (sqlite-init (format
                     "%s/%s.docset/Contents/Resources/docSet.dsidx"
@@ -76,18 +78,20 @@ Suggested possible values are:
   "Filter connections using `helm-dash-connections-filters'."
   (let ((docsets (with-current-buffer helm-current-buffer
                    (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
-                       helm-dash-active-docsets)))
+                      '())))
         (connections nil))
+    (setq docsets (append docsets helm-dash-common-docsets))
     (mapcar (lambda (y) (assoc y helm-dash-connections))
-     (remove-if-not (lambda (x) (member x helm-dash-active-docsets))
-                    docsets))))
+            (remove-if-not (lambda (x)
+                             (member x helm-dash-common-docsets))
+                           docsets))))
 
 (defun helm-dash-create-connections ()
   (when (not helm-dash-connections)
     (setq helm-dash-connections
           (mapcar (lambda (x)
                     (cons x (helm-dash-connect-to-docset x)))
-                  helm-dash-active-docsets))))
+                  helm-dash-common-docsets))))
 
 (defun helm-dash-reset-connections ()
   (interactive)
@@ -118,14 +122,12 @@ Suggested possible values are:
                      (t name)))
             docsets)))
 
-;;;###autoload
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
   (interactive (list (funcall helm-dash-completing-read-func
                               "Activate docset: " (helm-dash-installed-docsets)
                               nil t)))
-  (add-to-list 'helm-dash-active-docsets docset)
-  (customize-save-variable 'helm-dash-active-docsets helm-dash-active-docsets)
+  (add-to-list 'helm-dash-common-docsets docset)
   (helm-dash-reset-connections))
 
 ;;;###autoload
