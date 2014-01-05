@@ -191,31 +191,45 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                  (split-string pattern " "))))
     (format " WHERE %s" (mapconcat 'identity conditions " AND "))))
 
+(defun helm-dash-count-query (type)
+  ""
+  (if (equal "DASH" type)
+      (format "SELECT COUNT(name) FROM %s %s" "searchIndex" (helm-dash-where-query helm-pattern))
+    (format "SELECT COUNT(Z_PK) FROM %s %s" "ZTOKEN" "WHERE Z_PK = 0")))
+
+(defun helm-dash-select-query (type)
+  ""
+  (if (equal "DASH" type)
+      (helm-dash-select-query-dash)
+    (helm-dash-select-query-zdash)))
+
+(defun helm-dash-select-query-dash ()
+  ""
+  (format "SELECT t.type, t.name, t.path FROM %s t %s order by lower(t.name)"
+          "searchIndex" (helm-dash-where-query helm-pattern)))
+
+(defun helm-dash-select-query-zdash ()
+  ""
+  (format "SELECT * FROM %s WHERE Z_PK = 0 limit 1" "ZTOKEN"))
+
 (defun helm-dash-search ()
-  "Iterates every `helm-dash-connections' looking for the
-`helm-pattern'."
-  (let ((db "searchIndex")
-        (full-res (list))
-        (where-query (helm-dash-where-query helm-pattern))             ;let the magic happen with spaces
+  "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
+  (let ((full-res (list))
         (connections (helm-dash-filter-connections)))
     (dolist (docset connections)
       (let ((res
              (and
               ;; hack to avoid sqlite hanging (timeouting) because of no results
               (< 0 (string-to-number (caadr (sqlite-query (cadr docset)
-                                                          (format
-                                                           "SELECT COUNT(*) FROM %s %s"
-                                                           db where-query)))))
+                                                          (helm-dash-count-query (caddr docset))))))
               (sqlite-query (cadr docset)
-                            (format
-                             "SELECT t.type, t.name, t.path FROM %s t %s order by lower(t.name)"
-                             db where-query)))))
+                            (helm-dash-select-query (caddr docset))))))
 
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (format "%s - %s"  (cadr docset) (cadr x)) (format "%s%s%s%s"
+                                (cons (format "%s - %s"  (car docset) (cadr x)) (format "%s%s%s%s"
                                                           "file://"
                                                           helm-dash-docsets-path
                                                           (format "/%s.docset/Contents/Resources/Documents/"
