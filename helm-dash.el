@@ -24,7 +24,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; Clone the functionality of dash using helm foundation. Browse
+;; Clone the functionality of dash using helm foundation.  Browse
 ;; documentation via dash docsets.
 ;;
 ;; More info in the project site https://github.com/areina/helm-dash
@@ -66,13 +66,13 @@ Suggested possible values are:
   '() "List of Docsets to search active by default.")
 
 (defun helm-dash-connect-to-docset (docset)
-      (sqlite-init (format
+  "Make the connection to sqlite DOCSET."
+  (sqlite-init (format
                     "%s/%s.docset/Contents/Resources/docSet.dsidx"
                     helm-dash-docsets-path docset)))
 
 (defvar helm-dash-connections nil
-;;; create conses like ("Go" . connection)
-)
+  "Create conses like (\"Go\" . connection).")
 
 (defun helm-dash-filter-connections ()
   "Filter connections using `helm-dash-connections-filters'."
@@ -84,11 +84,13 @@ Suggested possible values are:
              docsets))))
 
 (defun helm-dash-buffer-local-docsets ()
- (with-helm-current-buffer
-                   (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
-                      '())))
+  "Get the docsets configured for the current buffer."
+  (with-helm-current-buffer
+    (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
+        '())))
 
 (defun helm-dash-create-common-connections ()
+  "Create connections to sqlite docsets for common docsets."
   (when (not helm-dash-connections)
     (setq helm-dash-connections
           (mapcar (lambda (x)
@@ -96,18 +98,21 @@ Suggested possible values are:
                   helm-dash-common-docsets))))
 
 (defun helm-dash-create-buffer-connections ()
+  "Create connections to sqlite docsets for buffer-local docsets."
   (mapc (lambda (x) (when (not (assoc x helm-dash-connections))
                       (push (cons x (helm-dash-connect-to-docset x))
                             helm-dash-connections)))
         (helm-dash-buffer-local-docsets)))
 
 (defun helm-dash-reset-connections ()
+  "Wipe all connections to docsets."
   (interactive)
   (dolist (i helm-dash-connections)
     (sqlite-bye (cdr i)))
   (setq helm-dash-connections nil))
 
 (defun helm-dash-search-all-docsets ()
+  "Fetch docsets from the original Kapeli's feed."
   (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
     (with-current-buffer
         (url-retrieve-synchronously url)
@@ -115,7 +120,7 @@ Suggested possible values are:
       (json-read))))
 
 (defun helm-dash-available-docsets ()
-  ""
+  "."
   (delq nil (mapcar (lambda (docset)
                       (let ((name (assoc-default 'name (cdr docset))))
                         (unless (member name '(".gitignore" ".DS_Store" "price.txt" "zzz"))
