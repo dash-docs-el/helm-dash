@@ -84,7 +84,7 @@ Suggested possible values are:
              docsets))))
 
 (defun helm-dash-buffer-local-docsets ()
- (with-current-buffer helm-current-buffer
+ (with-helm-current-buffer
                    (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
                       '())))
 
