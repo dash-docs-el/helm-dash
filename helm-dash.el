@@ -160,6 +160,8 @@ Suggested possible values are:
               "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
                      docset-name))))
 
+(fset 'helm-dash-update-docset 'helm-dash-install-docset)
+
 (defun helm-dash-get-docset-url (feed-path)
   ""
   (let* ((xml (xml-parse-file feed-path))
