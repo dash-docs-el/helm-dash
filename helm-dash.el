@@ -183,19 +183,23 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
          (url (xml-get-children urls 'url)))
     (caddr (first url))))
 
-(defun helm-dash-where-query (pattern)
+(defun helm-dash-common-where-query (type pattern)
   ""
-  (let ((conditions
+  (let* ((column (if (equal "DASH" type) "t.name" "t.ZTOKENNAME"))
+         (conditions
          (mapcar (lambda (word)
-                   (format "\"name\" like \"%%%s%%\"" word))
+                   (format "%s like \"%%%s%%\"" column word))
                  (split-string pattern " "))))
     (format " WHERE %s" (mapconcat 'identity conditions " AND "))))
+
+(defvar helm-dash-zdash-tables
+  "ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m")
 
 (defun helm-dash-count-query (type)
   ""
   (if (equal "DASH" type)
-      (format "SELECT COUNT(name) FROM %s %s" "searchIndex" (helm-dash-where-query helm-pattern))
-    (format "SELECT COUNT(Z_PK) FROM %s %s" "ZTOKEN" "WHERE Z_PK = 0")))
+      (format "SELECT COUNT(t.name) FROM %s t %s" "searchIndex" (helm-dash-common-where-query type helm-pattern))
+    (format "SELECT COUNT(ty.Z_PK) FROM %s %s" helm-dash-zdash-tables (helm-dash-where-query-zdash helm-pattern))))
 
 (defun helm-dash-select-query (type)
   ""
@@ -205,12 +209,19 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
 (defun helm-dash-select-query-dash ()
   ""
-  (format "SELECT t.type, t.name, t.path FROM %s t %s order by lower(t.name)"
-          "searchIndex" (helm-dash-where-query helm-pattern)))
+  (format "SELECT t.type, t.name, t.path FROM %s t %s order by lower(name)"
+          "searchIndex" (helm-dash-common-where-query "DASH" helm-pattern)))
+
+(defun helm-dash-where-query-zdash (pattern)
+  ""
+  (format "%s AND ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK"
+          (helm-dash-common-where-query "ZDASH" pattern)))
 
 (defun helm-dash-select-query-zdash ()
   ""
-  (format "SELECT * FROM %s WHERE Z_PK = 0 limit 1" "ZTOKEN"))
+  (format "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR
+FROM %s %s ORDER BY LOWER(t.ZTOKENNAME)"
+          helm-dash-zdash-tables (helm-dash-where-query-zdash helm-pattern)))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
