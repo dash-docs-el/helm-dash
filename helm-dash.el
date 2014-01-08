@@ -183,58 +183,64 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
          (url (xml-get-children urls 'url)))
     (caddr (first url))))
 
-(defun helm-dash-common-where-query (type pattern)
-  ""
-  (let* ((column (if (equal "DASH" type) "t.name" "t.ZTOKENNAME"))
-         (conditions
-         (mapcar (lambda (word)
-                   (format "%s like \"%%%s%%\"" column word))
-                 (split-string pattern " "))))
-    (format " WHERE %s" (mapconcat 'identity conditions " AND "))))
+(defvar helm-dash-sql-queries
+  '((DASH . ((select . (lambda ()
+                         (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
+                               (query "
+SELECT t.type, t.name, t.path
+FROM searchIndex t
+WHERE %s ORDER BY LOWER(t.name)
+"))
+                           (format query like))))
+             (count . (lambda ()
+                        (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
+                              (query "
+SELECT COUNT(t.name)
+FROM searchIndex t
+WHERE %s
+"))
+                          (format query like))))
+    (ZDASH . ((select . (lambda ()
+                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
+                                (query "
+SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR
+FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m
+WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s
+ORDER BY LOWER(t.ZTOKENNAME)
+"))
+                            (format query like))))
+              (count . (lambda ()
+                         (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
+                               (query "
+SELECT COUNT(t.ZTOKENNAME)
+FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m
+WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s
+"))
+                           (format query like))))))))))
 
-(defvar helm-dash-zdash-tables
-  "ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m")
-
-(defun helm-dash-count-query (type)
+(defun helm-dash-sql-compose-like (column pattern)
   ""
-  (if (equal "DASH" type)
-      (format "SELECT COUNT(t.name) FROM %s t %s" "searchIndex" (helm-dash-common-where-query type helm-pattern))
-    (format "SELECT COUNT(ty.Z_PK) FROM %s %s" helm-dash-zdash-tables (helm-dash-where-query-zdash helm-pattern))))
+  (let ((conditions (mapcar (lambda (word) (format "%s like \"%%%s%%\"" column word))
+                            (split-string pattern " "))))
+    (format "%s" (mapconcat 'identity conditions " AND "))))
 
-(defun helm-dash-select-query (type)
+(defun helm-dash-sql-execute (query-type docset-type)
   ""
-  (if (equal "DASH" type)
-      (helm-dash-select-query-dash)
-    (helm-dash-select-query-zdash)))
-
-(defun helm-dash-select-query-dash ()
-  ""
-  (format "SELECT t.type, t.name, t.path FROM %s t %s order by lower(name)"
-          "searchIndex" (helm-dash-common-where-query "DASH" helm-pattern)))
-
-(defun helm-dash-where-query-zdash (pattern)
-  ""
-  (format "%s AND ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK"
-          (helm-dash-common-where-query "ZDASH" pattern)))
-
-(defun helm-dash-select-query-zdash ()
-  ""
-  (format "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR
-FROM %s %s ORDER BY LOWER(t.ZTOKENNAME)"
-          helm-dash-zdash-tables (helm-dash-where-query-zdash helm-pattern)))
+  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries)))))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
   (let ((full-res (list))
         (connections (helm-dash-filter-connections)))
     (dolist (docset connections)
-      (let ((res
+      (let* ((docset-type (caddr docset))
+             (res
              (and
               ;; hack to avoid sqlite hanging (timeouting) because of no results
               (< 0 (string-to-number (caadr (sqlite-query (cadr docset)
-                                                          (helm-dash-count-query (caddr docset))))))
+                                                          (helm-dash-sql-execute 'count docset-type)))))
               (sqlite-query (cadr docset)
-                            (helm-dash-select-query (caddr docset))))))
+                            (helm-dash-sql-execute 'select docset-type)))))
 
         ;; how to do the appending properly?
         (setq full-res
