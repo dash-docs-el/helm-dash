@@ -188,36 +188,19 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 (defvar helm-dash-sql-queries
   '((DASH . ((select . (lambda ()
                          (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
-                               (query "
-SELECT t.type, t.name, t.path
-FROM searchIndex t
-WHERE %s ORDER BY LOWER(t.name)
-"))
+                               (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 20"))
                            (format query like))))
              (count . (lambda ()
                         (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
-                              (query "
-SELECT COUNT(t.name)
-FROM searchIndex t
-WHERE %s
-"))
+                              (query "SELECT COUNT(t.name) FROM searchIndex t WHERE %s "))
                           (format query like))))))
     (ZDASH . ((select . (lambda ()
                           (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
-                                (query "
-SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR
-FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m
-WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s
-ORDER BY LOWER(t.ZTOKENNAME)
-"))
+                                (query "SELECT t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 20"))
                             (format query like))))
               (count . (lambda ()
                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
-                               (query "
-SELECT COUNT(t.ZTOKENNAME)
-FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m
-WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s
-"))
+                               (query "SELECT COUNT(t.ZTOKENNAME) FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s"))
                            (format query like))))))))
 
 (defun helm-dash-sql-compose-like (column pattern)
