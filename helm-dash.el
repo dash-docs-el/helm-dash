@@ -101,8 +101,10 @@ Suggested possible values are:
 (defun helm-dash-create-buffer-connections ()
   "Create connections to sqlite docsets for buffer-local docsets."
   (mapc (lambda (x) (when (not (assoc x helm-dash-connections))
-                      (push (cons x (helm-dash-connect-to-docset x))
-                            helm-dash-connections)))
+                      (let ((connection  (helm-dash-connect-to-docset x)))
+                        (setq helm-dash-connections
+                              (cons (list x connection (helm-dash-docset-type connection))
+                                    helm-dash-connections)))))
         (helm-dash-buffer-local-docsets)))
 
 (defun helm-dash-reset-connections ()
