@@ -199,7 +199,7 @@ SELECT COUNT(t.name)
 FROM searchIndex t
 WHERE %s
 "))
-                          (format query like))))
+                          (format query like))))))
     (ZDASH . ((select . (lambda ()
                           (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
                                 (query "
@@ -216,7 +216,7 @@ SELECT COUNT(t.ZTOKENNAME)
 FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m
 WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s
 "))
-                           (format query like))))))))))
+                           (format query like))))))))
 
 (defun helm-dash-sql-compose-like (column pattern)
   ""
