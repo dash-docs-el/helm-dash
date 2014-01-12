@@ -162,6 +162,12 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
+
+    (when (and (not (file-directory-p helm-dash-docsets-path))
+	       (y-or-n-p (format "Directory %s does not exist. Want to create it?"
+				 helm-dash-docsets-path)))
+      (mkdir helm-dash-docsets-path))
+
     (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path helm-dash-docsets-path))
     (helm-dash-activate-docset docset-name)
     (message (format
