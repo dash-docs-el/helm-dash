@@ -1,12 +1,11 @@
 ;;; helm-dash.el --- Helm extension to search dash docsets
-
 ;; Copyright (C) 2013  Raimon Grau
 ;; Copyright (C) 2013  Toni Reina
 
 ;; Author: Raimon Grau <raimonster@gmail.com>
 ;;         Toni Reina  <areina0@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: ((sqlite "0.1") (helm "0.0.0"))
+;; Package-Requires: ((esqlite "0.0.0") (helm "0.0.0"))
 ;; Keywords: docs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -34,7 +33,7 @@
 
 (require 'helm)
 (require 'helm-match-plugin)
-(require 'sqlite)
+(require 'esqlite)
 (require 'json)
 (require 'ido)
 
@@ -67,9 +66,9 @@ Suggested possible values are:
 
 (defun helm-dash-connect-to-docset (docset)
   "Make the connection to sqlite DOCSET."
-  (sqlite-init (format
-                    "%s/%s.docset/Contents/Resources/docSet.dsidx"
-                    helm-dash-docsets-path docset)))
+  (esqlite-stream-open (format
+			"%s/%s.docset/Contents/Resources/docSet.dsidx"
+			helm-dash-docsets-path docset)))
 
 (defvar helm-dash-connections nil
   "Create conses like (\"Go\" . connection).")
@@ -111,13 +110,17 @@ Suggested possible values are:
   "Wipe all connections to docsets."
   (interactive)
   (dolist (connection helm-dash-connections)
-    (sqlite-bye (cadr connection)))
+    (esqlite-stream-close (cadr connection)))
   (setq helm-dash-connections nil))
 
 (defun helm-dash-docset-type (connection)
-  (if (member "searchIndex" (car (sqlite-query connection ".tables")))
-    "DASH"
-    "ZDASH"))
+  "Return the type of the docset based in db schema.
+Possible values are \"DASH\" and \"ZDASH\.
+The Argument CONNECTION should be an esqlite streaming process."
+  (let ((type_sql "SELECT name FROM sqlite_master WHERE type = 'table' LIMIT 1"))
+    (if (member "searchIndex" (car (esqlite-stream-read connection type_sql)))
+	"DASH"
+      "ZDASH")))
 
 (defun helm-dash-search-all-docsets ()
   "Fetch docsets from the original Kapeli's feed."
@@ -228,9 +231,9 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
              (res
              (and
               ;; hack to avoid sqlite hanging (timeouting) because of no results
-              (< 0 (string-to-number (caadr (sqlite-query (cadr docset)
+              (< 0 (string-to-number (caar (esqlite-stream-read (cadr docset)
                                                           (helm-dash-sql-execute 'count docset-type)))))
-              (sqlite-query (cadr docset)
+              (esqlite-stream-read (cadr docset)
                             (helm-dash-sql-execute 'select docset-type)))))
 
         ;; how to do the appending properly?
@@ -243,7 +246,11 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
 (defun helm-dash-result-url (docset result)
   ""
-  (let ((filename (mapconcat 'identity (cddr result) "#")))
+  (let* ((anchor (car (last result)))
+	 (filename
+	 (format "%s%s"
+		 (caddr result)
+		 (if (or (eq :null anchor) (not anchor)) "" (format "#%s" anchor)))))
     (format "%s%s%s%s"
 	    "file://"
 	    helm-dash-docsets-path
