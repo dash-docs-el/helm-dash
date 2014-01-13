@@ -237,14 +237,18 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (format "%s - %s"  (car docset) (cadr x)) (format "%s%s%s%s"
-                                                          "file://"
-                                                          helm-dash-docsets-path
-                                                          (format "/%s.docset/Contents/Resources/Documents/"
-																																	(car docset))
-                                                          (caddr x))))
+                                (cons (format "%s - %s"  (car docset) (cadr x)) (helm-dash-result-url docset x)))
                               res)))))
     full-res))
+
+(defun helm-dash-result-url (docset result)
+  ""
+  (let ((filename (mapconcat 'identity (cddr result) "#")))
+    (format "%s%s%s%s"
+	    "file://"
+	    helm-dash-docsets-path
+	    (format "/%s.docset/Contents/Resources/Documents/" (car docset))
+	    filename)))
 
 (defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
 
