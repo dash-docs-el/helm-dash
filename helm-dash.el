@@ -1,12 +1,11 @@
 ;;; helm-dash.el --- Helm extension to search dash docsets
-
 ;; Copyright (C) 2013  Raimon Grau
 ;; Copyright (C) 2013  Toni Reina
 
 ;; Author: Raimon Grau <raimonster@gmail.com>
 ;;         Toni Reina  <areina0@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: ((sqlite "0.1") (helm "0.0.0"))
+;; Package-Requires: ((esqlite "0.0.0") (helm "0.0.0"))
 ;; Keywords: docs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -34,7 +33,7 @@
 
 (require 'helm)
 (require 'helm-match-plugin)
-(require 'sqlite)
+(require 'esqlite)
 (require 'json)
 (require 'ido)
 
@@ -67,9 +66,9 @@ Suggested possible values are:
 
 (defun helm-dash-connect-to-docset (docset)
   "Make the connection to sqlite DOCSET."
-  (sqlite-init (format
-                    "%s/%s.docset/Contents/Resources/docSet.dsidx"
-                    helm-dash-docsets-path docset)))
+  (esqlite-stream-open (format
+			"%s/%s.docset/Contents/Resources/docSet.dsidx"
+			helm-dash-docsets-path docset)))
 
 (defvar helm-dash-connections nil
   "Create conses like (\"Go\" . connection).")
@@ -94,22 +93,34 @@ Suggested possible values are:
   (when (not helm-dash-connections)
     (setq helm-dash-connections
           (mapcar (lambda (x)
-                    (cons x (helm-dash-connect-to-docset x)))
+                    (let ((connection (helm-dash-connect-to-docset x)))
+                      (list x connection (helm-dash-docset-type connection))))
                   helm-dash-common-docsets))))
 
 (defun helm-dash-create-buffer-connections ()
   "Create connections to sqlite docsets for buffer-local docsets."
   (mapc (lambda (x) (when (not (assoc x helm-dash-connections))
-                      (push (cons x (helm-dash-connect-to-docset x))
-                            helm-dash-connections)))
+                      (let ((connection  (helm-dash-connect-to-docset x)))
+                        (setq helm-dash-connections
+                              (cons (list x connection (helm-dash-docset-type connection))
+                                    helm-dash-connections)))))
         (helm-dash-buffer-local-docsets)))
 
 (defun helm-dash-reset-connections ()
   "Wipe all connections to docsets."
   (interactive)
-  (dolist (i helm-dash-connections)
-    (sqlite-bye (cdr i)))
+  (dolist (connection helm-dash-connections)
+    (esqlite-stream-close (cadr connection)))
   (setq helm-dash-connections nil))
+
+(defun helm-dash-docset-type (connection)
+  "Return the type of the docset based in db schema.
+Possible values are \"DASH\" and \"ZDASH\.
+The Argument CONNECTION should be an esqlite streaming process."
+  (let ((type_sql "SELECT name FROM sqlite_master WHERE type = 'table' LIMIT 1"))
+    (if (member "searchIndex" (car (esqlite-stream-read connection type_sql)))
+	"DASH"
+      "ZDASH")))
 
 (defun helm-dash-search-all-docsets ()
   "Fetch docsets from the original Kapeli's feed."
@@ -126,7 +137,7 @@ These docsets are not available to install.
 See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
 (defun helm-dash-available-docsets ()
-  "."
+  "Return a list of official docsets (http://kapeli.com/docset_links)."
   (delq nil (mapcar (lambda (docset)
                       (let ((name (assoc-default 'name (cdr docset))))
                         (if (and (equal (file-name-extension name) "xml")
@@ -183,46 +194,68 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
          (url (xml-get-children urls 'url)))
     (caddr (first url))))
 
-(defun helm-dash-where-query (pattern)
+(defvar helm-dash-sql-queries
+  '((DASH . ((select . (lambda ()
+                         (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
+                               (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 20"))
+                           (format query like))))
+             (count . (lambda ()
+                        (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
+                              (query "SELECT COUNT(t.name) FROM searchIndex t WHERE %s "))
+                          (format query like))))))
+    (ZDASH . ((select . (lambda ()
+                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
+                                (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 20"))
+                            (format query like))))
+              (count . (lambda ()
+                         (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
+                               (query "SELECT COUNT(t.ZTOKENNAME) FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s"))
+                           (format query like))))))))
+
+(defun helm-dash-sql-compose-like (column pattern)
   ""
-  (let ((conditions
-         (mapcar (lambda (word)
-                   (format "\"name\" like \"%%%s%%\"" word))
-                 (split-string pattern " "))))
-    (format " WHERE %s" (mapconcat 'identity conditions " AND "))))
+  (let ((conditions (mapcar (lambda (word) (format "%s like \"%%%s%%\"" column word))
+                            (split-string pattern " "))))
+    (format "%s" (mapconcat 'identity conditions " AND "))))
+
+(defun helm-dash-sql-execute (query-type docset-type)
+  ""
+  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries)))))
 
 (defun helm-dash-search ()
-  "Iterates every `helm-dash-connections' looking for the
-`helm-pattern'."
-  (let ((db "searchIndex")
-        (full-res (list))
-        (where-query (helm-dash-where-query helm-pattern))             ;let the magic happen with spaces
+  "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
+  (let ((full-res (list))
         (connections (helm-dash-filter-connections)))
     (dolist (docset connections)
-      (let ((res
+      (let* ((docset-type (caddr docset))
+             (res
              (and
               ;; hack to avoid sqlite hanging (timeouting) because of no results
-              (< 0 (string-to-number (caadr (sqlite-query (cdr docset)
-                                                          (format
-                                                           "SELECT COUNT(*) FROM %s %s"
-                                                           db where-query)))))
-              (sqlite-query (cdr docset)
-                            (format
-                             "SELECT t.type, t.name, t.path FROM %s t %s order by lower(t.name)"
-                             db where-query)))))
+              (< 0 (string-to-number (caar (esqlite-stream-read (cadr docset)
+                                                          (helm-dash-sql-execute 'count docset-type)))))
+              (esqlite-stream-read (cadr docset)
+                            (helm-dash-sql-execute 'select docset-type)))))
 
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (format "%s - %s"  (car docset) (cadr x)) (format "%s%s%s%s"
-                                                          "file://"
-                                                          helm-dash-docsets-path
-                                                          (format "/%s.docset/Contents/Resources/Documents/"
-																																	(car docset))
-                                                          (caddr x))))
+                                (cons (format "%s - %s"  (car docset) (cadr x)) (helm-dash-result-url docset x)))
                               res)))))
     full-res))
+
+(defun helm-dash-result-url (docset result)
+  ""
+  (let* ((anchor (car (last result)))
+	 (filename
+	 (format "%s%s"
+		 (caddr result)
+		 (if (or (eq :null anchor) (not anchor)) "" (format "#%s" anchor)))))
+    (format "%s%s%s%s"
+	    "file://"
+	    helm-dash-docsets-path
+	    (format "/%s.docset/Contents/Resources/Documents/" (car docset))
+	    filename)))
 
 (defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
 

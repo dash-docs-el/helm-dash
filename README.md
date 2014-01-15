@@ -17,7 +17,11 @@ If you're looking for dash.el, the list library, please go to
 ## Requirements
 
 - [helm](https://github.com/emacs-helm/helm)
-- [sqlite](https://github.com/cnngimenez/sqlite.el)
+- [esqlite](https://github.com/mhayashi1120/Emacs-esqlite)
+
+Previously, we were using [sqlite](https://github.com/cnngimenez/sqlite.el)
+but we had some problems with it because it was returning different
+results for the same sql query.
 
 ## Installation
 
@@ -61,8 +65,7 @@ docsets sets.
 
 ## Caveats
 
-Dash accepts a few different docset types while helm-dash only
-understands the [simplest ones](http://kapeli.com/docsets#dashDocset).
+helm-dash has been tested only in linux.
 
 ## Authors
 
