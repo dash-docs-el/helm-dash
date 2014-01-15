@@ -39,6 +39,11 @@ loaded. Typing substrings of what you search will find-as-you-type.
   `helm-dash-common-docsets' or in 'helm-dash-docsets' (which is ment
   to be buffer local)
 
+
+The command `helm-dash-reset-connections` will clear the connections
+to all sqlite db's. Use it in case of errors when adding new docsets.
+The next call to `helm-dash` will recreate them.
+
 ## Sets of Docsets
 
 ### Common docsets
