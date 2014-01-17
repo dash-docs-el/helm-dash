@@ -39,6 +39,8 @@ loaded. Typing substrings of what you search will find-as-you-type.
   `helm-dash-common-docsets' or in 'helm-dash-docsets' (which is ment
   to be buffer local)
 
+`m-x helm-dash-at-point RET` is like helm-dash, but it will prefill
+the search input with the symbol at point.
 
 The command `helm-dash-reset-connections` will clear the connections
 to all sqlite db's. Use it in case of errors when adding new docsets.
