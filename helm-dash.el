@@ -26,6 +26,9 @@
 ;; Clone the functionality of dash using helm foundation.  Browse
 ;; documentation via dash docsets.
 ;;
+;; M-x helm-dash
+;; M-x helm-dash-at-point
+;;
 ;; More info in the project site https://github.com/areina/helm-dash
 ;;
 ;;; Code:
@@ -275,6 +278,17 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
   (helm-dash-create-buffer-connections)
   (helm :sources '(helm-source-dash-search)
 	:buffer "*helm-dash*"))
+
+;;;###autoload
+(defun helm-dash-at-point ()
+  "Bring up a Dash search interface in helm using the symbol at
+point as prefilled search."
+  (interactive)
+  (helm-dash-create-common-connections)
+  (helm-dash-create-buffer-connections)
+  (helm :sources '(helm-source-dash-search)
+	:buffer "*helm-dash*"
+	:input (thing-at-point 'symbol)))
 
 (provide 'helm-dash)
 
