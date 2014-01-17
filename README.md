@@ -2,8 +2,10 @@
 
 ## What's it
 
-This package uses [Dash](http://www.kapeli.com/dash) docsets inside emacs to browse
-documentation.
+This package uses [Dash](http://www.kapeli.com/dash) docsets inside
+emacs to browse documentation. Here's an
+[article](http://puntoblogspot.blogspot.com.es/2014/01/ann-helm-dash-documentation-browser-for.html)
+explaining the basic usage of it.
 
 ![](https://raw.github.com/areina/helm-dash/master/misc/helm-dash.gif)
 
@@ -39,6 +41,8 @@ loaded. Typing substrings of what you search will find-as-you-type.
   `helm-dash-common-docsets' or in 'helm-dash-docsets' (which is ment
   to be buffer local)
 
+`m-x helm-dash-at-point RET` is like helm-dash, but it will prefill
+the search input with the symbol at point.
 
 The command `helm-dash-reset-connections` will clear the connections
 to all sqlite db's. Use it in case of errors when adding new docsets.
