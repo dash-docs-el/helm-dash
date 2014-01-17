@@ -75,7 +75,7 @@ docsets sets.
 
 helm-dash has been tested only in linux.  We've been notified that it doesn't work in Mac, so we ask for elisp hackers who own something that runs Mac OSX if they could take a look at it. 
 
-Hints: It looks like something with 'end of line' differences. The suspicious are [esqlite](http://www.github.com/mahayashi1120/Emacs-sqlite) (which helm-dash requires) or [pcsv](http://www.github.com/mahayashi1120/Emacs-pcsv) (which esqlite requires)
+Hints: It looks like something with 'end of line' differences. The suspicious are [esqlite](http://www.github.com/mhayashi1120/Emacs-esqlite) (which helm-dash requires) or [pcsv](http://www.github.com/mhayashi1120/Emacs-pcsv) (which esqlite requires)
 
 ## Authors
 
