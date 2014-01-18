@@ -201,19 +201,11 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
   '((DASH . ((select . (lambda ()
                          (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
                                (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 20"))
-                           (format query like))))
-             (count . (lambda ()
-                        (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
-                              (query "SELECT COUNT(t.name) FROM searchIndex t WHERE %s "))
-                          (format query like))))))
+                           (format query like))))))
     (ZDASH . ((select . (lambda ()
                           (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
                                 (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 20"))
-                            (format query like))))
-              (count . (lambda ()
-                         (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
-                               (query "SELECT COUNT(t.ZTOKENNAME) FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s"))
-                           (format query like))))))))
+                            (format query like))))))))
 
 (defun helm-dash-sql-compose-like (column pattern)
   ""
@@ -232,13 +224,8 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
     (dolist (docset connections)
       (let* ((docset-type (caddr docset))
              (res
-             (and
-              ;; hack to avoid sqlite hanging (timeouting) because of no results
-              (< 0 (string-to-number (caar (esqlite-stream-read (cadr docset)
-                                                          (helm-dash-sql-execute 'count docset-type)))))
-              (esqlite-stream-read (cadr docset)
-                            (helm-dash-sql-execute 'select docset-type)))))
-
+	      (esqlite-stream-read (cadr docset)
+                            (helm-dash-sql-execute 'select docset-type))))
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
