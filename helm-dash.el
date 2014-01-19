@@ -249,11 +249,16 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
 (defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
 
+(defcustom helm-dash-min-lengh 0
+  "Minimum length to start searching in docsets.
+0 facilitates discoverability, but may be a bit heavy when lots
+of docsets are active. Between 0 and 3 is sane.")
+
 (defvar helm-source-dash-search
   '((name . "Dash")
     (volatile)
     (delayed)
-    (requires-pattern . 3)
+    (requires-pattern . helm-dash-min-lengh)
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
 
