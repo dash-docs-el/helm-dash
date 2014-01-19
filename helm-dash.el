@@ -1,6 +1,6 @@
 ;;; helm-dash.el --- Helm extension to search dash docsets
-;; Copyright (C) 2013  Raimon Grau
-;; Copyright (C) 2013  Toni Reina
+;; Copyright (C) 2013-2014  Raimon Grau
+;; Copyright (C) 2013-2014  Toni Reina
 
 ;; Author: Raimon Grau <raimonster@gmail.com>
 ;;         Toni Reina  <areina0@gmail.com>
@@ -63,6 +63,10 @@ Suggested possible values are:
   :options '(completing-read ido-completing-read)
   :group 'helm-dash)
 
+(defcustom helm-dash-min-lengh 3
+  "Minimum length to start searching in docsets.
+0 facilitates discoverability, but may be a bit heavy when lots
+of docsets are active. Between 0 and 3 is sane.")
 
 (defvar helm-dash-common-docsets
   '() "List of Docsets to search active by default.")
@@ -248,11 +252,6 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 	    filename)))
 
 (defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
-
-(defcustom helm-dash-min-lengh 0
-  "Minimum length to start searching in docsets.
-0 facilitates discoverability, but may be a bit heavy when lots
-of docsets are active. Between 0 and 3 is sane.")
 
 (defvar helm-source-dash-search
   '((name . "Dash")
