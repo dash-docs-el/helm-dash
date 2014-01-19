@@ -263,10 +263,10 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 (defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
 
 (defvar helm-source-dash-search
-  '((name . "Dash")
+  `((name . "Dash")
     (volatile)
     (delayed)
-    (requires-pattern . helm-dash-min-lengh)
+    (requires-pattern . ,helm-dash-min-lengh)
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
 
