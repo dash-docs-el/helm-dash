@@ -198,12 +198,12 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
     (caddr (first url))))
 
 (defvar helm-dash-sql-queries
-  '((DASH . ((select . (lambda ()
-                         (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
+  '((DASH . ((select . (lambda (pattern)
+                         (let ((like (helm-dash-sql-compose-like "t.name" pattern))
                                (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 20"))
                            (format query like))))))
-    (ZDASH . ((select . (lambda ()
-                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
+    (ZDASH . ((select . (lambda (pattern)
+                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
                                 (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 20"))
                             (format query like))))))))
 
@@ -213,19 +213,23 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                             (split-string pattern " "))))
     (format "%s" (mapconcat 'identity conditions " AND "))))
 
-(defun helm-dash-sql-execute (query-type docset-type)
+(defun helm-dash-sql-execute (query-type docset-type pattern)
   ""
-  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries)))))
+  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
-(defun helm-dash-search ()
+(defun helm-dash-search () (helm-dash-search2))
+
+(defun helm-dash-search2 ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
   (let ((full-res (list))
-        (connections (helm-dash-filter-connections)))
+        (connections (if (string-match "^\\(.*\\):" helm-pattern)
+			 (list (assoc (match-string 1 helm-pattern) (helm-dash-filter-connections)))
+			 (helm-dash-filter-connections))))
     (dolist (docset connections)
       (let* ((docset-type (caddr docset))
              (res
 	      (esqlite-stream-read (cadr docset)
-                            (helm-dash-sql-execute 'select docset-type))))
+				   (helm-dash-sql-execute 'select docset-type (replace-regexp-in-string "^.*:" "" helm-pattern)))))
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
@@ -253,10 +257,11 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
   '((name . "Dash")
     (volatile)
     (delayed)
-    (requires-pattern . 3)
+;    (requires-pattern . 3)
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
 
+(defvar helm-dash-hist nil)
 ;;;###autoload
 (defun helm-dash ()
   "Bring up a Dash search interface in helm."
@@ -264,12 +269,12 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
   (helm :sources '(helm-source-dash-search)
+	:history 'helm-dash-hist
 	:buffer "*helm-dash*"))
 
 ;;;###autoload
 (defun helm-dash-at-point ()
-  "Bring up a Dash search interface in helm using the symbol at
-point as prefilled search."
+  "Bring up a Dash search interface in helm using the symbol at point as prefilled search."
   (interactive)
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
