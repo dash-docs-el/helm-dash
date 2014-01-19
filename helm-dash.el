@@ -262,7 +262,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 
 (defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
 
-(defvar helm-source-dash-search
+(defun helm-source-dash-search ()
   `((name . "Dash")
     (volatile)
     (delayed)
@@ -276,7 +276,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   (interactive)
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
-  (helm :sources '(helm-source-dash-search)
+  (helm :sources (list (helm-source-dash-search))
 	:buffer "*helm-dash*"))
 
 ;;;###autoload
@@ -286,7 +286,7 @@ point as prefilled search."
   (interactive)
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
-  (helm :sources '(helm-source-dash-search)
+  (helm :sources (list (helm-source-dash-search))
 	:buffer "*helm-dash*"
 	:input (thing-at-point 'symbol)))
 
