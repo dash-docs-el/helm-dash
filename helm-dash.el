@@ -66,7 +66,7 @@ Suggested possible values are:
 (defcustom helm-dash-min-lengh 3
   "Minimum length to start searching in docsets.
 0 facilitates discoverability, but may be a bit heavy when lots
-of docsets are active. Between 0 and 3 is sane.")
+of docsets are active.  Between 0 and 3 is sane.")
 
 (defvar helm-dash-common-docsets
   '() "List of Docsets to search active by default.")
@@ -182,7 +182,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
     (when (and (not (file-directory-p helm-dash-docsets-path))
-	       (y-or-n-p (format "Directory %s does not exist. Want to create it?"
+	       (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
 				 helm-dash-docsets-path)))
       (mkdir helm-dash-docsets-path))
     (let ((docset-folder
@@ -203,7 +203,8 @@ The argument TAR-OUTPUT should be an string with the output of a tar command."
     (car (split-string last-line "\\." t))))
 
 (defun helm-dash-get-docset-url (feed-path)
-  ""
+  "Parse a xml feed with docset urls and return the first url.
+The Argument FEED-PATH should be a string with the path of the xml file."
   (let* ((xml (xml-parse-file feed-path))
          (urls (car xml))
          (url (xml-get-children urls 'url)))
