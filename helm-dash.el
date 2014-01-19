@@ -82,7 +82,7 @@ Suggested possible values are:
         (connections nil))
     (setq docsets (append docsets helm-dash-common-docsets))
     (delq nil (mapcar (lambda (y)
-                        (assoc y helm-dash-connections))
+                        (assoc (downcase y) helm-dash-connections))
              docsets))))
 
 (defun helm-dash-buffer-local-docsets ()
@@ -97,7 +97,7 @@ Suggested possible values are:
     (setq helm-dash-connections
           (mapcar (lambda (x)
                     (let ((connection (helm-dash-connect-to-docset x)))
-                      (list x connection (helm-dash-docset-type connection))))
+                      (list (downcase x) connection (helm-dash-docset-type connection))))
                   helm-dash-common-docsets))))
 
 (defun helm-dash-create-buffer-connections ()
@@ -217,26 +217,25 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
   ""
   (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
-(defun helm-dash-search () (helm-dash-search2))
-
-(defun helm-dash-search2 ()
+(defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
   (let ((full-res (list))
-        (connections (if (string-match "^\\(.*\\):" helm-pattern)
-			 (list (assoc (match-string 1 helm-pattern) (helm-dash-filter-connections)))
+        (connections (if (string-match "^\\([^ ]*\\) " helm-pattern)
+			 (list (assoc (downcase (match-string 1 helm-pattern)) (helm-dash-filter-connections)))
 			 (helm-dash-filter-connections))))
     (dolist (docset connections)
       (let* ((docset-type (caddr docset))
              (res
 	      (esqlite-stream-read (cadr docset)
-				   (helm-dash-sql-execute 'select docset-type (replace-regexp-in-string "^.*:" "" helm-pattern)))))
+				   (helm-dash-sql-execute 'select docset-type (replace-regexp-in-string "^[^ ]* " "" helm-pattern)))))
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (format "%s - %s"  (car docset) (cadr x)) (helm-dash-result-url docset x)))
+                                (cons (format "%s %s"  (car docset) (cadr x)) (helm-dash-result-url docset x)))
                               res)))))
-    full-res))
+    full-res)
+  )
 
 (defun helm-dash-result-url (docset result)
   ""
