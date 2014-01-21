@@ -200,7 +200,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 The argument TAR-OUTPUT should be an string with the output of a tar command."
   (let ((last-line
 	 (car (last (split-string tar-output "\n" t)))))
-    (car (split-string last-line "\\." t))))
+    (replace-regexp-in-string "^x " "" (car (split-string last-line "\\." t)))))
 
 (defun helm-dash-get-docset-url (feed-path)
   "Parse a xml feed with docset urls and return the first url.
