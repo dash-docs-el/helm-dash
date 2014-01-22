@@ -5,7 +5,7 @@
 ;; Author: Raimon Grau <raimonster@gmail.com>
 ;;         Toni Reina  <areina0@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: ((esqlite "0.0.0") (helm "0.0.0"))
+;; Package-Requires: ((helm "0.0.0"))
 ;; Keywords: docs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,6 @@
 
 (require 'helm)
 (require 'helm-match-plugin)
-(require 'esqlite)
 (require 'json)
 (require 'ido)
 
@@ -72,13 +71,17 @@ of docsets are active.  Between 0 and 3 is sane.")
   '() "List of Docsets to search active by default.")
 
 (defun helm-dash-connect-to-docset (docset)
-  "Make the connection to sqlite DOCSET."
-  (esqlite-stream-open (format
-			"%s/%s.docset/Contents/Resources/docSet.dsidx"
-			helm-dash-docsets-path docset)))
+  "Compose the path to sqlite DOCSET."
+  (format "%s/%s.docset/Contents/Resources/docSet.dsidx"
+	  helm-dash-docsets-path docset))
 
 (defvar helm-dash-connections nil
   "Create conses like (\"Go\" . connection).")
+
+(defun helm-dash-sql (db-path sql)
+  ""
+  (mapcar (lambda (x) (split-string x "|" t))
+	  (split-string (shell-command-to-string (format "sqlite3 \"%s\" \"%s\"" db-path sql)) "\n" t)))
 
 (defun helm-dash-filter-connections ()
   "Filter connections using `helm-dash-connections-filters'."
@@ -100,8 +103,8 @@ of docsets are active.  Between 0 and 3 is sane.")
   (when (not helm-dash-connections)
     (setq helm-dash-connections
           (mapcar (lambda (x)
-                    (let ((connection (helm-dash-connect-to-docset x)))
-                      (list x connection (helm-dash-docset-type connection))))
+                    (let ((db-path (helm-dash-connect-to-docset x)))
+                      (list x db-path (helm-dash-docset-type db-path))))
                   helm-dash-common-docsets))))
 
 (defun helm-dash-create-buffer-connections ()
@@ -116,16 +119,14 @@ of docsets are active.  Between 0 and 3 is sane.")
 (defun helm-dash-reset-connections ()
   "Wipe all connections to docsets."
   (interactive)
-  (dolist (connection helm-dash-connections)
-    (esqlite-stream-close (cadr connection)))
   (setq helm-dash-connections nil))
 
-(defun helm-dash-docset-type (connection)
+(defun helm-dash-docset-type (db-path)
   "Return the type of the docset based in db schema.
 Possible values are \"DASH\" and \"ZDASH\.
-The Argument CONNECTION should be an esqlite streaming process."
+The Argument DB-PATH should be a string with the sqlite db path."
   (let ((type_sql "SELECT name FROM sqlite_master WHERE type = 'table' LIMIT 1"))
-    (if (member "searchIndex" (car (esqlite-stream-read connection type_sql)))
+    (if (member "searchIndex" (car (helm-dash-sql db-path type_sql)))
 	"DASH"
       "ZDASH")))
 
@@ -222,7 +223,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 
 (defun helm-dash-sql-compose-like (column pattern)
   ""
-  (let ((conditions (mapcar (lambda (word) (format "%s like \"%%%s%%\"" column word))
+  (let ((conditions (mapcar (lambda (word) (format "%s like '%%%s%%'" column word))
                             (split-string pattern " "))))
     (format "%s" (mapconcat 'identity conditions " AND "))))
 
@@ -237,8 +238,8 @@ The Argument FEED-PATH should be a string with the path of the xml file."
     (dolist (docset connections)
       (let* ((docset-type (caddr docset))
              (res
-	      (esqlite-stream-read (cadr docset)
-                            (helm-dash-sql-execute 'select docset-type))))
+	      (helm-dash-sql (cadr docset)
+			     (helm-dash-sql-execute 'select docset-type))))
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
