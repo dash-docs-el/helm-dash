@@ -73,7 +73,7 @@ docsets sets.
 
 ## Caveats
 
-*Update*: helm-dash is working in Mac OSX now. We've changed the way to execute
+**Update**: helm-dash is working in Mac OSX now. We've changed the way to execute
 sqlite queries. Provisionally, we're executing shell-commands directly. Our
 idea is come back to use [esqlite](http://www.github.com/mhayashi1120/Emacs-esqlite)
 when some issues will be fixed.
