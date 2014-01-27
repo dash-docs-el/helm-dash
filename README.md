@@ -89,7 +89,7 @@ helm-dash requires) or
 [pcsv](http://www.github.com/mhayashi1120/Emacs-pcsv) (which esqlite
 requires)
 
-There's some (bug on **mac osx**'s browse-url)[https://github.com/areina/helm-dash/issues/36] which can't open urls with #. If you
+There's some [bug on **mac osx**'s browse-url](https://github.com/areina/helm-dash/issues/36) which can't open urls with #. If you
 find this issue, and want to debug, great, otherwise, you can use eww
 or w3 or w3m which will work just fine
 
