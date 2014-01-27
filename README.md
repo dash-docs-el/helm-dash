@@ -78,9 +78,20 @@ sqlite queries. Provisionally, we're executing shell-commands directly. Our
 idea is come back to use [esqlite](http://www.github.com/mhayashi1120/Emacs-esqlite)
 when some issues will be fixed.
 
-helm-dash has been tested only in linux.  We've been notified that it doesn't work in Mac, so we ask for elisp hackers who own something that runs Mac OSX if they could take a look at it. 
+helm-dash has been tested only in linux.  We've been notified that it
+doesn't work in Mac, so we ask for elisp hackers who own something
+that runs Mac OSX if they could take a look at it.
 
-Hints: It looks like something with 'end of line' differences. The suspicious are [esqlite](http://www.github.com/mhayashi1120/Emacs-esqlite) (which helm-dash requires) or [pcsv](http://www.github.com/mhayashi1120/Emacs-pcsv) (which esqlite requires)
+Hints: It looks like something with 'end of line' differences. The
+suspicious are
+[esqlite](http://www.github.com/mhayashi1120/Emacs-esqlite) (which
+helm-dash requires) or
+[pcsv](http://www.github.com/mhayashi1120/Emacs-pcsv) (which esqlite
+requires)
+
+There's some (bug on **mac osx**'s browse-url)[https://github.com/areina/helm-dash/issues/36] which can't open urls with #. If you
+find this issue, and want to debug, great, otherwise, you can use eww
+or w3 or w3m which will work just fine
 
 ## Authors
 
