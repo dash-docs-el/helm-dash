@@ -48,6 +48,11 @@ The command `helm-dash-reset-connections` will clear the connections
 to all sqlite db's. Use it in case of errors when adding new docsets.
 The next call to `helm-dash` will recreate them.
 
+## Variables to customize
+
+`helm-dash-min-length' tells helm-dash from which length to start
+searching. Defaults to 3. 0 Facilitates exploratoration.
+
 ## Sets of Docsets
 
 ### Common docsets
@@ -71,6 +76,12 @@ docsets sets.
 (add-hook 'go-mode-hook 'go-doc)
 ```
 
+### Only one docset
+
+To narrow the search to just one docset, type its name in the
+beginning of the search followed by a space. If the docset contains
+spaces, no problemo, we handle it :D.
+
 ## Caveats
 
 **Update**: helm-dash is working in Mac OSX now. We've changed the way to execute
@@ -89,9 +100,11 @@ helm-dash requires) or
 [pcsv](http://www.github.com/mhayashi1120/Emacs-pcsv) (which esqlite
 requires)
 
-There's some [bug on **mac osx**'s browse-url](https://github.com/areina/helm-dash/issues/36) which can't open urls with #. If you
-find this issue, and want to debug, great, otherwise, you can use eww
-or w3 or w3m which will work just fine
+There's some
+[bug on **mac osx**'s browse-url](https://github.com/areina/helm-dash/issues/36)
+which can't open urls with #. If you find this issue, and want to
+debug, great, otherwise, you can use eww or w3 or w3m which will work
+just fine
 
 ## Authors
 
