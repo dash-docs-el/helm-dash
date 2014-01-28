@@ -212,12 +212,12 @@ The Argument FEED-PATH should be a string with the path of the xml file."
     (caddr (first url))))
 
 (defvar helm-dash-sql-queries
-  '((DASH . ((select . (lambda ()
-                         (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
+  '((DASH . ((select . (lambda (pattern)
+                         (let ((like (helm-dash-sql-compose-like "t.name" pattern))
                                (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 20"))
                            (format query like))))))
-    (ZDASH . ((select . (lambda ()
-                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
+    (ZDASH . ((select . (lambda (pattern)
+                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
                                 (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 20"))
                             (format query like))))))))
 
@@ -227,9 +227,9 @@ The Argument FEED-PATH should be a string with the path of the xml file."
                             (split-string pattern " "))))
     (format "%s" (mapconcat 'identity conditions " AND "))))
 
-(defun helm-dash-sql-execute (query-type docset-type)
+(defun helm-dash-sql-execute (query-type docset-type pattern)
   ""
-  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries)))))
+  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
@@ -239,7 +239,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
       (let* ((docset-type (caddr docset))
              (res
 	      (helm-dash-sql (cadr docset)
-			     (helm-dash-sql-execute 'select docset-type))))
+			     (helm-dash-sql-execute 'select docset-type helm-pattern))))
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
