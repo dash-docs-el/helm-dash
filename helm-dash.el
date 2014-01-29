@@ -62,7 +62,7 @@ Suggested possible values are:
   :options '(completing-read ido-completing-read)
   :group 'helm-dash)
 
-(defcustom helm-dash-min-lengh 3
+(defcustom helm-dash-min-length 3
   "Minimum length to start searching in docsets.
 0 facilitates discoverability, but may be a bit heavy when lots
 of docsets are active.  Between 0 and 3 is sane.")
@@ -212,13 +212,13 @@ The Argument FEED-PATH should be a string with the path of the xml file."
     (caddr (first url))))
 
 (defvar helm-dash-sql-queries
-  '((DASH . ((select . (lambda ()
-                         (let ((like (helm-dash-sql-compose-like "t.name" helm-pattern))
-                               (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 20"))
+  '((DASH . ((select . (lambda (pattern)
+                         (let ((like (helm-dash-sql-compose-like "t.name" pattern))
+                               (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 100"))
                            (format query like))))))
-    (ZDASH . ((select . (lambda ()
-                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" helm-pattern))
-                                (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 20"))
+    (ZDASH . ((select . (lambda (pattern)
+                          (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
+                                (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 100"))
                             (format query like))))))))
 
 (defun helm-dash-sql-compose-like (column pattern)
@@ -227,24 +227,59 @@ The Argument FEED-PATH should be a string with the path of the xml file."
                             (split-string pattern " "))))
     (format "%s" (mapconcat 'identity conditions " AND "))))
 
-(defun helm-dash-sql-execute (query-type docset-type)
+(defun helm-dash-sql-execute (query-type docset-type pattern)
   ""
-  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries)))))
+  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
+
+(defun helm-dash-string-starts-with (s begins)
+	"returns non-nil if string S starts with BEGINS.  Else nil."
+	(cond ((>= (length s) (length begins))
+				 (string-equal (substring s 0 (length begins)) begins))
+				(t nil)))
+
+(defun helm-dash-some (fun l)
+	(dolist (elem l)
+		(when (funcall fun elem)
+			(return elem)))
+	nil)
+
+(defun helm-dash-maybe-narrow-to-one-docset (pattern)
+	"If PATTERN starts with the name of a docset followed by a
+space, narrow the used connections to just that one. We're
+looping on all connections, but it shouldn't be a problem as
+there won't be many."
+	(or (helm-dash-some '(lambda (x)
+									(and
+									 (helm-dash-string-starts-with
+										(downcase helm-pattern)
+										(format "%s " (downcase (car x))))
+									 (list x)))
+							 (helm-dash-filter-connections))
+			(helm-dash-filter-connections)))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
   (let ((full-res (list))
-        (connections (helm-dash-filter-connections)))
+        (connections (helm-dash-maybe-narrow-to-one-docset helm-pattern)))
+
     (dolist (docset connections)
       (let* ((docset-type (caddr docset))
              (res
-	      (helm-dash-sql (cadr docset)
-			     (helm-dash-sql-execute 'select docset-type))))
+							(helm-dash-sql
+							 (cadr docset)
+							 (helm-dash-sql-execute 'select
+																			docset-type
+																			;; if the search starts with the name of the docset, ignore it
+																			;; this avoids searching for redis in redis unless you type 'redis redis'
+																			(replace-regexp-in-string
+																			 (format "^%s " (downcase (car docset)))
+																			 ""
+																			 helm-pattern)))))
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (format "%s - %s"  (car docset) (cadr x)) (helm-dash-result-url docset x)))
+                                (cons (format "%s %s"  (car docset) (cadr x)) (helm-dash-result-url docset x)))
                               res)))))
     full-res))
 
@@ -267,7 +302,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   `((name . "Dash")
     (volatile)
     (delayed)
-    (requires-pattern . ,helm-dash-min-lengh)
+    (requires-pattern . ,helm-dash-min-length)
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
 
