@@ -7,6 +7,8 @@ emacs to browse documentation. Here's an
 [article](http://puntoblogspot.blogspot.com.es/2014/01/ann-helm-dash-documentation-browser-for.html)
 explaining the basic usage of it.
 
+It doesn't require Dash app.
+
 ![](https://raw.github.com/areina/helm-dash/master/misc/helm-dash.gif)
 
 ## What's not
