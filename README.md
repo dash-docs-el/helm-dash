@@ -53,7 +53,7 @@ The next call to `helm-dash` will recreate them.
 ## Variables to customize
 
 `helm-dash-min-length' tells helm-dash from which length to start
-searching. Defaults to 3. 0 Facilitates exploratoration.
+searching. Defaults to 3.
 
 ## Sets of Docsets
 
