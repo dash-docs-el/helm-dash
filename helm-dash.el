@@ -62,7 +62,7 @@ Suggested possible values are:
   :options '(completing-read ido-completing-read)
   :group 'helm-dash)
 
-(defcustom helm-dash-min-lengh 3
+(defcustom helm-dash-min-length 3
   "Minimum length to start searching in docsets.
 0 facilitates discoverability, but may be a bit heavy when lots
 of docsets are active.  Between 0 and 3 is sane.")
@@ -296,7 +296,7 @@ there won't be many."
   `((name . "Dash")
     (volatile)
     (delayed)
-    (requires-pattern . ,helm-dash-min-lengh)
+    (requires-pattern . ,helm-dash-min-length)
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
 
