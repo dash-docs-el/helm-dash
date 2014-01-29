@@ -214,11 +214,11 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 (defvar helm-dash-sql-queries
   '((DASH . ((select . (lambda (pattern)
                          (let ((like (helm-dash-sql-compose-like "t.name" pattern))
-                               (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 20"))
+                               (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LOWER(t.name) LIMIT 100"))
                            (format query like))))))
     (ZDASH . ((select . (lambda (pattern)
                           (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
-                                (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 20"))
+                                (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LOWER(t.ZTOKENNAME) LIMIT 100"))
                             (format query like))))))))
 
 (defun helm-dash-sql-compose-like (column pattern)
