@@ -237,19 +237,25 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 				 (string-equal (substring s 0 (length begins)) begins))
 				(t nil)))
 
+(defun helm-dash-some (fun l)
+	(dolist (elem l)
+		(when (funcall fun elem)
+			(return elem)))
+	nil)
+
 (defun helm-dash-maybe-narrow-to-one-docset (pattern)
 	"If PATTERN starts with the name of a docset followed by a
 space, narrow the used connections to just that one. We're
 looping on all connections, but it shouldn't be a problem as
 there won't be many."
-	(or (cl-some '(lambda (x)
-												 (and
-													(helm-dash-string-starts-with
-													 (downcase helm-pattern)
-													 (format "%s " (downcase (car x))))
-													(list x)))
-											(helm-dash-filter-connections))
-						 (helm-dash-filter-connections)))
+	(or (helm-dash-some '(lambda (x)
+									(and
+									 (helm-dash-string-starts-with
+										(downcase helm-pattern)
+										(format "%s " (downcase (car x))))
+									 (list x)))
+							 (helm-dash-filter-connections))
+			(helm-dash-filter-connections)))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
