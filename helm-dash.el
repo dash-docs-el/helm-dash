@@ -171,12 +171,11 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
   (helm-dash-reset-connections))
 
 ;;;###autoload
-(defun helm-dash-install-docset ()
+(defun helm-dash-install-docset (docset-name)
   "Download docset with specified NAME and move its stuff to docsets-path."
-  (interactive)
-  (let* ((docset-name (funcall helm-dash-completing-read-func
-                               "Install docset: " (helm-dash-available-docsets)))
-         (feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
+  (interactive (list (funcall helm-dash-completing-read-func
+                               "Install docset: " (helm-dash-available-docsets))))
+  (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
          (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
     (url-copy-file feed-url feed-tmp-path t)
