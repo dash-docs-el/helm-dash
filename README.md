@@ -1,4 +1,4 @@
-# Helm Dash
+# Helm Dash [![Build Status](https://api.travis-ci.org/areina/helm-dash.png?branch=master)](http://travis-ci.org/areina/helm-dash)
 
 ## What's it
 

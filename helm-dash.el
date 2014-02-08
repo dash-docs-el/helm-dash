@@ -232,30 +232,38 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
 (defun helm-dash-string-starts-with (s begins)
-	"returns non-nil if string S starts with BEGINS.  Else nil."
-	(cond ((>= (length s) (length begins))
-				 (string-equal (substring s 0 (length begins)) begins))
-				(t nil)))
+  "Return non-nil if string S starts with BEGINS.  Else nil."
+  (cond ((>= (length s) (length begins))
+	 (string-equal (substring s 0 (length begins)) begins))
+	(t nil)))
 
 (defun helm-dash-some (fun l)
-	(dolist (elem l)
-		(when (funcall fun elem)
-			(return elem)))
-	nil)
+  (dolist (elem l)
+    (when (funcall fun elem)
+      (return elem))))
 
 (defun helm-dash-maybe-narrow-to-one-docset (pattern)
-	"If PATTERN starts with the name of a docset followed by a
-space, narrow the used connections to just that one. We're
-looping on all connections, but it shouldn't be a problem as
-there won't be many."
-	(or (helm-dash-some '(lambda (x)
-									(and
-									 (helm-dash-string-starts-with
-										(downcase helm-pattern)
-										(format "%s " (downcase (car x))))
-									 (list x)))
-							 (helm-dash-filter-connections))
-			(helm-dash-filter-connections)))
+  "Return a list of helm-dash-connections.
+If PATTERN starts with the name of a docset followed by a space, narrow the
+ used connections to just that one.  We're looping on all connections, but it
+ shouldn't be a problem as there won't be many."
+  (or (helm-dash-some '(lambda (x)
+			 (and
+			  (helm-dash-string-starts-with
+			   (downcase pattern)
+			   (format "%s " (downcase (car x))))
+			  (return (list x))))
+		      (helm-dash-filter-connections))
+      (helm-dash-filter-connections)))
+
+(defun helm-dash-sub-docset-name-in-pattern (pattern docset-name)
+  ""
+  ;; if the search starts with the name of the docset, ignore it
+  ;; this avoids searching for redis in redis unless you type 'redis redis'
+  (replace-regexp-in-string
+   (format "^%s " (regexp-quote (downcase docset-name)))
+   ""
+   pattern))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
@@ -265,16 +273,11 @@ there won't be many."
     (dolist (docset connections)
       (let* ((docset-type (caddr docset))
              (res
-							(helm-dash-sql
-							 (cadr docset)
-							 (helm-dash-sql-execute 'select
-																			docset-type
-																			;; if the search starts with the name of the docset, ignore it
-																			;; this avoids searching for redis in redis unless you type 'redis redis'
-																			(replace-regexp-in-string
-																			 (format "^%s " (downcase (car docset)))
-																			 ""
-																			 helm-pattern)))))
+	      (helm-dash-sql
+	       (cadr docset)
+	       (helm-dash-sql-execute 'select
+				      docset-type
+				      (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
         ;; how to do the appending properly?
         (setq full-res
               (append full-res
