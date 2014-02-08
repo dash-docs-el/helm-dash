@@ -1,3 +1,4 @@
+(source gnu)
 (source melpa)
 
 (package "helm-dash" "1.0.0" "Browse Dash docsets inside emacs.")
