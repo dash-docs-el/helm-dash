@@ -11,14 +11,20 @@
 (ert-deftest helm-dash-test/maybe-narrow-to-one-docset-filtered ()
   "Should return a list with filtered connections."
   (let ((pattern "Go ")
-	(helm-dash-docsets-path "/tmp/.docsets")
-	(helm-dash-common-docsets '("Redis" "Go" "CSS"))
-	(helm-dash-connections
-	 '(("Redis" "/tmp/.docsets/Redis.docset/Contents/Resources/docSet.dsidx" "DASH")
-	   ("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH")
-	   ("CSS" "/tmp/.docsets/CSS.docset/Contents/Resources/docSet.dsidx" "ZDASH"))))
+        (helm-dash-docsets-path "/tmp/.docsets")
+        (helm-dash-common-docsets '("Redis" "Go" "CSS" "C" "C++"))
+        (helm-dash-connections
+         '(("Redis" "/tmp/.docsets/Redis.docset/Contents/Resources/docSet.dsidx" "DASH")
+           ("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH")
+           ("C" "/tmp/.docsets/C.docset/Contents/Resources/docSet.dsidx" "DASH")
+           ("C++" "/tmp/.docsets/C++.docset/Contents/Resources/docSet.dsidx" "DASH")
+           ("CSS" "/tmp/.docsets/CSS.docset/Contents/Resources/docSet.dsidx" "ZDASH"))))
     (should (equal (helm-dash-maybe-narrow-to-one-docset pattern)
-		   '("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH")))))
+                   '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH"))))
+
+    (should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "C foo"))))
+		(should (equal "C++" (caar (helm-dash-maybe-narrow-to-one-docset "C++ foo"))))
+		(should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "c foo"))))))
 
 (ert-deftest helm-dash-test/maybe-narrow-to-one-docset-not-filtered ()
   "Should return all current connections because the pattern doesn't match with any connection."
