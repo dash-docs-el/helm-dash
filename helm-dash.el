@@ -252,7 +252,7 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
 			  (helm-dash-string-starts-with
 			   (downcase pattern)
 			   (format "%s " (downcase (car x))))
-			  (list x)))
+			  (return (list x))))
 		      (helm-dash-filter-connections))
       (helm-dash-filter-connections)))
 
