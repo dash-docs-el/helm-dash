@@ -106,6 +106,23 @@ which can't open urls with #. If you find this issue, and want to
 debug, great, otherwise, you can use eww or w3 or w3m which will work
 just fine
 
+## Contribution
+
+We ♥ feedback, issues or pull requests. Feel free to contribute in helm-dash.
+
+We're trying to add tests to the project, if you send a PR please consider add
+new or update the existing ones.
+
+Install [Cask](https://github.com/cask/cask) if you haven't already, then:
+
+    $ cd /path/to/helm-dash
+    $ cask
+
+Run all tests with:
+
+    $ make
+
+
 ## Authors
 
 - Toni Reina <areina0@gmail.com>
