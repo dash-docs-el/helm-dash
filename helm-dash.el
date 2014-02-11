@@ -46,7 +46,10 @@
 
 (defcustom helm-dash-docsets-path
   (format "%s/.docsets"  (getenv "HOME"))
-  "Default path for docsets."
+  "Default path for docsets. If you're setting this option
+manually, set it to an absolute path. You can use
+`expand-file-name' function for that."
+  :set (lambda (opt val) (set opt (expand-file-name val)))
   :group 'helm-dash)
 
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
