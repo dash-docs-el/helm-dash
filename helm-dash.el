@@ -76,10 +76,14 @@ of docsets are active.  Between 0 and 3 is sane.")
 (defun helm-dash-connect-to-docset (docset)
   "Compose the path to sqlite DOCSET."
   (format "%s/%s.docset/Contents/Resources/docSet.dsidx"
-	  helm-dash-docsets-path docset))
+	  (helm-dash-docsets-path) docset))
 
 (defvar helm-dash-connections nil
   "Create conses like (\"Go\" . connection).")
+
+
+(defun helm-dash-docsets-path ()
+  (expand-file-name helm-dash-docsets-path))
 
 (defun helm-dash-sql (db-path sql)
   ""
@@ -159,7 +163,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
-  (let ((docsets (directory-files helm-dash-docsets-path nil ".docset$")))
+  (let ((docsets (directory-files (helm-dash-docsets-path) nil ".docset$")))
     (mapcar #'(lambda (name)
                (cond ((string-match "[^.]+" name) (match-string 0 name))
                      (t name)))
@@ -180,17 +184,19 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                                "Install docset: " (helm-dash-available-docsets))))
   (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
          (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
-         (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
+         (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
+         (docset-path (helm-dash-docsets-path))
+         )
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
-    (when (and (not (file-directory-p helm-dash-docsets-path))
+    (when (and (not (file-directory-p docset-path))
 	       (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
-				 helm-dash-docsets-path)))
-      (mkdir helm-dash-docsets-path))
+				 docset-path)))
+      (mkdir docset-path))
     (let ((docset-folder
 	   (helm-dash-docset-folder-name
-	    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path helm-dash-docsets-path)))))
+	    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path (helm-dash-docsets-path))))))
       (helm-dash-activate-docset docset-folder)
       (message (format
 		"Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
@@ -297,7 +303,7 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
 		 (if (or (eq :null anchor) (not anchor)) "" (format "#%s" anchor)))))
     (format "%s%s%s%s"
 	    "file://"
-	    helm-dash-docsets-path
+	    (helm-dash-docsets-path)
 	    (format "/%s.docset/Contents/Resources/Documents/" (car docset))
 	    filename)))
 
