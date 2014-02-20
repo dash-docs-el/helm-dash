@@ -92,9 +92,9 @@
 
 (ert-deftest helm-dash-result-url/checks-docset-types ()
   (should (helm-dash-ends-with (helm-dash-result-url (list "a" "" "ZDASH") '("one" "two" "three" "anchor"))
-                               "three#anchor"))
+                               "Documents/three#anchor"))
   (should (helm-dash-ends-with (helm-dash-result-url (list "a" "" "DASH") '("one" "two" "three#anchor"))
-                               "three#anchor")))
+                               "Documents/three#anchor")))
 
 (ert-deftest helm-dash-docsets-path-test/relative-path ()
   "Should return the absolute path."
