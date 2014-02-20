@@ -300,7 +300,12 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
 	 (filename
 	 (format "%s%s"
 		 (caddr result)
-		 (if (or (eq :null anchor) (not anchor)) "" (format "#%s" anchor)))))
+		 (if (or
+          (not anchor)
+          (eq :null anchor)
+          (string= "DASH" (caddr docset)))
+         ""
+       (format "#%s" anchor)))))
     (format "%s%s%s%s"
 	    "file://"
 	    (helm-dash-docsets-path)
