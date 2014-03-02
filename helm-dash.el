@@ -295,7 +295,8 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
     full-res))
 
 (defun helm-dash-result-url (docset result)
-  ""
+  "Return the absolute path to the RESULT path in the
+DOCSET. Sanitization of spaces in the path."
   (let* ((anchor (car (last result)))
 	 (filename
 	 (format "%s%s"
@@ -306,11 +307,14 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
           (string= "DASH" (caddr docset)))
          ""
        (format "#%s" anchor)))))
-    (format "%s%s%s%s"
-	    "file://"
-	    (helm-dash-docsets-path)
-	    (format "/%s.docset/Contents/Resources/Documents/" (car docset))
-	    filename)))
+    (replace-regexp-in-string
+     " "
+     "%20"
+     (format "%s%s%s%s"
+             "file://"
+             (helm-dash-docsets-path)
+             (format "/%s.docset/Contents/Resources/Documents/" (car docset))
+             filename))))
 
 (defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
 
