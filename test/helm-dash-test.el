@@ -91,9 +91,11 @@
     (should (equal (helm-dash-sub-docset-name-in-pattern pattern docset) "printf"))))
 
 (ert-deftest helm-dash-result-url/checks-docset-types ()
-  (should (helm-dash-ends-with (helm-dash-result-url (list "a" "" "ZDASH") '("one" "two" "three" "anchor"))
+  (should (helm-dash-ends-with (helm-dash-result-url "Python 3" "three" "anchor")
                                "Documents/three#anchor"))
-  (should (helm-dash-ends-with (helm-dash-result-url (list "a" "" "DASH") '("one" "two" "three#anchor"))
+  (should (helm-dash-ends-with (helm-dash-result-url "Css" "three#anchor" nil)
+                               "Documents/three#anchor"))
+  (should (helm-dash-ends-with (helm-dash-result-url "Redis" "three#anchor")
                                "Documents/three#anchor")))
 
 (ert-deftest helm-dash-docsets-path-test/relative-path ()

@@ -81,6 +81,11 @@ of docsets are active.  Between 0 and 3 is sane.")
 (defvar helm-dash-connections nil
   "Create conses like (\"Go\" . connection).")
 
+(defvar helm-dash-browser-func 'browse-url
+  "Default function to browse Dash's docsets.
+Suggested values are:
+ * `browse-url'
+ * `eww'")
 
 (defun helm-dash-docsets-path ()
   (expand-file-name helm-dash-docsets-path))
@@ -290,33 +295,39 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (format "%s %s"  (car docset) (cadr x)) (helm-dash-result-url docset x)))
+                                (cons (format "%s %s"  (car docset) (cadr x)) (list (car docset) x)))
                               res)))))
     full-res))
 
-(defun helm-dash-result-url (docset result)
-  "Return the absolute path to the RESULT path in the
-DOCSET. Sanitization of spaces in the path."
-  (let* ((anchor (car (last result)))
-	 (filename
-	 (format "%s%s"
-		 (caddr result)
-		 (if (or
-          (not anchor)
-          (eq :null anchor)
-          (string= "DASH" (caddr docset)))
-         ""
-       (format "#%s" anchor)))))
+(defun helm-dash-result-url (docset-name filename &optional anchor)
+  "Return the absolute path joining docsets path, DOCSET-NAME,FILENAME & ANCHOR.
+Sanitization of spaces in the path."
+  (let ((path (format "%s%s" filename (if anchor (format "#%s" anchor) ""))))
     (replace-regexp-in-string
      " "
      "%20"
      (format "%s%s%s%s"
-             "file://"
-             (helm-dash-docsets-path)
-             (format "/%s.docset/Contents/Resources/Documents/" (car docset))
-             filename))))
+	     "file://"
+	     helm-dash-docsets-path
+	     (format "/%s.docset/Contents/Resources/Documents/" docset-name)
+	     path))))
 
-(defun helm-dash-actions (actions doc-item) `(("Go to doc" . browse-url)))
+(defun helm-dash-browse-url (search-result)
+  "Call to `browse-url' with the result returned by `helm-dash-result-url'.
+Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
+  (let ((docset-name (car search-result))
+	(filename (nth 2 (cadr search-result)))
+	(anchor (nth 3 (cadr search-result))))
+    (funcall helm-dash-browser-func (helm-dash-result-url docset-name filename anchor))))
+
+(defun helm-dash-copy-to-clipboard (search-result)
+  ""
+  (kill-new (format "(helm-dash-browse-url '%s)" search-result)))
+
+(defun helm-dash-actions (actions doc-item)
+  ""
+  `(("Go to doc" . helm-dash-browse-url)
+    ("Copy to clipboard" . helm-dash-copy-to-clipboard)))
 
 (defun helm-source-dash-search ()
   `((name . "Dash")
