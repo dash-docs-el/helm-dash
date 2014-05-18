@@ -90,6 +90,9 @@
 	(docset "C++"))
     (should (equal (helm-dash-sub-docset-name-in-pattern pattern docset) "printf"))))
 
+
+;;;; helm-dash-result-url
+
 (ert-deftest helm-dash-result-url/checks-docset-types ()
   (should (helm-dash-ends-with (helm-dash-result-url "Python 3" "three" "anchor")
                                "Documents/three#anchor"))
@@ -98,12 +101,23 @@
   (should (helm-dash-ends-with (helm-dash-result-url "Redis" "three#anchor")
                                "Documents/three#anchor")))
 
+;;;; helm-dash-docsets-path
+
 (ert-deftest helm-dash-docsets-path-test/relative-path ()
   "Should return the absolute path."
   (let ((helm-dash-docsets-path "~/.emacs.d/helm-dash-docsets")
 	(home-path (getenv "HOME")))
     (should (equal (helm-dash-docsets-path)
 		   (format "%s/.emacs.d/helm-dash-docsets" home-path)))))
+
+;;;; helm-dash-add-to-kill-ring
+
+(ert-deftest helm-dash-add-to-kill-ring-test ()
+  "Should add to kill ring a string with a call to `helm-dash-browse-url'"
+  (let ((results '(Redis ("func" "Documents/blpop.html"))))
+    (helm-dash-add-to-kill-ring results))
+  (should (equal (current-kill 0 t)
+		 "(helm-dash-browse-url '(Redis (func Documents/blpop.html)))")))
 
 (provide 'helm-dash-test)
 

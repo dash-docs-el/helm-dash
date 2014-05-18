@@ -321,7 +321,7 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
 	(anchor (nth 3 (cadr search-result))))
     (funcall helm-dash-browser-func (helm-dash-result-url docset-name filename anchor))))
 
-(defun helm-dash-copy-to-clipboard (search-result)
+(defun helm-dash-add-to-kill-ring (search-result)
   "Add to kill ring a formatted string to call `helm-dash-browse-url' with SEARCH-RESULT."
   (kill-new (format "(helm-dash-browse-url '%s)" search-result)))
 
