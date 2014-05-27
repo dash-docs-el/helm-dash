@@ -59,7 +59,7 @@ The next call to `helm-dash` will recreate them.
 searching. Defaults to 3.
 
 `helm-dash-browser-func` is a function to encapsulate the way to browse
-Dash' docsets. Defaults to `browse-url. For example, if you want to use eww to
+Dash' docsets. Defaults to browse-url. For example, if you want to use eww to
 browse your docsets, you can do: `(setq helm-dash-browser-func 'eww)`.
 
 ## Sets of Docsets
