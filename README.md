@@ -20,7 +20,7 @@ If you're looking for dash.el, the list library, please go to
 ## Requirements
 
 - [helm](https://github.com/emacs-helm/helm)
-- sqlite
+- sqlite3
 
 ## Installation
 
