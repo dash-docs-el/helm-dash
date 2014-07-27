@@ -199,7 +199,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
     (when (and (not (file-directory-p docset-path))
 	       (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
 				 docset-path)))
-      (mkdir docset-path))
+      (mkdir docset-path t))
     (let ((docset-folder
 	   (helm-dash-docset-folder-name
 	    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path (helm-dash-docsets-path))))))
