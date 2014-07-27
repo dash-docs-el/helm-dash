@@ -3,7 +3,7 @@ before_install:
   - curl -fsSkL https://gist.github.com/rejeep/7736123/raw | sh
   - export PATH="/home/travis/.cask/bin:$PATH"
   - export PATH="/home/travis/.evm/bin:$PATH"
-  - evm install $EVM_EMACS --use
+  - evm install $EVM_EMACS --use --skip
   - cask
 env:
   # - EVM_EMACS=emacs-24.1-bin
