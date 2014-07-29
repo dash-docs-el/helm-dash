@@ -91,9 +91,10 @@ To narrow the search to just one docset, type its name in the
 beginning of the search followed by a space. If the docset contains
 spaces, no problemo, we handle it :D.
 
-## Caveats
+## FAQ
 
-**Update**: helm-dash is working in Mac OSX now. We've changed the way to execute
+- Does it work in osX?
+
 sqlite queries. Provisionally, we're executing shell-commands directly. Our
 idea is come back to use [esqlite](http://www.github.com/mhayashi1120/Emacs-esqlite)
 when some issues will be fixed.
@@ -109,11 +110,17 @@ helm-dash requires) or
 [pcsv](http://www.github.com/mhayashi1120/Emacs-pcsv) (which esqlite
 requires)
 
-There's some
+- I'm using mac osx and pages open but not in the correct anchor
+
 [bug on **mac osx**'s browse-url](https://github.com/areina/helm-dash/issues/36)
 which can't open urls with #. If you find this issue, and want to
 debug, great, otherwise, you can use eww or w3 or w3m which will work
 just fine
+
+- I get nil for every search I do
+
+make sure you don't have sqlite3 .mode column but .mode list (the default). check your .sqliterc
+
 
 ## Contribution
 
