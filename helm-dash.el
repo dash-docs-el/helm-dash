@@ -55,12 +55,13 @@ manually, set it to an absolute path. You can use
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
   "Foo." :group 'helm-dash)
 
-(defcustom helm-dash-completing-read-func 'ido-completing-read
+(defcustom helm-dash-completing-read-func 'helm-comp-read
   "Completion function to be used when installing docsets.
 
 Suggested possible values are:
  * `completing-read':       built-in completion method.
- * `ido-completing-read':   dynamic completion within the minibuffer."
+ * `ido-completing-read':   dynamic completion within the minibuffer.
+ * `helm-comp-read':        use helm."
   :type 'function
   :options '(completing-read ido-completing-read)
   :group 'helm-dash)
