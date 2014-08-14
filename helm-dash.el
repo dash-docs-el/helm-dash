@@ -167,13 +167,18 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                             (file-name-sans-extension name))))
                     (helm-dash-search-all-docsets))))
 
+(defun docset-basename (path)
+  "Return the prefix base name of a docset path."
+  (file-name-base
+   ; This is to account for emacs on systems that return a '/' suffix
+   ; and those that don't, with directories.
+   (if (equal (last (string-to-list path)) (string-to-list "/"))
+       (butlast path) path)))
+
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
   (let ((docsets (directory-files (helm-dash-docsets-path) nil ".docset$")))
-    (mapcar #'(lambda (name)
-               (cond ((string-match "[^.]+" name) (match-string 0 name))
-                     (t name)))
-            docsets)))
+    (mapcar #'docset-basename docsets)))
 
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
