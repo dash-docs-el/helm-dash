@@ -4,6 +4,8 @@
 
 ;; Author: Raimon Grau <raimonster@gmail.com>
 ;;         Toni Reina  <areina0@gmail.com>
+;;
+;; URL: http://github.com/areina/helm-dash
 ;; Version: 0.1
 ;; Package-Requires: ((helm "0.0.0"))
 ;; Keywords: docs
