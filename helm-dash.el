@@ -315,7 +315,7 @@ Sanitization of spaces in the path."
      " "
      "%20"
      (format "%s%s%s%s"
-	     "file://"
+	     "file:///"
 	     helm-dash-docsets-path
 	     (format "/%s.docset/Contents/Resources/Documents/" docset-name)
 	     path))))
