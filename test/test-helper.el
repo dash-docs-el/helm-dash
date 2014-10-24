@@ -1,3 +1,4 @@
+(require 'undercover)
 (require 'f)
 
 (defvar helm-dash-test-path
@@ -12,4 +13,5 @@
                      string)
        t))
 
+(undercover "*.el" "helm-dash/*.el" (:exclude "*-test.el"))
 (require 'helm-dash (f-expand "helm-dash.el" helm-dash-code-path))
