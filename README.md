@@ -1,4 +1,4 @@
-# Helm Dash [![Build Status](https://api.travis-ci.org/areina/helm-dash.png?branch=master)](http://travis-ci.org/areina/helm-dash)
+# Helm Dash [![Build Status](https://api.travis-ci.org/areina/helm-dash.png?branch=master)](http://travis-ci.org/areina/helm-dash) [![Coverage Status](https://img.shields.io/coveralls/areina/helm-dash.svg)](https://coveralls.io/r/areina/helm-dash?branch=try-undercover)
 
 ## What's it
 
