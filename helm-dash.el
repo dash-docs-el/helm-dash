@@ -1,4 +1,4 @@
-;;; helm-dash.el --- Documentation browser for emacs with offline access to 150+ APIs.
+;;; helm-dash.el --- Documentation browser with offline access to 150+ APIs using Dash documentation sets.
 ;; Copyright (C) 2013-2014  Raimon Grau
 ;; Copyright (C) 2013-2014  Toni Reina
 
