@@ -1,4 +1,4 @@
-;;; helm-dash.el --- Helm extension to search dash docsets
+;;; helm-dash.el --- Documentation browser for emacs with offline access to 150+ APIs.
 ;; Copyright (C) 2013-2014  Raimon Grau
 ;; Copyright (C) 2013-2014  Toni Reina
 
