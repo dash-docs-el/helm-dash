@@ -1,4 +1,4 @@
-;;; helm-dash.el --- Documentation browser with offline access to 150+ APIs using Dash documentation sets.
+;;; helm-dash.el --- Offline documentation browser for +150 APIs using Dash docsets.
 ;; Copyright (C) 2013-2014  Raimon Grau
 ;; Copyright (C) 2013-2014  Toni Reina
 
