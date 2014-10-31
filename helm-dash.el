@@ -39,7 +39,6 @@
 (require 'helm)
 (require 'helm-match-plugin)
 (require 'json)
-(require 'ido)
 
 (defgroup helm-dash nil
   "Search Dash docsets using helm."
@@ -56,16 +55,6 @@ manually, set it to an absolute path. You can use
 
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
   "Foo." :group 'helm-dash)
-
-(defcustom helm-dash-completing-read-func 'ido-completing-read
-  "Completion function to be used when installing docsets.
-
-Suggested possible values are:
- * `completing-read':       built-in completion method.
- * `ido-completing-read':   dynamic completion within the minibuffer."
-  :type 'function
-  :options '(completing-read ido-completing-read)
-  :group 'helm-dash)
 
 (defcustom helm-dash-min-length 3
   "Minimum length to start searching in docsets.
@@ -184,17 +173,18 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
-  (interactive (list (funcall helm-dash-completing-read-func
+  (interactive (list (helm-comp-read
                               "Activate docset: " (helm-dash-installed-docsets)
-                              nil t)))
+                              :must-match t)))
   (add-to-list 'helm-dash-common-docsets docset)
   (helm-dash-reset-connections))
 
 ;;;###autoload
 (defun helm-dash-install-docset (docset-name)
   "Download docset with specified DOCSET-NAME and move its stuff to docsets-path."
-  (interactive (list (funcall helm-dash-completing-read-func
-                               "Install docset: " (helm-dash-available-docsets))))
+  (interactive (list (helm-comp-read
+                      "Install docset: " (helm-dash-available-docsets)
+                      :must-match t)))
   (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
          (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
