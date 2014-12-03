@@ -85,7 +85,10 @@ Suggested values are:
 (defun helm-dash-sql (db-path sql)
   ""
   (mapcar (lambda (x) (split-string x "|" t))
-	  (split-string (shell-command-to-string (format "sqlite3 \"%s\" \"%s\"" db-path sql)) "\n" t)))
+          (split-string
+           (with-output-to-string
+             (call-process-shell-command
+              (format "sqlite3 \"%s\" \"%s\"" db-path sql) nil standard-output)) "\n" t)))
 
 (defun helm-dash-filter-connections ()
   "Filter connections using `helm-dash-connections-filters'."
