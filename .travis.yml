@@ -1,5 +1,6 @@
 language: emacs-lisp
 before_install:
+  - apt-get install texinfo
   - curl -fsSkL https://gist.github.com/rejeep/7736123/raw | sh
   - export PATH="/home/travis/.cask/bin:$PATH"
   - export PATH="/home/travis/.evm/bin:$PATH"
