@@ -8,6 +8,7 @@ before_install:
 env:
   - EVM_EMACS=emacs-24.3-bin
   - EVM_EMACS=emacs-24.4-bin
+  - EVM_EMACS=emacs-git-snapshot
 script:
   - emacs --version
   - make test
