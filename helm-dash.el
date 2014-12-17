@@ -51,14 +51,14 @@
              (file-directory-p original-dash-path))
         original-dash-path
       (expand-file-name "~/.docsets")))
-  "Default path for docsets. If you're setting this option
-manually, set it to an absolute path. You can use
-`expand-file-name' function for that."
+  "Default path for docsets.
+If you're setting this option manually, set it to an absolute
+path.  You can use `expand-file-name' function for that."
   :set (lambda (opt val) (set opt (expand-file-name val)))
   :group 'helm-dash)
 
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
-  "Foo." :group 'helm-dash)
+  "Feeds URL for dash docsets." :group 'helm-dash)
 
 (defcustom helm-dash-min-length 3
   "Minimum length to start searching in docsets.
@@ -74,7 +74,7 @@ of docsets are active.  Between 0 and 3 is sane.")
 	  (helm-dash-docsets-path) docset))
 
 (defvar helm-dash-connections nil
-  "Create conses like (\"Go\" . connection).")
+  "List of conses like (\"Go\" . connection).")
 
 (defvar helm-dash-browser-func 'browse-url
   "Default function to browse Dash's docsets.
