@@ -267,9 +267,9 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
  shouldn't be a problem as there won't be many."
   (or (helm-dash-some '(lambda (x)
 			 (and
-			  (helm-dash-string-starts-with
-			   (downcase pattern)
-			   (format "%s " (downcase (car x))))
+			  (string-prefix-p
+			   (format "%s " (downcase (car x)))
+			   (downcase pattern))
 			  (cl-return (list x))))
 		      (helm-dash-filter-connections))
       (helm-dash-filter-connections)))
