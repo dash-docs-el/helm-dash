@@ -7,7 +7,7 @@
 ;;
 ;; URL: http://github.com/areina/helm-dash
 ;; Version: 1.1
-;; Package-Requires: ((helm "0.0.0"))
+;; Package-Requires: ((helm "0.0.0") (cl-lib "0.5"))
 ;; Keywords: docs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -34,8 +34,8 @@
 ;; More info in the project site https://github.com/areina/helm-dash
 ;;
 ;;; Code:
-(eval-when-compile (require 'cl))
 
+(require 'cl-lib)
 (require 'helm)
 (require 'helm-match-plugin)
 (require 'json)
@@ -68,10 +68,18 @@ of docsets are active.  Between 0 and 3 is sane.")
 (defvar helm-dash-common-docsets
   '() "List of Docsets to search active by default.")
 
+
+(defun helm-dash-docset-path (docset)
+  "Return the full path of the directory for DOCSET."
+  (let ((top-level (format "%s/%s.docset" (helm-dash-docsets-path) docset))
+        (nested (format "%s/%s/%s.docset" (helm-dash-docsets-path) docset docset)))
+    (if (file-directory-p top-level)
+        top-level
+      nested)))
+
 (defun helm-dash-docset-db-path (docset)
   "Compose the path to sqlite DOCSET."
-  (format "%s/%s.docset/Contents/Resources/docSet.dsidx"
-	  (helm-dash-docsets-path) docset))
+  (expand-file-name "Contents/Resources/docSet.dsidx" (helm-dash-docset-path docset)))
 
 (defvar helm-dash-connections nil
   "List of conses like (\"Go\" . connection).")
@@ -165,18 +173,14 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                             (file-name-sans-extension name))))
                     (helm-dash-search-all-docsets))))
 
-(defun docset-basename (path)
-  "Return the prefix base name of a docset path."
-  (file-name-base
-   ; This is to account for emacs on systems that return a '/' suffix
-   ; and those that don't, with directories.
-   (if (equal (last (string-to-list path)) (string-to-list "/"))
-       (butlast path) path)))
-
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
-  (let ((docsets (directory-files (helm-dash-docsets-path) nil ".docset$")))
-    (mapcar #'docset-basename docsets)))
+  (let ((docset-path (helm-dash-docsets-path)))
+    (cl-loop for dir in (directory-files docset-path)
+             for full-path = (expand-file-name dir docset-path)
+             when (or (string-match-p "\\.docset\\'" dir)
+                      (file-directory-p (expand-file-name (format "%s.docset" dir) full-path)))
+             collecting (replace-regexp-in-string "\\.docset\\'" "" dir))))
 
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
@@ -193,10 +197,10 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                       "Install docset: " (helm-dash-available-docsets)
                       :must-match t)))
   (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
-         (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
-         (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
-         (docset-path (helm-dash-docsets-path))
-         )
+        (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
+        (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
+        (docset-path (helm-dash-docsets-path))
+        )
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
@@ -308,11 +312,10 @@ formed as-is if FILENAME is a full HTTP(S) URL."
       (replace-regexp-in-string
        " "
        "%20"
-       (format "%s%s%s%s"
-               "file:///"
-               helm-dash-docsets-path
-               (format "/%s.docset/Contents/Resources/Documents/" docset-name)
-               path)))))
+       (concat
+        "file://"
+        (expand-file-name "Contents/Resources/Documents/" (helm-dash-docset-path docset-name))
+        path)))))
 
 (defun helm-dash-browse-url (search-result)
   "Call to `browse-url' with the result returned by `helm-dash-result-url'.
