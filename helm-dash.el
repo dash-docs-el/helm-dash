@@ -249,12 +249,6 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   ""
   (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
-(defun helm-dash-string-starts-with (s begins)
-  "Return non-nil if string S starts with BEGINS.  Else nil."
-  (cond ((>= (length s) (length begins))
-	 (string-equal (substring s 0 (length begins)) begins))
-	(t nil)))
-
 (defun helm-dash-some (fun l)
   (dolist (elem l)
     (when (funcall fun elem)
