@@ -68,7 +68,7 @@ of docsets are active.  Between 0 and 3 is sane.")
 (defvar helm-dash-common-docsets
   '() "List of Docsets to search active by default.")
 
-(defun helm-dash-connect-to-docset (docset)
+(defun helm-dash-docset-db-path (docset)
   "Compose the path to sqlite DOCSET."
   (format "%s/%s.docset/Contents/Resources/docSet.dsidx"
 	  (helm-dash-docsets-path) docset))
@@ -114,17 +114,17 @@ Suggested values are:
   (when (not helm-dash-connections)
     (setq helm-dash-connections
           (mapcar (lambda (x)
-                    (let ((db-path (helm-dash-connect-to-docset x)))
+                    (let ((db-path (helm-dash-docset-db-path x)))
                       (list x db-path (helm-dash-docset-type db-path))))
                   helm-dash-common-docsets))))
 
 (defun helm-dash-create-buffer-connections ()
   "Create connections to sqlite docsets for buffer-local docsets."
   (mapc (lambda (x) (when (not (assoc x helm-dash-connections))
-                      (let ((connection  (helm-dash-connect-to-docset x)))
-                        (setq helm-dash-connections
-                              (cons (list x connection (helm-dash-docset-type connection))
-                                    helm-dash-connections)))))
+                 (let ((connection  (helm-dash-docset-db-path x)))
+                   (setq helm-dash-connections
+                         (cons (list x connection (helm-dash-docset-type connection))
+                               helm-dash-connections)))))
         (helm-dash-buffer-local-docsets)))
 
 (defun helm-dash-reset-connections ()
