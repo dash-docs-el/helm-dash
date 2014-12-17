@@ -37,8 +37,10 @@
 
 (require 'cl-lib)
 (require 'helm)
+(require 'helm-mode)
 (require 'helm-match-plugin)
 (require 'json)
+(require 'xml)
 
 (defgroup helm-dash nil
   "Search Dash docsets using helm."
@@ -231,7 +233,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   (let* ((xml (xml-parse-file feed-path))
          (urls (car xml))
          (url (xml-get-children urls 'url)))
-    (caddr (first url))))
+    (cl-caddr (cl-first url))))
 
 (defvar helm-dash-sql-queries
   '((DASH . ((select . (lambda (pattern)
@@ -256,7 +258,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 (defun helm-dash-some (fun l)
   (dolist (elem l)
     (when (funcall fun elem)
-      (return elem))))
+      (cl-return elem))))
 
 (defun helm-dash-maybe-narrow-to-one-docset (pattern)
   "Return a list of helm-dash-connections.
@@ -268,7 +270,7 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
 			  (helm-dash-string-starts-with
 			   (downcase pattern)
 			   (format "%s " (downcase (car x))))
-			  (return (list x))))
+			  (cl-return (list x))))
 		      (helm-dash-filter-connections))
       (helm-dash-filter-connections)))
 
@@ -287,7 +289,7 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
         (connections (helm-dash-maybe-narrow-to-one-docset helm-pattern)))
 
     (dolist (docset connections)
-      (let* ((docset-type (caddr docset))
+      (let* ((docset-type (cl-caddr docset))
              (res
 	      (helm-dash-sql
 	       (cadr docset)
