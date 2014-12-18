@@ -257,24 +257,18 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   ""
   (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
-(defun helm-dash-some (fun l)
-  (dolist (elem l)
-    (when (funcall fun elem)
-      (cl-return elem))))
-
 (defun helm-dash-maybe-narrow-to-one-docset (pattern)
   "Return a list of helm-dash-connections.
 If PATTERN starts with the name of a docset followed by a space, narrow the
  used connections to just that one.  We're looping on all connections, but it
  shouldn't be a problem as there won't be many."
-  (or (helm-dash-some '(lambda (x)
-			 (and
-			  (string-prefix-p
-			   (format "%s " (downcase (car x)))
-			   (downcase pattern))
-			  (cl-return (list x))))
-		      (helm-dash-filter-connections))
-      (helm-dash-filter-connections)))
+  (let ((conns (helm-dash-filter-connections)))
+    (or (cl-loop for x in conns
+                 if (string-prefix-p
+                     (concat (downcase (car x)) " ")
+                     (downcase pattern))
+                 return (list x))
+        conns)))
 
 (defun helm-dash-sub-docset-name-in-pattern (pattern docset-name)
   "Remove from PATTERN the DOCSET-NAME if this includes it.
