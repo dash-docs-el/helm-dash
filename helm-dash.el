@@ -220,7 +220,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 		"Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
 		docset-folder)))))
 
-(fset 'helm-dash-update-docset 'helm-dash-install-docset)
+(defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
 (defun helm-dash-docset-folder-name (tar-output)
   "Return the name of the folder where the docset has been extracted.
