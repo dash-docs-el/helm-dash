@@ -42,8 +42,8 @@
                    '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH"))))
 
     (should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "C foo"))))
-		(should (equal "C++" (caar (helm-dash-maybe-narrow-to-one-docset "C++ foo"))))
-		(should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "c foo"))))))
+    (should (equal "C++" (caar (helm-dash-maybe-narrow-to-one-docset "C++ foo"))))
+    (should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "c foo"))))))
 
 (ert-deftest helm-dash-maybe-narrow-to-one-docset-test/not-filtered ()
   "Should return all current connections because the pattern doesn't match with any connection."
