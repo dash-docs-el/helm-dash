@@ -94,12 +94,12 @@
 ;;;; helm-dash-result-url
 
 (ert-deftest helm-dash-result-url/checks-docset-types ()
-  (should (helm-dash-ends-with (helm-dash-result-url "Python 3" "three" "anchor")
-                               "Documents/three#anchor"))
-  (should (helm-dash-ends-with (helm-dash-result-url "Css" "three#anchor" nil)
-                               "Documents/three#anchor"))
-  (should (helm-dash-ends-with (helm-dash-result-url "Redis" "three#anchor")
-                               "Documents/three#anchor")))
+  (should (string-match-p "Documents/three#anchor$"
+                          (helm-dash-result-url "Python 3" "three" "anchor")))
+  (should (string-match-p "Documents/three#anchor$"
+                          (helm-dash-result-url "Css" "three#anchor" nil)))
+  (should (string-match-p "Documents/three#anchor$"
+                          (helm-dash-result-url "Redis" "three#anchor"))))
 
 ;;;; helm-dash-docsets-path
 
