@@ -37,7 +37,6 @@
 
 (require 'cl-lib)
 (require 'helm)
-(require 'helm-mode)
 (require 'helm-match-plugin)
 (require 'json)
 (require 'xml)
@@ -186,20 +185,26 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                       (file-directory-p (expand-file-name (format "%s.docset" dir) full-path)))
              collecting (replace-regexp-in-string "\\.docset\\'" "" dir))))
 
+(defun helm-dash-read-docset (prompt choices)
+  "PROMPT user to choose one of the docsets in CHOICES.
+Report an error unless a valid docset is selected."
+  (completing-read (format "%s (%s): " prompt (car choices))
+                   choices nil t nil nil choices))
+
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
-  (interactive (list (helm-comp-read
-                              "Activate docset: " (helm-dash-installed-docsets)
-                              :must-match t)))
+  (interactive (list (helm-dash-read-docset
+                      "Activate docset"
+                      (helm-dash-installed-docsets))))
   (add-to-list 'helm-dash-common-docsets docset)
   (helm-dash-reset-connections))
 
 ;;;###autoload
 (defun helm-dash-install-docset (docset-name)
   "Download docset with specified DOCSET-NAME and move its stuff to docsets-path."
-  (interactive (list (helm-comp-read
-                      "Install docset: " (helm-dash-available-docsets)
-                      :must-match t)))
+  (interactive (list (helm-dash-read-docset
+                      "Install docset"
+                      (helm-dash-available-docsets))))
   (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
         (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
         (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
