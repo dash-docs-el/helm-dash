@@ -25,19 +25,6 @@
 
 ;;; Code:
 
-;;;; helm-dash-some
-
-(ert-deftest helm-dash-some-test/with-matches ()
-  "Should return the first element of the list because it satisfies the function."
-  (should (equal (helm-dash-some '(lambda (x) (equal 0 (mod x 2))) '(1 2 3 4))
-		 2)))
-
-(ert-deftest helm-dash-some-test/no-matches ()
-  "Should return nil because it doesn't satisfy the function."
-  (should (equal (helm-dash-some '(lambda (x) (equal 5 x)) '(1 2 3 4))
-		 nil)))
-
-
 ;;;; helm-dash-maybe-narrow-to-one-docset
 
 (ert-deftest helm-dash-maybe-narrow-to-one-docset-test/filtered ()
