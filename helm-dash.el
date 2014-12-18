@@ -65,7 +65,8 @@ path.  You can use `expand-file-name' function for that."
 (defcustom helm-dash-min-length 3
   "Minimum length to start searching in docsets.
 0 facilitates discoverability, but may be a bit heavy when lots
-of docsets are active.  Between 0 and 3 is sane.")
+of docsets are active.  Between 0 and 3 is sane."
+  :group 'helm-dash)
 
 (defvar helm-dash-common-docsets
   '() "List of Docsets to search active by default.")
@@ -86,11 +87,12 @@ of docsets are active.  Between 0 and 3 is sane.")
 (defvar helm-dash-connections nil
   "List of conses like (\"Go\" . connection).")
 
-(defvar helm-dash-browser-func 'browse-url
+(defcustom helm-dash-browser-func 'browse-url
   "Default function to browse Dash's docsets.
 Suggested values are:
  * `browse-url'
- * `eww'")
+ * `eww'"
+  :group 'helm-dash)
 
 (defun helm-dash-docsets-path ()
   "Return the path where Dash's docsets are stored."
