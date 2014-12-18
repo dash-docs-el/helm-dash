@@ -25,19 +25,6 @@
 
 ;;; Code:
 
-;;;; helm-dash-some
-
-(ert-deftest helm-dash-some-test/with-matches ()
-  "Should return the first element of the list because it satisfies the function."
-  (should (equal (helm-dash-some '(lambda (x) (equal 0 (mod x 2))) '(1 2 3 4))
-		 2)))
-
-(ert-deftest helm-dash-some-test/no-matches ()
-  "Should return nil because it doesn't satisfy the function."
-  (should (equal (helm-dash-some '(lambda (x) (equal 5 x)) '(1 2 3 4))
-		 nil)))
-
-
 ;;;; helm-dash-maybe-narrow-to-one-docset
 
 (ert-deftest helm-dash-maybe-narrow-to-one-docset-test/filtered ()
@@ -55,8 +42,8 @@
                    '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH"))))
 
     (should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "C foo"))))
-		(should (equal "C++" (caar (helm-dash-maybe-narrow-to-one-docset "C++ foo"))))
-		(should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "c foo"))))))
+    (should (equal "C++" (caar (helm-dash-maybe-narrow-to-one-docset "C++ foo"))))
+    (should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "c foo"))))))
 
 (ert-deftest helm-dash-maybe-narrow-to-one-docset-test/not-filtered ()
   "Should return all current connections because the pattern doesn't match with any connection."
@@ -94,12 +81,12 @@
 ;;;; helm-dash-result-url
 
 (ert-deftest helm-dash-result-url/checks-docset-types ()
-  (should (helm-dash-ends-with (helm-dash-result-url "Python 3" "three" "anchor")
-                               "Documents/three#anchor"))
-  (should (helm-dash-ends-with (helm-dash-result-url "Css" "three#anchor" nil)
-                               "Documents/three#anchor"))
-  (should (helm-dash-ends-with (helm-dash-result-url "Redis" "three#anchor")
-                               "Documents/three#anchor")))
+  (should (string-match-p "Documents/three#anchor$"
+                          (helm-dash-result-url "Python 3" "three" "anchor")))
+  (should (string-match-p "Documents/three#anchor$"
+                          (helm-dash-result-url "Css" "three#anchor" nil)))
+  (should (string-match-p "Documents/three#anchor$"
+                          (helm-dash-result-url "Redis" "three#anchor"))))
 
 ;;;; helm-dash-docsets-path
 

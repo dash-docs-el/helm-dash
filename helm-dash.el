@@ -7,7 +7,7 @@
 ;;
 ;; URL: http://github.com/areina/helm-dash
 ;; Version: 1.1
-;; Package-Requires: ((helm "0.0.0"))
+;; Package-Requires: ((helm "0.0.0") (cl-lib "0.5"))
 ;; Keywords: docs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -34,11 +34,13 @@
 ;; More info in the project site https://github.com/areina/helm-dash
 ;;
 ;;; Code:
-(eval-when-compile (require 'cl))
 
+(require 'cl-lib)
 (require 'helm)
+(require 'helm-mode)
 (require 'helm-match-plugin)
 (require 'json)
+(require 'xml)
 
 (defgroup helm-dash nil
   "Search Dash docsets using helm."
@@ -46,37 +48,51 @@
   :group 'applications)
 
 (defcustom helm-dash-docsets-path
-  (format "%s/.docsets"  (getenv "HOME"))
-  "Default path for docsets. If you're setting this option
-manually, set it to an absolute path. You can use
-`expand-file-name' function for that."
+  (let ((original-dash-path (expand-file-name "~/Library/Application Support/Dash/DocSets")))
+    (if (and (string-equal system-type 'darwin)
+             (file-directory-p original-dash-path))
+        original-dash-path
+      (expand-file-name "~/.docsets")))
+  "Default path for docsets.
+If you're setting this option manually, set it to an absolute
+path.  You can use `expand-file-name' function for that."
   :set (lambda (opt val) (set opt (expand-file-name val)))
   :group 'helm-dash)
 
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
-  "Foo." :group 'helm-dash)
+  "Feeds URL for dash docsets." :group 'helm-dash)
 
 (defcustom helm-dash-min-length 3
   "Minimum length to start searching in docsets.
 0 facilitates discoverability, but may be a bit heavy when lots
-of docsets are active.  Between 0 and 3 is sane.")
+of docsets are active.  Between 0 and 3 is sane."
+  :group 'helm-dash)
 
 (defvar helm-dash-common-docsets
   '() "List of Docsets to search active by default.")
 
-(defun helm-dash-connect-to-docset (docset)
+
+(defun helm-dash-docset-path (docset)
+  "Return the full path of the directory for DOCSET."
+  (let ((top-level (format "%s/%s.docset" (helm-dash-docsets-path) docset))
+        (nested (format "%s/%s/%s.docset" (helm-dash-docsets-path) docset docset)))
+    (if (file-directory-p top-level)
+        top-level
+      nested)))
+
+(defun helm-dash-docset-db-path (docset)
   "Compose the path to sqlite DOCSET."
-  (format "%s/%s.docset/Contents/Resources/docSet.dsidx"
-	  (helm-dash-docsets-path) docset))
+  (expand-file-name "Contents/Resources/docSet.dsidx" (helm-dash-docset-path docset)))
 
 (defvar helm-dash-connections nil
-  "Create conses like (\"Go\" . connection).")
+  "List of conses like (\"Go\" . connection).")
 
-(defvar helm-dash-browser-func 'browse-url
+(defcustom helm-dash-browser-func 'browse-url
   "Default function to browse Dash's docsets.
 Suggested values are:
  * `browse-url'
- * `eww'")
+ * `eww'"
+  :group 'helm-dash)
 
 (defun helm-dash-docsets-path ()
   "Return the path where Dash's docsets are stored."
@@ -110,17 +126,17 @@ Suggested values are:
   (when (not helm-dash-connections)
     (setq helm-dash-connections
           (mapcar (lambda (x)
-                    (let ((db-path (helm-dash-connect-to-docset x)))
+                    (let ((db-path (helm-dash-docset-db-path x)))
                       (list x db-path (helm-dash-docset-type db-path))))
                   helm-dash-common-docsets))))
 
 (defun helm-dash-create-buffer-connections ()
   "Create connections to sqlite docsets for buffer-local docsets."
   (mapc (lambda (x) (when (not (assoc x helm-dash-connections))
-                      (let ((connection  (helm-dash-connect-to-docset x)))
-                        (setq helm-dash-connections
-                              (cons (list x connection (helm-dash-docset-type connection))
-                                    helm-dash-connections)))))
+                 (let ((connection  (helm-dash-docset-db-path x)))
+                   (setq helm-dash-connections
+                         (cons (list x connection (helm-dash-docset-type connection))
+                               helm-dash-connections)))))
         (helm-dash-buffer-local-docsets)))
 
 (defun helm-dash-reset-connections ()
@@ -161,18 +177,14 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                             (file-name-sans-extension name))))
                     (helm-dash-search-all-docsets))))
 
-(defun docset-basename (path)
-  "Return the prefix base name of a docset path."
-  (file-name-base
-   ; This is to account for emacs on systems that return a '/' suffix
-   ; and those that don't, with directories.
-   (if (equal (last (string-to-list path)) (string-to-list "/"))
-       (butlast path) path)))
-
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
-  (let ((docsets (directory-files (helm-dash-docsets-path) nil ".docset$")))
-    (mapcar #'docset-basename docsets)))
+  (let ((docset-path (helm-dash-docsets-path)))
+    (cl-loop for dir in (directory-files docset-path)
+             for full-path = (expand-file-name dir docset-path)
+             when (or (string-match-p "\\.docset\\'" dir)
+                      (file-directory-p (expand-file-name (format "%s.docset" dir) full-path)))
+             collecting (replace-regexp-in-string "\\.docset\\'" "" dir))))
 
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
@@ -189,10 +201,10 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                       "Install docset: " (helm-dash-available-docsets)
                       :must-match t)))
   (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
-         (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
-         (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
-         (docset-path (helm-dash-docsets-path))
-         )
+        (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
+        (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
+        (docset-path (helm-dash-docsets-path))
+        )
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
@@ -208,7 +220,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 		"Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
 		docset-folder)))))
 
-(fset 'helm-dash-update-docset 'helm-dash-install-docset)
+(defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
 (defun helm-dash-docset-folder-name (tar-output)
   "Return the name of the folder where the docset has been extracted.
@@ -223,7 +235,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   (let* ((xml (xml-parse-file feed-path))
          (urls (car xml))
          (url (xml-get-children urls 'url)))
-    (caddr (first url))))
+    (cl-caddr (cl-first url))))
 
 (defvar helm-dash-sql-queries
   '((DASH . ((select . (lambda (pattern)
@@ -245,30 +257,18 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   ""
   (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
-(defun helm-dash-string-starts-with (s begins)
-  "Return non-nil if string S starts with BEGINS.  Else nil."
-  (cond ((>= (length s) (length begins))
-	 (string-equal (substring s 0 (length begins)) begins))
-	(t nil)))
-
-(defun helm-dash-some (fun l)
-  (dolist (elem l)
-    (when (funcall fun elem)
-      (return elem))))
-
 (defun helm-dash-maybe-narrow-to-one-docset (pattern)
   "Return a list of helm-dash-connections.
 If PATTERN starts with the name of a docset followed by a space, narrow the
  used connections to just that one.  We're looping on all connections, but it
  shouldn't be a problem as there won't be many."
-  (or (helm-dash-some '(lambda (x)
-			 (and
-			  (helm-dash-string-starts-with
-			   (downcase pattern)
-			   (format "%s " (downcase (car x))))
-			  (return (list x))))
-		      (helm-dash-filter-connections))
-      (helm-dash-filter-connections)))
+  (let ((conns (helm-dash-filter-connections)))
+    (or (cl-loop for x in conns
+                 if (string-prefix-p
+                     (concat (downcase (car x)) " ")
+                     (downcase pattern))
+                 return (list x))
+        conns)))
 
 (defun helm-dash-sub-docset-name-in-pattern (pattern docset-name)
   "Remove from PATTERN the DOCSET-NAME if this includes it.
@@ -285,7 +285,7 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
         (connections (helm-dash-maybe-narrow-to-one-docset helm-pattern)))
 
     (dolist (docset connections)
-      (let* ((docset-type (caddr docset))
+      (let* ((docset-type (cl-caddr docset))
              (res
 	      (helm-dash-sql
 	       (cadr docset)
@@ -310,11 +310,10 @@ formed as-is if FILENAME is a full HTTP(S) URL."
       (replace-regexp-in-string
        " "
        "%20"
-       (format "%s%s%s%s"
-               "file:///"
-               helm-dash-docsets-path
-               (format "/%s.docset/Contents/Resources/Documents/" docset-name)
-               path)))))
+       (concat
+        "file://"
+        (expand-file-name "Contents/Resources/Documents/" (helm-dash-docset-path docset-name))
+        path)))))
 
 (defun helm-dash-browse-url (search-result)
   "Call to `browse-url' with the result returned by `helm-dash-result-url'.
