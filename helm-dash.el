@@ -188,8 +188,9 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 (defun helm-dash-read-docset (prompt choices)
   "PROMPT user to choose one of the docsets in CHOICES.
 Report an error unless a valid docset is selected."
-  (completing-read (format "%s (%s): " prompt (car choices))
-                   choices nil t nil nil choices))
+  (let ((completion-ignore-case t))
+    (completing-read (format "%s (%s): " prompt (car choices))
+                     choices nil t nil nil choices)))
 
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
