@@ -208,23 +208,30 @@ Report an error unless a valid docset is selected."
                       (helm-dash-available-docsets))))
   (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
         (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
-        (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
-        (docset-path (helm-dash-docsets-path))
-        )
+        (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
+    (helm-dash-install-docset-from-file docset-tmp-path)))
 
-    (when (and (not (file-directory-p docset-path))
-	       (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
-				 docset-path)))
-      (mkdir docset-path t))
-    (let ((docset-folder
-	   (helm-dash-docset-folder-name
-	    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path (shell-quote-argument helm-dash-docsets-path))))))
-      (helm-dash-activate-docset docset-folder)
-      (message (format
-		"Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-		docset-folder)))))
+;;;###autoload
+(defun helm-dash-install-docset-from-file (path)
+  "Install docset from pre-downloaded tarball at PATH."
+  (interactive
+   (list (car (find-file-read-args "Docset Tarball: " t))))
+  (let ((docset-root (helm-dash-docsets-path))
+        docset-folder)
+    (when (and (not (file-directory-p docset-root))
+               (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
+                                 docset-root)))
+      (mkdir docset-root t))
+    (setq docset-folder
+          (helm-dash-docset-folder-name
+           (shell-command-to-string
+            (format "tar axvf %s -C %s" path docset-root))))
+    (helm-dash-activate-docset docset-folder)
+    (message (format
+              "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
+              docset-folder))))
 
 (defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
