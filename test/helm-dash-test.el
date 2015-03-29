@@ -25,9 +25,9 @@
 
 ;;; Code:
 
-;;;; helm-dash-maybe-narrow-to-one-docset
+;;;; helm-dash-maybe-narrow-docsets
 
-(ert-deftest helm-dash-maybe-narrow-to-one-docset-test/filtered ()
+(ert-deftest helm-dash-maybe-narrow-docsets-test/filtered ()
   "Should return a list with filtered connections."
   (let ((pattern "Go ")
         (helm-dash-docsets-path "/tmp/.docsets")
@@ -38,14 +38,14 @@
            ("C" "/tmp/.docsets/C.docset/Contents/Resources/docSet.dsidx" "DASH")
            ("C++" "/tmp/.docsets/C++.docset/Contents/Resources/docSet.dsidx" "DASH")
            ("CSS" "/tmp/.docsets/CSS.docset/Contents/Resources/docSet.dsidx" "ZDASH"))))
-    (should (equal (helm-dash-maybe-narrow-to-one-docset pattern)
+    (should (equal (helm-dash-maybe-narrow-docsets pattern)
                    '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH"))))
 
-    (should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "C foo"))))
-    (should (equal "C++" (caar (helm-dash-maybe-narrow-to-one-docset "C++ foo"))))
-    (should (equal "C" (caar (helm-dash-maybe-narrow-to-one-docset "c foo"))))))
+    (should (equal "C" (caar (helm-dash-maybe-narrow-docsets "C foo"))))
+    (should (equal "C++" (caar (helm-dash-maybe-narrow-docsets "C++ foo"))))
+    (should (equal "C" (caar (helm-dash-maybe-narrow-docsets "c foo"))))))
 
-(ert-deftest helm-dash-maybe-narrow-to-one-docset-test/not-filtered ()
+(ert-deftest helm-dash-maybe-narrow-docsets-test/not-filtered ()
   "Should return all current connections because the pattern doesn't match with any connection."
   (let ((pattern "FOOOO ")
 	(helm-dash-docsets-path "/tmp/.docsets")
@@ -54,7 +54,7 @@
 	 '(("Redis" "/tmp/.docsets/Redis.docset/Contents/Resources/docSet.dsidx" "DASH")
 	   ("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH")
 	   ("CSS" "/tmp/.docsets/CSS.docset/Contents/Resources/docSet.dsidx" "ZDASH"))))
-    (should (equal (helm-dash-maybe-narrow-to-one-docset pattern) helm-dash-connections))))
+    (should (equal (helm-dash-maybe-narrow-docsets pattern) helm-dash-connections))))
 
 
 ;;;; helm-dash-sub-docset-name-in-pattern
