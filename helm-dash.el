@@ -331,12 +331,12 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
 
 (defun helm-dash-add-to-kill-ring (search-result)
   "Add to kill ring a formatted string to call `helm-dash-browse-url' with SEARCH-RESULT."
-  (kill-new (format "(helm-dash-browse-url '%s)" search-result)))
+  (kill-new (format "(helm-dash-browse-url '%S)" search-result)))
 
 (defun helm-dash-actions (actions doc-item)
   "Return an alist with the possible actions to execute with DOC-ITEM."
   `(("Go to doc" . helm-dash-browse-url)
-    ("Copy to clipboard" . helm-dash-copy-to-clipboard)))
+    ("Copy to clipboard" . helm-dash-add-to-kill-ring)))
 
 (defun helm-source-dash-search ()
   "Return an alist with configuration options for Helm."
