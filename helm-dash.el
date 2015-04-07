@@ -271,7 +271,7 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
   (let ((connections (helm-dash-filter-connections))
         (f-word (car (split-string pattern " "))))
     (or
-     (remove-if-not (lambda (x) (string-match f-word (car x)))
+     (cl-remove-if-not (lambda (x) (string-match f-word (car x)))
               connections)
      connections)))
 
