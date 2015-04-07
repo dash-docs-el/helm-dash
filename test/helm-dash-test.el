@@ -104,7 +104,7 @@
   (let ((results '(Redis ("func" "Documents/blpop.html"))))
     (helm-dash-add-to-kill-ring results))
   (should (equal (current-kill 0 t)
-		 "(helm-dash-browse-url '(Redis (func \"Documents/blpop.html\")))")))
+		 "(helm-dash-browse-url '(Redis (\"func\" \"Documents/blpop.html\")))")))
 
 (provide 'helm-dash-test)
 
