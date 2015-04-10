@@ -174,8 +174,9 @@ The Argument DB-PATH should be a string with the sqlite db path."
                     "https://dashes-to-dashes.herokuapp.com/contrib-docs"
                     )))
     (mapcar (lambda (docset)
-              (assoc-default 'archive (cdr docset))
-              (assoc-default 'name (cdr docset)))
+              (list
+               (assoc-default 'name docset)
+               (assoc-default 'archive docset)))
             user-docs)))
 
 (defvar helm-dash-ignored-docsets
@@ -220,8 +221,8 @@ Report an error unless a valid docset is selected."
   (helm-dash-reset-connections))
 
 (defun helm-dash--install-docset (url docset-name)
-  (let ((docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
-        (url-copy-file url (helm-dash-docsets-path) t))
+  (let ((docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name)))
+    (url-copy-file url docset-tmp-path t)
     (helm-dash--unpack docset-tmp-path (helm-dash-docsets-path))))
 
 
@@ -240,6 +241,16 @@ Report an error unless a valid docset is selected."
     (message (format
               "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
               docset-folder))))
+
+
+;;;###autoload
+(defun helm-dash-install-user-docset (docset-name)
+  (interactive (list (helm-dash-read-docset
+                      "Install docset"
+                      (mapcar 'car (helm-dash-search-all-user-docsets)))))
+  (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
+    (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-search-all-user-docsets))) docset-name)))
+
 
 ;;;###autoload
 (defun helm-dash-install-docset (docset-name)
