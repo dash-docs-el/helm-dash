@@ -163,7 +163,10 @@ The Argument DB-PATH should be a string with the sqlite db path."
 (defun helm-dash-search-all-docsets ()
   "Fetch docsets from the original Kapeli's feed."
   (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
-    (helm-dash-read-json-from-url url)))
+    (with-current-buffer
+        (url-retrieve-synchronously url)
+      (goto-char url-http-end-of-headers)
+      (json-read))))
 
 (defun helm-dash-search-all-user-docsets ()
   (let ((user-docs (helm-dash-read-json-from-url
@@ -191,6 +194,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                             (file-name-sans-extension name))))
                     (helm-dash-search-all-docsets))))
 
+
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
   (let ((docset-path (helm-dash-docsets-path)))
@@ -215,31 +219,44 @@ Report an error unless a valid docset is selected."
   (add-to-list 'helm-dash-common-docsets docset)
   (helm-dash-reset-connections))
 
+(defun helm-dash--install-docset (url docset-name)
+  (let ((docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
+        (url-copy-file url (helm-dash-docsets-path) t))
+    (helm-dash--unpack docset-tmp-path (helm-dash-docsets-path))))
+
+
+(defun helm-dash--ensure-created-docsets-path (docset-path)
+  (or (file-directory-p docset-path)
+      (and (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
+                             docset-path))
+           (mkdir docset-path t))))
+
+
+(defun helm-dash--unpack (docset-tmp-path destination-path)
+  (let ((docset-folder
+         (helm-dash-docset-folder-name
+          (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path (helm-dash-docsets-path))))))
+    (helm-dash-activate-docset docset-folder)
+    (message (format
+              "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
+              docset-folder))))
+
 ;;;###autoload
 (defun helm-dash-install-docset (docset-name)
   "Download docset with specified DOCSET-NAME and move its stuff to docsets-path."
   (interactive (list (helm-dash-read-docset
                       "Install docset"
                       (helm-dash-available-docsets))))
-  (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
-        (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
-        (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
-        (docset-path (helm-dash-docsets-path))
-        )
+
+  (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
+    (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
+          (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
+          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
+
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
-    (when (and (not (file-directory-p docset-path))
-	       (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
-				 docset-path)))
-      (mkdir docset-path t))
-    (let ((docset-folder
-	   (helm-dash-docset-folder-name
-	    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path (helm-dash-docsets-path))))))
-      (helm-dash-activate-docset docset-folder)
-      (message (format
-		"Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-		docset-folder)))))
+    (helm-dash--unpack docset-tmp-path (helm-dash-docsets-path)))))
 
 (defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
