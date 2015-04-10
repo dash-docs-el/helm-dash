@@ -152,13 +152,28 @@ The Argument DB-PATH should be a string with the sqlite db path."
 	"DASH"
       "ZDASH")))
 
-(defun helm-dash-search-all-docsets ()
-  "Fetch docsets from the original Kapeli's feed."
-  (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
+
+(defun helm-dash-read-json-from-url (addr)
+  (let ((url addr))
     (with-current-buffer
         (url-retrieve-synchronously url)
       (goto-char url-http-end-of-headers)
       (json-read))))
+
+(defun helm-dash-search-all-docsets ()
+  "Fetch docsets from the original Kapeli's feed."
+  (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
+    (helm-dash-read-json-from-url url)))
+
+(defun helm-dash-search-all-user-docsets ()
+  (let ((user-docs (helm-dash-read-json-from-url
+                    ;"http://sanfrancisco.kapeli.com/feeds/zzz/user_contributed/build/index.json"
+                    "https://dashes-to-dashes.herokuapp.com/contrib-docs"
+                    )))
+    (mapcar (lambda (docset)
+              (assoc-default 'archive (cdr docset))
+              (assoc-default 'name (cdr docset)))
+            user-docs)))
 
 (defvar helm-dash-ignored-docsets
   '("Bootstrap" "Drupal" "Zend_Framework" "Ruby_Installed_Gems" "Man_Pages")
