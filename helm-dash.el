@@ -269,21 +269,25 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
  used connections to just that one.  We're looping on all connections, but it
  shouldn't be a problem as there won't be many."
   (let ((connections (helm-dash-filter-connections))
-        (f-word (car (split-string pattern " "))))
+        (splitted-pat (split-string pattern "|")))
     (or
-     (cl-remove-if-not (lambda (x) (string-match f-word (car x)))
-              connections)
+     (and (> (length splitted-pat) 1)
+      (cl-remove-if-not (lambda (con)
+                          (cl-every (lambda (word)
+                                      (string-match word (car con)))
+                                    (split-string (car splitted-pat) " ")))
+                        connections))
      connections)))
 
 (defun helm-dash-sub-docset-name-in-pattern (pattern docset-name)
   "Remove from PATTERN the DOCSET-NAME if this includes it.
 If the search starts with the name of the docset, ignore it.
 Ex: This avoids searching for redis in redis unless you type 'redis redis'"
-  (let ((f-word (car (split-string pattern " "))))
-    (if (string-match f-word docset-name)
+  (let ((splitted-pat (split-string pattern "|")))
+    (if (> (length splitted-pat) 1)
         (replace-regexp-in-string
-         (format "^%s " (regexp-quote f-word)) "" pattern)
-        pattern)))
+         (format "^%s|" (regexp-quote (car splitted-pat))) "" pattern)
+      pattern)))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
@@ -302,7 +306,7 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (format "%s %s"  (car docset) (cadr x)) (list (car docset) x)))
+                                (cons (format "%s | %s"  (car docset) (cadr x)) (list (car docset) x)))
                               res)))))
     full-res))
 
