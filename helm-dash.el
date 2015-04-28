@@ -263,32 +263,36 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   ""
   (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
-(defun helm-dash-maybe-narrow-to-one-docset (pattern)
+(defun helm-dash-maybe-narrow-docsets (pattern)
   "Return a list of helm-dash-connections.
 If PATTERN starts with the name of a docset followed by a space, narrow the
  used connections to just that one.  We're looping on all connections, but it
  shouldn't be a problem as there won't be many."
-  (let ((conns (helm-dash-filter-connections)))
-    (or (cl-loop for x in conns
-                 if (string-prefix-p
-                     (concat (downcase (car x)) " ")
-                     (downcase pattern))
-                 return (list x))
-        conns)))
+  (let ((connections (helm-dash-filter-connections))
+        (splitted-pat (split-string pattern "|")))
+    (or
+     (and (> (length splitted-pat) 1)
+      (cl-remove-if-not (lambda (con)
+                          (cl-every (lambda (word)
+                                      (string-match (regexp-quote word) (car con)))
+                                    (split-string (car splitted-pat) " ")))
+                        connections))
+     connections)))
 
 (defun helm-dash-sub-docset-name-in-pattern (pattern docset-name)
   "Remove from PATTERN the DOCSET-NAME if this includes it.
 If the search starts with the name of the docset, ignore it.
 Ex: This avoids searching for redis in redis unless you type 'redis redis'"
-  (replace-regexp-in-string
-   (format "^%s " (regexp-quote (downcase docset-name)))
-   ""
-   pattern))
+  (let ((splitted-pat (split-string pattern "|")))
+    (if (> (length splitted-pat) 1)
+        (replace-regexp-in-string
+         (format "^%s|" (regexp-quote (car splitted-pat))) "" pattern)
+      pattern)))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
   (let ((full-res (list))
-        (connections (helm-dash-maybe-narrow-to-one-docset helm-pattern)))
+        (connections (helm-dash-maybe-narrow-docsets helm-pattern)))
 
     (dolist (docset connections)
       (let* ((docset-type (cl-caddr docset))
@@ -302,7 +306,7 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
         (setq full-res
               (append full-res
                       (mapcar (lambda (x)
-                                (cons (format "%s %s"  (car docset) (cadr x)) (list (car docset) x)))
+                                (cons (format "%s | %s"  (car docset) (cadr x)) (list (car docset) x)))
                               res)))))
     full-res))
 
