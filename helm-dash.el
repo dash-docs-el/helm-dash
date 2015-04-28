@@ -309,22 +309,22 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 If PATTERN starts with the name of a docset followed by a space, narrow the
  used connections to just that one.  We're looping on all connections, but it
  shouldn't be a problem as there won't be many."
-  (let ((connections (helm-dash-filter-connections))
-        (f-word (car (split-string pattern " "))))
-    (or
-     (cl-remove-if-not (lambda (x) (string-match f-word (car x)))
-              connections)
-     connections)))
+  (let ((conns (helm-dash-filter-connections)))
+    (or (cl-loop for x in conns
+                 if (string-prefix-p
+                     (concat (downcase (car x)) " ")
+                     (downcase pattern))
+                 return (list x))
+        conns)))
 
 (defun helm-dash-sub-docset-name-in-pattern (pattern docset-name)
   "Remove from PATTERN the DOCSET-NAME if this includes it.
 If the search starts with the name of the docset, ignore it.
 Ex: This avoids searching for redis in redis unless you type 'redis redis'"
-  (let ((f-word (car (split-string pattern " "))))
-    (if (string-match f-word docset-name)
-        (replace-regexp-in-string
-         (format "^%s " (regexp-quote f-word)) "" pattern)
-        pattern)))
+  (replace-regexp-in-string
+   (format "^%s " (regexp-quote (downcase docset-name)))
+   ""
+   pattern))
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
