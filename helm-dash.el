@@ -170,9 +170,7 @@ The Argument DB-PATH should be a string with the sqlite db path."
 
 (defun helm-dash-search-all-user-docsets ()
   (let ((user-docs (helm-dash-read-json-from-url
-                    ;"http://sanfrancisco.kapeli.com/feeds/zzz/user_contributed/build/index.json"
-                    "https://dashes-to-dashes.herokuapp.com/contrib-docs"
-                    )))
+                    "https://dashes-to-dashes.herokuapp.com/docsets/contrib")))
     (mapcar (lambda (docset)
               (list
                (assoc-default 'name docset)
