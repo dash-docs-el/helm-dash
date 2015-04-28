@@ -29,7 +29,7 @@
 
 (ert-deftest helm-dash-maybe-narrow-docsets-test/filtered ()
   "Should return a list with filtered connections."
-  (let ((pattern "Go ")
+  (let ((pattern "Go | ")
         (helm-dash-docsets-path "/tmp/.docsets")
         (helm-dash-common-docsets '("Redis" "Go" "CSS" "C" "C++"))
         (helm-dash-connections
@@ -41,13 +41,17 @@
     (should (equal (helm-dash-maybe-narrow-docsets pattern)
                    '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH"))))
 
-    (should (equal "C" (caar (helm-dash-maybe-narrow-docsets "C foo"))))
-    (should (equal "C++" (caar (helm-dash-maybe-narrow-docsets "C++ foo"))))
-    (should (equal "C" (caar (helm-dash-maybe-narrow-docsets "c foo"))))))
+    (should (equal "C++" (caar (helm-dash-maybe-narrow-docsets "C++ | foo"))))
+
+    ;; Caveat, but as we match substrings, when looking for 'c', we'll
+    ;; match CSS and C++. It's a corner case, as most have more and
+    ;; unique digraphs.
+    (should (equal 3 (length (helm-dash-maybe-narrow-docsets "C | foo"))))
+    (should (equal 3 (length (helm-dash-maybe-narrow-docsets "c | foo"))))))
 
 (ert-deftest helm-dash-maybe-narrow-docsets-test/not-filtered ()
-  "Should return all current connections because the pattern doesn't match with any connection."
-  (let ((pattern "FOOOO ")
+  "Should return no connections because the pattern doesn't match with any connection."
+  (let ((pattern "FOOOO | lal")
 	(helm-dash-docsets-path "/tmp/.docsets")
 	(helm-dash-common-docsets '("Redis" "Go" "CSS"))
 	(helm-dash-connections
@@ -61,9 +65,9 @@
 
 (ert-deftest helm-dash-sub-docset-name-in-pattern-test/with-docset-name ()
   ""
-  (let ((pattern "Redis BLPOP")
+  (let ((pattern "Redis | BLPOP")
 	(docset "Redis"))
-    (should (equal (helm-dash-sub-docset-name-in-pattern pattern docset) "BLPOP"))))
+    (should (equal (helm-dash-sub-docset-name-in-pattern pattern docset) " BLPOP"))))
 
 (ert-deftest helm-dash-sub-docset-name-in-pattern-test/without-docset-name ()
   ""
@@ -73,9 +77,9 @@
 
 (ert-deftest helm-dash-sub-docset-name-in-pattern-test/with-special-docset-name ()
   ""
-  (let ((pattern "C++ printf")
+  (let ((pattern "C++ | printf")
 	(docset "C++"))
-    (should (equal (helm-dash-sub-docset-name-in-pattern pattern docset) "printf"))))
+    (should (equal (helm-dash-sub-docset-name-in-pattern pattern docset) " printf"))))
 
 
 ;;;; helm-dash-result-url

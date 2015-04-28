@@ -274,7 +274,7 @@ If PATTERN starts with the name of a docset followed by a space, narrow the
      (and (> (length splitted-pat) 1)
       (cl-remove-if-not (lambda (con)
                           (cl-every (lambda (word)
-                                      (string-match word (car con)))
+                                      (string-match (regexp-quote word) (car con)))
                                     (split-string (car splitted-pat) " ")))
                         connections))
      connections)))
