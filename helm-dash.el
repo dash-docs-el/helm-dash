@@ -221,24 +221,13 @@ Report an error unless a valid docset is selected."
 (defun helm-dash--install-docset (url docset-name)
   (let ((docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name)))
     (url-copy-file url docset-tmp-path t)
-    (helm-dash--unpack docset-tmp-path (helm-dash-docsets-path))))
-
+    (helm-dash-install-docset-from-file docset-tmp-path)))
 
 (defun helm-dash--ensure-created-docsets-path (docset-path)
   (or (file-directory-p docset-path)
       (and (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
                              docset-path))
            (mkdir docset-path t))))
-
-
-(defun helm-dash--unpack (docset-tmp-path destination-path)
-  (let ((docset-folder
-         (helm-dash-docset-folder-name
-          (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path (helm-dash-docsets-path))))))
-    (helm-dash-activate-docset docset-folder)
-    (message (format
-              "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-              docset-folder))))
 
 
 ;;;###autoload
@@ -249,6 +238,19 @@ Report an error unless a valid docset is selected."
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
     (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-search-all-user-docsets))) docset-name)))
 
+
+;;;###autoload
+(defun helm-dash-install-docset-from-file (docset-tmp-path)
+  (interactive
+   (list (car (find-file-read-args "Docset Tarball: " t))))
+  (let ((docset-folder
+         (helm-dash-docset-folder-name
+          (shell-command-to-string
+           (format "tar xvf %s -C %s" docset-tmp-path (helm-dash-docsets-path))))))
+    (helm-dash-activate-docset docset-folder)
+    (message (format
+              "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
+              docset-folder))))
 
 ;;;###autoload
 (defun helm-dash-install-docset (docset-name)
@@ -265,7 +267,7 @@ Report an error unless a valid docset is selected."
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
-    (helm-dash--unpack docset-tmp-path (helm-dash-docsets-path)))))
+    (helm-dash-install-docset-from-file docset-tmp-path))))
 
 (defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
