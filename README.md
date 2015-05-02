@@ -33,6 +33,14 @@ there is an explanation about stable packages and MELPA and
 
 `m-x package-install helm-dash RET`
 
+
+## Installing docsets
+
+Helm-dash uses the same docsets as [Dash](http://www.kapeli.com/dash).
+You can install them with `m-x helm-dash-install-docset` for the
+official docsets or `m-x helm-dash-install-user-docset` for user
+contributed docsets (experimental).
+
 ## Usage
 
 `m-x helm-dash RET` will run helm with your active docsets
