@@ -98,12 +98,33 @@ Suggested values are:
   (expand-file-name helm-dash-docsets-path))
 
 (defun helm-dash-sql (db-path sql)
-  ""
+  "Run the sql command, parse the results and display errors"
+  (helm-dash-parse-sql-results
+   (with-output-to-string
+     (let ((error-file (make-temp-file "helm-dash-errors-file")))
+       (call-process "sqlite3" nil (list standard-output error-file) nil
+                     ;; args for sqlite3:
+                     db-path sql)
+
+       ;; display errors, stolen from emacs' `shell-command` function
+       (when (and error-file (file-exists-p error-file))
+         (if (< 0 (nth 7 (file-attributes error-file)))
+             (with-current-buffer (get-buffer-create "*helm-dash-errors*")
+               (let ((pos-from-end (- (point-max) (point))))
+                 (or (bobp)
+                     (insert "\f\n"))
+                 ;; Do no formatting while reading error file,
+                 ;; because that can run a shell command, and we
+                 ;; don't want that to cause an infinite recursion.
+                 (format-insert-file error-file nil)
+                 ;; Put point after the inserted errors.
+                 (goto-char (- (point-max) pos-from-end)))
+               (display-buffer (current-buffer))))
+         (delete-file error-file))))))
+
+(defun helm-dash-parse-sql-results (sql-result-string)
   (mapcar (lambda (x) (split-string x "|" t))
-          (split-string
-           (with-output-to-string
-             (call-process-shell-command
-              (format "sqlite3 \"%s\" \"%s\"" db-path sql) nil standard-output)) "\n" t)))
+          (split-string sql-result-string "\n" t)))
 
 (defun helm-dash-filter-connections ()
   "Filter connections using `helm-dash-connections-filters'."
