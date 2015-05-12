@@ -246,7 +246,7 @@ Report an error unless a valid docset is selected."
   (let ((docset-folder
          (helm-dash-docset-folder-name
           (shell-command-to-string
-           (format "tar xvf %s -C %s" docset-tmp-path (helm-dash-docsets-path))))))
+           (format "tar xvf %s -C %s" (shell-quote-argument docset-tmp-path) (helm-dash-docsets-path))))))
     (helm-dash-activate-docset docset-folder)
     (message (format
               "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
