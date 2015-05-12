@@ -41,6 +41,9 @@ You can install them with `m-x helm-dash-install-docset` for the
 official docsets or `m-x helm-dash-install-user-docset` for user
 contributed docsets (experimental).
 
+To install a docset from a file in your drive you can use `m-x
+helm-dash-install-docset-from-file'.
+
 ## Usage
 
 `m-x helm-dash RET` will run helm with your active docsets
