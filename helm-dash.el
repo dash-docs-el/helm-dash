@@ -46,6 +46,13 @@
   :prefix "helm-dash-"
   :group 'applications)
 
+(defcustom helm-dash-use-curl-and-wget nil
+  "When set to non-nil, use curl & wget instead of url.el to retrieve data.
+If you encounter GnuTLS error -19 continuously, set this to non-nil."
+  :type 'boolean
+  :group 'helm-dash
+  )
+
 (defcustom helm-dash-docsets-path
   (let ((original-dash-path (expand-file-name "~/Library/Application Support/Dash/DocSets")))
     (if (and (string-equal system-type 'darwin)
@@ -132,10 +139,10 @@ Suggested values are:
 (defun helm-dash-create-buffer-connections ()
   "Create connections to sqlite docsets for buffer-local docsets."
   (mapc (lambda (x) (when (not (assoc x helm-dash-connections))
-                 (let ((connection  (helm-dash-docset-db-path x)))
-                   (setq helm-dash-connections
-                         (cons (list x connection (helm-dash-docset-type connection))
-                               helm-dash-connections)))))
+                  (let ((connection  (helm-dash-docset-db-path x)))
+                    (setq helm-dash-connections
+                          (cons (list x connection (helm-dash-docset-type connection))
+                                helm-dash-connections)))))
         (helm-dash-buffer-local-docsets)))
 
 (defun helm-dash-reset-connections ()
@@ -155,10 +162,17 @@ The Argument DB-PATH should be a string with the sqlite db path."
 (defun helm-dash-search-all-docsets ()
   "Fetch docsets from the original Kapeli's feed."
   (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
-    (with-current-buffer
-        (url-retrieve-synchronously url)
-      (goto-char url-http-end-of-headers)
-      (json-read))))
+    (if helm-dash-use-curl-and-wget
+        (with-temp-buffer
+          (insert (shell-command-to-string
+                   (format "curl %s 2>/dev/null" url)))
+          (goto-char (point-min))
+          (json-read))
+      (progn
+        (with-current-buffer
+            (url-retrieve-synchronously url))
+        (goto-char url-http-end-of-headers)
+        (json-read)))))
 
 (defvar helm-dash-ignored-docsets
   '("Bootstrap" "Drupal" "Zend_Framework" "Ruby_Installed_Gems" "Man_Pages")
@@ -211,9 +225,11 @@ Report an error unless a valid docset is selected."
         (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
         (docset-path (helm-dash-docsets-path))
         )
-    (url-copy-file feed-url feed-tmp-path t)
-    (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
-
+    (if helm-dash-use-curl-and-wget
+        (progn (shell-command (format "wget -O %s %s" feed-tmp-path feed-url))
+               (shell-command (format "wget -O %s %s" docset-tmp-path (helm-dash-get-docset-url feed-tmp-path))))
+      (progn (url-copy-file feed-url feed-tmp-path t)
+             (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)))
     (when (and (not (file-directory-p docset-path))
 	       (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
 				 docset-path)))
