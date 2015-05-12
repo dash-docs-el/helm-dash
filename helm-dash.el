@@ -6,7 +6,7 @@
 ;;         Toni Reina  <areina0@gmail.com>
 ;;
 ;; URL: http://github.com/areina/helm-dash
-;; Version: 1.1
+;; Version: 1.2.1
 ;; Package-Requires: ((helm "0.0.0") (cl-lib "0.5"))
 ;; Keywords: docs
 
@@ -152,6 +152,14 @@ The Argument DB-PATH should be a string with the sqlite db path."
 	"DASH"
       "ZDASH")))
 
+
+(defun helm-dash-read-json-from-url (addr)
+  (let ((url addr))
+    (with-current-buffer
+        (url-retrieve-synchronously url)
+      (goto-char url-http-end-of-headers)
+      (json-read))))
+
 (defun helm-dash-search-all-docsets ()
   "Fetch docsets from the original Kapeli's feed."
   (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
@@ -159,6 +167,15 @@ The Argument DB-PATH should be a string with the sqlite db path."
         (url-retrieve-synchronously url)
       (goto-char url-http-end-of-headers)
       (json-read))))
+
+(defun helm-dash-search-all-user-docsets ()
+  (let ((user-docs (helm-dash-read-json-from-url
+                    "https://dashes-to-dashes.herokuapp.com/docsets/contrib")))
+    (mapcar (lambda (docset)
+              (list
+               (assoc-default 'name docset)
+               (assoc-default 'archive docset)))
+            user-docs)))
 
 (defvar helm-dash-ignored-docsets
   '("Bootstrap" "Drupal" "Zend_Framework" "Ruby_Installed_Gems" "Man_Pages")
@@ -175,6 +192,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
                                   (member (file-name-sans-extension name) helm-dash-ignored-docsets)))
                             (file-name-sans-extension name))))
                     (helm-dash-search-all-docsets))))
+
 
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
@@ -200,31 +218,56 @@ Report an error unless a valid docset is selected."
   (add-to-list 'helm-dash-common-docsets docset)
   (helm-dash-reset-connections))
 
+(defun helm-dash--install-docset (url docset-name)
+  (let ((docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name)))
+    (url-copy-file url docset-tmp-path t)
+    (helm-dash-install-docset-from-file docset-tmp-path)))
+
+(defun helm-dash--ensure-created-docsets-path (docset-path)
+  (or (file-directory-p docset-path)
+      (and (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
+                             docset-path))
+           (mkdir docset-path t))))
+
+
+;;;###autoload
+(defun helm-dash-install-user-docset (docset-name)
+  (interactive (list (helm-dash-read-docset
+                      "Install docset"
+                      (mapcar 'car (helm-dash-search-all-user-docsets)))))
+  (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
+    (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-search-all-user-docsets))) docset-name)))
+
+
+;;;###autoload
+(defun helm-dash-install-docset-from-file (docset-tmp-path)
+  (interactive
+   (list (car (find-file-read-args "Docset Tarball: " t))))
+  (let ((docset-folder
+         (helm-dash-docset-folder-name
+          (shell-command-to-string
+           (format "tar xvf %s -C %s" (shell-quote-argument docset-tmp-path) (helm-dash-docsets-path))))))
+    (helm-dash-activate-docset docset-folder)
+    (message (format
+              "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
+              docset-folder))))
+
 ;;;###autoload
 (defun helm-dash-install-docset (docset-name)
   "Download docset with specified DOCSET-NAME and move its stuff to docsets-path."
   (interactive (list (helm-dash-read-docset
                       "Install docset"
                       (helm-dash-available-docsets))))
-  (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
-        (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
-        (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name))
-        (docset-path (helm-dash-docsets-path))
-        )
+
+  (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
+    (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
+          (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
+          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
+
     (url-copy-file feed-url feed-tmp-path t)
     (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
-    (when (and (not (file-directory-p docset-path))
-	       (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
-				 docset-path)))
-      (mkdir docset-path t))
-    (let ((docset-folder
-	   (helm-dash-docset-folder-name
-	    (shell-command-to-string (format "tar xvf %s -C %s" docset-tmp-path (shell-quote-argument helm-dash-docsets-path))))))
-      (helm-dash-activate-docset docset-folder)
-      (message (format
-		"Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-		docset-folder)))))
+    (helm-dash-install-docset-from-file docset-tmp-path))))
 
 (defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
@@ -263,7 +306,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   ""
   (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
 
-(defun helm-dash-maybe-narrow-to-one-docset (pattern)
+(defun helm-dash-maybe-narrow-docsets (pattern)
   "Return a list of helm-dash-connections.
 If PATTERN starts with the name of a docset followed by a space, narrow the
  used connections to just that one.  We're looping on all connections, but it
@@ -288,7 +331,7 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
   (let ((full-res (list))
-        (connections (helm-dash-maybe-narrow-to-one-docset helm-pattern)))
+        (connections (helm-dash-maybe-narrow-docsets helm-pattern)))
 
     (dolist (docset connections)
       (let* ((docset-type (cl-caddr docset))
