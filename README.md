@@ -132,6 +132,15 @@ just fine
 
 make sure you don't have sqlite3 .mode column but .mode list (the default). check your .sqliterc
 
+- When selecting an item in helm-dash, no browser lookup occurs with firefox >= 38.0.and emacs >= 24.4
+
+try:
+```
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "/path/to/firefox")
+(setq helm-dash-browser-func 'browse-url-generic)
+```
+
 
 ## Contribution
 
