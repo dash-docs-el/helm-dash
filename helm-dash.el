@@ -330,24 +330,21 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
 
 (defun helm-dash-search ()
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
-  (let ((full-res (list))
-        (connections (helm-dash-maybe-narrow-docsets helm-pattern)))
+  (let ((connections (helm-dash-maybe-narrow-docsets helm-pattern)))
+    (cl-loop for docset in connections
+             append (cl-loop for row in (helm-dash--run-query docset)
+                             collect (helm-dash--candidate docset row)))))
 
-    (dolist (docset connections)
-      (let* ((docset-type (cl-caddr docset))
-             (res
-	      (helm-dash-sql
-	       (cadr docset)
-	       (helm-dash-sql-execute 'select
-				      docset-type
-				      (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
-        ;; how to do the appending properly?
-        (setq full-res
-              (append full-res
-                      (mapcar (lambda (x)
-                                (cons (format "%s %s"  (car docset) (cadr x)) (list (car docset) x)))
-                              res)))))
-    full-res))
+(defun helm-dash--run-query (docset)
+  (let ((docset-type (cl-caddr docset)))
+    (helm-dash-sql
+     (cadr docset)
+     (helm-dash-sql-execute 'select
+                            docset-type
+                            (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
+
+(defun helm-dash--candidate (docset x)
+  (cons (format "%s %s" (car docset) (cadr x)) (list (car docset) x)))
 
 (defun helm-dash-result-url (docset-name filename &optional anchor)
   "Return the full, absolute URL to documentation: either a file:// URL joining
