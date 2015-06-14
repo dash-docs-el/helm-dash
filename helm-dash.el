@@ -61,6 +61,21 @@ path.  You can use `expand-file-name' function for that."
 (defcustom helm-dash-docsets-url "https://raw.github.com/Kapeli/feeds/master"
   "Feeds URL for dash docsets." :group 'helm-dash)
 
+(defcustom helm-dash-preferred-hosts '()
+  "Your preferred hosts from where to download the docsets.
+
+List of regular expressions to match download server host name.
+
+For example the following settings may improve your download speed depending on
+where you are located:
+    Asia:      '(\"singapore\")
+    Australia: '(\"sydney\")
+    Europe:    '(\"london\")
+    Japan:     '(\"tokyo\")
+    US East:   '(\"newyork\")
+    US West:   '(\"sanfrancisco\")"
+  :group 'helm-dash)
+
 (defcustom helm-dash-min-length 3
   "Minimum length to start searching in docsets.
 0 facilitates discoverability, but may be a bit heavy when lots
@@ -278,13 +293,24 @@ The argument TAR-OUTPUT should be an string with the output of a tar command."
 	 (car (last (split-string tar-output "\n" t)))))
     (replace-regexp-in-string "^x " "" (car (split-string last-line "\\." t)))))
 
+(defun helm-dash--url-preference (x)
+  (or (cl-position (url-host (url-generic-parse-url x)) helm-dash-preferred-hosts
+                   :test (lambda (host regexp) (string-match-p regexp host)))
+      9999))
+
 (defun helm-dash-get-docset-url (feed-path)
-  "Parse a xml feed with docset urls and return the first url.
-The Argument FEED-PATH should be a string with the path of the xml file."
+  "Parse a docset xml feed with docset urls.
+Return the first url in order of preference.
+The Argument FEED-PATH should be a string with the path of the xml file.
+
+Set `helm-dash-preferred-hosts' to select preferred hosts."
+  (cl-first (cl-sort (helm-dash--get-docset-urls feed-path) '<
+                     :key 'helm-dash--url-preference)))
+
+(defun helm-dash--get-docset-urls (feed-path)
   (let* ((xml (xml-parse-file feed-path))
-         (urls (car xml))
-         (url (xml-get-children urls 'url)))
-    (cl-caddr (cl-first url))))
+         (root (car xml)))
+    (mapcar 'cl-caddr (xml-get-children root 'url))))
 
 (defvar helm-dash-sql-queries
   '((DASH . ((select . (lambda (pattern)
