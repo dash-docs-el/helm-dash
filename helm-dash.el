@@ -67,7 +67,7 @@ path.  You can use `expand-file-name' function for that."
 of docsets are active.  Between 0 and 3 is sane."
   :group 'helm-dash)
 
-(defcustom helm-dash-debugging-mode t
+(defcustom helm-dash-enable-debugging t
   "When non-nil capture stderr from sql commands and display in a
 buffer. Setting this to nil may speed up querys."
   :group 'helm-dash)
@@ -106,7 +106,7 @@ Suggested values are:
   "Run the sql command, parse the results and display errors"
   (helm-dash-parse-sql-results
    (with-output-to-string
-     (let ((error-file (when helm-dash-debugging-mode
+     (let ((error-file (when helm-dash-enable-debugging
                          (make-temp-file "helm-dash-errors-file"))))
        (call-process "sqlite3" nil (list standard-output error-file) nil
                      ;; args for sqlite3:
