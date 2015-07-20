@@ -78,11 +78,14 @@ buffer. Setting this to nil may speed up querys."
 
 (defun helm-dash-docset-path (docset)
   "Return the full path of the directory for DOCSET."
-  (let ((top-level (format "%s/%s.docset" (helm-dash-docsets-path) docset))
-        (nested (format "%s/%s/%s.docset" (helm-dash-docsets-path) docset docset)))
-    (if (file-directory-p top-level)
-        top-level
-      nested)))
+  (let* ((base (helm-dash-docsets-path))
+         (docdir (expand-file-name docset base)))
+    (cl-loop for dir in (list (format "%s/%s.docset" base docset)
+                              (format "%s/%s.docset" docdir docset)
+                              (when (file-directory-p docdir)
+                                (cl-first (directory-files docdir t "\\.docset\\'"))))
+             when (and dir (file-directory-p dir))
+             return dir)))
 
 (defun helm-dash-docset-db-path (docset)
   "Compose the path to sqlite DOCSET."
@@ -224,10 +227,12 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
   (let ((docset-path (helm-dash-docsets-path)))
-    (cl-loop for dir in (directory-files docset-path)
+    (cl-loop for dir in (directory-files docset-path nil "^[^.]")
              for full-path = (expand-file-name dir docset-path)
+             for subdir = (cl-first (directory-files full-path t "\\.docset\\'"))
              when (or (string-match-p "\\.docset\\'" dir)
-                      (file-directory-p (expand-file-name (format "%s.docset" dir) full-path)))
+                      (file-directory-p (expand-file-name (format "%s.docset" dir) full-path))
+                      (and subdir (file-directory-p subdir)))
              collecting (replace-regexp-in-string "\\.docset\\'" "" dir))))
 
 (defun helm-dash-read-docset (prompt choices)
