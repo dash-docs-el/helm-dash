@@ -73,6 +73,12 @@ searching. Defaults to 3.
 Dash' docsets. Defaults to browse-url. For example, if you want to use eww to
 browse your docsets, you can do: `(setq helm-dash-browser-func 'eww)`.
 
+When `helm-dash-enable-debugging` is non-nil stderr from sqlite queries is
+captured and displayed in a buffer. The default value is `t`. Setting this
+to `nil` may speed up queries on some machines (capturing stderr requires
+the creation and deletion of a temporary file for each query).
+
+
 ## Sets of Docsets
 
 ### Common docsets

@@ -67,6 +67,11 @@ path.  You can use `expand-file-name' function for that."
 of docsets are active.  Between 0 and 3 is sane."
   :group 'helm-dash)
 
+(defcustom helm-dash-enable-debugging t
+  "When non-nil capture stderr from sql commands and display in a
+buffer. Setting this to nil may speed up querys."
+  :group 'helm-dash)
+
 (defvar helm-dash-common-docsets
   '() "List of Docsets to search active by default.")
 
@@ -98,12 +103,34 @@ Suggested values are:
   (expand-file-name helm-dash-docsets-path))
 
 (defun helm-dash-sql (db-path sql)
-  ""
+  "Run the sql command, parse the results and display errors"
+  (helm-dash-parse-sql-results
+   (with-output-to-string
+     (let ((error-file (when helm-dash-enable-debugging
+                         (make-temp-file "helm-dash-errors-file"))))
+       (call-process "sqlite3" nil (list standard-output error-file) nil
+                     ;; args for sqlite3:
+                     db-path sql)
+
+       ;; display errors, stolen from emacs' `shell-command` function
+       (when (and error-file (file-exists-p error-file))
+         (if (< 0 (nth 7 (file-attributes error-file)))
+             (with-current-buffer (helm-dash-debugging-buffer)
+               (let ((pos-from-end (- (point-max) (point))))
+                 (or (bobp)
+                     (insert "\f\n"))
+                 ;; Do no formatting while reading error file,
+                 ;; because that can run a shell command, and we
+                 ;; don't want that to cause an infinite recursion.
+                 (format-insert-file error-file nil)
+                 ;; Put point after the inserted errors.
+                 (goto-char (- (point-max) pos-from-end)))
+               (display-buffer (current-buffer))))
+         (delete-file error-file))))))
+
+(defun helm-dash-parse-sql-results (sql-result-string)
   (mapcar (lambda (x) (split-string x "|" t))
-          (split-string
-           (with-output-to-string
-             (call-process-shell-command
-              (format "sqlite3 \"%s\" \"%s\"" db-path sql) nil standard-output)) "\n" t)))
+          (split-string sql-result-string "\n" t)))
 
 (defun helm-dash-filter-connections ()
   "Filter connections using `helm-dash-connections-filters'."
@@ -387,10 +414,23 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
 
+(defun helm-dash-debugging-buffer ()
+  "Return the helm-dash debugging buffer."
+  (get-buffer-create "*helm-dash-errors*"))
+
+(defun helm-dash-initialize-debugging-buffer ()
+  "Open debugging buffer and insert a header message."
+  (with-current-buffer (helm-dash-debugging-buffer)
+    (erase-buffer)
+    (insert "----------------")
+    (insert "\n HEY! This is helm-dash (sqlite) error logging. If you want to disable it, set `helm-dash-enable-debugging` to nil\n")
+    (insert "---------------- \n\n")))
+
 ;;;###autoload
 (defun helm-dash ()
   "Bring up a Dash search interface in helm."
   (interactive)
+  (helm-dash-initialize-debugging-buffer)
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
@@ -402,6 +442,7 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
   "Bring up a Dash search interface in helm using the symbol at
 point as prefilled search."
   (interactive)
+  (helm-dash-initialize-debugging-buffer)
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
