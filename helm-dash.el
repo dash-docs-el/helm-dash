@@ -115,7 +115,7 @@ Suggested values are:
        ;; display errors, stolen from emacs' `shell-command` function
        (when (and error-file (file-exists-p error-file))
          (if (< 0 (nth 7 (file-attributes error-file)))
-             (with-current-buffer (get-buffer-create "*helm-dash-errors*")
+             (with-current-buffer (helm-dash-debugging-buffer)
                (let ((pos-from-end (- (point-max) (point))))
                  (or (bobp)
                      (insert "\f\n"))
@@ -414,10 +414,23 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
     (candidates-process . helm-dash-search)
     (action-transformer . helm-dash-actions)))
 
+(defun helm-dash-debugging-buffer ()
+  "Return the helm-dash debugging buffer."
+  (get-buffer-create "*helm-dash-errors*"))
+
+(defun helm-dash-initialize-debugging-buffer ()
+  "Open debugging buffer and insert a header message."
+  (with-current-buffer (helm-dash-debugging-buffer)
+    (erase-buffer)
+    (insert "----------------")
+    (insert "\n HEY! This is helm-dash (sqlite) error logging. If you want to disable it, set `helm-dash-enable-debugging` to nil\n")
+    (insert "---------------- \n\n")))
+
 ;;;###autoload
 (defun helm-dash ()
   "Bring up a Dash search interface in helm."
   (interactive)
+  (helm-dash-initialize-debugging-buffer)
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
@@ -429,6 +442,7 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
   "Bring up a Dash search interface in helm using the symbol at
 point as prefilled search."
   (interactive)
+  (helm-dash-initialize-debugging-buffer)
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
