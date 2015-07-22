@@ -113,7 +113,7 @@ Suggested values are:
                          (make-temp-file "helm-dash-errors-file"))))
        (call-process "sqlite3" nil (list standard-output error-file) nil
                      ;; args for sqlite3:
-                     db-path sql)
+                     "-list" db-path sql)
 
        ;; display errors, stolen from emacs' `shell-command` function
        (when (and error-file (file-exists-p error-file))
