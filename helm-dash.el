@@ -37,7 +37,7 @@
 
 (require 'cl-lib)
 (require 'helm)
-(require 'helm-match-plugin)
+(require 'helm-multi-match)
 (require 'json)
 (require 'xml)
 
