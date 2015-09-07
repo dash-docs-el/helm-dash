@@ -388,7 +388,6 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
   "Return a list extracting info from DOCSET and ROW to build a helm candidate.
 First element is the display message of the candidate, rest is used to build
 candidate opts."
-  (message (format "%s" docset))
   (cons (format-spec helm-dash-candidate-format
 		     (list (cons ?d (car docset))
 			   (cons ?n (cadr row))
