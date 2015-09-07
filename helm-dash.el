@@ -384,12 +384,16 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
                             docset-type
                             (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
 
-(defun helm-dash--candidate (docset x)
+(defun helm-dash--candidate (docset row)
+  "Return a list extracting info from DOCSET and ROW to build a helm candidate.
+First element is the display message of the candidate, rest is used to build
+candidate opts."
+  (message (format "%s" docset))
   (cons (format-spec helm-dash-candidate-format
 		     (list (cons ?d (car docset))
-			   (cons ?n (cadr x))
-			   (cons ?t (car x))))
-	(list (car docset) x)))
+			   (cons ?n (cadr row))
+			   (cons ?t (car row))))
+	(list (car docset) row)))
 
 (defun helm-dash-result-url (docset-name filename &optional anchor)
   "Return the full, absolute URL to documentation: either a file:// URL joining
