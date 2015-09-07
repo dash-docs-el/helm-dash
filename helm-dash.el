@@ -89,7 +89,10 @@ buffer. Setting this to nil may speed up querys."
 
 (defun helm-dash-docset-db-path (docset)
   "Compose the path to sqlite DOCSET."
-  (expand-file-name "Contents/Resources/docSet.dsidx" (helm-dash-docset-path docset)))
+  (let ((path (helm-dash-docset-path docset)))
+    (if path
+	(expand-file-name "Contents/Resources/docSet.dsidx" path)
+      (error "Cannot find docset '%s' in `helm-dash-docsets-path'" docset))))
 
 (defvar helm-dash-connections nil
   "List of conses like (\"Go\" . connection).")
