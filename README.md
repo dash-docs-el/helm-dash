@@ -24,7 +24,7 @@ If you're looking for dash.el, the list library, please go to
 
 ## Installation
 
-It's available on [MELPA](http://melpa.milkbox.net).
+It's available on [MELPA](https://melpa.org).
 
 Now, it's possible to choose between install the stable or development version
 of helm-dash. [Here](https://github.com/milkypostman/melpa#stable-packages)
