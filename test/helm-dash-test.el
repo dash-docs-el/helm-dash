@@ -106,6 +106,15 @@
   (should (equal (current-kill 0 t)
 		 "(helm-dash-browse-url '(Redis (\"func\" \"Documents/blpop.html\")))")))
 
+;;;; helm-dash-available-docsets
+
+(ert-deftest helm-dash-available-docsets-test ()
+  "Should return a list of available docsets."
+  (let ((docsets (helm-dash-available-docsets)))
+    (should (member "Ruby" docsets))
+    ;; ignored docset:
+    (should-not (member "Man_Pages" docsets))))
+
 (provide 'helm-dash-test)
 
 ;;; helm-dash-test ends here
