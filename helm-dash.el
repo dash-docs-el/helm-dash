@@ -228,7 +228,7 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 (defun helm-dash-available-docsets ()
   "Return a list of official docsets (http://kapeli.com/docset_links)."
   (delq nil (mapcar (lambda (docset)
-                      (let ((name (assoc-default 'name (cdr docset))))
+                      (let ((name (assoc-default 'name docset)))
                         (if (and (equal (file-name-extension name) "xml")
                                  (not
                                   (member (file-name-sans-extension name) helm-dash-ignored-docsets)))
