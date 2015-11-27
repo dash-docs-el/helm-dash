@@ -459,6 +459,7 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
         :buffer "*helm-dash*"
+	:prompt "Doc for: "
         :helm-candidate-number-limit 1000))
 
 ;;;###autoload
@@ -471,6 +472,7 @@ point as prefilled search."
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
 	:buffer "*helm-dash*"
+	:prompt "Doc for: "
 	:input (thing-at-point 'symbol)
   :helm-candidate-number-limit 1000))
 
