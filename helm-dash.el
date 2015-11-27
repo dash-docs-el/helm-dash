@@ -82,6 +82,7 @@ Available formats are
 buffer. Setting this to nil may speed up querys."
   :group 'helm-dash)
 
+(defvar helm-dash-history-input nil)
 (defvar helm-dash-common-docsets
   '() "List of Docsets to search active by default.")
 
@@ -460,9 +461,10 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
   (helm-dash-create-common-connections)
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
-        :buffer "*helm-dash*"
+	:buffer "*helm-dash*"
 	:prompt "Doc for: "
-        :helm-candidate-number-limit 1000))
+	:history 'helm-dash-history-input
+	:helm-candidate-number-limit 1000))
 
 ;;;###autoload
 (defun helm-dash-at-point ()
@@ -475,8 +477,9 @@ point as prefilled search."
   (helm :sources (list (helm-source-dash-search))
 	:buffer "*helm-dash*"
 	:prompt "Doc for: "
+	:history 'helm-dash-history-input
 	:input (thing-at-point 'symbol)
-  :helm-candidate-number-limit 1000))
+	:helm-candidate-number-limit 1000))
 
 (provide 'helm-dash)
 
