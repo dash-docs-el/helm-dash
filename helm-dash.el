@@ -37,6 +37,7 @@
 
 (require 'cl-lib)
 (require 'helm)
+(require 'helm-plugin)
 (require 'helm-multi-match)
 (require 'json)
 (require 'xml)
@@ -436,6 +437,7 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
     (delayed)
     (requires-pattern . ,helm-dash-min-length)
     (candidates-process . helm-dash-search)
+    (persistent-help . "Show this doc")
     (action-transformer . helm-dash-actions)))
 
 (defun helm-dash-debugging-buffer ()
@@ -459,6 +461,7 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
         :buffer "*helm-dash*"
+	:prompt "Doc for: "
         :helm-candidate-number-limit 1000))
 
 ;;;###autoload
@@ -471,6 +474,7 @@ point as prefilled search."
   (helm-dash-create-buffer-connections)
   (helm :sources (list (helm-source-dash-search))
 	:buffer "*helm-dash*"
+	:prompt "Doc for: "
 	:input (thing-at-point 'symbol)
   :helm-candidate-number-limit 1000))
 
