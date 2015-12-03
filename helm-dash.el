@@ -256,6 +256,7 @@ Report an error unless a valid docset is selected."
     (completing-read (format "%s (%s): " prompt (car choices))
                      choices nil t nil nil choices)))
 
+;;;###autoload
 (defun helm-dash-activate-docset (docset)
   "Activate DOCSET.  If called interactively prompts for the docset name."
   (interactive (list (helm-dash-read-docset
