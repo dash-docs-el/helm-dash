@@ -1,4 +1,11 @@
-# Helm Dash [![Build Status](https://api.travis-ci.org/areina/helm-dash.png?branch=master)](http://travis-ci.org/areina/helm-dash) [![Coverage Status](https://img.shields.io/coveralls/areina/helm-dash.svg)](https://coveralls.io/r/areina/helm-dash?branch=master)
+# Helm Dash
+
+[![Build Status](https://api.travis-ci.org/areina/helm-dash.svg?branch=master)](http://travis-ci.org/areina/helm-dash)
+[![Coverage Status](https://img.shields.io/coveralls/areina/helm-dash.svg)](https://coveralls.io/r/areina/helm-dash?branch=master)
+[![MELPA](http://melpa.org/packages/helm-dash-badge.svg)](http://melpa.org/#/helm-dash)
+[![MELPA Stable](http://stable.melpa.org/packages/helm-dash-badge.svg)](http://stable.melpa.org/#/helm-dash)
+[![Tag Version](https://img.shields.io/github/tag/areina/helm-dash.svg)](https://github.com/areina/helm-dash/tags)
+[![License](http://img.shields.io/:license-gpl3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 
 ## What's it
 
