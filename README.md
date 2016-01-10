@@ -49,7 +49,13 @@ official docsets or `m-x helm-dash-install-user-docset` for user
 contributed docsets (experimental).
 
 To install a docset from a file in your drive you can use `m-x
-helm-dash-install-docset-from-file'.
+helm-dash-install-docset-from-file'. That function takes as input
+a `tgz` file that you obtained, starting from a folder named `<docset
+name>.docset`, with the command:
+
+`tar --exclude='.DS_Store' -cvzf <docset name>.tgz <docset name>.docset`
+
+as explained [here](https://kapeli.com/docsets#dashdocsetfeed).
 
 ## Usage
 
