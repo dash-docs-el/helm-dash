@@ -194,7 +194,7 @@ Suggested values are:
 
 (defun helm-dash-docset-type (db-path)
   "Return the type of the docset based in db schema.
-Possible values are \"DASH\" and \"ZDASH\.
+Possible values are \"DASH\" and \"ZDASH\".
 The Argument DB-PATH should be a string with the sqlite db path."
   (let ((type_sql "SELECT name FROM sqlite_master WHERE type = 'table' LIMIT 1"))
     (if (member "searchIndex" (car (helm-dash-sql db-path type_sql)))
