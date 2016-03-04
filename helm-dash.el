@@ -467,13 +467,15 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
 
 (defun helm-dash-build-source (docset)
   "Build a Helm source for DOCSET."
-  (helm-build-async-source (car docset)
-    :action-transformer #'helm-dash-actions
-    :candidates-process (cl-loop for row in (helm-dash--run-query docset)
-				 collect (helm-dash--candidate docset row))
-    :delayed t
-    :persistent-help "View doc"
-    :requires-pattern helm-dash-min-length))
+  (lexical-let ((docset docset))
+   (helm-build-async-source (car docset)
+     :action-transformer #'helm-dash-actions
+     :candidates-process (lambda ()
+                           (cl-loop for row in (helm-dash--run-query docset)
+                                    collect (helm-dash--candidate docset row)))
+     :delayed t
+     :persistent-help "View doc"
+     :requires-pattern helm-dash-min-length)))
 
 (defun helm-dash-sources--narrowed-docsets ()
   "Return a list of Helm sources for narrowed docsets.
