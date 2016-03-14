@@ -269,6 +269,14 @@ Report an error unless a valid docset is selected."
 		      (helm-dash-installed-docsets))))
   (add-to-list 'helm-dash-common-docsets docset)
   (helm-dash-reset-connections))
+  
+;;;###autoload
+(defun helm-dash-deactivate-docset(docset)
+  "Deactivate DOCSET.  If called interactively prompts for the docset name."
+  (interactive (list (helm-dash-read-docset
+		      "Deactivate docset"
+		      helm-dash-common-docsets)))
+  (setq helm-dash-common-docsets (delete docset helm-dash-common-docsets)))
 
 (defun helm-dash--install-docset (url docset-name)
   (let ((docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name)))
