@@ -165,9 +165,8 @@ Suggested values are:
 
 (defun helm-dash-buffer-local-docsets ()
   "Get the docsets configured for the current buffer."
-  (with-helm-current-buffer
-    (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
-	'())))
+  (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
+      '()))
 
 (defun helm-dash-create-common-connections ()
   "Create connections to sqlite docsets for common docsets."
