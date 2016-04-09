@@ -481,7 +481,6 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
       :candidates (lambda ()
 		    (cl-loop for row in (helm-dash--run-query docset)
 			     collect (helm-dash--candidate docset row)))
-      :delayed t
       :volatile t
       :persistent-help "View doc"
       :requires-pattern helm-dash-min-length)))
