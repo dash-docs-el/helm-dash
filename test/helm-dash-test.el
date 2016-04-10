@@ -126,6 +126,28 @@
     (should (equal'("Clojure" "Redis" "Go" "CSS") helm-dash-common-docsets))
     (should (equal nil helm-dash-connections))))
 
+;; helm-dash-buffer-local-docsets
+
+(ert-deftest helm-dash-buffer-local-docsets-narrowing ()
+  (let ((c-buffer nil)
+        (helm-dash-connections
+         '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH")
+           ("C" "/tmp/.docsets/C.docset/Contents/Resources/docSet.dsidx" "DASH")
+           ("CSS" "/tmp/.docsets/CSS.docset/Contents/Resources/docSet.dsidx" "ZDASH"))))
+    (with-temp-buffer
+      (setq c-buffer (current-buffer))
+      (setq-local helm-dash-docsets (list "C"))
+
+      (with-temp-buffer
+        (setq-local helm-dash-docsets (list "Go"))
+        (should (equal (helm-dash-maybe-narrow-docsets "*")
+                       '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH"))))
+
+        (with-current-buffer c-buffer
+          (should (equal (helm-dash-maybe-narrow-docsets "*")
+                         '(("C" "/tmp/.docsets/C.docset/Contents/Resources/docSet.dsidx" "DASH"))))
+          )))))
+
 (provide 'helm-dash-test)
 
 ;;; helm-dash-test ends here

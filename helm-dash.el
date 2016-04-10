@@ -165,9 +165,8 @@ Suggested values are:
 
 (defun helm-dash-buffer-local-docsets ()
   "Get the docsets configured for the current buffer."
-  (with-helm-current-buffer
-    (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
-	'())))
+  (or (and (boundp 'helm-dash-docsets) helm-dash-docsets)
+      '()))
 
 (defun helm-dash-create-common-connections ()
   "Create connections to sqlite docsets for common docsets."
@@ -481,7 +480,6 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
       :candidates (lambda ()
 		    (cl-loop for row in (helm-dash--run-query docset)
 			     collect (helm-dash--candidate docset row)))
-      :delayed t
       :volatile t
       :persistent-help "View doc"
       :requires-pattern helm-dash-min-length)))
