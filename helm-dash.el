@@ -127,6 +127,99 @@ Suggested values are:
   "Return the path where Dash's docsets are stored."
   (expand-file-name helm-dash-docsets-path))
 
+
+(defun helm-dash-check-mode-docsets-alist (&optional silentp)
+  (dolist (mode-docsets helm-dash-mode-docsets-alist)
+    (setf (cdr mode-docsets)
+          (let (ret)
+            (dolist (docset (cdr mode-docsets))
+              (if (helm-dash-docset-path docset)
+                  (push docset ret)
+                (let ((docset-n (mapconcat #'identity (split-string docset) "_")))
+                  (if (helm-dash-docset-path docset-n)
+                      (push docset-n ret)
+                    (unless silentp
+                      (message "[helm-dash] Warning: Can not find %s docset!" docset))))))
+            ret))))
+
+(let ((js-cd '("JavaScript" "jQuery" "Bootstrap_4" "React" "Lo-Dash" "BackboneJS" "RequireJS" "EmberJS"
+               "MongoDB" "NodeJS" "Meteor" "MooTools" "jQuery_UI" "jQuery_Mobile"))
+      (c-cd '("OpenGL_4" "OpenGL_3" "OpenGL_2"))
+      (css-cd '("CSS" "Bootstrap_4"))
+      (ja-cd '("Java_SE8" "Java_EE7" "JavaFX" "Akka"))
+      (erl-cd '("Erlang"))
+      (pl-cd '("Perl"))
+      (conf-cd '("Nginx" "Apache_HTTP_Server")))
+  (defcustom helm-dash-mode-docsets-alist
+    `((js-mode . ,js-cd) (js2-mode . ,js-cd)
+      (coffee-mode     . ("CoffeeScript" ,@js-cd))
+      (typescript-mode . ("TypeScript" ,@js-cd))
+
+      ,@(let (ret)
+          (dolist (cf-m '(conf-mode conf-javaprop-mode conf-ppd-mode conf-colon-mode conf-space-mode
+                                    conf-unix-mode conf-windows-mode conf-xdefaults-mode))
+            (push (cons cf-m conf-cd) ret))
+          ret)
+      (sh-mode         . ("Bash" "Vagrant" "Ansible" "Chef"))
+      (tcl-mode        . ("Tcl"))
+      (dockerfile-mode . ("Docker"))
+
+      (css-mode      . ,css-cd)
+      (less-css-mode . ("Less" ,@css-cd))
+      (sass-mode     . ("Sass" ,@css-cd))
+
+      (html-mode     . ("HTML" ,@css-cd))
+      (haml-mode     . ("Haml" "HTML" ,@css-cd))
+      (markdown-mode . ("Markdown" "HTML" ,@css-cd))
+      (jinja2-mode   . ("Jinja" "HTML" ,@css-cd))
+      (latex-mode    . ("LaTeX"))
+
+      (c-mode    . ("C" "GLib" ,@c-cd "OpenCV_C"))
+      (c++-mode  . ("C++" "Qt_5" "Boost" ,@c-cd "OpenCV_C++"))
+      (rust-mode . ("Rust"))
+
+      (cmake-mode . ("CMake"))
+
+      (java-mode    . (,@ja-cd "Android" "OpenCV_Java" "Spring_Framework"))
+      (scala-mode   . ("Scala" "Play_Scala" ,@ja-cd))
+      (clojure-mode . ("Clojure" ,@ja-cd))
+
+      (csharp-mode . ("Mono" "Unity_3D" "NET_Framework"))
+      (swift-mode  . ("Swift"))
+      (go-mode     . ("Go"))
+
+      (php-mode    . ("PHP" "Laravel" "Yii" "Symfony"))
+      (ruby-mode   . ("Ruby" "Ruby_on_Rails_5"))
+      (python-mode . ("Python_3" "Django" "SQLAlchemy" "Flask" "Jinja" "NumPy" "SciPy" "OpenCV_Python"))
+      (perl-mode   . ,pl-cd)(cperl-mode   . ,pl-cd)
+      (lua-mode    . ("Lua_5.1"))
+
+      (sql-mode . ("PostgreSQL" "MySQL"))
+
+      (erlang-mode . ,erl-cd)
+      (elixir-mode . ("Elixir" ,@erl-cd))
+
+      (emacs-lisp-mode . ("Emacs_Lisp"))
+      (lisp-mode       . ("Common_Lisp"))
+      (racket-mode     . ("Racket"))
+      (ess-mode        . ("R"))
+
+      (haskell-mode . ("Haskell"))
+      (ocaml-mode   . ("OCaml")))
+    "What docsets to activate for a major-mode."
+    :group 'helm-dash
+    :type '(alist :key-type (symbol :tag "Mode") :value-type (repeat :tag "Docsets" string))
+    :set #'(lambda (sym val)
+             (set-default sym val)
+             (helm-dash-check-mode-docsets-alist))))
+
+;;;###autoload
+(defun helm-dash-set-apropriate-major-mode-docsets ()
+  (let ((docsets (cdr (assoc major-mode helm-dash-mode-docsets-alist))))
+    (when docsets
+      (setq-local helm-dash-docsets docsets))))
+
+
 (defun helm-dash-sql (db-path sql)
   "Run the sql command, parse the results and display errors"
   (helm-dash-parse-sql-results
