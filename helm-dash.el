@@ -54,9 +54,12 @@
 (defcustom helm-dash-docsets-path
   (let ((original-dash-path (expand-file-name "~/Library/Application Support/Dash/DocSets")))
     (if (and (string-equal system-type 'darwin)
-	     (file-directory-p original-dash-path))
-	original-dash-path
-      (expand-file-name "~/.docsets")))
+             (file-directory-p original-dash-path))
+        original-dash-path
+      (let ((zeal-docsets-path (expand-file-name "~/.local/share/Zeal/Zeal/docsets")))
+        (if (file-directory-p zeal-docsets-path)
+            zeal-docsets-path
+          (expand-file-name "~/.docsets")))))
   "Default path for docsets.
 If you're setting this option manually, set it to an absolute
 path.  You can use `expand-file-name' function for that."
