@@ -38,7 +38,6 @@
 (eval-when-compile (require 'cl))
 (require 'cl-lib)
 (require 'helm)
-(require 'helm-plugin)
 (require 'helm-multi-match)
 (require 'json)
 (require 'xml)
