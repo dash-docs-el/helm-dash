@@ -77,7 +77,7 @@ The next call to `helm-dash` will recreate them.
 
 ## Variables to customize
 
-`helm-dash-docsets-path` is the prefix for your docsets. Defaults to ~/.docset
+`helm-dash-docsets-path` is the prefix for your docsets. Defaults to ~/.docsets
 
 `helm-dash-min-length` tells helm-dash from which length to start
 searching. Defaults to 3.
