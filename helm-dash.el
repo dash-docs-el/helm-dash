@@ -458,7 +458,7 @@ candidate opts."
 	(list (car docset) row)))
 
 (defun helm-dash-result-url (docset-name filename &optional anchor)
-  "Return the full, absolute URL to documentation: either a file:// URL joining
+  "Return the full, absolute URL to documentation: either a file:/// URL joining
 DOCSET-NAME, FILENAME & ANCHOR with sanitization of spaces or a http(s):// URL
 formed as-is if FILENAME is a full HTTP(S) URL."
   (let ((path (format "%s%s" filename (if anchor (format "#%s" anchor) ""))))
@@ -468,7 +468,7 @@ formed as-is if FILENAME is a full HTTP(S) URL."
        " "
        "%20"
        (concat
-	"file://"
+	"file:///"
 	(expand-file-name "Contents/Resources/Documents/" (helm-dash-docset-path docset-name))
 	path)))))
 
