@@ -232,7 +232,7 @@ The Argument DB-PATH should be a string with the sqlite db path."
 These docsets are not available to install.
 See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
-(defun helm-dash-available-docsets ()
+(defun helm-dash-official-docsets ()
   "Return a list of official docsets (http://kapeli.com/docset_links)."
   (delq nil (mapcar (lambda (docset)
 		      (let ((name (assoc-default 'name docset)))
@@ -241,7 +241,6 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 				  (member (file-name-sans-extension name) helm-dash-ignored-docsets)))
 			    (file-name-sans-extension name))))
 		    (helm-dash-search-all-docsets))))
-
 
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
@@ -319,22 +318,22 @@ Report an error unless a valid docset is selected."
   "Download docset with specified DOCSET-NAME and move its stuff to docsets-path."
   (interactive (list (helm-dash-read-docset
 		      "Install docset"
-		      (helm-dash-available-docsets))))
+		      (helm-dash-official-docsets))))
 
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
     (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
 	  (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
 	  (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
 
-    (url-copy-file feed-url feed-tmp-path t)
-    (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
+      (url-copy-file feed-url feed-tmp-path t)
+      (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
-    (helm-dash-install-docset-from-file docset-tmp-path))))
+      (helm-dash-install-docset-from-file docset-tmp-path))))
 
 ;;;###autoload
 (defun helm-dash-async-install-docset (docset-name)
   "Asynchronously download docset with specified DOCSET-NAME and move its stuff to docsets-path."
-  (interactive (list (helm-dash-read-docset "Install docset" (helm-dash-available-docsets))))
+  (interactive (list (helm-dash-read-docset "Install docset" (helm-dash-official-docsets))))
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
     (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name)))
 
