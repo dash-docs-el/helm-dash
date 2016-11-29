@@ -125,7 +125,8 @@ Suggested values are:
   (expand-file-name helm-dash-docsets-path))
 
 (defun helm-dash-sql (db-path sql)
-  "Run the sql command, parse the results and display errors"
+  "Run in the db located at DB-PATH the SQL command and parse the results.
+If there are errors, print them in `helm-dash-debugging-buffer'"
   (helm-dash-parse-sql-results
    (with-output-to-string
      (let ((error-file (when helm-dash-enable-debugging
