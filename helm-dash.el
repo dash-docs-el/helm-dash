@@ -81,8 +81,8 @@ Available formats are
   :group 'helm-dash)
 
 (defcustom helm-dash-enable-debugging t
-  "When non-nil capture stderr from sql commands and display in a
-buffer. Setting this to nil may speed up querys."
+  "When non-nil capture stderr from sql commands and display it in a buffer.
+Setting this to nil may speed up queries."
   :group 'helm-dash)
 
 
