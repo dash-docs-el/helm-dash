@@ -208,14 +208,6 @@ The Argument DB-PATH should be a string with the sqlite db path."
     (goto-char url-http-end-of-headers)
     (json-read)))
 
-(defun helm-dash-search-all-docsets ()
-  "Fetch docsets from the original Kapeli's feed."
-  (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
-    (with-current-buffer
-	(url-retrieve-synchronously url)
-      (goto-char url-http-end-of-headers)
-      (json-read))))
-
 (defun helm-dash-search-all-user-docsets ()
   (let ((user-docs (helm-dash-read-json-from-url
 		    "https://dashes-to-dashes.herokuapp.com/docsets/contrib")))
@@ -233,13 +225,15 @@ See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
 (defun helm-dash-official-docsets ()
   "Return a list of official docsets (http://kapeli.com/docset_links)."
-  (delq nil (mapcar (lambda (docset)
-		      (let ((name (assoc-default 'name docset)))
-			(if (and (equal (file-name-extension name) "xml")
-				 (not
-				  (member (file-name-sans-extension name) helm-dash-ignored-docsets)))
-			    (file-name-sans-extension name))))
-		    (helm-dash-search-all-docsets))))
+  (let ((docsets (helm-dash-read-json-from-url
+		  "https://api.github.com/repos/Kapeli/feeds/contents/")))
+    (delq nil (mapcar (lambda (docset)
+			(let ((name (assoc-default 'name docset)))
+			  (if (and (equal (file-name-extension name) "xml")
+				   (not
+				    (member (file-name-sans-extension name) helm-dash-ignored-docsets)))
+			      (file-name-sans-extension name))))
+		      docsets))))
 
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
