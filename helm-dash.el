@@ -208,7 +208,9 @@ The Argument DB-PATH should be a string with the sqlite db path."
     (goto-char url-http-end-of-headers)
     (json-read)))
 
-(defun helm-dash-search-all-user-docsets ()
+(defun helm-dash-unofficial-docsets ()
+  "Return a list of lists with docsets contributed by users.
+The first element is the docset's name second the docset's archive url."
   (let ((user-docs (helm-dash-read-json-from-url
 		    "https://dashes-to-dashes.herokuapp.com/docsets/contrib")))
     (mapcar (lambda (docset)
@@ -286,9 +288,9 @@ Report an error unless a valid docset is selected."
 (defun helm-dash-install-user-docset (docset-name)
   (interactive (list (helm-dash-read-docset
 		      "Install docset"
-		      (mapcar 'car (helm-dash-search-all-user-docsets)))))
+		      (mapcar 'car (helm-dash-unofficial-docsets)))))
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
-    (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-search-all-user-docsets))) docset-name)))
+    (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-unofficial-docsets))) docset-name)))
 
 
 ;;;###autoload
