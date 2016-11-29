@@ -386,14 +386,14 @@ The Argument FEED-PATH should be a string with the path of the xml file."
     (cl-caddr (cl-first url))))
 
 (defvar helm-dash-sql-queries
-  '((DASH . ((select . (lambda (pattern)
-			 (let ((like (helm-dash-sql-compose-like "t.name" pattern))
-			       (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LENGTH(t.name), LOWER(t.name) LIMIT 1000"))
-			   (format query like))))))
-    (ZDASH . ((select . (lambda (pattern)
-			  (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
-				(query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LENGTH(t.ZTOKENNAME), LOWER(t.ZTOKENNAME) LIMIT 1000"))
-			    (format query like))))))))
+  '((DASH . (lambda (pattern)
+	      (let ((like (helm-dash-sql-compose-like "t.name" pattern))
+		    (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LENGTH(t.name), LOWER(t.name) LIMIT 1000"))
+		(format query like))))
+    (ZDASH . (lambda (pattern)
+	       (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
+		     (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LENGTH(t.ZTOKENNAME), LOWER(t.ZTOKENNAME) LIMIT 1000"))
+		 (format query like))))))
 
 (defun helm-dash-sql-compose-like (column pattern)
   ""
@@ -401,9 +401,14 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 			    (split-string pattern " "))))
     (format "%s" (mapconcat 'identity conditions " AND "))))
 
-(defun helm-dash-sql-execute (query-type docset-type pattern)
-  ""
-  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
+(defun helm-dash-sql-query (docset-type pattern)
+  "Return a SQL query to search documentation in dash docsets.
+A different query is returned depending on DOCSET-TYPE.  PATTERN
+is used to compose the SQL WHERE clause."
+  (let ((compose-select-query-func
+	 (cdr (assoc (intern docset-type) helm-dash-sql-queries))))
+    (when compose-select-query-func
+      (funcall compose-select-query-func pattern))))
 
 (defun helm-dash-maybe-narrow-docsets (pattern)
   "Return a list of helm-dash-connections.
@@ -440,9 +445,8 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
   (let ((docset-type (cl-caddr docset)))
     (helm-dash-sql
      (cadr docset)
-     (helm-dash-sql-execute 'select
-			    docset-type
-			    (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
+     (helm-dash-sql-query docset-type
+			  (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
 
 (defun helm-dash--candidate (docset row)
   "Return a list extracting info from DOCSET and ROW to build a helm candidate.

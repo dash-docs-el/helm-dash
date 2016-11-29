@@ -148,6 +148,19 @@
                          '(("C" "/tmp/.docsets/C.docset/Contents/Resources/docSet.dsidx" "DASH"))))
           )))))
 
+;; helm-dash-sql-query
+
+(ert-deftest helm-dash-sql-query/DASH-docset-type ()
+  (should (equal "SELECT t.type, t.name, t.path FROM searchIndex t WHERE t.name like '%blpop%' ORDER BY LENGTH(t.name), LOWER(t.name) LIMIT 1000"
+		 (helm-dash-sql-query "DASH" "blpop"))))
+
+(ert-deftest helm-dash-sql-query/ZDASH-docset-type ()
+  (should (equal "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND t.ZTOKENNAME like '%blpop%' ORDER BY LENGTH(t.ZTOKENNAME), LOWER(t.ZTOKENNAME) LIMIT 1000"
+		 (helm-dash-sql-query "ZDASH" "blpop"))))
+
+(ert-deftest helm-dash-sql-query/UNKNOWN-docset-type ()
+  (should (equal nil (helm-dash-sql-query "FOO" "blpop"))))
+
 (provide 'helm-dash-test)
 
 ;;; helm-dash-test ends here
