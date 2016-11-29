@@ -201,13 +201,12 @@ The Argument DB-PATH should be a string with the sqlite db path."
 	"DASH"
       "ZDASH")))
 
-
-(defun helm-dash-read-json-from-url (addr)
-  (let ((url addr))
-    (with-current-buffer
-	(url-retrieve-synchronously url)
-      (goto-char url-http-end-of-headers)
-      (json-read))))
+(defun helm-dash-read-json-from-url (url)
+  "Read and return a JSON object from URL."
+  (with-current-buffer
+      (url-retrieve-synchronously url)
+    (goto-char url-http-end-of-headers)
+    (json-read)))
 
 (defun helm-dash-search-all-docsets ()
   "Fetch docsets from the original Kapeli's feed."
