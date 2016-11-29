@@ -266,7 +266,7 @@ Report an error unless a valid docset is selected."
   
 ;;;###autoload
 (defun helm-dash-deactivate-docset(docset)
-  "Deactivate DOCSET.  If called interactively prompts for the docset name."
+  "Deactivate DOCSET. If called interactively prompts for the docset name."
   (interactive (list (helm-dash-read-docset
 		      "Deactivate docset"
 		      helm-dash-common-docsets)))
@@ -278,6 +278,8 @@ Report an error unless a valid docset is selected."
     (helm-dash-install-docset-from-file docset-tmp-path)))
 
 (defun helm-dash--ensure-created-docsets-path (docset-path)
+  "Check if DOCSET-PATH directory exists.
+If doesn't exist, it asks to create it."
   (or (file-directory-p docset-path)
       (and (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
 			     docset-path))
