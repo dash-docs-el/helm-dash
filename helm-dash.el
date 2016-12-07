@@ -81,8 +81,8 @@ Available formats are
   :group 'helm-dash)
 
 (defcustom helm-dash-enable-debugging t
-  "When non-nil capture stderr from sql commands and display in a
-buffer. Setting this to nil may speed up querys."
+  "When non-nil capture stderr from sql commands and display it in a buffer.
+Setting this to nil may speed up queries."
   :group 'helm-dash)
 
 
@@ -125,7 +125,8 @@ Suggested values are:
   (expand-file-name helm-dash-docsets-path))
 
 (defun helm-dash-sql (db-path sql)
-  "Run the sql command, parse the results and display errors"
+  "Run in the db located at DB-PATH the SQL command and parse the results.
+If there are errors, print them in `helm-dash-debugging-buffer'"
   (helm-dash-parse-sql-results
    (with-output-to-string
      (let ((error-file (when helm-dash-enable-debugging
@@ -200,23 +201,16 @@ The Argument DB-PATH should be a string with the sqlite db path."
 	"DASH"
       "ZDASH")))
 
+(defun helm-dash-read-json-from-url (url)
+  "Read and return a JSON object from URL."
+  (with-current-buffer
+      (url-retrieve-synchronously url)
+    (goto-char url-http-end-of-headers)
+    (json-read)))
 
-(defun helm-dash-read-json-from-url (addr)
-  (let ((url addr))
-    (with-current-buffer
-	(url-retrieve-synchronously url)
-      (goto-char url-http-end-of-headers)
-      (json-read))))
-
-(defun helm-dash-search-all-docsets ()
-  "Fetch docsets from the original Kapeli's feed."
-  (let ((url "https://api.github.com/repos/Kapeli/feeds/contents/"))
-    (with-current-buffer
-	(url-retrieve-synchronously url)
-      (goto-char url-http-end-of-headers)
-      (json-read))))
-
-(defun helm-dash-search-all-user-docsets ()
+(defun helm-dash-unofficial-docsets ()
+  "Return a list of lists with docsets contributed by users.
+The first element is the docset's name second the docset's archive url."
   (let ((user-docs (helm-dash-read-json-from-url
 		    "https://dashes-to-dashes.herokuapp.com/docsets/contrib")))
     (mapcar (lambda (docset)
@@ -231,16 +225,17 @@ The Argument DB-PATH should be a string with the sqlite db path."
 These docsets are not available to install.
 See here the reason: https://github.com/areina/helm-dash/issues/17.")
 
-(defun helm-dash-available-docsets ()
+(defun helm-dash-official-docsets ()
   "Return a list of official docsets (http://kapeli.com/docset_links)."
-  (delq nil (mapcar (lambda (docset)
-		      (let ((name (assoc-default 'name docset)))
-			(if (and (equal (file-name-extension name) "xml")
-				 (not
-				  (member (file-name-sans-extension name) helm-dash-ignored-docsets)))
-			    (file-name-sans-extension name))))
-		    (helm-dash-search-all-docsets))))
-
+  (let ((docsets (helm-dash-read-json-from-url
+		  "https://api.github.com/repos/Kapeli/feeds/contents/")))
+    (delq nil (mapcar (lambda (docset)
+			(let ((name (assoc-default 'name docset)))
+			  (if (and (equal (file-name-extension name) "xml")
+				   (not
+				    (member (file-name-sans-extension name) helm-dash-ignored-docsets)))
+			      (file-name-sans-extension name))))
+		      docsets))))
 
 (defun helm-dash-installed-docsets ()
   "Return a list of installed docsets."
@@ -271,7 +266,7 @@ Report an error unless a valid docset is selected."
   
 ;;;###autoload
 (defun helm-dash-deactivate-docset(docset)
-  "Deactivate DOCSET.  If called interactively prompts for the docset name."
+  "Deactivate DOCSET. If called interactively prompts for the docset name."
   (interactive (list (helm-dash-read-docset
 		      "Deactivate docset"
 		      helm-dash-common-docsets)))
@@ -283,6 +278,8 @@ Report an error unless a valid docset is selected."
     (helm-dash-install-docset-from-file docset-tmp-path)))
 
 (defun helm-dash--ensure-created-docsets-path (docset-path)
+  "Check if DOCSET-PATH directory exists.
+If doesn't exist, it asks to create it."
   (or (file-directory-p docset-path)
       (and (y-or-n-p (format "Directory %s does not exist.  Want to create it? "
 			     docset-path))
@@ -293,9 +290,9 @@ Report an error unless a valid docset is selected."
 (defun helm-dash-install-user-docset (docset-name)
   (interactive (list (helm-dash-read-docset
 		      "Install docset"
-		      (mapcar 'car (helm-dash-search-all-user-docsets)))))
+		      (mapcar 'car (helm-dash-unofficial-docsets)))))
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
-    (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-search-all-user-docsets))) docset-name)))
+    (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-unofficial-docsets))) docset-name)))
 
 
 ;;;###autoload
@@ -318,22 +315,22 @@ Report an error unless a valid docset is selected."
   "Download docset with specified DOCSET-NAME and move its stuff to docsets-path."
   (interactive (list (helm-dash-read-docset
 		      "Install docset"
-		      (helm-dash-available-docsets))))
+		      (helm-dash-official-docsets))))
 
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
     (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
 	  (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
 	  (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
 
-    (url-copy-file feed-url feed-tmp-path t)
-    (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
+      (url-copy-file feed-url feed-tmp-path t)
+      (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
 
-    (helm-dash-install-docset-from-file docset-tmp-path))))
+      (helm-dash-install-docset-from-file docset-tmp-path))))
 
 ;;;###autoload
 (defun helm-dash-async-install-docset (docset-name)
   "Asynchronously download docset with specified DOCSET-NAME and move its stuff to docsets-path."
-  (interactive (list (helm-dash-read-docset "Install docset" (helm-dash-available-docsets))))
+  (interactive (list (helm-dash-read-docset "Install docset" (helm-dash-official-docsets))))
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
     (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name)))
 
@@ -389,14 +386,14 @@ The Argument FEED-PATH should be a string with the path of the xml file."
     (cl-caddr (cl-first url))))
 
 (defvar helm-dash-sql-queries
-  '((DASH . ((select . (lambda (pattern)
-			 (let ((like (helm-dash-sql-compose-like "t.name" pattern))
-			       (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LENGTH(t.name), LOWER(t.name) LIMIT 1000"))
-			   (format query like))))))
-    (ZDASH . ((select . (lambda (pattern)
-			  (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
-				(query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LENGTH(t.ZTOKENNAME), LOWER(t.ZTOKENNAME) LIMIT 1000"))
-			    (format query like))))))))
+  '((DASH . (lambda (pattern)
+	      (let ((like (helm-dash-sql-compose-like "t.name" pattern))
+		    (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LENGTH(t.name), LOWER(t.name) LIMIT 1000"))
+		(format query like))))
+    (ZDASH . (lambda (pattern)
+	       (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
+		     (query "SELECT ty.ZTYPENAME, t.ZTOKENNAME, f.ZPATH, m.ZANCHOR FROM ZTOKEN t, ZTOKENTYPE ty, ZFILEPATH f, ZTOKENMETAINFORMATION m WHERE ty.Z_PK = t.ZTOKENTYPE AND f.Z_PK = m.ZFILE AND m.ZTOKEN = t.Z_PK AND %s ORDER BY LENGTH(t.ZTOKENNAME), LOWER(t.ZTOKENNAME) LIMIT 1000"))
+		 (format query like))))))
 
 (defun helm-dash-sql-compose-like (column pattern)
   ""
@@ -404,9 +401,14 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 			    (split-string pattern " "))))
     (format "%s" (mapconcat 'identity conditions " AND "))))
 
-(defun helm-dash-sql-execute (query-type docset-type pattern)
-  ""
-  (funcall (cdr (assoc query-type (assoc (intern docset-type) helm-dash-sql-queries))) pattern))
+(defun helm-dash-sql-query (docset-type pattern)
+  "Return a SQL query to search documentation in dash docsets.
+A different query is returned depending on DOCSET-TYPE.  PATTERN
+is used to compose the SQL WHERE clause."
+  (let ((compose-select-query-func
+	 (cdr (assoc (intern docset-type) helm-dash-sql-queries))))
+    (when compose-select-query-func
+      (funcall compose-select-query-func pattern))))
 
 (defun helm-dash-maybe-narrow-docsets (pattern)
   "Return a list of helm-dash-connections.
@@ -443,9 +445,8 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
   (let ((docset-type (cl-caddr docset)))
     (helm-dash-sql
      (cadr docset)
-     (helm-dash-sql-execute 'select
-			    docset-type
-			    (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
+     (helm-dash-sql-query docset-type
+			  (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
 
 (defun helm-dash--candidate (docset row)
   "Return a list extracting info from DOCSET and ROW to build a helm candidate.
