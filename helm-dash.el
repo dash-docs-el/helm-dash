@@ -458,10 +458,11 @@ candidate opts."
 	(list (car docset) row)))
 
 (defun helm-dash-result-url (docset-name filename &optional anchor)
-  "Return the full, absolute URL to documentation: either a file:/// URL joining
-DOCSET-NAME, FILENAME & ANCHOR with sanitization of spaces or a http(s):// URL
-formed as-is if FILENAME is a full HTTP(S) URL."
-  (let ((path (format "%s%s" filename (if anchor (format "#%s" anchor) ""))))
+  "Return the full, absolute URL to documentation.
+Either a file:/// URL joining DOCSET-NAME, FILENAME & ANCHOR with sanitization
+ of spaces or a http(s):// URL formed as-is if FILENAME is a full HTTP(S) URL."
+  (let* ((clean-filename (replace-regexp-in-string "<dash_entry_.*>" "" filename))
+	 (path (format "%s%s" clean-filename (if anchor (format "#%s" anchor) ""))))
     (if (string-match-p "^https?://" path)
 	path
       (replace-regexp-in-string
