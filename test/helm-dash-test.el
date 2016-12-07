@@ -87,6 +87,10 @@
   (should (string-match-p "Documents/three#anchor$"
                           (helm-dash-result-url "Redis" "three#anchor"))))
 
+(ert-deftest helm-dash-result-url/remove-dash-entry-tag-from-url ()
+  (should (string-match-p "Documents/three#anchor$"
+                          (helm-dash-result-url "Python 3" "three<dash_entry_menuDescription=android.provider.ContactsContract.CommonDataKinds.Website>" "anchor"))))
+
 ;;;; helm-dash-docsets-path
 
 (ert-deftest helm-dash-docsets-path-test/relative-path ()
