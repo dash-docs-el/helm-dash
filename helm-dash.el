@@ -322,13 +322,9 @@ If doesn't exist, it asks to create it."
 
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
     (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
-	  (docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name))
-	  (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
-
+          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
       (url-copy-file feed-url feed-tmp-path t)
-      (url-copy-file (helm-dash-get-docset-url feed-tmp-path) docset-tmp-path t)
-
-      (helm-dash-install-docset-from-file docset-tmp-path))))
+      (helm-dash--install-docset (helm-dash-get-docset-url feed-tmp-path) docset-name))))
 
 ;;;###autoload
 (defun helm-dash-async-install-docset (docset-name)
