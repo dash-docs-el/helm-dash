@@ -152,6 +152,7 @@ If there are errors, print them in `helm-dash-debugging-buffer'"
 	 (delete-file error-file))))))
 
 (defun helm-dash-parse-sql-results (sql-result-string)
+  "Parse SQL-RESULT-STRING splitting it by newline and '|' chars."
   (mapcar (lambda (x) (split-string x "|" t))
 	  (split-string sql-result-string "\n" t)))
 
@@ -265,14 +266,15 @@ Report an error unless a valid docset is selected."
   (helm-dash-reset-connections))
   
 ;;;###autoload
-(defun helm-dash-deactivate-docset(docset)
-  "Deactivate DOCSET. If called interactively prompts for the docset name."
+(defun helm-dash-deactivate-docset (docset)
+  "Deactivate DOCSET.  If called interactively prompts for the docset name."
   (interactive (list (helm-dash-read-docset
 		      "Deactivate docset"
 		      helm-dash-common-docsets)))
   (setq helm-dash-common-docsets (delete docset helm-dash-common-docsets)))
 
 (defun helm-dash--install-docset (url docset-name)
+  "Download a docset from URL and install with name DOCSET-NAME."
   (let ((docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name)))
     (url-copy-file url docset-tmp-path t)
     (helm-dash-install-docset-from-file docset-tmp-path)))
@@ -288,6 +290,7 @@ If doesn't exist, it asks to create it."
 
 ;;;###autoload
 (defun helm-dash-install-user-docset (docset-name)
+  "Download an unofficial docset with specified DOCSET-NAME and move its stuff to docsets-path."
   (interactive (list (helm-dash-read-docset
 		      "Install docset"
 		      (mapcar 'car (helm-dash-unofficial-docsets)))))
@@ -312,7 +315,7 @@ If doesn't exist, it asks to create it."
 
 ;;;###autoload
 (defun helm-dash-install-docset (docset-name)
-  "Download docset with specified DOCSET-NAME and move its stuff to docsets-path."
+  "Download an official docset with specified DOCSET-NAME and move its stuff to docsets-path."
   (interactive (list (helm-dash-read-docset
 		      "Install docset"
 		      (helm-dash-official-docsets))))
@@ -396,7 +399,9 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 		 (format query like))))))
 
 (defun helm-dash-sql-compose-like (column pattern)
-  ""
+  "Return a query fragment for a sql where clause.
+Search in column COLUMN by multiple terms splitting the PATTERN
+by whitespace and using like sql operator."
   (let ((conditions (mapcar (lambda (word) (format "%s like '%%%s%%'" column word))
 			    (split-string pattern " "))))
     (format "%s" (mapconcat 'identity conditions " AND "))))
