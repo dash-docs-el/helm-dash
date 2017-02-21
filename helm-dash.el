@@ -300,6 +300,7 @@ If doesn't exist, it asks to create it."
 
 ;;;###autoload
 (defun helm-dash-install-docset-from-file (docset-tmp-path)
+  "Extract the content of DOCSET-TMP-PATH, move it to `helm-dash-docsets-path` and activate the docset."
   (interactive
    (list (car (find-file-read-args "Docset Tarball: " t))))
   (let ((docset-folder
@@ -350,6 +351,7 @@ If doesn't exist, it asks to create it."
 
 ;;;###autoload
 (defun helm-dash-async-install-docset-from-file (docset-tmp-path)
+  "Asynchronously extract the content of DOCSET-TMP-PATH, move it to `helm-dash-docsets-path` and activate the docset."
   (interactive (list (car (find-file-read-args "Docset Tarball: " t))))
   (let ((docset-tar-path (expand-file-name docset-tmp-path))
         (docset-out-path (helm-dash-docsets-path)))
