@@ -439,17 +439,24 @@ Ex: This avoids searching for redis in redis unless you type 'redis redis'"
   "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
   (let ((connections (helm-dash-maybe-narrow-docsets helm-pattern)))
     (cl-loop for docset in connections
-             append (cl-loop for row in (helm-dash--run-query docset)
+             append (cl-loop for row in (helm-dash--run-query docset helm-pattern)
                              collect (helm-dash--candidate docset row)))))
 
 (make-obsolete #'helm-dash-search nil "1.3.0")
 
-(defun helm-dash--run-query (docset)
+(defun helm-dash--run-query (docset search-pattern)
+  "Execute an sql query in dash docset DOCSET looking for SEARCH-PATTERN.
+Return a list of db results.  Ex:
+
+'((\"func\" \"BLPOP\" \"commands/blpop.html\")
+ (\"func\" \"PUBLISH\" \"commands/publish.html\")
+ (\"func\" \"problems\" \"topics/problems.html\"))"
   (let ((docset-type (cl-caddr docset)))
     (helm-dash-sql
      (cadr docset)
      (helm-dash-sql-query docset-type
-                          (helm-dash-sub-docset-name-in-pattern helm-pattern (car docset))))))
+                          (helm-dash-sub-docset-name-in-pattern search-pattern
+                                                                (car docset))))))
 
 (defun helm-dash--candidate (docset row)
   "Return a list extracting info from DOCSET and ROW to build a helm candidate.
@@ -524,7 +531,7 @@ Get required params to call `helm-dash-result-url' from SEARCH-RESULT."
     (helm-build-sync-source (car docset)
       :action-transformer #'helm-dash-actions
       :candidates (lambda ()
-                    (cl-loop for row in (helm-dash--run-query docset)
+                    (cl-loop for row in (helm-dash--run-query docset helm-pattern)
                              collect (helm-dash--candidate docset row)))
       :volatile t
       :persistent-help "View doc"
