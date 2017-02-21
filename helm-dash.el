@@ -541,8 +541,9 @@ Narrowed docsets are those returned by
 ;;; Autoloads
 
 ;;;###autoload
-(defun helm-dash ()
-  "Bring up a `helm-dash' search interface."
+(defun helm-dash (&optional input-pattern)
+  "Bring up a `helm-dash' search interface.
+If INPUT-PATTERN is non-nil, use it as an initial input in helm search."
   (interactive)
   (helm-dash-initialize-debugging-buffer)
   (helm-dash-create-common-connections)
@@ -551,21 +552,14 @@ Narrowed docsets are those returned by
         :buffer "*helm-dash*"
         :prompt "Doc for: "
         :history 'helm-dash-history-input
+        :input input-pattern
         :helm-candidate-number-limit 1000))
 
 ;;;###autoload
 (defun helm-dash-at-point ()
   "Bring up a `helm-dash' search interface with symbol at point."
   (interactive)
-  (helm-dash-initialize-debugging-buffer)
-  (helm-dash-create-common-connections)
-  (helm-dash-create-buffer-connections)
-  (helm :sources (helm-dash-sources--narrowed-docsets)
-        :buffer "*helm-dash*"
-        :prompt "Doc for: "
-        :history 'helm-dash-history-input
-        :input (thing-at-point 'symbol)
-        :helm-candidate-number-limit 1000))
+  (helm-dash (thing-at-point 'symbol)))
 
 
 (provide 'helm-dash)
