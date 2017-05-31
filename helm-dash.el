@@ -371,6 +371,16 @@ If doesn't exist, it asks to create it."
 
 (defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
+(defun helm-dash-docset-installed-p (docset)
+  "Return true if DOCSET is installed."
+  (member docset (helm-dash-installed-docsets)))
+
+;;;###autoload
+(defun helm-dash-ensure-docset-installed (docset)
+  "Install DOCSET if it is not currently installed."
+  (unless (helm-dash-docset-installed-p docset)
+    (helm-dash-install-docset docset)))
+
 (defun helm-dash-docset-folder-name (tar-output)
   "Return the name of the folder where the docset has been extracted.
 The argument TAR-OUTPUT should be an string with the output of a tar command."
