@@ -77,7 +77,8 @@ of docsets are active.  Between 0 and 3 is sane."
 Available formats are
    %d - docset name
    %n - name of the token
-   %t - type of the token"
+   %t - type of the token
+   %f - file name"
   :group 'helm-dash)
 
 (defcustom helm-dash-enable-debugging t
@@ -474,9 +475,13 @@ Return a list of db results.  Ex:
 First element is the display message of the candidate, rest is used to build
 candidate opts."
   (cons (format-spec helm-dash-candidate-format
-                     (list (cons ?d (car docset))
-                           (cons ?n (cadr row))
-                           (cons ?t (car row))))
+                     (list (cons ?d (first docset))
+                           (cons ?n (second row))
+                           (cons ?t (first row))
+                           (cons ?f (replace-regexp-in-string
+                                     "^.*/\\([^/]*\\)\\.html?#?.*"
+                                     "\\1"
+                                     (third row)))))
         (list (car docset) row)))
 
 (defun helm-dash-result-url (docset-name filename &optional anchor)
