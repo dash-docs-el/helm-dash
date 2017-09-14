@@ -7,7 +7,7 @@
 ;;
 ;; URL: http://github.com/areina/helm-dash
 ;; Version: 1.3.0
-;; Package-Requires: ((helm "1.9.2") (cl-lib "0.5"))
+;; Package-Requires: ((helm "1.9.2") (cl-lib "0.5") (async "1.9"))
 ;; Keywords: docs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -278,8 +278,11 @@ Report an error unless a valid docset is selected."
 (defun helm-dash--install-docset (url docset-name)
   "Download a docset from URL and install with name DOCSET-NAME."
   (let ((docset-tmp-path (format "%s%s-docset.tgz" temporary-file-directory docset-name)))
-    (url-copy-file url docset-tmp-path t)
-    (helm-dash-install-docset-from-file docset-tmp-path)))
+    (async-start
+     (lambda ()
+       (url-copy-file url docset-tmp-path t))
+     (lambda (result)
+       (helm-dash-install-docset-from-file docset-tmp-path)))))
 
 (defun helm-dash--ensure-created-docsets-path (docset-path)
   "Check if DOCSET-PATH directory exists.
