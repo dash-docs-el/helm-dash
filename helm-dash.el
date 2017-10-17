@@ -584,7 +584,8 @@ If INPUT-PATTERN is non-nil, use it as an initial input in helm search."
 (defun helm-dash-at-point ()
   "Bring up a `helm-dash' search interface with symbol at point."
   (interactive)
-  (helm-dash (thing-at-point 'symbol)))
+  (helm-dash
+   (substring-no-properties (thing-at-point 'symbol))))
 
 
 (provide 'helm-dash)
