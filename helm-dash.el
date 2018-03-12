@@ -489,7 +489,7 @@ candidate opts."
 Either a file:/// URL joining DOCSET-NAME, FILENAME & ANCHOR with sanitization
  of spaces or a http(s):// URL formed as-is if FILENAME is a full HTTP(S) URL."
   (let* ((clean-filename (replace-regexp-in-string "<dash_entry_.*>" "" filename))
-         (path (format "%s%s" clean-filename (if anchor (format "#%s" anchor) ""))))
+         (path (format "%s%s" clean-filename (if anchor (replace-regexp-in-string "%2E" "%252E" (format "#%s" anchor) "")))))
     (if (string-match-p "^https?://" path)
         path
       (replace-regexp-in-string
