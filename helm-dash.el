@@ -375,7 +375,7 @@ If doesn't exist, it asks to create it."
 
 (defun helm-dash-docset-installed-p (docset)
   "Return true if DOCSET is installed."
-  (member docset (helm-dash-installed-docsets)))
+  (member (replace-regexp-in-string "_" " " docset) (helm-dash-installed-docsets)))
 
 ;;;###autoload
 (defun helm-dash-ensure-docset-installed (docset)
