@@ -299,22 +299,41 @@ If doesn't exist, it asks to create it."
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
     (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-unofficial-docsets))) docset-name)))
 
+(defmacro helm-dash-extract-docset (docset-archive docsets-path)
+  "Extract DOCSET-ARCHIVE to DOCSETS-PATH."
+  `(let* ((tar-output (shell-command-to-string
+                       (format "tar xvf %s -C %s"
+                               (shell-quote-argument (expand-file-name ,docset-archive))
+                               (shell-quote-argument ,docsets-path))))
+          (last-line (car (last (split-string tar-output "\n" t)))))
+     (replace-regexp-in-string "^x " "" (car (split-string last-line "\\." t)))))
+
+(defmacro helm-dash-get-docset-url (feed-path)
+  "Parse a xml feed with docset urls and return the first url.
+The Argument FEED-PATH should be a string with the path of the xml file."
+  `(let* ((xml (xml-parse-file ,feed-path))
+          (urls (car xml))
+          (url (xml-get-children urls 'url)))
+     (caddr (car url))))
+
+(defmacro helm-dash-docset-url (docset-name docsets-url)
+  "Fetch and parse docset feed returning the url for DOCSET-NAME located at DOCSETS-URL."
+  `(let* ((feed-url (format "%s/%s.xml" ,docsets-url ,docset-name))
+          (feed-path (url-file-local-copy feed-url)))
+     (helm-dash-get-docset-url feed-path)))
+
+(defmacro helm-dash-download-install-docset (docset-name docsets-path docsets-url)
+  "Download and install DOCSET-NAME to DOCSETS-PATH, using feeds at DOCSETS-URL."
+  `(let ((docset-url (helm-dash-docset-url ,docset-name ,docsets-url)))
+     (helm-dash-extract-docset-into (url-file-local-copy docset-url) docsets-path docset-name)))
 
 ;;;###autoload
 (defun helm-dash-install-docset-from-file (docset-tmp-path)
   "Extract the content of DOCSET-TMP-PATH, move it to `helm-dash-docsets-path` and activate the docset."
   (interactive
    (list (car (find-file-read-args "Docset Tarball: " t))))
-  (let ((docset-folder
-         (helm-dash-docset-folder-name
-          (shell-command-to-string
-           (format "tar xvf %s -C %s"
-                   (shell-quote-argument (expand-file-name docset-tmp-path))
-                   (shell-quote-argument (helm-dash-docsets-path)))))))
-    (helm-dash-activate-docset docset-folder)
-    (message (format
-              "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-              docset-folder))))
+  (let ((proc (helm-dash-async-install-docset-from-file docset-tmp-path)))
+    (when proc (async-wait proc))))
 
 ;;;###autoload
 (defun helm-dash-install-docset (docset-name)
@@ -322,54 +341,46 @@ If doesn't exist, it asks to create it."
   (interactive (list (helm-dash-read-docset
                       "Install docset"
                       (helm-dash-official-docsets))))
-
-  (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
-    (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name))
-          (feed-tmp-path (format "%s%s-feed.xml" temporary-file-directory docset-name)))
-      (url-copy-file feed-url feed-tmp-path t)
-      (helm-dash--install-docset (helm-dash-get-docset-url feed-tmp-path) docset-name))))
+  (let ((proc (helm-dash-async-install-docset docset-name)))
+    (when proc (async-wait proc))))
 
 ;;;###autoload
 (defun helm-dash-async-install-docset (docset-name)
   "Asynchronously download docset with specified DOCSET-NAME and move its stuff to docsets-path."
   (interactive (list (helm-dash-read-docset "Install docset" (helm-dash-official-docsets))))
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
-    (let ((feed-url (format "%s/%s.xml" helm-dash-docsets-url docset-name)))
-
-      (message (concat "The docset \"" docset-name "\" will now be installed asynchronously."))
-
+    (message (concat "The docset \"" docset-name "\" will now be installed."))
+    (let ((docsets-path helm-dash-docsets-path)
+          (docsets-url helm-dash-docsets-url))
       (async-start ; First async call gets the docset meta data
        (lambda ()
          ;; Beware! This lambda is run in it's own instance of emacs.
-         (url-file-local-copy feed-url))
-       (lambda (filename)
-         (let ((docset-url (helm-dash-get-docset-url filename)))
-           (async-start     ; Second async call gets the docset itself
-            (lambda ()
-              ;; Beware! This lambda is run in it's own instance of emacs.
-              (url-file-local-copy docset-url))
-            (lambda (docset-tmp-path)
-              (helm-dash-async-install-docset-from-file docset-tmp-path)))))))))
+         (ignore-errors
+           (require 'mm-decode) ;; needed by `url-file-local-copy'
+           (helm-dash-download-install-docset docset-name docsets-path docsets-url)))
+       (lambda (docset-folder)
+         (when (string= docset-folder "nil")
+           (user-error "Error installing docset \"%s\"" docset-name))
+         (helm-dash-activate-docset docset-folder)
+         (message (format
+                   "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
+                   docset-folder)))))))
 
 ;;;###autoload
 (defun helm-dash-async-install-docset-from-file (docset-tmp-path)
   "Asynchronously extract the content of DOCSET-TMP-PATH, move it to `helm-dash-docsets-path` and activate the docset."
   (interactive (list (car (find-file-read-args "Docset Tarball: " t))))
   (let ((docset-tar-path (expand-file-name docset-tmp-path))
-        (docset-out-path (helm-dash-docsets-path)))
+        (docsets-path helm-dash-docsets-path))
     (async-start
      (lambda ()
        ;; Beware! This lambda is run in it's own instance of emacs.
-       (shell-command-to-string
-        (format "tar xvf %s -C %s"
-                (shell-quote-argument docset-tar-path)
-                (shell-quote-argument docset-out-path))))
-     (lambda (shell-output)
-       (let ((docset-folder (helm-dash-docset-folder-name shell-output)))
-         (helm-dash-activate-docset docset-folder)
-         (message (format
-                   "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-                   docset-folder)))))))
+       (helm-dash-extract-docset docset-tar-path docsets-path))
+     (lambda (docset-folder)
+       (helm-dash-activate-docset docset-folder)
+       (message (format
+                 "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
+                 docset-folder))))))
 
 (defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
@@ -382,21 +393,6 @@ If doesn't exist, it asks to create it."
   "Install DOCSET if it is not currently installed."
   (unless (helm-dash-docset-installed-p docset)
     (helm-dash-install-docset docset)))
-
-(defun helm-dash-docset-folder-name (tar-output)
-  "Return the name of the folder where the docset has been extracted.
-The argument TAR-OUTPUT should be an string with the output of a tar command."
-  (let ((last-line
-         (car (last (split-string tar-output "\n" t)))))
-    (replace-regexp-in-string "^x " "" (car (split-string last-line "\\." t)))))
-
-(defun helm-dash-get-docset-url (feed-path)
-  "Parse a xml feed with docset urls and return the first url.
-The Argument FEED-PATH should be a string with the path of the xml file."
-  (let* ((xml (xml-parse-file feed-path))
-         (urls (car xml))
-         (url (xml-get-children urls 'url)))
-    (cl-caddr (cl-first url))))
 
 (defvar helm-dash-sql-queries
   '((DASH . (lambda (pattern)
