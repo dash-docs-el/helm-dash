@@ -349,7 +349,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
   "Asynchronously download docset with specified DOCSET-NAME and move its stuff to docsets-path."
   (interactive (list (helm-dash-read-docset "Install docset" (helm-dash-official-docsets))))
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
-    (message (concat "The docset \"" docset-name "\" will now be installed."))
+    (message "The docset \"%s\" will now be installed." docset-name)
     (let ((docsets-path helm-dash-docsets-path)
           (docsets-url helm-dash-docsets-url))
       (async-start ; First async call gets the docset meta data
@@ -362,9 +362,8 @@ The Argument FEED-PATH should be a string with the path of the xml file."
          (when (string= docset-folder "nil")
            (user-error "Error installing docset \"%s\"" docset-name))
          (helm-dash-activate-docset docset-folder)
-         (message (format
-                   "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-                   docset-folder)))))))
+         (message "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
+                   docset-folder))))))
 
 ;;;###autoload
 (defun helm-dash-async-install-docset-from-file (docset-tmp-path)
@@ -378,9 +377,8 @@ The Argument FEED-PATH should be a string with the path of the xml file."
        (helm-dash-extract-docset docset-tar-path docsets-path))
      (lambda (docset-folder)
        (helm-dash-activate-docset docset-folder)
-       (message (format
-                 "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-                 docset-folder))))))
+       (message "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
+                 docset-folder)))))
 
 (defalias 'helm-dash-update-docset 'helm-dash-install-docset)
 
