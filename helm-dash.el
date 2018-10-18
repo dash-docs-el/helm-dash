@@ -299,6 +299,15 @@ If doesn't exist, it asks to create it."
   (when (helm-dash--ensure-created-docsets-path (helm-dash-docsets-path))
     (helm-dash--install-docset (car (assoc-default docset-name (helm-dash-unofficial-docsets))) docset-name)))
 
+(defmacro helm-dash-extract-docset-into (docset-archive docsets-path docset-name)
+  "Extract DOCSET-ARCHIVE into DOCSETS-PATH/DOCSET-NAME, removing top directory."
+  `(let ((docset-dir (concat (file-name-as-directory docsets-path) docset-name ".docset")))
+     (mkdir docset-dir t)
+     (shell-command (format "tar xvf %s -C %s --strip-components=1"
+                            (shell-quote-argument (expand-file-name ,docset-archive))
+                            (shell-quote-argument (expand-file-name docset-dir))))
+     docset-name))
+
 (defmacro helm-dash-extract-docset (docset-archive docsets-path)
   "Extract DOCSET-ARCHIVE to DOCSETS-PATH."
   `(let* ((tar-output (shell-command-to-string
@@ -361,9 +370,9 @@ The Argument FEED-PATH should be a string with the path of the xml file."
        (lambda (docset-folder)
          (when (string= docset-folder "nil")
            (user-error "Error installing docset \"%s\"" docset-name))
-         (helm-dash-activate-docset docset-folder)
+         (helm-dash-activate-docset docset-name)
          (message "Docset installed. Add \"%s\" to helm-dash-common-docsets or helm-dash-docsets."
-                   docset-folder))))))
+                  docset-name))))))
 
 ;;;###autoload
 (defun helm-dash-async-install-docset-from-file (docset-tmp-path)
@@ -384,7 +393,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 
 (defun helm-dash-docset-installed-p (docset)
   "Return true if DOCSET is installed."
-  (member (replace-regexp-in-string "_" " " docset) (helm-dash-installed-docsets)))
+  (member docset (helm-dash-installed-docsets)))
 
 ;;;###autoload
 (defun helm-dash-ensure-docset-installed (docset)
