@@ -399,7 +399,7 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 (defun helm-dash-ensure-docset-installed (docset)
   "Install DOCSET if it is not currently installed."
   (unless (helm-dash-docset-installed-p docset)
-    (helm-dash-install-docset docset)))
+    (helm-dash-async-install-docset docset)))
 
 (defvar helm-dash-sql-queries
   '((DASH . (lambda (pattern)
