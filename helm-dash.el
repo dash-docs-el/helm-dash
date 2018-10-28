@@ -106,9 +106,16 @@ Setting this to nil may speed up queries."
 
 (defun helm-dash-docset-db-path (docset)
   "Compose the path to sqlite DOCSET."
-  (let ((path (helm-dash-docset-path docset)))
-    (if path
-        (expand-file-name "Contents/Resources/docSet.dsidx" path)
+  (let* ((docset-path (helm-dash-docset-path docset))
+         (path (expand-file-name "Contents/Resources/docSet.dsidx" docset-path)))
+    (if docset-path
+        (if (file-exists-p path)
+            path
+          (let ((path (expand-file-name "Contents/Resources/docset.dsidx" docset-path)))
+            (if (file-exists-p path)
+                path
+              (error "Docset %s doesn't contain /Contents/Resources/docSet.dsidx database"
+                     docset))))
       (error "Cannot find docset '%s' in `helm-dash-docsets-path'" docset))))
 
 (defvar helm-dash-connections nil
