@@ -308,7 +308,8 @@ If doesn't exist, it asks to create it."
   (let ((docset-folder
          (helm-dash-docset-folder-name
           (shell-command-to-string
-           (format "tar xvf %s -C %s"
+	   ;; This fails on windows because tar cannot deal with absolute paths on windows.
+           (format "tar xvf %s -C %s --force-local"
                    (shell-quote-argument (expand-file-name docset-tmp-path))
                    (shell-quote-argument (helm-dash-docsets-path)))))))
     (helm-dash-activate-docset docset-folder)
@@ -361,7 +362,7 @@ If doesn't exist, it asks to create it."
      (lambda ()
        ;; Beware! This lambda is run in it's own instance of emacs.
        (shell-command-to-string
-        (format "tar xvf %s -C %s"
+        (format "tar xvf %s -C %s --force-local"
                 (shell-quote-argument docset-tar-path)
                 (shell-quote-argument docset-out-path))))
      (lambda (shell-output)
