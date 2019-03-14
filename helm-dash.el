@@ -309,15 +309,20 @@ If doesn't exist, it asks to create it."
 			  "-C" helm-dash-docsets-path))
 	   ;; On Windows, several elements need to be removed from filenames, see
 	   ;; https://docs.microsoft.com/en-us/windows/desktop/FileIO/naming-a-file#naming-conventions.
-	   ;; We replace with underscores on windows.
+	   ;; We replace with underscores on windows. This might lead to broken links.
 	   (windows-args (list "--force-local" "--transform" "s/[<>\":?*^|]/_/g"))
 	   (result (apply #'call-process
 			  (append call-process-args process-args (when (eq system-type 'windows-nt) windows-args)))))
-      (when (not (equal result 0))
-	(error (format "Failed to extract %s to %s. Error: %s" docset-temp-path (helm-dash-docsets-path) result)))
+      (goto-char (point-max))
+      (cond
+       ((and (not (equal result 0))
+	     ;; TODO: Adjust to proper text. Also requires correct locale.
+	     (backward-search "too long"))
+	(error "Failed to extract %s to %s. Filename too long. Consider changing `helm-dash-docsets-path' to a shorter value"))
+       ((not (equal result 0)) (error "Failed to extract %s to %s. Error: %s" docset-temp-path (helm-dash-docsets-path) result)))
       (goto-char (point-max))
       (replace-regexp-in-string "^x " "" (car (split-string (thing-at-point 'line) "\\." t))))))
-	 
+
 ;;;###autoload
 (defun helm-dash-install-docset-from-file (docset-tmp-path)
   "Extract the content of DOCSET-TMP-PATH, move it to `helm-dash-docsets-path` and activate the docset."
