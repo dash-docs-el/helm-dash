@@ -317,7 +317,7 @@ If doesn't exist, it asks to create it."
       (cond
        ((and (not (equal result 0))
 	     ;; TODO: Adjust to proper text. Also requires correct locale.
-	     (search-backward "too long"))
+	     (search-backward "too long" nil t))
 	(error "Failed to extract %s to %s. Filename too long. Consider changing `helm-dash-docsets-path' to a shorter value"))
        ((not (equal result 0)) (error "Failed to extract %s to %s. Error: %s" docset-temp-path (helm-dash-docsets-path) result)))
       (goto-char (point-max))
