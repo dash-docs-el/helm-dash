@@ -317,7 +317,7 @@ If doesn't exist, it asks to create it."
       (cond
        ((and (not (equal result 0))
 	     ;; TODO: Adjust to proper text. Also requires correct locale.
-	     (backward-search "too long"))
+	     (search-backward "too long"))
 	(error "Failed to extract %s to %s. Filename too long. Consider changing `helm-dash-docsets-path' to a shorter value"))
        ((not (equal result 0)) (error "Failed to extract %s to %s. Error: %s" docset-temp-path (helm-dash-docsets-path) result)))
       (goto-char (point-max))
@@ -408,7 +408,8 @@ The Argument FEED-PATH should be a string with the path of the xml file."
 (defvar helm-dash-sql-queries
   '((DASH . (lambda (pattern)
               (let ((like (helm-dash-sql-compose-like "t.name" pattern))
-                    (query "SELECT t.type, t.name, t.path FROM searchIndex t WHERE %s ORDER BY LENGTH(t.name), LOWER(t.name) LIMIT 1000"))
+                    (query "SELECT t.type, t.name, t.path FROM 
+                           Index t WHERE %s ORDER BY LENGTH(t.name), LOWER(t.name) LIMIT 1000"))
                 (format query like))))
     (ZDASH . (lambda (pattern)
                (let ((like (helm-dash-sql-compose-like "t.ZTOKENNAME" pattern))
