@@ -569,6 +569,57 @@ Narrowed docsets are those returned by
     (cl-loop for docset in connections
              append (list (helm-dash-build-source docset)))))
 
+;; This provides a :dash keyword to the use-package macro so that one can do
+;;
+;;   (use-package ruby-mode
+;;     :dash (ruby-mode "Ruby_2" "Ruby_on_Rails_5"))
+;;
+;; to make sure Ruby_2 Ruby_on_Rails_5 are installed. It will also enable them
+;; in the ruby-mode startup hook.
+(eval-when-compile
+  (when (featurep 'use-package)
+    (defun helm-dash-seq-insert-after (element place-holder sequence)
+      "Insert ELEMENT after PLACE-HOLDER into SEQUENCE."
+      (when sequence
+        (let ((e (car sequence)))
+          (cons e
+                (if (equal place-holder e)
+                    (cons element (cdr sequence))
+                  (helm-dash-seq-insert-after element place-holder (cdr sequence)))))))
+
+    ;; Add :dash keyword after :delight if not already there
+    (unless (seq-contains use-package-keywords :dash)
+      (setq use-package-keywords
+            (helm-dash-seq-insert-after :dash :delight use-package-keywords)))
+
+    (defun use-package-normalize/:dash (name-symbol keyword arg)
+      "Normalize use-package customize keyword."
+      (let ((error-msg (format  "%s wants a (<symbol> <docset> docset)  or list of these" name-symbol)))
+        (unless (listp arg)
+          (use-package-error error-msg))
+        (dolist (def arg arg)
+          (unless (listp def)
+            (use-package-error error-msg)))))
+
+    (defun use-package-handler/:dash (name keyword args rest state)
+      "Generate use-package customize keyword code."
+      (let ((body (use-package-process-keywords name rest state)))
+        (use-package-concat
+         (seq-map (lambda (def)
+                    (let ((mode (intern (format "%s-hook" (car def))))
+                          (hook (intern (format "use-package-dash-setup-%s" (car def))))
+                          (docsets (cdr def)))
+                      `(progn
+                         (seq-do #'helm-dash-ensure-docset-installed (quote ,docsets))
+                         (defun ,hook ,()
+                           (make-local-variable 'helm-dash-docsets)
+                           (seq-do (lambda (docset)
+                                     (add-to-list 'helm-dash-docsets docset))
+                                   (quote ,docsets)))
+                         (add-hook (quote ,mode) (function ,hook)))))
+                  args)
+         body)))))
+
 
 ;;; Autoloads
 

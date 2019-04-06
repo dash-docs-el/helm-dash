@@ -114,6 +114,17 @@ docsets sets.
 
 (add-hook 'go-mode-hook 'go-doc)
 ```
+If you are using the `use-package` macro to configure your package, it is even
+easier. Once the `helm-dash` package has been initialized, you can use the new
+`:dash` keyboard to ensure that a docset is installed and loaded for a specific
+mode. The following code will make sure docsets `Ruby_2` and `Ruby_on_Rails_5`
+are installed and it will create a hook to add them to buffer local docsets for
+`ruby-mode` enabled buffers.
+
+``` elisp
+(use-package ruby-mode
+  :dash (ruby-mode "Ruby_2" "Ruby_on_Rails_5"))
+```
 
 ### Only one docset
 
