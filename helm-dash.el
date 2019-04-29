@@ -56,11 +56,18 @@
 (defvaralias 'helm-dash-common-docsets 'dash-docs-common-docsets)
 (defvaralias 'helm-dash-ignored-docsets 'dash-docs-ignored-docsets)
 
+(defalias 'helm-dash--candidate 'dash-docs--candidate)
+(defalias 'helm-dash--run-query 'dash-docs--run-query)
+(defalias 'helm-dash-actions 'dash-docs-actions)
 (defalias 'helm-dash-activate-docset 'dash-docs-activate-docset)
+(defalias 'helm-dash-create-buffer-connections 'dash-docs-create-buffer-connections)
+(defalias 'helm-dash-create-common-connections 'dash-docs-create-common-connections)
 (defalias 'helm-dash-deactivate-docset 'dash-docs-deactivate-docset)
+(defalias 'helm-dash-initialize-debugging-buffer 'dash-docs-initialize-debugging-buffer)
 (defalias 'helm-dash-install-docset 'dash-docs-install-docset)
 (defalias 'helm-dash-install-docset-from-file 'dash-docs-install-docset-from-file)
 (defalias 'helm-dash-install-user-docset 'dash-docs-install-user-docset)
+(defalias 'helm-dash-maybe-narrow-docsets 'dash-docs-maybe-narrow-docsets)
 (defalias 'helm-dash-reset-connections 'dash-docs-reset-connections)
 
 (defvar helm-dash-history-input nil)
@@ -84,7 +91,7 @@ Narrowed docsets are those returned by
 `helm-dash-maybe-narrow-docsets'."
   (let ((connections (helm-dash-maybe-narrow-docsets helm-pattern)))
     (cl-loop for docset in connections
-             append (list (helm-dash-build-source docset)))))
+             append (list (helm-dash--build-source docset)))))
 
 ;;; Autoloads
 
