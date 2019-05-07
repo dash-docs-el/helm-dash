@@ -36,6 +36,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
+(require 'dash-docs)
 (require 'helm)
 (require 'helm-multi-match)
 
