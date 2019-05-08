@@ -73,6 +73,15 @@
 
 (defvar helm-dash-history-input nil)
 
+(defun helm-dash-search ()
+  "Iterates every `helm-dash-connections' looking for the `helm-pattern'."
+  (let ((connections (helm-dash-maybe-narrow-docsets helm-pattern)))
+    (cl-loop for docset in connections
+             append (cl-loop for row in (helm-dash--run-query docset helm-pattern)
+                             collect (helm-dash--candidate docset row)))))
+
+(make-obsolete #'helm-dash-search nil "1.3.0")
+
 (defun helm-dash--build-source (docset)
   "Build a Helm source for DOCSET."
   (lexical-let ((docset docset))
