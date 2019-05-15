@@ -4,8 +4,9 @@
 
 ;; Author: Raimon Grau <raimonster@gmail.com>
 ;;         Toni Reina  <areina0@gmail.com>
+;;         Bryan Gilbert <bryan@bryan.sh>
 ;;
-;; URL: http://github.com/areina/helm-dash
+;; URL: https://github.com/dash-docs-el/helm-dash
 ;; Version: 1.3.0
 ;; Package-Requires: ((emacs "24.4") (dash-docs "1.4.0") (helm "1.9.2") (cl-lib "0.5"))
 ;; Keywords: docs
