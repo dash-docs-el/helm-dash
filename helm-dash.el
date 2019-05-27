@@ -68,6 +68,7 @@
 (defalias 'helm-dash-initialize-debugging-buffer 'dash-docs-initialize-debugging-buffer)
 (defalias 'helm-dash-install-docset 'dash-docs-install-docset)
 (defalias 'helm-dash-install-docset-from-file 'dash-docs-install-docset-from-file)
+(defalias 'helm-dash-installed-docsets 'dash-docs-installed-docsets)
 (defalias 'helm-dash-install-user-docset 'dash-docs-install-user-docset)
 (defalias 'helm-dash-maybe-narrow-docsets 'dash-docs-maybe-narrow-docsets)
 (defalias 'helm-dash-reset-connections 'dash-docs-reset-connections)
