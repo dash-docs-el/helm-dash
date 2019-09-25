@@ -110,7 +110,7 @@ docsets sets.
 ``` elisp
 (defun go-doc ()
   (interactive)
-  (setq-local helm-dash-docsets '("Go")))
+  (setq-local dash-docs-docsets '("Go")))
 
 (add-hook 'go-mode-hook 'go-doc)
 ```
