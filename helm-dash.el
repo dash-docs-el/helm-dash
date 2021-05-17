@@ -90,8 +90,9 @@
     (helm-build-sync-source (car docset)
       :action-transformer #'helm-dash-actions
       :candidates (lambda ()
-                    (cl-loop for row in (helm-dash--run-query docset helm-pattern)
-                             collect (helm-dash--candidate docset row)))
+                    (let ((inhibit-quit (not (display-graphic-p))))
+                      (cl-loop for row in (helm-dash--run-query docset helm-pattern)
+                               collect (helm-dash--candidate docset row))))
       :volatile t
       :persistent-help "View doc"
       :requires-pattern helm-dash-min-length)))
