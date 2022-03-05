@@ -49,7 +49,7 @@ official docsets or `m-x helm-dash-install-user-docset` for user
 contributed docsets (experimental).
 
 To install a docset from a file in your drive you can use `m-x
-helm-dash-install-docset-from-file'. That function takes as input
+helm-dash-install-docset-from-file`. That function takes as input
 a `tgz` file that you obtained, starting from a folder named `<docset
 name>.docset`, with the command:
 
@@ -65,7 +65,7 @@ loaded. Typing substrings of what you search will find-as-you-type.
 - The search starts from 3 chars.
 - Install new docsets with m-x helm-dash-install-docset
 - After installing a new docset, add the name of the docset to
-  `helm-dash-common-docsets' or in 'helm-dash-docsets' (which is ment
+  `helm-dash-common-docsets` or in `helm-dash-docsets` (which is ment
   to be buffer local)
 
 `m-x helm-dash-at-point RET` is like helm-dash, but it will prefill
@@ -96,7 +96,7 @@ the creation and deletion of a temporary file for each query).
 
 ### Common docsets
 
-`helm-dash-common-docsets' is a list that should contain the docsets
+`helm-dash-common-docsets` is a list that should contain the docsets
 to be active always. In all buffers.
 
 ### Buffer local docsets
